@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IContainerProps {
+interface IProps {
   isNew: boolean;
 }
 
-export default ({navigation, alarmData}) => {
+export default ({navigation, alarmData}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -16,10 +16,12 @@ export default ({navigation, alarmData}) => {
                 <AlarmMarkWrapper>
                   <AlarmMark isNew={item.isNew}></AlarmMark>
                 </AlarmMarkWrapper>
-                <AlarmTextWrapper>
-                  <AlarmText>{item.title}</AlarmText>
+                <AlarmBtnWrapper>
+                  <AlarmBtn onPress={() => {}}>
+                    <AlarmTitleText>{item.title}</AlarmTitleText>
+                  </AlarmBtn>
                   <AlarmDateText>{item.date}</AlarmDateText>
-                </AlarmTextWrapper>
+                </AlarmBtnWrapper>
               </AlarmWrapper>
             ))}
           </Card>
@@ -61,34 +63,38 @@ const AlarmMarkWrapper = styled.View`
   width: 10%;
   padding: 10px;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const AlarmMark = styled.View`
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50px;
-  background-color: ${(props: IContainerProps) =>
-    props.isNew ? '#ff0d0d' : '#b5b5b5'};
+  background-color: ${(props: IProps) => (props.isNew ? '#ff0d0d' : '#b5b5b5')};
 `;
 
-const AlarmTextWrapper = styled.View`
+const AlarmBtnWrapper = styled.View`
   display: flex;
   flex-flow: column;
-  align-items: flex-start;
-  justify-content: center;
   width: 80%;
 `;
 
-const AlarmText = styled.Text`
-  font-size: 17px;
+const AlarmBtn = styled.TouchableOpacity`
+  width: 100%;
+  padding: 5px 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
+
+const AlarmTitleText = styled.Text`
+  font-size: 13px;
   font-weight: 500;
   color: #333;
   margin-bottom: 5px;
 `;
 
 const AlarmDateText = styled.Text`
-  font-size: 15px;
+  font-size: 11px;
   color: #7f7f7f;
   padding-bottom: 5px;
 `;

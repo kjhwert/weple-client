@@ -4,12 +4,12 @@ import styled from 'styled-components/native';
 interface IProps {
   children: ReactNode;
   padding?: number;
-  marginTop?: number;
+  margin?: number;
 }
 
-export default ({children, padding, marginTop}: IProps) => {
+export default ({children, paddingTop, margin}: IProps) => {
   return (
-    <Card padding={padding} marginTop={marginTop}>
+    <Card paddingTop={paddingTop} margin={margin}>
       {children}
     </Card>
   );
@@ -19,8 +19,8 @@ const Card = styled.View`
   background-color: white;
   width: 100%;
   height: 100%;
-  padding: ${({padding}) => (padding ? padding : 0)}px;
-  margin-top: ${({marginTop}) => (marginTop ? marginTop : 0)}px;
+  padding-top: ${({paddingTop}) => (paddingTop ? paddingTop : 0)}px;
+  margin: ${({margin}) => (margin ? margin : 0)}px;
   padding: 20px;
   display: flex;
   align-items: center;

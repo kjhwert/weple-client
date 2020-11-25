@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IContainerProps {
+interface IProps {
+  navigation: any;
   isClick: boolean;
 }
 
-export default ({navigation, menuList, Data}) => {
+export default ({navigation, menuList, openClub}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             <RecruitTogetherWrapper>
-              <RecruitTogetherBtn onPress={() => {}}>
+              <RecruitTogetherBtn>
                 <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage
@@ -22,8 +23,11 @@ export default ({navigation, menuList, Data}) => {
             </RecruitTogetherWrapper>
 
             <RecruitWrapper>
-              <RecruitImageWrapper>
-                <RecruitImage source={require('../../assets/photo_2.jpeg')} />
+              <RecruitImageWrapper
+                onPress={() => {
+                  navigation.navigate('togetherModify');
+                }}>
+                <RecruitImage source={require('../../assets/photo_4.jpeg')} />
                 <RecordWrapper>
                   <RecordImage source={require('../../assets/cycle.png')} />
                   <RecordText>21.7 KM</RecordText>
@@ -39,7 +43,7 @@ export default ({navigation, menuList, Data}) => {
             <RecruitBtnWrapper>
               <RecruitBtn
                 onPress={() => {
-                  navigation.navigate('togetherOpen');
+                  navigation.navigate('subject');
                 }}>
                 <RecruitBtnText>함께 개설하기</RecruitBtnText>
               </RecruitBtn>
@@ -67,7 +71,7 @@ export default ({navigation, menuList, Data}) => {
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
-            {Data.map((item, idx) => (
+            {openClub.map((item, idx) => (
               <RecruitWrapper key={idx}>
                 <RecruitImageWrapper
                   onPress={() => {
@@ -121,7 +125,7 @@ const Line = styled.View`
 const RecruitTogetherWrapper = styled.View`
   display: flex;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
 
 const RecruitTogetherBtn = styled.TouchableOpacity`
@@ -133,7 +137,7 @@ const RecruitTogetherBtn = styled.TouchableOpacity`
 `;
 
 const RecruitTogetherText = styled.Text`
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
   font-weight: bold;
   text-align: left;
@@ -143,12 +147,12 @@ const RecruitTogetherText = styled.Text`
 const RecruitTogetherNumber = styled.Text`
   color: #007bf1;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 13px;
 `;
 
 const RecruitTogetherMoreImage = styled.Image`
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 `;
 
 const RecruitWrapper = styled.View`
@@ -165,9 +169,7 @@ const RecruitWrapper = styled.View`
 
 const RecruitImageWrapper = styled.TouchableOpacity`
   display: flex;
-  /* align-items: center;
-  justify-content: flex-start; */
-  width: 40%;
+  width: 45%;
   border-width: 1px;
   border-color: #dfdfdf;
   margin-right: 10px;
@@ -181,14 +183,13 @@ const RecruitImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 60%;
+  width: 65%;
   align-items: center;
   justify-content: center;
   background-color: #007bf1;
   position: absolute;
   margin-top: 10px;
   padding: 2px;
-  /* left: -10px; */
 `;
 
 const RecordText = styled.Text`
@@ -199,8 +200,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 25px;
-  height: 15px;
+  width: 22px;
+  height: 13px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -211,27 +212,26 @@ const RecruitTextWrapper = styled.View`
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 55%;
+  width: 50%;
 `;
 
 const RecruitTitle = styled.Text`
   width: 100%;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   color: #000;
-  padding: 5px 0;
 `;
 
 const RecruitAddress = styled.Text`
   width: 100%;
-  font-size: 14px;
+  font-size: 12px;
   color: #777;
   padding: 5px 0 10px 0;
 `;
 
 const EntryFee = styled.Text`
   width: 100%;
-  font-size: 13px;
+  font-size: 11px;
   color: #000;
   font-weight: bold;
   padding: 5px 0;
@@ -239,10 +239,9 @@ const EntryFee = styled.Text`
 
 const Deadline = styled.Text`
   width: 100%;
-  font-size: 12px;
+  font-size: 10px;
   color: #007bf1;
   font-weight: bold;
-  padding: 5px 0;
 `;
 
 const RecruitBtnWrapper = styled.View`
@@ -261,12 +260,12 @@ const RecruitBtn = styled.TouchableOpacity`
   border-radius: 5px;
   background-color: #fff;
   border-width: 1px;
-  border-color: #bfbfbf;
+  border-color: #b5b5b5;
 `;
 
 const RecruitBtnText = styled.Text`
   color: #6f6f6f;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
 `;
 
@@ -283,8 +282,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IContainerProps) =>
-    props.isClick ? '#007bf1' : '#fff'};
+  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -294,8 +292,8 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 18px;
-  color: ${(props: IContainerProps) => (props.isClick ? '#007bf1' : '#333')};
+  font-size: 15px;
+  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#3a3636')};
   font-weight: bold;
   text-align: center;
   padding: 10px;

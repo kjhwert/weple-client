@@ -1,6 +1,10 @@
 import React from 'react';
 import LoginPresenter from './LoginPresenter';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return <LoginPresenter navigation={navigation} />;
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-
-interface IContainerProps {
+interface IProps {
+  navigation: any;
   isClick: boolean;
 }
 
-export default ({navigation, menuList}) => {
+export default ({navigation, menuList, aroundData}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -17,7 +17,10 @@ export default ({navigation, menuList}) => {
               </RecruitTogetherBtn>
 
               <TogetherOpenWrapper>
-                <OpenBtnWrapper>
+                <OpenBtnWrapper
+                  onPress={() => {
+                    navigation.navigate('subject');
+                  }}>
                   <TogetherOpenBtnText>+</TogetherOpenBtnText>
                 </OpenBtnWrapper>
                 <TogetherOpenText>함께하기를 만들어주세요</TogetherOpenText>
@@ -45,22 +48,27 @@ export default ({navigation, menuList}) => {
                 />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
-            <RecruitWrapper>
-              <RecruitImageWrapper
-                onPress={() => {
-                  navigation.navigate('togetherDetail');
-                }}>
-                <RecruitImage
-                  source={require('../../../assets/photo_2.jpeg')}
-                />
-              </RecruitImageWrapper>
-              <RecruitTextWrapper>
-                <RecruitTitle>강변북로 라이딩</RecruitTitle>
-                <RecruitAddress>서울특별시 마포구 공덕동 118-1</RecruitAddress>
-                <EntryFee>참가비 10,000원</EntryFee>
-                <Deadline>모집마감 18시간 전</Deadline>
-              </RecruitTextWrapper>
-            </RecruitWrapper>
+
+            {aroundData.map((item, idx) => (
+              <RecruitWrapper key={idx}>
+                <RecruitImageWrapper
+                  onPress={() => {
+                    navigation.navigate('togetherDetail');
+                  }}>
+                  <RecruitImage source={item.image} />
+                  <RecordWrapper>
+                    <RecordImage source={item.iconImage} />
+                    <RecordText>{item.distance}KM</RecordText>
+                  </RecordWrapper>
+                </RecruitImageWrapper>
+                <RecruitTextWrapper>
+                  <RecruitTitle>{item.title}</RecruitTitle>
+                  <RecruitAddress>{item.address}</RecruitAddress>
+                  <EntryFee>참가비 {item.pay}원</EntryFee>
+                  <Deadline>모집마감 {item.endTime}시간 전</Deadline>
+                </RecruitTextWrapper>
+              </RecruitWrapper>
+            ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -95,7 +103,7 @@ const Line = styled.View`
 const RecruitTogetherWrapper = styled.View`
   display: flex;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
 
 const RecruitTogetherBtn = styled.TouchableOpacity`
@@ -107,7 +115,7 @@ const RecruitTogetherBtn = styled.TouchableOpacity`
 `;
 
 const RecruitTogetherText = styled.Text`
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
   font-weight: bold;
   text-align: left;
@@ -139,9 +147,7 @@ const RecruitWrapper = styled.View`
 
 const RecruitImageWrapper = styled.TouchableOpacity`
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 40%;
+  width: 45%;
   border-width: 1px;
   border-color: #dfdfdf;
   margin-right: 10px;
@@ -150,6 +156,33 @@ const RecruitImageWrapper = styled.TouchableOpacity`
 const RecruitImage = styled.Image`
   width: 100%;
   height: 100px;
+`;
+
+const RecordWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 65%;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  margin-top: 10px;
+  padding: 2px;
+`;
+
+const RecordText = styled.Text`
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const RecordImage = styled.Image`
+  width: 25px;
+  height: 15px;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const TogetherOpenWrapper = styled.View`
@@ -162,12 +195,12 @@ const TogetherOpenWrapper = styled.View`
   border-radius: 5px;
   background-color: #fcfcfd;
   border-width: 1px;
-  border-color: #4c585858;
+  border-color: #d2d2d2;
 `;
 
 const OpenBtnWrapper = styled.TouchableOpacity`
-  border-width: 1px;
-  border-color: #b8b8b8;
+  border-width: 2px;
+  border-color: #d2d2d2;
   border-radius: 50px;
   align-items: center;
   justify-content: center;
@@ -175,16 +208,17 @@ const OpenBtnWrapper = styled.TouchableOpacity`
 `;
 
 const TogetherOpenBtnText = styled.Text`
-  width: 60px;
-  height: 60px;
-  font-size: 50px;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
   text-align: center;
-  color: #b8b8b8;
+  bottom: 4px;
+  color: #d2d2d2;
 `;
 
 const TogetherOpenText = styled.Text`
   color: #b4b4b4;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: bold;
   padding: 20px;
 `;
@@ -194,7 +228,7 @@ const RecruitTextWrapper = styled.View`
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 55%;
+  width: 50%;
 `;
 
 const RecruitTitle = styled.Text`
@@ -202,7 +236,6 @@ const RecruitTitle = styled.Text`
   font-size: 15px;
   font-weight: bold;
   color: #000;
-  padding: 5px 0;
 `;
 
 const RecruitAddress = styled.Text`
@@ -241,8 +274,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IContainerProps) =>
-    props.isClick ? '#007bf1' : '#fff'};
+  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -252,8 +284,8 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 18px;
-  color: ${(props: IContainerProps) => (props.isClick ? '#007bf1' : '#333')};
+  font-size: 15px;
+  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;

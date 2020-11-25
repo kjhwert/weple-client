@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -13,7 +17,9 @@ export default ({navigation}) => {
                   source={require('../../../assets/profile_1.png')}
                 />
                 <ProfileTextWrapper>
-                  <ProfileName>GilDong Hong</ProfileName>
+                  <ProfileNameBtn onPress={() => {}}>
+                    <ProfileName>GilDong Hong</ProfileName>
+                  </ProfileNameBtn>
                   <PostTime>10분 전</PostTime>
                 </ProfileTextWrapper>
                 <FollowBtn onPress={() => {}}>
@@ -47,7 +53,9 @@ export default ({navigation}) => {
                   source={require('../../../assets/profile_2.png')}
                 />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
                   <AllCommentBtn onPress={() => {}}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
@@ -62,7 +70,9 @@ export default ({navigation}) => {
                   source={require('../../../assets/profile_1.png')}
                 />
                 <ProfileTextWrapper>
-                  <ProfileName>GilDong Hong</ProfileName>
+                  <ProfileNameBtn onPress={() => {}}>
+                    <ProfileName>GilDong Hong</ProfileName>
+                  </ProfileNameBtn>
                   <PostTime>10분 전</PostTime>
                 </ProfileTextWrapper>
                 <FollowBtn onPress={() => {}}>
@@ -96,7 +106,9 @@ export default ({navigation}) => {
                   source={require('../../../assets/profile_2.png')}
                 />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
                   <AllCommentBtn onPress={() => {}}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
@@ -152,8 +164,8 @@ const ProfileWrapper = styled.View`
 `;
 
 const ProfileImage = styled.Image`
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50px;
   margin-right: 20px;
 `;
@@ -166,14 +178,22 @@ const ProfileTextWrapper = styled.View`
   width: 55%;
 `;
 
+const ProfileNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const ProfileName = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #303030;
 `;
 
 const PostTime = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #5f5e5e;
   padding-bottom: 5px;
 `;
@@ -189,7 +209,7 @@ const FollowBtn = styled.TouchableOpacity`
 
 const FollowBtnText = styled.Text`
   color: #fff;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
 `;
 
@@ -217,15 +237,15 @@ const RecordWrapper = styled.View`
 `;
 
 const RecordText = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   color: #fff;
   font-weight: bold;
   text-align: center;
 `;
 
 const RecordImage = styled.Image`
-  width: 30px;
-  height: 18px;
+  width: 22px;
+  height: 13px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -246,16 +266,16 @@ const IconImageWrapper = styled.View`
 `;
 
 const IconBtn = styled.TouchableOpacity`
-  width: 12%;
+  width: 10%;
 `;
 
 const IconImage = styled.Image`
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
 `;
 
 const AlarmText = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #303030;
   font-weight: 600;
 `;
@@ -277,16 +297,24 @@ const FollowTextWrapper = styled.View`
   width: 75%;
 `;
 
+const FollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const FollowName = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #303030;
 `;
 
 const CommentText = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #5f5e5e;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 `;
 
 const AllCommentBtn = styled.TouchableOpacity`
@@ -298,6 +326,6 @@ const AllCommentBtn = styled.TouchableOpacity`
 `;
 
 const AllCommentText = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   color: #7c7c7c;
 `;

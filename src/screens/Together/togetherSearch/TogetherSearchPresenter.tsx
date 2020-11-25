@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return (
     <Container>
       <ScrollContainer>

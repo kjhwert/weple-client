@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IContainerProps {
+interface IProps {
+  navigation: any;
   isClick: boolean;
 }
 
-export default ({navigation, newFollower, menuList}) => {
+export default ({navigation, newFollower, menuList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -23,7 +24,10 @@ export default ({navigation, newFollower, menuList}) => {
                 {newFollower.map((item, idx) => (
                   <FollowerImageWrapper key={idx}>
                     <FollowerImage source={item.followerImage} />
-                    <FollowerName>{item.name}</FollowerName>
+
+                    <NewFollowNameBtn onPress={() => {}}>
+                      <FollowerName>{item.name}</FollowerName>
+                    </NewFollowNameBtn>
                   </FollowerImageWrapper>
                 ))}
               </FollowerWrapper>
@@ -34,7 +38,7 @@ export default ({navigation, newFollower, menuList}) => {
               onPress={() => {
                 navigation.navigate('eventAll');
               }}>
-              <EventImage source={require('../../assets/event_1.jpg')} />
+              <EventImage source={require('../../assets/event_2.png')} />
             </EventWrapper>
             <Line></Line>
 
@@ -53,7 +57,9 @@ export default ({navigation, newFollower, menuList}) => {
               <ProfileWrapper>
                 <ProfileImage source={require('../../assets/profile_1.png')} />
                 <ProfileTextWrapper>
-                  <ProfileName>GilDong Hong</ProfileName>
+                  <ProfileNameBtn onPress={() => {}}>
+                    <ProfileName>GilDong Hong</ProfileName>
+                  </ProfileNameBtn>
                   <PostTime>10분 전</PostTime>
                 </ProfileTextWrapper>
                 <FollowBtn onPress={() => {}}>
@@ -87,7 +93,9 @@ export default ({navigation, newFollower, menuList}) => {
               <FollowWrapper>
                 <ProfileImage source={require('../../assets/profile_2.png')} />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
                   <AllCommentBtn onPress={() => {}}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
@@ -141,7 +149,7 @@ const NewFollowerBtn = styled.TouchableOpacity`
 `;
 
 const NewFollowerText = styled.Text`
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
   font-weight: bold;
   text-align: left;
@@ -151,12 +159,12 @@ const NewFollowerText = styled.Text`
 const NewFollowerNumber = styled.Text`
   color: #007bf1;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 13px;
 `;
 
 const NewFollowerMoreImage = styled.Image`
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 `;
 
 const FollowerWrapper = styled.View`
@@ -182,8 +190,14 @@ const FollowerImage = styled.Image`
   border-color: #007bf1;
 `;
 
+const NewFollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
 const FollowerName = styled.Text`
-  font-size: 14px;
+  font-size: 11px;
   color: #505050;
   padding-top: 10px;
 `;
@@ -197,7 +211,7 @@ const EventWrapper = styled.TouchableOpacity`
 
 const EventImage = styled.Image`
   width: 100%;
-  height: 230px;
+  height: 200px;
 `;
 
 const MenuBarWrapper = styled.View`
@@ -213,8 +227,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IContainerProps) =>
-    props.isClick ? '#007bf1' : '#fff'};
+  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -224,8 +237,8 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 18px;
-  color: ${(props: IContainerProps) => (props.isClick ? '#007bf1' : '#333')};
+  font-size: 16px;
+  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;
@@ -248,8 +261,8 @@ const ProfileWrapper = styled.View`
 `;
 
 const ProfileImage = styled.Image`
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50px;
   margin-right: 20px;
 `;
@@ -262,14 +275,22 @@ const ProfileTextWrapper = styled.View`
   width: 55%;
 `;
 
+const ProfileNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const ProfileName = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #303030;
 `;
 
 const PostTime = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #5f5e5e;
   padding-bottom: 5px;
 `;
@@ -285,7 +306,7 @@ const FollowBtn = styled.TouchableOpacity`
 
 const FollowBtnText = styled.Text`
   color: #fff;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
 `;
 
@@ -313,15 +334,15 @@ const RecordWrapper = styled.View`
 `;
 
 const RecordText = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   color: #fff;
   font-weight: bold;
   text-align: center;
 `;
 
 const RecordImage = styled.Image`
-  width: 30px;
-  height: 18px;
+  width: 22px;
+  height: 13px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -342,17 +363,16 @@ const IconImageWrapper = styled.View`
 `;
 
 const IconBtn = styled.TouchableOpacity`
-  width: 12%;
-  /* border-width: 1px; */
+  width: 10%;
 `;
 
 const IconImage = styled.Image`
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
 `;
 
 const AlarmText = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #303030;
   font-weight: 600;
 `;
@@ -374,16 +394,24 @@ const FollowTextWrapper = styled.View`
   width: 75%;
 `;
 
+const FollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const FollowName = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #303030;
 `;
 
 const CommentText = styled.Text`
-  font-size: 15px;
+  font-size: 13px;
   color: #5f5e5e;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 `;
 
 const AllCommentBtn = styled.TouchableOpacity`
@@ -395,6 +423,6 @@ const AllCommentBtn = styled.TouchableOpacity`
 `;
 
 const AllCommentText = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   color: #7c7c7c;
 `;

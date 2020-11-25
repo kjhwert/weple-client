@@ -1,18 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import StartContainer from '../screens/Start/StartContainer';
-import CreateAccountContainer from '../screens/CreateAccount/CreateAccountContainer';
+import CreateAccountContainer from '../screens//Start/CreateAccount/CreateAccountContainer';
 import LoginContainer from '../screens/login/LoginContainer';
 import BottomTab from './BottomTab';
 import PasswordContainer from '../screens/login/password/PasswordContainer';
-import SignInContainer from '../screens/login/SignIn/SignInContainer';
-import CategoryContainer from '../screens/login/SignIn/Category/CategoryContainer';
-import PersonalDataContainer from '../screens/login/SignIn/PersonalData/PersonalDataContainer';
-import PersonalVideoContainer from '../screens/login/SignIn/PersonalVideo/PersonalVideoContainer';
-import PersonalCommunityContainer from '../screens/login/SignIn/PersonalCommunity/PersonalCommunityContainer';
-import PersonalAlarmContainer from '../screens/login/SignIn/PersonalAlarm/PersonalAlarmContainer';
-import WelcomeContainer from '../screens/login/SignIn/Welcome/WelcomeContainer';
-import AlarmSelectContainer from '../screens/login/SignIn/Alarm/AlarmSelectContainer';
+import SignInContainer from '../screens/Start/SignIn/SignInContainer';
+import CategoryContainer from '../screens/Start/SignIn/Category/CategoryContainer';
+import PersonalDataContainer from '../screens/Start/SignIn/PersonalData/PersonalDataContainer';
+import PersonalVideoContainer from '../screens/Start/SignIn/PersonalData/PersonalVideoContainer';
+import PersonalCommunityContainer from '../screens/Start/SignIn/PersonalData/PersonalCommunityContainer';
+import PersonalAlarmContainer from '../screens/Start/SignIn/PersonalData/PersonalAlarmContainer';
+import WelcomeContainer from '../screens/Start/SignIn/Welcome/WelcomeContainer';
+import AlarmSetContainer from '../screens/Start/SignIn/alarmSetting/AlarmSetContainer';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +36,7 @@ export default () => {
         component={PersonalCommunityContainer}
       />
       <Stack.Screen name="personalAlarm" component={PersonalAlarmContainer} />
-      <Stack.Screen name="alarmSelect" component={AlarmSelectContainer} />
+      <Stack.Screen name="alarmSet" component={AlarmSetContainer} />
       <Stack.Screen name="welcome" component={WelcomeContainer} />
       <Stack.Screen
         options={{headerShown: false}}

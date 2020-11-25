@@ -1,6 +1,10 @@
 import React from 'react';
 import PasswordPresenter from './PasswordPresenter';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return <PasswordPresenter navigation={navigation} />;
 };

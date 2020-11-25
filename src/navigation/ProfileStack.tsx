@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Alarm from '../components/Alarm';
-import Search from '../components/Search';
+import BackBtn from '../components/BackBtn';
 import ProfileContainer from '../screens/Profile/ProfileContainer';
 
 const Stack = createStackNavigator();
@@ -12,7 +12,7 @@ export default ({navigation}) => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: 'black',
-        headerLeft: () => <Search navigation={navigation} />,
+        headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <Alarm navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       }}>

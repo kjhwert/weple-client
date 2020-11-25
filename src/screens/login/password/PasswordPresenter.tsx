@@ -2,13 +2,17 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Card from '../../../components/Card';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return (
     <Container>
       <Card>
         <PasswordWrapper>
           <PasswordTitle>이메일</PasswordTitle>
-          <Input placeholder="이메일를 입력하세요." name="id" />
+          <PasswordInput placeholder="이메일를 입력하세요." name="id" />
         </PasswordWrapper>
 
         <ConfirmBtnWrapper>
@@ -26,43 +30,45 @@ const Container = styled.View`
 `;
 
 const PasswordWrapper = styled.View`
+  flex: 9;
   display: flex;
   width: 100%;
 `;
 
 const PasswordTitle = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   color: #6f6f6f;
   font-weight: bold;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
-const Input = styled.TextInput`
-  padding: 10px 15px;
+const PasswordInput = styled.TextInput`
+  padding: 5px 10px;
   border-bottom-width: 1px;
   border-color: #babfc7;
   border-radius: 5px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #6f6f6f;
 `;
 
 const ConfirmBtnWrapper = styled.View`
+  flex: 1;
   display: flex;
   width: 100%;
-  position: absolute;
-  bottom: 20px;
 `;
 
 const ConfirmButton = styled.TouchableOpacity`
-  background-color: #b2b2b2;
   padding: 15px;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+  background-color: #b2b2b2;
 `;
 
 const ConfirmText = styled.Text`
   color: #fff;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `;

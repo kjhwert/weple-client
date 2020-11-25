@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
   return (
     <Container>
       <LinearGradient colors={['#79a6fa', '#3065f4', '#4e3adf']}>
@@ -10,23 +14,24 @@ export default ({navigation}) => {
           <AppLogoImageWrapper>
             <AppLogoImage source={require('../../assets/ttamna.png')} />
           </AppLogoImageWrapper>
+
           <LoginWrapper>
-            <LoginInfoText>이미 가입하셨으면 로그인해주세요.</LoginInfoText>
-            <LoginBtn
-              onPress={() => {
-                navigation.navigate('login');
-              }}>
-              <LoginBtnText>로그인</LoginBtnText>
-            </LoginBtn>
-          </LoginWrapper>
-          <StartBtnWrapper>
+            <LoginInfoWrapper>
+              <LoginInfoText>이미 가입하셨으면 로그인해주세요.</LoginInfoText>
+              <LoginBtn
+                onPress={() => {
+                  navigation.navigate('login');
+                }}>
+                <LoginBtnText>로그인</LoginBtnText>
+              </LoginBtn>
+            </LoginInfoWrapper>
             <StartBtn
               onPress={() => {
                 navigation.navigate('createAccount');
               }}>
               <StartText>시작하기</StartText>
             </StartBtn>
-          </StartBtnWrapper>
+          </LoginWrapper>
         </Card>
       </LinearGradient>
     </Container>
@@ -46,7 +51,7 @@ const Card = styled.View`
 `;
 
 const AppLogoImageWrapper = styled.View`
-  flex: 0.7;
+  flex: 8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,17 +64,22 @@ const AppLogoImage = styled.Image`
 `;
 
 const LoginWrapper = styled.View`
-  flex: 0.1;
+  flex: 2;
   display: flex;
   width: 100%;
+  flex-direction: column;
+`;
+
+const LoginInfoWrapper = styled.View`
+  display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
 `;
 
 const LoginInfoText = styled.Text`
   color: #bdc8ff;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: bold;
   width: 70%;
   text-align: center;
@@ -87,17 +97,10 @@ const LoginBtn = styled.TouchableOpacity`
 
 const LoginBtnText = styled.Text`
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   text-decoration: underline;
   text-decoration-color: #bdc8ff;
-`;
-
-const StartBtnWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  position: absolute;
-  bottom: 80px;
 `;
 
 const StartBtn = styled.TouchableOpacity`
@@ -110,6 +113,6 @@ const StartBtn = styled.TouchableOpacity`
 
 const StartText = styled.Text`
   color: #007bf1;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
 `;
