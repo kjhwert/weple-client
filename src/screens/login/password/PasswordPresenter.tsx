@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import Card from '../../../components/Card';
+import ContainerCard from '../../../components/ContainerCard';
+import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -9,18 +10,16 @@ interface IProps {
 export default ({navigation}: IProps) => {
   return (
     <Container>
-      <Card>
+      <ContainerCard>
         <PasswordWrapper>
           <PasswordTitle>이메일</PasswordTitle>
-          <PasswordInput placeholder="이메일를 입력하세요." name="id" />
+          <PasswordInput placeholder="이메일를 입력하세요." />
         </PasswordWrapper>
+      </ContainerCard>
 
-        <ConfirmBtnWrapper>
-          <ConfirmButton onPress={() => {}}>
-            <ConfirmText>확인</ConfirmText>
-          </ConfirmButton>
-        </ConfirmBtnWrapper>
-      </Card>
+      <NextBtn nextPage={'login'} navigation={navigation}>
+        {`확인`}
+      </NextBtn>
     </Container>
   );
 };
@@ -51,24 +50,4 @@ const PasswordInput = styled.TextInput`
   margin-bottom: 20px;
   font-size: 15px;
   color: #6f6f6f;
-`;
-
-const ConfirmBtnWrapper = styled.View`
-  flex: 1;
-  display: flex;
-  width: 100%;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  padding: 15px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  background-color: #b2b2b2;
-`;
-
-const ConfirmText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
 `;

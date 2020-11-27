@@ -10,7 +10,7 @@ export default ({navigation, menuList, aroundData}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn>
                 <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
@@ -19,9 +19,11 @@ export default ({navigation, menuList, aroundData}: IProps) => {
               <TogetherOpenWrapper>
                 <OpenBtnWrapper
                   onPress={() => {
-                    navigation.navigate('subject');
+                    navigation.navigate('togetherPostSubject');
                   }}>
-                  <TogetherOpenBtnText>+</TogetherOpenBtnText>
+                  <OpenBtnImage
+                    source={require('../../../assets/plus_icon.png')}
+                  />
                 </OpenBtnWrapper>
                 <TogetherOpenText>함께하기를 만들어주세요</TogetherOpenText>
               </TogetherOpenWrapper>
@@ -69,7 +71,7 @@ export default ({navigation, menuList, aroundData}: IProps) => {
                 </RecruitTextWrapper>
               </RecruitWrapper>
             ))}
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -87,7 +89,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
@@ -188,10 +190,11 @@ const RecordImage = styled.Image`
 const TogetherOpenWrapper = styled.View`
   display: flex;
   width: 100%;
+  height: 170px;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  margin-top: 20px;
+  margin: 10px 0;
   border-radius: 5px;
   background-color: #fcfcfd;
   border-width: 1px;
@@ -199,28 +202,21 @@ const TogetherOpenWrapper = styled.View`
 `;
 
 const OpenBtnWrapper = styled.TouchableOpacity`
-  border-width: 2px;
-  border-color: #d2d2d2;
-  border-radius: 50px;
+  width: 40%;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
 `;
 
-const TogetherOpenBtnText = styled.Text`
+const OpenBtnImage = styled.Image`
   width: 50px;
   height: 50px;
-  font-size: 40px;
-  text-align: center;
-  bottom: 4px;
-  color: #d2d2d2;
 `;
 
 const TogetherOpenText = styled.Text`
   color: #b4b4b4;
   font-size: 12px;
   font-weight: bold;
-  padding: 20px;
+  padding-top: 20px;
 `;
 
 const RecruitTextWrapper = styled.View`

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import Card from '../../../components/Card';
+import ContainerCard from '../../../components/ContainerCard';
+import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -9,7 +10,7 @@ interface IProps {
 export default ({navigation}: IProps) => {
   return (
     <Container>
-      <Card>
+      <ContainerCard>
         <CreateAccountWrapper>
           <CreateAccountTitle>계정 만들기</CreateAccountTitle>
           <CreateAccountContent>
@@ -20,10 +21,7 @@ export default ({navigation}: IProps) => {
         </CreateAccountWrapper>
 
         <SocialLoginWrapper>
-          <SocialLogin
-            onPress={() => {
-              navigation.navigate('signIn');
-            }}>
+          <SocialLogin onPress={() => {}}>
             <SocialLoginText>이메일로 가입하기</SocialLoginText>
           </SocialLogin>
           <SocialLogin onPress={() => {}}>
@@ -43,16 +41,10 @@ export default ({navigation}: IProps) => {
             <SocialLoginText>Google로 시작하기</SocialLoginText>
           </SocialLogin>
         </SocialLoginWrapper>
-
-        <NextBtnWrapper>
-          <NextButton
-            onPress={() => {
-              navigation.navigate('signIn');
-            }}>
-            <NextText>다음</NextText>
-          </NextButton>
-        </NextBtnWrapper>
-      </Card>
+      </ContainerCard>
+      <NextBtn nextPage={'signUpEmail'} navigation={navigation}>
+        {`다음`}
+      </NextBtn>
     </Container>
   );
 };
@@ -62,7 +54,6 @@ const Container = styled.View`
 `;
 
 const CreateAccountWrapper = styled.View`
-  flex: 3;
   display: flex;
   width: 100%;
 `;
@@ -82,7 +73,6 @@ const CreateAccountContent = styled.Text`
 `;
 
 const SocialLoginWrapper = styled.View`
-  flex: 6;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -114,25 +104,4 @@ const SocialLoginText = styled.Text`
   font-weight: bold;
   width: 70%;
   text-align: center;
-`;
-
-const NextBtnWrapper = styled.View`
-  flex: 1;
-  display: flex;
-  width: 100%;
-`;
-
-const NextButton = styled.TouchableOpacity`
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  background-color: #b2b2b2;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
 `;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -16,7 +17,14 @@ export default ({navigation, content}: IProps) => {
           <Card>
             <JoinWrapper>
               <JoinInfoWrapper>
-                <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                <JoinTitleWrapper>
+                  <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                  <ShareBtn>
+                    <ShareImage
+                      source={require('../../../assets/share_icon.png')}
+                    />
+                  </ShareBtn>
+                </JoinTitleWrapper>
                 <JoinTextWrapper>
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
@@ -28,7 +36,6 @@ export default ({navigation, content}: IProps) => {
                       source={require('../../../assets/more.png')}
                     />
                   </JoinInfoContentBtn>
-
                   <JoinInfoTitle>참가비</JoinInfoTitle>
                   <JoinInfoContent>10,000원</JoinInfoContent>
                   <JoinInfoTitle>지역</JoinInfoTitle>
@@ -52,7 +59,9 @@ export default ({navigation, content}: IProps) => {
                   source={require('../../../assets/profile_2.png')}
                 />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
                   <AllCommentBtn onPress={() => {}}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
@@ -60,11 +69,12 @@ export default ({navigation, content}: IProps) => {
                 </FollowTextWrapper>
               </FollowWrapper>
 
-              <JoinBtnWrapper>
-                <JoinButton onPress={() => {}}>
-                  <JoinText>수정하기</JoinText>
-                </JoinButton>
-              </JoinBtnWrapper>
+              <JoinButton
+                onPress={() => {
+                  navigation.navigate('togetherDelete');
+                }}>
+                <JoinText>수정하기</JoinText>
+              </JoinButton>
             </JoinWrapper>
           </Card>
         </ScrollWrapper>
@@ -112,7 +122,12 @@ const JoinWrapper = styled.View`
   justify-content: flex-start;
   padding: 20px;
   border-width: 1px;
-  border-color: #4c585858;
+  border-color: #e2e2e2;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+  shadow-color: grey;
+  shadow-offset: 0px 0px;
+  elevation: 0.5;
 `;
 
 const JoinInfoWrapper = styled.View`
@@ -122,24 +137,35 @@ const JoinInfoWrapper = styled.View`
   justify-content: flex-start;
   width: 100%;
   border-bottom-width: 1px;
-  border-color: #919191;
+  border-color: #dcdcdc;
 `;
 
-const JoinTextWrapper = styled.View`
+const JoinTitleWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 10px 0 20px 0;
 `;
 
 const JoinTitle = styled.Text`
-  width: 100%;
+  width: 85%;
   font-size: 15px;
   font-weight: bold;
   color: #222;
   padding: 10px 0;
+`;
+
+const ShareBtn = styled.TouchableOpacity`
+  width: 15%;
+  flex-flow: row wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+`;
+
+const ShareImage = styled.Image`
+  width: 22px;
+  height: 19px;
 `;
 
 const JoinInfoTitle = styled.Text`
@@ -156,6 +182,14 @@ const JoinInfoContent = styled.Text`
   color: #333333;
   padding: 5px 0;
   text-align: right;
+`;
+const JoinTextWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 0 20px 0;
 `;
 
 const JoinInfoContentBtn = styled.TouchableOpacity`
@@ -184,7 +218,7 @@ const JoinContentWrapper = styled.View`
   justify-content: center;
   width: 100%;
   border-bottom-width: 1px;
-  border-color: #919191;
+  border-color: #dcdcdc;
   padding: 20px 0;
 `;
 
@@ -227,6 +261,14 @@ const FollowTextWrapper = styled.View`
   width: 75%;
 `;
 
+const FollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const FollowName = styled.Text`
   font-size: 15px;
   font-weight: 500;
@@ -252,18 +294,12 @@ const AllCommentText = styled.Text`
   color: #7c7c7c;
 `;
 
-const JoinBtnWrapper = styled.View`
+const JoinButton = styled.TouchableOpacity`
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: center;
-  padding-top: 20px;
-`;
-
-const JoinButton = styled.TouchableOpacity`
-  width: 100%;
   padding: 15px;
-  border-radius: 5px;
+  margin-top: 20px;
   background-color: #b2b2b2;
 `;
 

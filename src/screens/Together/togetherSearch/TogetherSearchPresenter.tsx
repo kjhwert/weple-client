@@ -10,7 +10,7 @@ export default ({navigation}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <PostWrapper>
               <ProfileWrapper>
                 <ProfileImage
@@ -100,7 +100,7 @@ export default ({navigation}: IProps) => {
                 </FollowTextWrapper>
               </FollowWrapper>
             </PostWrapper>
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -118,7 +118,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;

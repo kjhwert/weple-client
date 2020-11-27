@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeedStack from '../navigation/FeedStack';
-import TogetherStack from '../navigation/TogertherStack';
+import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
 

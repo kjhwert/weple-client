@@ -11,9 +11,12 @@ export default ({navigation, menuList, openClub}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <RecruitTogetherWrapper>
-              <RecruitTogetherBtn>
+              <RecruitTogetherBtn
+                onPress={() => {
+                  navigation.navigate('togetherOpen');
+                }}>
                 <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage
@@ -43,7 +46,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <RecruitBtnWrapper>
               <RecruitBtn
                 onPress={() => {
-                  navigation.navigate('subject');
+                  navigation.navigate('togetherPostSubject');
                 }}>
                 <RecruitBtnText>함께 개설하기</RecruitBtnText>
               </RecruitBtn>
@@ -91,7 +94,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 </RecruitTextWrapper>
               </RecruitWrapper>
             ))}
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -109,7 +112,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;

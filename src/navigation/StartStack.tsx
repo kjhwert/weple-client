@@ -5,14 +5,17 @@ import CreateAccountContainer from '../screens//Start/CreateAccount/CreateAccoun
 import LoginContainer from '../screens/login/LoginContainer';
 import BottomTab from './BottomTab';
 import PasswordContainer from '../screens/login/password/PasswordContainer';
-import SignInContainer from '../screens/Start/SignIn/SignInContainer';
-import CategoryContainer from '../screens/Start/SignIn/Category/CategoryContainer';
-import PersonalDataContainer from '../screens/Start/SignIn/PersonalData/PersonalDataContainer';
-import PersonalVideoContainer from '../screens/Start/SignIn/PersonalData/PersonalVideoContainer';
-import PersonalCommunityContainer from '../screens/Start/SignIn/PersonalData/PersonalCommunityContainer';
-import PersonalAlarmContainer from '../screens/Start/SignIn/PersonalData/PersonalAlarmContainer';
-import WelcomeContainer from '../screens/Start/SignIn/Welcome/WelcomeContainer';
-import AlarmSetContainer from '../screens/Start/SignIn/alarmSetting/AlarmSetContainer';
+import SignUpEmailContainer from '../screens/Start/SignUp/SignUpEmailContainer';
+import SignUpPasswordContainer from '../screens/Start/SignUp/SignUpPasswordContainer';
+import SignUpNicknameContainer from '../screens/Start/SignUp/SignUpNicknameContainer';
+import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
+import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
+import PersonalDataContainer from '../screens/Start/PersonalData/PersonalDataContainer';
+import PersonalVideoContainer from '../screens/Start/PersonalData/PersonalVideoContainer';
+import PersonalCommunityContainer from '../screens/Start/PersonalData/PersonalCommunityContainer';
+import PersonalAlarmContainer from '../screens/Start/PersonalData/PersonalAlarmContainer';
+import WelcomeContainer from '../screens/Start/Welcome/WelcomeContainer';
+import AlarmSetContainer from '../screens/Start/alarmSetting/AlarmSetContainer';
 
 const Stack = createStackNavigator();
 
@@ -27,8 +30,11 @@ export default () => {
       <Stack.Screen name="createAccount" component={CreateAccountContainer} />
       <Stack.Screen name="login" component={LoginContainer} />
       <Stack.Screen name="password" component={PasswordContainer} />
-      <Stack.Screen name="signIn" component={SignInContainer} />
-      <Stack.Screen name="category" component={CategoryContainer} />
+      <Stack.Screen name="signUpEmail" component={SignUpEmailContainer} />
+      <Stack.Screen name="signUpPassword" component={SignUpPasswordContainer} />
+      <Stack.Screen name="signUpNickname" component={SignUpNicknameContainer} />
+      <Stack.Screen name="signUpName" component={SignUpNameContainer} />
+      <Stack.Screen name="startCategory" component={StartCategoryContainer} />
       <Stack.Screen name="personalData" component={PersonalDataContainer} />
       <Stack.Screen name="personalVideo" component={PersonalVideoContainer} />
       <Stack.Screen

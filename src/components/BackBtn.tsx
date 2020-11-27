@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-// interface IProps {
-//   navigation: INavigation;
-// }
-
 export default ({navigation}) => {
   return (
     <Container

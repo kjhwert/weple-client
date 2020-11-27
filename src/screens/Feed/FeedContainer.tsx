@@ -22,6 +22,26 @@ const newFollower = [
     name: 'Benjamin',
     followerImage: require('../../assets/follower_4.png'),
   },
+  {
+    id: 4,
+    name: 'GilDong',
+    followerImage: require('../../assets/follower_1.jpeg'),
+  },
+  {
+    id: 5,
+    name: 'Benjamin',
+    followerImage: require('../../assets/follower_2.png'),
+  },
+  {
+    id: 6,
+    name: 'Benjamin',
+    followerImage: require('../../assets/follower_3.jpeg'),
+  },
+  {
+    id: 7,
+    name: 'Benjamin',
+    followerImage: require('../../assets/follower_4.png'),
+  },
 ];
 
 const menuList = [

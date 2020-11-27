@@ -10,7 +10,7 @@ export default ({navigation}: IProps) => {
   return (
     <Container>
       <LinearGradient colors={['#79a6fa', '#3065f4', '#4e3adf']}>
-        <Card>
+        <ContainerCard>
           <AppLogoImageWrapper>
             <AppLogoImage source={require('../../assets/ttamna.png')} />
           </AppLogoImageWrapper>
@@ -32,7 +32,7 @@ export default ({navigation}: IProps) => {
               <StartText>시작하기</StartText>
             </StartBtn>
           </LoginWrapper>
-        </Card>
+        </ContainerCard>
       </LinearGradient>
     </Container>
   );
@@ -42,7 +42,7 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   padding: 20px;

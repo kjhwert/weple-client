@@ -10,7 +10,7 @@ export default ({navigation}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <PostWrapper>
               <ProfileWrapper>
                 <ProfileImage
@@ -116,7 +116,7 @@ export default ({navigation}: IProps) => {
                 </FollowTextWrapper>
               </FollowWrapper>
             </PostWrapper>
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -134,7 +134,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
@@ -151,7 +151,7 @@ const PostWrapper = styled.View`
   display: flex;
   align-items: flex-start;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
 
 const ProfileWrapper = styled.View`
@@ -199,8 +199,8 @@ const PostTime = styled.Text`
 `;
 
 const FollowBtn = styled.TouchableOpacity`
-  width: 20%;
-  padding: 6px;
+  width: 22%;
+  padding: 7px;
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;

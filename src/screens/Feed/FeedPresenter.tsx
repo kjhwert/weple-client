@@ -11,7 +11,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <NewFollowerWrapper>
               <NewFollowerBtn onPress={() => {}}>
                 <NewFollowerText>새로운 팔로워</NewFollowerText>
@@ -20,7 +20,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                   source={require('../../assets/more.png')}
                 />
               </NewFollowerBtn>
-              <FollowerWrapper>
+              <FollowerWrapper horizontal={true}>
                 {newFollower.map((item, idx) => (
                   <FollowerImageWrapper key={idx}>
                     <FollowerImage source={item.followerImage} />
@@ -36,7 +36,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
 
             <EventWrapper
               onPress={() => {
-                navigation.navigate('eventAll');
+                navigation.navigate('feedEventDetail');
               }}>
               <EventImage source={require('../../assets/event_2.png')} />
             </EventWrapper>
@@ -103,7 +103,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                 </FollowTextWrapper>
               </FollowWrapper>
             </PostWrapper>
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -121,7 +121,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
@@ -134,7 +134,7 @@ const Line = styled.View`
   background-color: #f3f3f3;
 `;
 
-const NewFollowerWrapper = styled.View`
+const NewFollowerWrapper = styled.ScrollView`
   display: flex;
   width: 100%;
   padding: 20px;
@@ -167,11 +167,9 @@ const NewFollowerMoreImage = styled.Image`
   height: 8px;
 `;
 
-const FollowerWrapper = styled.View`
+const FollowerWrapper = styled.ScrollView`
   display: flex;
   flex-flow: row;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
   padding-top: 10px;
 `;
@@ -180,6 +178,7 @@ const FollowerImageWrapper = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-right: 10px;
 `;
 
 const FollowerImage = styled.Image`
@@ -248,7 +247,7 @@ const PostWrapper = styled.View`
   display: flex;
   align-items: flex-start;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
 `;
 
 const ProfileWrapper = styled.View`
@@ -296,8 +295,8 @@ const PostTime = styled.Text`
 `;
 
 const FollowBtn = styled.TouchableOpacity`
-  width: 20%;
-  padding: 6px;
+  width: 22%;
+  padding: 7px;
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;

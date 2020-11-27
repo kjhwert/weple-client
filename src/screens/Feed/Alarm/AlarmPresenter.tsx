@@ -10,7 +10,7 @@ export default ({navigation, alarmData}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             {alarmData.map((item, idx) => (
               <AlarmWrapper key={idx}>
                 <AlarmMarkWrapper>
@@ -24,7 +24,7 @@ export default ({navigation, alarmData}: IProps) => {
                 </AlarmBtnWrapper>
               </AlarmWrapper>
             ))}
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -42,7 +42,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const Card = styled.View`
+const ContainerCard = styled.View`
   width: 100%;
   height: 100%;
   display: flex;

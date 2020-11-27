@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import Card from '../../components/Card';
+import ContainerCard from '../../components/ContainerCard';
 
 interface IProps {
   navigation: any;
@@ -11,7 +11,7 @@ export default ({navigation}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <Card>
+          <ContainerCard>
             <SignInWrapper>
               <LoginTitle>로그인</LoginTitle>
               <SignInTitle>이메일</SignInTitle>
@@ -62,13 +62,13 @@ export default ({navigation}: IProps) => {
                 <SignInInfoText>아직 계정이 없으신가요?</SignInInfoText>
                 <SignInButton
                   onPress={() => {
-                    navigation.navigate('signIn');
+                    navigation.navigate('signUpEmail');
                   }}>
                   <SignInText>무료 회원가입</SignInText>
                 </SignInButton>
               </FreeSignInWrapper>
             </SnsLoginWrapper>
-          </Card>
+          </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
