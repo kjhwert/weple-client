@@ -7,13 +7,33 @@ interface IProps {
   navigation: any;
 }
 
-export default ({navigation, categories}: IProps) => {
+export default ({
+  navigation,
+  sportCategories,
+  travelCategories,
+  hobbyCategories,
+}: IProps) => {
   return (
     <Container>
       <ContainerCard>
         <CategoryWrapper>
           <InfoText>1개 이상 선택해주세요.</InfoText>
-          {categories.map((item, idx) => (
+          <CategoryTitle>운동</CategoryTitle>
+          {sportCategories.map((item, idx) => (
+            <CategoryBtn key={idx} onPress={() => {}}>
+              <CategoryText>{item.name}</CategoryText>
+            </CategoryBtn>
+          ))}
+
+          <CategoryTitle>여행</CategoryTitle>
+          {travelCategories.map((item, idx) => (
+            <CategoryBtn key={idx} onPress={() => {}}>
+              <CategoryText>{item.name}</CategoryText>
+            </CategoryBtn>
+          ))}
+
+          <CategoryTitle>취미</CategoryTitle>
+          {hobbyCategories.map((item, idx) => (
             <CategoryBtn key={idx} onPress={() => {}}>
               <CategoryText>{item.name}</CategoryText>
             </CategoryBtn>
@@ -37,7 +57,15 @@ const InfoText = styled.Text`
   font-weight: bold;
   color: #6f6f6f;
   text-align: left;
-  margin-bottom: 20px;
+`;
+
+const CategoryTitle = styled.Text`
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  color: #1f1f1f;
+  text-align: left;
+  margin: 10px 0;
 `;
 
 const CategoryWrapper = styled.View`

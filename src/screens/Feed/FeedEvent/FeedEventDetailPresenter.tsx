@@ -62,9 +62,6 @@ const EventImageWrapper = styled.View`
   align-items: center;
   justify-content: center;
   width: 100%;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-color: #d1d1d1;
 `;
 
 const EventImage = styled.Image`

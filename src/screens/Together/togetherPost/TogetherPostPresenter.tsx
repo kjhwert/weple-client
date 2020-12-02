@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-// import NextBtn from '../../../components/NextBtn';
+import NextBtn from '../../../components/NextBtn';
 
 export default ({navigation, content}) => {
   return (
@@ -35,15 +35,11 @@ export default ({navigation, content}) => {
               ))}
             </JoinWrapper>
           </Card>
-
-          <NextButton
-            onPress={() => {
-              navigation.navigate('togetherModify');
-            }}>
-            <NextText>완료</NextText>
-          </NextButton>
         </ScrollWrapper>
       </ScrollContainer>
+      <NextBtn nextPage={'togetherModify'} navigation={navigation}>
+        {`다음`}
+      </NextBtn>
     </Container>
   );
 };
@@ -65,7 +61,6 @@ const Card = styled.View`
   display: flex;
   align-items: center;
   padding: 20px;
-  /* margin-bottom: 50px; */
 `;
 
 const JoinImageWrapper = styled.View`

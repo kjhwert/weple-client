@@ -3,8 +3,8 @@ import styled from 'styled-components/native';
 
 interface IProps {
   children: ReactNode;
-  padding?: number;
-  margin?: number;
+  navigation: any;
+  nextPage: any;
 }
 
 export default ({children, navigation, nextPage}: IProps) => {
@@ -13,17 +13,11 @@ export default ({children, navigation, nextPage}: IProps) => {
   };
 
   return (
-    <Container>
-      <NextButton onPress={moveToPage}>
-        <NextText>{children}</NextText>
-      </NextButton>
-    </Container>
+    <NextButton onPress={moveToPage}>
+      <NextText>{children}</NextText>
+    </NextButton>
   );
 };
-
-const Container = styled.View`
-  flex: 1;
-`;
 
 const NextButton = styled.TouchableOpacity`
   display: flex;

@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
+// import DropdownMenu from 'react-native-dropdown-menu';
+
+// var SearchData = [['싸이클링', '달리기', '걷기', '등산']];
 
 interface IProps {
   navigation: any;
@@ -11,6 +14,30 @@ export default ({navigation}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
+            <ActiveSelectTitleWrapper>
+              <ProfileTitleBtn onPress={() => {}}>
+                <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
+                {/* <DropdownMenu
+                  style={{
+                    flex: 1,
+                    position: 'absolute',
+                  }}
+                  bgColor={'white'}
+                  tintColor={'#666666'}
+                  activityTintColor={'green'}
+                  // arrowImg={}
+                  // checkImage={}
+                  // optionTextStyle={{color: '#333333'}}
+                  // titleStyle={{color: '#333333'}}
+                  // maxHeight={300}
+                  handler={(selection, row) => console.log(row)}
+                  data={SearchData}></DropdownMenu> */}
+              </ProfileTitleBtn>
+              <SortBtn>
+                <SortImage source={require('../../../assets/sort_icon.png')} />
+              </SortBtn>
+            </ActiveSelectTitleWrapper>
+
             <PostWrapper>
               <ProfileWrapper>
                 <ProfileImage
@@ -37,7 +64,7 @@ export default ({navigation}: IProps) => {
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/heart_icon.png')}
+                      source={require('../../../assets/heart_icon_red.png')}
                     />
                   </IconBtn>
                   <IconBtn>
@@ -147,6 +174,40 @@ const Line = styled.View`
   background-color: #f3f3f3;
 `;
 
+const ActiveSelectTitleWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  background-color: #f3f3f3;
+  padding: 20px;
+  margin-bottom: 5px;
+`;
+
+const ProfileTitleBtn = styled.TouchableOpacity`
+  width: 85%;
+  flex-flow: row wrap;
+`;
+
+const ProfileActiveTitle = styled.Text`
+  font-size: 15px;
+  color: #333;
+  text-align: left;
+  margin-right: 5px;
+`;
+
+const SortBtn = styled.TouchableOpacity`
+  width: 15%;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+`;
+
+const SortImage = styled.Image`
+  width: 25px;
+  height: 20px;
+`;
+
 const PostWrapper = styled.View`
   display: flex;
   align-items: flex-start;
@@ -213,14 +274,14 @@ const FollowBtnText = styled.Text`
   font-weight: bold;
 `;
 
-const PostImageWrapper = styled.View`
+const PostImageWrapper = styled.TouchableOpacity`
   display: flex;
   width: 100%;
 `;
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 280px;
+  height: 250px;
   border-radius: 5px;
 `;
 
@@ -270,8 +331,8 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 19px;
 `;
 
 const AlarmText = styled.Text`

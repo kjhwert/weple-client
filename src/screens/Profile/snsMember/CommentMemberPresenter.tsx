@@ -18,8 +18,17 @@ export default ({navigation, member}: IProps) => {
                   <ProfileImage source={item.image} />
                 </ProfileImageWrapper>
                 <MemberTextWrapper>
-                  <MemberText>{item.name}</MemberText>
+                  <MemberNameBtn>
+                    <MemberText>{item.name}</MemberText>
+                  </MemberNameBtn>
+                  <CommentText multiline={true}>{item.comment}</CommentText>
                 </MemberTextWrapper>
+
+                <DotMoreBtn>
+                  <DotMoreImage
+                    source={require('../../../assets/dotMore.png')}
+                  />
+                </DotMoreBtn>
               </MemberWrapper>
             ))}
           </Card>
@@ -78,15 +87,36 @@ const MemberTextWrapper = styled.View`
   flex-flow: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 60%;
+  width: 69%;
   height: 100%;
   margin-right: 5px;
 `;
 
-const MemberText = styled.Text`
+const MemberNameBtn = styled.TouchableOpacity`
   width: 100%;
+`;
+
+const MemberText = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333;
   padding-bottom: 5px;
+`;
+
+const CommentText = styled.TextInput`
+  width: 100%;
+  font-size: 13px;
+  color: #333;
+`;
+
+const DotMoreBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 10%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DotMoreImage = styled.Image`
+  width: 16px;
+  height: 4px;
 `;

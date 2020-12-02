@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../components/NextBtn';
+import CheckBox from '@react-native-community/checkbox';
 
 interface IProps {
   navigation: any;
@@ -8,6 +8,8 @@ interface IProps {
 }
 
 export default ({navigation, menuList, ActivityData}: IProps) => {
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
   return (
     <Container>
       <ScrollContainer>
@@ -35,13 +37,28 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                     <ActivityDistance>{item.distance}KM</ActivityDistance>
                   </ActivityTextWrapper>
                   <ActivityAddress>{item.address}</ActivityAddress>
+                  <CheckBox
+                    style={{
+                      position: 'absolute',
+                      right: 8,
+                      bottom: 120,
+                    }}
+                    boxType={'circle'}
+                    disabled={false}
+                    value={false}
+                    onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                  />
                 </ActivityImageWrapper>
               ))}
+              <ActivityImageWrapper></ActivityImageWrapper>
             </ActivityWrapper>
+            <NextBtn
+              onPress={() => {
+                navigation.navigate('togetherPost');
+              }}>
+              <NextText>다음</NextText>
+            </NextBtn>
           </Card>
-          <NextBtn nextPage={'togetherPost'} navigation={navigation}>
-            {`다음`}
-          </NextBtn>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -60,10 +77,10 @@ const ScrollContainer = styled.View`
 const ScrollWrapper = styled.ScrollView``;
 
 const Card = styled.View`
+  flex: 1;
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
 `;
 
 const Line = styled.View`
@@ -86,16 +103,17 @@ const ActivityTitle = styled.Text`
 const ActivityWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-around;
   width: 100%;
   padding: 10px 0px;
-  margin-bottom: 50px;
 `;
 
 const ActivityImageWrapper = styled.TouchableOpacity`
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: center;
   border-width: 1px;
   border-color: #4c585858;
@@ -108,7 +126,7 @@ const ActivityImage = styled.Image`
   width: 100%;
   height: 120px;
   flex-flow: row wrap;
-  border-radius: 5px;
+  border-radius: 4px;
 `;
 
 const ActivityTextWrapper = styled.View`
@@ -178,4 +196,20 @@ const MenuText = styled.Text`
   font-weight: bold;
   text-align: center;
   padding: 10px;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #b2b2b2;
+  margin-top: 50px;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

@@ -87,8 +87,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 65px;
-  height: 77px;
+  width: 60px;
+  height: 70px;
 `;
 
 const LineWrapper = styled.View`

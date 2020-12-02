@@ -15,13 +15,12 @@ export default ({navigation}: IProps) => {
           <SignUpTitle>닉네임</SignUpTitle>
           <NickNameWrapper>
             <NickNameInput placeholder="닉네임을 입력하세요." />
-            <DuplicateBtn>
+            <DuplicateBtn onPress={() => {}}>
               <DuplicateText>중복확인</DuplicateText>
             </DuplicateBtn>
           </NickNameWrapper>
         </SignUpWrapper>
       </ContainerCard>
-
       <NextBtn nextPage={'signUpName'} navigation={navigation}>
         {`다음`}
       </NextBtn>
@@ -46,6 +45,22 @@ const SignUpTitle = styled.Text`
   margin-bottom: 5px;
 `;
 
+const DuplicateBtn = styled.TouchableOpacity`
+  width: 25%;
+  align-items: center;
+  border-radius: 5px;
+  margin-left: 3%;
+  padding: 10px 5px;
+  background-color: #fff;
+  border-width: 1px;
+  border-color: #acacac;
+`;
+
+const DuplicateText = styled.Text`
+  color: #2b2b2b;
+  font-size: 12px;
+`;
+
 const NickNameWrapper = styled.View`
   display: flex;
   flex-direction: row;
@@ -58,22 +73,6 @@ const NickNameInput = styled.TextInput`
   margin-bottom: 20px;
   border-bottom-width: 1px;
   border-color: #acacac;
-  font-size: 15px;
+  font-size: 14px;
   color: #6f6f6f;
-`;
-
-const DuplicateBtn = styled.TouchableOpacity`
-  width: 25%;
-  align-items: center;
-  border-radius: 5px;
-  margin-left: 3%;
-  padding: 10px 5px;
-  background-color: #fff;
-  border-width: 1px;
-  border-color: #b9bec6;
-`;
-
-const DuplicateText = styled.Text`
-  color: #2b2b2b;
-  font-size: 12px;
 `;

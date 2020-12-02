@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface IProps {
   navigation: any;
@@ -13,25 +14,45 @@ export default ({navigation, newFollower, menuList}: IProps) => {
         <ScrollWrapper>
           <ContainerCard>
             <NewFollowerWrapper>
-              <NewFollowerBtn onPress={() => {}}>
+              <NewFollowerBtn
+                onPress={() => {
+                  navigation.navigate('friendFollower');
+                }}>
                 <NewFollowerText>새로운 팔로워</NewFollowerText>
                 <NewFollowerNumber>8</NewFollowerNumber>
                 <NewFollowerMoreImage
                   source={require('../../assets/more.png')}
                 />
               </NewFollowerBtn>
+
               <FollowerWrapper horizontal={true}>
                 {newFollower.map((item, idx) => (
                   <FollowerImageWrapper key={idx}>
-                    <FollowerImage source={item.followerImage} />
+                    <LinearGradient
+                      colors={['#61d7ff', '#79a6fa', '#3065f4']}
+                      start={{x: 0, y: 1}}
+                      end={{x: 1, y: 0}}
+                      style={{
+                        width: 65,
+                        height: 65,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 50,
+                      }}>
+                      <FollowerImage source={item.followerImage} />
+                    </LinearGradient>
 
-                    <NewFollowNameBtn onPress={() => {}}>
+                    <NewFollowNameBtn
+                      onPress={() => {
+                        navigation.navigate('friendActive');
+                      }}>
                       <FollowerName>{item.name}</FollowerName>
                     </NewFollowNameBtn>
                   </FollowerImageWrapper>
                 ))}
               </FollowerWrapper>
             </NewFollowerWrapper>
+
             <Line></Line>
 
             <EventWrapper
@@ -46,7 +67,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
               {menuList.map((item, idx) => (
                 <MenuWrapper key={idx} isClick={item.isClick}>
                   <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -66,7 +87,10 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                   <FollowBtnText>팔로우</FollowBtnText>
                 </FollowBtn>
               </ProfileWrapper>
-              <PostImageWrapper>
+              <PostImageWrapper
+                onPress={() => {
+                  navigation.navigate('activeDetail');
+                }}>
                 <PostImage source={require('../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
                   <RecordImage source={require('../../assets/cycle.png')} />
@@ -81,23 +105,37 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                       source={require('../../assets/heart_icon.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <IconImage
                       source={require('../../assets/comment_icon.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
-                <AlarmText>806명이 좋아합니다.</AlarmText>
+                <AlarmBtn
+                  onPress={() => {
+                    navigation.navigate('friendNice');
+                  }}>
+                  <AlarmBtnText>806명이 좋아합니다.</AlarmBtnText>
+                </AlarmBtn>
               </IconWrapper>
 
               <FollowWrapper>
                 <ProfileImage source={require('../../assets/profile_2.png')} />
                 <FollowTextWrapper>
-                  <FollowNameBtn onPress={() => {}}>
+                  <FollowNameBtn
+                    onPress={() => {
+                      navigation.navigate('friendActive');
+                    }}>
                     <FollowName>Benjamin</FollowName>
                   </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
+                  <AllCommentBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
                   </AllCommentBtn>
                 </FollowTextWrapper>
@@ -185,8 +223,6 @@ const FollowerImage = styled.Image`
   width: 60px;
   height: 60px;
   border-radius: 50px;
-  border-width: 2px;
-  border-color: #007bf1;
 `;
 
 const NewFollowNameBtn = styled.TouchableOpacity`
@@ -309,14 +345,14 @@ const FollowBtnText = styled.Text`
   font-weight: bold;
 `;
 
-const PostImageWrapper = styled.View`
+const PostImageWrapper = styled.TouchableOpacity`
   display: flex;
   width: 100%;
 `;
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 280px;
+  height: 250px;
   border-radius: 5px;
 `;
 
@@ -367,10 +403,14 @@ const IconBtn = styled.TouchableOpacity`
 
 const IconImage = styled.Image`
   width: 20px;
-  height: 20px;
+  height: 17px;
 `;
 
-const AlarmText = styled.Text`
+const AlarmBtn = styled.TouchableOpacity`
+  width: 100%;
+`;
+
+const AlarmBtnText = styled.Text`
   font-size: 13px;
   color: #303030;
   font-weight: 600;

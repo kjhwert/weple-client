@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 interface IProps {
   navigation: any;
   isClick: boolean;
-  isNew: boolean;
+  isFollow: boolean;
 }
 
 export default ({navigation, menuList, member}: IProps) => {
@@ -17,9 +17,14 @@ export default ({navigation, menuList, member}: IProps) => {
             <MenuBarWrapper>
               {menuList.map((item, idx) => (
                 <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
-                    <MenuNumberText>{item.number}</MenuNumberText>
+                  <MenuBtn
+                    onPress={() => {
+                      navigation.navigate('followingMember');
+                    }}>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
+                    <MenuNumberText isClick={item.isClick}>
+                      {item.number}
+                    </MenuNumberText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -30,9 +35,13 @@ export default ({navigation, menuList, member}: IProps) => {
               <MemberWrapper key={idx}>
                 <ProfileImage source={item.image} />
                 <MemberTextWrapper>
-                  <MemberText>{item.name}</MemberText>
-                  <FollowBtn>
-                    <FollowBtnText>팔로우</FollowBtnText>
+                  <MemberBtn onPress={() => {}}>
+                    <MemberText>{item.name}</MemberText>
+                  </MemberBtn>
+                  <FollowBtn isFollow={item.isFollow}>
+                    <FollowBtnText isFollow={item.isFollow}>
+                      {item.isFollow ? '팔로우' : '팔로우 중'}
+                    </FollowBtnText>
                   </FollowBtn>
                 </MemberTextWrapper>
               </MemberWrapper>
@@ -88,6 +97,7 @@ const MenuWrapper = styled.View`
 const MenuBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
+  align-items: center;
   padding: 5px 0;
 `;
 
@@ -133,6 +143,10 @@ const MemberTextWrapper = styled.View`
   width: 80%;
 `;
 
+const MemberBtn = styled.TouchableOpacity`
+  max-width: 70%;
+`;
+
 const MemberText = styled.Text`
   font-size: 13px;
   color: #333;
@@ -145,11 +159,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: #007bf1;
+  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
+  border-width: 1px;
+  border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;

@@ -49,6 +49,7 @@ const menuList = [
   {id: 1, name: '인기', isClick: false},
   {id: 2, name: '추천', isClick: false},
 ];
+
 interface IProps {
   navigation: any;
 }

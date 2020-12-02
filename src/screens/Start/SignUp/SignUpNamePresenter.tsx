@@ -45,6 +45,6 @@ const SignUpInput = styled.TextInput`
   margin-bottom: 20px;
   border-bottom-width: 1px;
   border-color: #acacac;
-  font-size: 15px;
+  font-size: 14px;
   color: #6f6f6f;
 `;

@@ -37,7 +37,12 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 </RecordWrapper>
               </RecruitImageWrapper>
               <RecruitTextWrapper>
-                <RecruitTitle>강변북로 라이딩</RecruitTitle>
+                <RecruitTitleBtn
+                  onPress={() => {
+                    navigation.navigate('togetherModify');
+                  }}>
+                  <RecruitTitle>강변북로 라이딩</RecruitTitle>
+                </RecruitTitleBtn>
                 <RecruitAddress>서울특별시 마포구 공덕동 118-1</RecruitAddress>
                 <EntryFee>참가비 10,000원</EntryFee>
                 <Deadline>모집마감 18시간 전</Deadline>
@@ -57,7 +62,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
               {menuList.map((item, idx) => (
                 <MenuWrapper key={idx} isClick={item.isClick}>
                   <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -65,7 +70,10 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <Line></Line>
 
             <RecruitTogetherWrapper>
-              <RecruitTogetherBtn onPress={() => {}}>
+              <RecruitTogetherBtn
+                onPress={() => {
+                  navigation.navigate('togetherSearch');
+                }}>
                 <RecruitTogetherText>내 주변 개설 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage
@@ -87,7 +95,12 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   </RecordWrapper>
                 </RecruitImageWrapper>
                 <RecruitTextWrapper>
-                  <RecruitTitle>{item.title}</RecruitTitle>
+                  <RecruitTitleBtn
+                    onPress={() => {
+                      navigation.navigate('togetherDetail');
+                    }}>
+                    <RecruitTitle>{item.title}</RecruitTitle>
+                  </RecruitTitleBtn>
                   <RecruitAddress>{item.address}</RecruitAddress>
                   <EntryFee>참가비 {item.pay}원</EntryFee>
                   <Deadline>모집마감 {item.endTime}시간 전</Deadline>
@@ -218,8 +231,11 @@ const RecruitTextWrapper = styled.View`
   width: 50%;
 `;
 
-const RecruitTitle = styled.Text`
+const RecruitTitleBtn = styled.TouchableOpacity`
   width: 100%;
+`;
+
+const RecruitTitle = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #000;

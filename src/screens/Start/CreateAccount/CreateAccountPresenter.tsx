@@ -25,7 +25,7 @@ export default ({navigation}: IProps) => {
             <SocialLoginText>이메일로 가입하기</SocialLoginText>
           </SocialLogin>
           <SocialLogin onPress={() => {}}>
-            <LogoImage source={require('../../../assets/kakaoLogo.png')} />
+            <LogoImage source={require('../../../assets/kakaoLogo.jpg')} />
             <SocialLoginText>카카오톡으로 시작하기</SocialLoginText>
           </SocialLogin>
           <SocialLogin onPress={() => {}}>

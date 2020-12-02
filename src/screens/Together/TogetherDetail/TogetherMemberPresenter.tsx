@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 interface IProps {
   navigation: any;
-  isNew: boolean;
+  isFollow: boolean;
 }
 
 export default ({navigation, member}: IProps) => {
@@ -17,8 +17,10 @@ export default ({navigation, member}: IProps) => {
                 <ProfileImage source={item.image} />
                 <MemberTextWrapper>
                   <MemberText>{item.name}</MemberText>
-                  <FollowBtn>
-                    <FollowBtnText>팔로우</FollowBtnText>
+                  <FollowBtn isFollow={item.isFollow}>
+                    <FollowBtnText isFollow={item.isFollow}>
+                      {item.isFollow ? '팔로우' : '팔로우 중'}
+                    </FollowBtnText>
                   </FollowBtn>
                 </MemberTextWrapper>
               </MemberWrapper>
@@ -86,11 +88,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: #007bf1;
+  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
+  border-width: 1px;
+  border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;

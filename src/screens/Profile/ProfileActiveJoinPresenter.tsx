@@ -12,51 +12,82 @@ export default ({navigation, menuList, openClub}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <ProfileTopWrapper>
-              <ProfileMainImage
-                source={require('../../assets/profile_1.png')}
-              />
-              <ProfileNickName>GilDong Hong</ProfileNickName>
-              <ActiveTextWrapper>
-                <ActiveBtnWrapper>
-                  <ActiveBtn onPress={() => {}}>
-                    <ActiveNumber>846</ActiveNumber>
-                  </ActiveBtn>
-                  <ActiveText>활동들</ActiveText>
-                </ActiveBtnWrapper>
-                <ActiveBtnWrapper>
-                  <ActiveBtn
+            <BackgroundLine>
+              <ProfileTopWrapper>
+                <ProfileImageWrapper>
+                  <ProfileMainImage
+                    source={require('../../assets/profile_1.png')}
+                  />
+                  <EditCard
                     onPress={() => {
-                      navigation.navigate('followerMember');
+                      navigation.navigate('setProfile');
                     }}>
-                    <FollowerNumber>1,226</FollowerNumber>
-                  </ActiveBtn>
-                  <ActiveText>팔로워</ActiveText>
-                </ActiveBtnWrapper>
-                <ActiveBtnWrapper>
-                  <ActiveBtn
-                    onPress={() => {
-                      navigation.navigate('followingMember');
-                    }}>
-                    <FollowingNumber>987</FollowingNumber>
-                  </ActiveBtn>
-                  <ActiveText>팔로워 중</ActiveText>
-                </ActiveBtnWrapper>
-              </ActiveTextWrapper>
-              <ActiveIntroduceText>
-                Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is
-                riding a bicycle.
-              </ActiveIntroduceText>
-              <FollowingBtn onPress={() => {}}>
-                <FollowingBtnText>팔로우 중</FollowingBtnText>
-              </FollowingBtn>
-            </ProfileTopWrapper>
-            <Line></Line>
+                    <EditImage source={require('../../assets/edit_icon.png')} />
+                    <EditBtnText>프로필 수정</EditBtnText>
+                  </EditCard>
+                </ProfileImageWrapper>
+                <ProfileNickName>GilDong Hong</ProfileNickName>
+                <ActiveTextWrapper>
+                  <ActiveBtnWrapper>
+                    <ActiveBtn onPress={() => {}}>
+                      <ActiveNumber>846</ActiveNumber>
+                    </ActiveBtn>
+                    <ActiveText>활동들</ActiveText>
+                  </ActiveBtnWrapper>
+                  <ActiveBtnWrapper>
+                    <ActiveBtn
+                      onPress={() => {
+                        navigation.navigate('followerMember');
+                      }}>
+                      <FollowerNumber>1,226</FollowerNumber>
+                    </ActiveBtn>
+                    <ActiveText>팔로워</ActiveText>
+                  </ActiveBtnWrapper>
+                  <ActiveBtnWrapper>
+                    <ActiveBtn
+                      onPress={() => {
+                        navigation.navigate('followingMember');
+                      }}>
+                      <FollowingNumber>987</FollowingNumber>
+                    </ActiveBtn>
+                    <ActiveText>팔로워 중</ActiveText>
+                  </ActiveBtnWrapper>
+                  <ActiveBtnWrapper>
+                    <ActiveBtn
+                      onPress={() => {
+                        navigation.navigate('followingMember');
+                      }}>
+                      <PointNumber>30</PointNumber>
+                    </ActiveBtn>
+                    <ActiveText>포인트</ActiveText>
+                  </ActiveBtnWrapper>
+                </ActiveTextWrapper>
+                <ActiveIntroduceText>
+                  Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is
+                  riding a bicycle.
+                </ActiveIntroduceText>
+                <PayBtnWrapper>
+                  <PaymentBtn onPress={() => {}}>
+                    <PayBtnText>결제내역</PayBtnText>
+                  </PaymentBtn>
+                  <MembershipBtn onPress={() => {}}>
+                    <PayBtnText>멤버쉽</PayBtnText>
+                  </MembershipBtn>
+                  <PointBtn onPress={() => {}}>
+                    <PayBtnText>포인트</PayBtnText>
+                  </PointBtn>
+                </PayBtnWrapper>
+              </ProfileTopWrapper>
+            </BackgroundLine>
+
             <MenuBarWrapper>
               {menuList.map((item, idx) => (
                 <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
+                  <MenuBtn
+                    onPress={() => {
+                      navigation.navigate('profileActiveMain');
+                    }}>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -122,22 +153,58 @@ const Line = styled.View`
   background-color: #f3f3f3;
 `;
 
-const ProfileTopWrapper = styled.View`
-  display: flex;
-  width: 90%;
+const BackgroundLine = styled.View`
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #f3f3f3;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  margin-top: 10px;
+`;
+
+const ProfileTopWrapper = styled.View`
+  display: flex;
+  width: 100%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #e1e1e1;
+  background-color: white;
+  padding: 20px;
+`;
+
+const ProfileImageWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ProfileMainImage = styled.Image`
   width: 60px;
   height: 60px;
   border-radius: 50px;
+`;
+
+const EditCard = styled.TouchableOpacity`
+  width: 30%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+`;
+
+const EditImage = styled.Image`
+  width: 18px;
+  height: 18px;
+`;
+
+const EditBtnText = styled.Text`
+  color: #b0b0b0;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 10px;
 `;
 
 const ProfileNickName = styled.Text`
@@ -161,7 +228,7 @@ const ActiveBtnWrapper = styled.View`
   align-items: center;
   justify-content: center;
   padding: 10px;
-  width: 30%;
+  width: 25%;
 `;
 
 const ActiveBtn = styled.TouchableOpacity`
@@ -192,6 +259,13 @@ const FollowingNumber = styled.Text`
   text-align: center;
 `;
 
+const PointNumber = styled.Text`
+  font-size: 20px;
+  color: #ffb284;
+  font-weight: bold;
+  text-align: center;
+`;
+
 const ActiveText = styled.Text`
   font-size: 13px;
   color: #ababab;
@@ -200,24 +274,49 @@ const ActiveText = styled.Text`
 `;
 
 const ActiveIntroduceText = styled.Text`
-  font-size: 15px;
+  font-size: 14px;
   color: #989898;
   padding: 10px;
 `;
 
-const FollowingBtn = styled.TouchableOpacity`
-  width: 26%;
-  padding: 7px;
+const PayBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
   align-items: center;
-  justify-content: flex-start;
-  border-radius: 5px;
-  border-color: #007bf1;
-  border-width: 1px;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 10px;
 `;
 
-const FollowingBtnText = styled.Text`
-  color: #007bf1;
-  font-size: 12px;
+const PaymentBtn = styled.TouchableOpacity`
+  width: 18%;
+  padding: 5px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #007bf1;
+`;
+
+const MembershipBtn = styled.TouchableOpacity`
+  width: 18%;
+  padding: 5px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #00bbc7;
+  margin-left: 5px;
+`;
+
+const PointBtn = styled.TouchableOpacity`
+  width: 18%;
+  padding: 5px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #ffb284;
+  margin-left: 5px;
+`;
+
+const PayBtnText = styled.Text`
+  color: #fff;
+  font-size: 10px;
   font-weight: bold;
 `;
 
@@ -244,7 +343,7 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 13px;
+  font-size: 15px;
   color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;

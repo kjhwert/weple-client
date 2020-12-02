@@ -11,6 +11,7 @@ import TogetherParticipateContainer from '../screens/Together/togetherDetail/Tog
 import TogetherModifyContainer from '../screens/Together/togetherDetail/TogetherModifyContainer';
 import TogetherDeleteContainer from '../screens/Together/togetherDetail/TogetherDeleteContainer';
 import TogetherMemberContainer from '../screens/Together/togetherDetail/TogetherMemberContainer';
+import TogetherShareContainer from '../screens/Together/togetherDetail/TogetherShareContainer';
 import TogetherPostSubjectContainer from '../screens/Together/togetherPost/TogetherPostSubjectContainer';
 import TogetherPostIntroduceContainer from '../screens/Together/togetherPost/TogetherPostIntroduceContainer';
 import TogetherPostPlaceContainer from '../screens/Together/togetherPost/TogetherPostPlaceContainer';
@@ -48,6 +49,7 @@ export default ({navigation}) => {
       <Stack.Screen name="togetherModify" component={TogetherModifyContainer} />
       <Stack.Screen name="togetherDelete" component={TogetherDeleteContainer} />
       <Stack.Screen name="togetherMember" component={TogetherMemberContainer} />
+      <Stack.Screen name="togetherShare" component={TogetherShareContainer} />
       <Stack.Screen
         name="togetherPostSubject"
         component={TogetherPostSubjectContainer}

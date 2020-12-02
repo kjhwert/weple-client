@@ -5,101 +5,46 @@ interface IProps {
   navigation: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, openClub}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
-                <ProfileTextWrapper>
-                  <ProfileName>GilDong Hong</ProfileName>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/heart_icon.png')}
-                    />
-                  </IconBtn>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/comment_icon.png')}
-                    />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmText>806명이 좋아합니다.</AlarmText>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
-                <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
-            <Line></Line>
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
-                <ProfileTextWrapper>
-                  <ProfileName>GilDong Hong</ProfileName>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/heart_icon.png')}
-                    />
-                  </IconBtn>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/comment_icon.png')}
-                    />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmText>806명이 좋아합니다.</AlarmText>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
-                <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
+            <ActiveSelectTitleWrapper>
+              <ProfileTitleBtn onPress={() => {}}>
+                <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
+              </ProfileTitleBtn>
+              <SortBtn>
+                <SortImage source={require('../../../assets/sort_icon.png')} />
+              </SortBtn>
+            </ActiveSelectTitleWrapper>
+
+            {openClub.map((item, idx) => (
+              <RecruitWrapper key={idx}>
+                <RecruitImageWrapper
+                  onPress={() => {
+                    navigation.navigate('togetherDetail');
+                  }}>
+                  <RecruitImage source={item.image} />
+                  <RecordWrapper>
+                    <RecordImage source={item.iconImage} />
+                    <RecordText>{item.distance}KM</RecordText>
+                  </RecordWrapper>
+                </RecruitImageWrapper>
+                <RecruitTextWrapper>
+                  <RecruitTitleBtn
+                    onPress={() => {
+                      navigation.navigate('togetherDetail');
+                    }}>
+                    <RecruitTitle>{item.title}</RecruitTitle>
+                  </RecruitTitleBtn>
+                  <RecruitAddress>{item.address}</RecruitAddress>
+                  <EntryFee>참가비 {item.pay}원</EntryFee>
+                  <Deadline>모집마감 {item.endTime}시간 전</Deadline>
+                </RecruitTextWrapper>
+              </RecruitWrapper>
+            ))}
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
@@ -131,144 +76,126 @@ const Line = styled.View`
   background-color: #f3f3f3;
 `;
 
-const PostWrapper = styled.View`
+const ActiveSelectTitleWrapper = styled.View`
   display: flex;
-  align-items: flex-start;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
+  background-color: #f3f3f3;
   padding: 20px;
 `;
 
-const ProfileWrapper = styled.View`
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding-bottom: 10px;
-  width: 100%;
-`;
-
-const ProfileImage = styled.Image`
-  width: 60px;
-  height: 60px;
-  border-radius: 50px;
-  margin-right: 20px;
-`;
-
-const ProfileTextWrapper = styled.View`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 55%;
-`;
-
-const ProfileName = styled.Text`
-  font-size: 16px;
-  font-weight: 500;
-  color: #303030;
-`;
-
-const PostTime = styled.Text`
-  font-size: 15px;
-  color: #5f5e5e;
-  padding-bottom: 5px;
-`;
-
-const FollowBtn = styled.TouchableOpacity`
-  width: 20%;
-  padding: 6px;
-  align-items: center;
-  justify-content: flex-start;
-  border-radius: 5px;
-  background-color: #007bf1;
-`;
-
-const FollowBtnText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const PostImageWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const PostImage = styled.Image`
-  width: 100%;
-  height: 280px;
-  border-radius: 5px;
-`;
-
-const IconWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  align-items: flex-start;
-  justify-content: center;
-`;
-
-const IconImageWrapper = styled.View`
-  display: flex;
-  flex-flow: row;
-  padding: 10px 0;
-  width: 100%;
-`;
-
-const IconBtn = styled.TouchableOpacity`
-  width: 12%;
-`;
-
-const IconImage = styled.Image`
-  width: 25px;
-  height: 25px;
-`;
-
-const AlarmText = styled.Text`
-  font-size: 15px;
-  color: #303030;
-  font-weight: 600;
-`;
-
-const FollowWrapper = styled.View`
-  display: flex;
-  flex-flow: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 15px 0;
-  width: 100%;
-`;
-
-const FollowTextWrapper = styled.View`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 75%;
-`;
-
-const FollowName = styled.Text`
-  font-size: 16px;
-  font-weight: 500;
-  color: #303030;
-`;
-
-const CommentText = styled.Text`
-  font-size: 15px;
-  color: #5f5e5e;
-  padding-bottom: 10px;
-`;
-
-const AllCommentBtn = styled.TouchableOpacity`
-  width: 100%;
+const ProfileTitleBtn = styled.TouchableOpacity`
+  width: 85%;
   flex-flow: row wrap;
-  padding: 5px 0;
-  align-items: center;
-  justify-content: flex-start;
 `;
 
-const AllCommentText = styled.Text`
+const ProfileActiveTitle = styled.Text`
   font-size: 15px;
-  color: #7c7c7c;
+  color: #333;
+  text-align: left;
+  margin-right: 5px;
+`;
+
+const SortBtn = styled.TouchableOpacity`
+  width: 15%;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+`;
+
+const SortImage = styled.Image`
+  width: 25px;
+  height: 20px;
+`;
+
+const RecruitWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 20px;
+  border-bottom-width: 1px;
+  border-color: #eee;
+`;
+
+const RecruitImageWrapper = styled.TouchableOpacity`
+  display: flex;
+  width: 45%;
+  border-width: 1px;
+  border-color: #dfdfdf;
+  margin-right: 10px;
+`;
+
+const RecruitImage = styled.Image`
+  width: 100%;
+  height: 100px;
+`;
+
+const RecordWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 65%;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  margin-top: 10px;
+  padding: 2px;
+`;
+
+const RecordText = styled.Text`
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const RecordImage = styled.Image`
+  width: 22px;
+  height: 13px;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RecruitTextWrapper = styled.View`
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 50%;
+`;
+
+const RecruitTitleBtn = styled.TouchableOpacity`
+  width: 100%;
+`;
+
+const RecruitTitle = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+`;
+
+const RecruitAddress = styled.Text`
+  width: 100%;
+  font-size: 12px;
+  color: #777;
+  padding: 5px 0 10px 0;
+`;
+
+const EntryFee = styled.Text`
+  width: 100%;
+  font-size: 11px;
+  color: #000;
+  font-weight: bold;
+  padding: 5px 0;
+`;
+
+const Deadline = styled.Text`
+  width: 100%;
+  font-size: 10px;
+  color: #007bf1;
+  font-weight: bold;
 `;

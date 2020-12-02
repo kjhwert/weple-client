@@ -7,13 +7,37 @@ import ProfileStack from '../navigation/ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
-export default () => {
+export default ({navigation}) => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="feed" component={FeedStack} />
-      <Tab.Screen name="together" component={TogetherStack} />
-      <Tab.Screen name="record" component={RecordStack} />
-      <Tab.Screen name="profile" component={ProfileStack} />
+      <Tab.Screen
+        options={{
+          tabBarLabel: '피드',
+        }}
+        name="feed"
+        component={FeedStack}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: '함께',
+        }}
+        name="together"
+        component={TogetherStack}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: '기록',
+        }}
+        name="record"
+        component={RecordStack}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: '프로필',
+        }}
+        name="profile"
+        component={ProfileStack}
+      />
     </Tab.Navigator>
   );
 };

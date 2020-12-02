@@ -35,6 +35,13 @@ const ActivityData = [
     distance: 30.5,
     address: '서울시 마포구 백범로 110-10',
   },
+  {
+    id: 3,
+    image: require('../../../assets/photo_2.jpeg'),
+    kind: '모터싸이클',
+    distance: 30.5,
+    address: '서울시 마포구 백범로 110-10',
+  },
 ];
 
 interface IProps {

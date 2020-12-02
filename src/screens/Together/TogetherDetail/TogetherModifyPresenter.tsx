@@ -19,7 +19,10 @@ export default ({navigation, content}: IProps) => {
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
                   <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
-                  <ShareBtn>
+                  <ShareBtn
+                    onPress={() => {
+                      navigation.navigate('togetherShare');
+                    }}>
                     <ShareImage
                       source={require('../../../assets/share_icon.png')}
                     />

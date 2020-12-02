@@ -11,19 +11,19 @@ const member = [
     id: 0,
     image: require('../../../assets/profile_1.png'),
     name: 'GilDong',
-    isClick: true,
+    isFollow: true,
   },
   {
     id: 1,
     image: require('../../../assets/profile_2.png'),
     name: 'Benjamin',
-    isClick: true,
+    isFollow: true,
   },
   {
     id: 2,
     image: require('../../../assets/follower_2.png'),
     name: 'Jamin',
-    isClick: false,
+    isFollow: false,
   },
 ];
 interface IProps {

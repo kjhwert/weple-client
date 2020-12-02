@@ -25,7 +25,7 @@ export default ({navigation}) => {
           <NowLine></NowLine>
         </LineWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'alarmSet'} navigation={navigation}>
+      <NextBtn nextPage={'startAlarmSet'} navigation={navigation}>
         {`동의함`}
       </NextBtn>
     </Container>
@@ -86,8 +86,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
 `;
 
 const LineWrapper = styled.View`

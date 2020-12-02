@@ -42,7 +42,7 @@ export default ({navigation}: IProps) => {
                 onPress={() => {
                   navigation.navigate('signIn');
                 }}>
-                <LogoImage source={require('../../assets/kakaoLogo.png')} />
+                <LogoImage source={require('../../assets/kakaoLogo.jpg')} />
                 <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
               </KakaoLoginBtn>
               <FaceBookLoginBtn onPress={() => {}}>
@@ -118,14 +118,13 @@ const LoginInput = styled.TextInput`
 const PasswordSearchWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  justify-content: flex-end;
   align-items: center;
   width: 100%;
 `;
 
 const PasswordWrapper = styled.View`
   display: flex;
-  width: 75%;
+  width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
 `;
@@ -134,6 +133,9 @@ const PasswordBtn = styled.TouchableOpacity`
   width: 25%;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  right: 0;
+  bottom: 30px;
 `;
 
 const PasswordText = styled.Text`

@@ -64,7 +64,12 @@ export default ({navigation, menuList, aroundData}: IProps) => {
                   </RecordWrapper>
                 </RecruitImageWrapper>
                 <RecruitTextWrapper>
-                  <RecruitTitle>{item.title}</RecruitTitle>
+                  <RecruitTitleBtn
+                    onPress={() => {
+                      navigation.navigate('togetherDetail');
+                    }}>
+                    <RecruitTitle>{item.title}</RecruitTitle>
+                  </RecruitTitleBtn>
                   <RecruitAddress>{item.address}</RecruitAddress>
                   <EntryFee>참가비 {item.pay}원</EntryFee>
                   <Deadline>모집마감 {item.endTime}시간 전</Deadline>
@@ -180,8 +185,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 25px;
-  height: 15px;
+  width: 22px;
+  height: 13px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;
@@ -227,23 +232,26 @@ const RecruitTextWrapper = styled.View`
   width: 50%;
 `;
 
-const RecruitTitle = styled.Text`
+const RecruitTitleBtn = styled.TouchableOpacity`
   width: 100%;
-  font-size: 15px;
+`;
+
+const RecruitTitle = styled.Text`
+  font-size: 13px;
   font-weight: bold;
   color: #000;
 `;
 
 const RecruitAddress = styled.Text`
   width: 100%;
-  font-size: 14px;
+  font-size: 12px;
   color: #777;
   padding: 5px 0 10px 0;
 `;
 
 const EntryFee = styled.Text`
   width: 100%;
-  font-size: 13px;
+  font-size: 11px;
   color: #000;
   font-weight: bold;
   padding: 5px 0;
@@ -251,7 +259,7 @@ const EntryFee = styled.Text`
 
 const Deadline = styled.Text`
   width: 100%;
-  font-size: 12px;
+  font-size: 10px;
   color: #007bf1;
   font-weight: bold;
   padding: 5px 0;

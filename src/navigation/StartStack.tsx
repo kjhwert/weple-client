@@ -15,7 +15,7 @@ import PersonalVideoContainer from '../screens/Start/PersonalData/PersonalVideoC
 import PersonalCommunityContainer from '../screens/Start/PersonalData/PersonalCommunityContainer';
 import PersonalAlarmContainer from '../screens/Start/PersonalData/PersonalAlarmContainer';
 import WelcomeContainer from '../screens/Start/Welcome/WelcomeContainer';
-import AlarmSetContainer from '../screens/Start/alarmSetting/AlarmSetContainer';
+import StartAlarmSetContainer from '../screens/Start/startAlarmSet/StartAlarmSetContainer';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +42,7 @@ export default () => {
         component={PersonalCommunityContainer}
       />
       <Stack.Screen name="personalAlarm" component={PersonalAlarmContainer} />
-      <Stack.Screen name="alarmSet" component={AlarmSetContainer} />
+      <Stack.Screen name="startAlarmSet" component={StartAlarmSetContainer} />
       <Stack.Screen name="welcome" component={WelcomeContainer} />
       <Stack.Screen
         options={{headerShown: false}}
