@@ -155,19 +155,3 @@ const JoinContent = styled.Text`
   color: #878787;
   padding: 5px 0;
 `;
-
-const NextButton = styled.TouchableOpacity`
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  background-color: #b2b2b2;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-`;

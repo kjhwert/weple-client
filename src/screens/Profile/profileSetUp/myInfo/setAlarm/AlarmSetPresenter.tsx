@@ -93,8 +93,8 @@ const SetUpListText = styled.Text`
 `;
 
 const MoreImage = styled.Image`
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
 `;
 
 const AlarmSetWrapper = styled.View`

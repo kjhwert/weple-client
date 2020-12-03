@@ -68,7 +68,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                 <MenuWrapper key={idx} isClick={item.isClick}>
                   <MenuBtn
                     onPress={() => {
-                      navigation.navigate('feedPopularity');
+                      navigation.navigate('feedRecommend');
                     }}>
                     <MenuText isClick={item.isClick}>{item.name}</MenuText>
                   </MenuBtn>

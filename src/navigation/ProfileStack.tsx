@@ -20,11 +20,12 @@ import SetAskWriteContainer from '../screens/Profile/profileSetUp/customer/setAs
 import SetAskDetailContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAskDetailContainer';
 import SetAnswerDetailContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAnswerDetailContainer';
 import SetFaqContainer from '../screens/Profile/profileSetUp/customer/setFAQ/SetFaqContainer';
-import ClauseContainer from '../screens/Profile/profileSetUp/customer/clauseAbout/ClauseContainer';
-import ServiceDetailContainer from '../screens/Profile/profileSetUp/customer/clauseAbout/ServiceDetailContainer';
-import SubscriptionDetailContainer from '../screens/Profile/profileSetUp/customer/clauseAbout/SubscriptionDetailContainer';
-import PrivacyDetailContainer from '../screens/Profile/profileSetUp/customer/clauseAbout/PrivacyDetailContainer';
-import AgreementDetailContainer from '../screens/Profile/profileSetUp/customer/clauseAbout/AgreementDetailContainer';
+import ClauseContainer from '../screens/Profile/profileSetUp/customer/clause/ClauseContainer';
+import ServiceDetailContainer from '../screens/Profile/profileSetUp/customer/clause/ServiceDetailContainer';
+import SubscriptionDetailContainer from '../screens/Profile/profileSetUp/customer/clause/SubscriptionDetailContainer';
+import PrivacyDetailContainer from '../screens/Profile/profileSetUp/customer/clause/PrivacyDetailContainer';
+import AgreementDetailContainer from '../screens/Profile/profileSetUp/customer/clause/AgreementDetailContainer';
+import AboutAppContainer from '../screens/Profile/profileSetUp/customer/aboutApp/AboutAppContainer';
 import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfile/SetProfileContainer';
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
@@ -89,6 +90,7 @@ export default ({navigation}) => {
         name="agreementDetaile"
         component={AgreementDetailContainer}
       />
+      <Stack.Screen name="aboutApp" component={AboutAppContainer} />
       <Stack.Screen name="setProfile" component={SetProfileContainer} />
       <Stack.Screen name="setPassword" component={SetPasswordContainer} />
       <Stack.Screen name="setPersonal" component={SetPersonalContainer} />

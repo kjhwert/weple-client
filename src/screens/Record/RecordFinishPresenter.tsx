@@ -90,10 +90,10 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
                   <ActiveDetailText>"965m"</ActiveDetailText>
-                  {/* <ActiveDetailTimeLine></ActiveDetailTimeLine> */}
                   <ActiveDetailTimeText>
                     2.5km 이동 후 오후 16:05
                   </ActiveDetailTimeText>
@@ -112,9 +112,9 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
-                  {/* <ActiveDetailTimeLine></ActiveDetailTimeLine> */}
                   <ActiveDetailTimeText>
                     12.5km 이동 후 오후 16:35에 촬영
                   </ActiveDetailTimeText>
@@ -219,7 +219,7 @@ const SetUpListText = styled.Text`
 `;
 
 const MoreImage = styled.Image`
-  width: 15px;
+  width: 8px;
   height: 12px;
 `;
 
@@ -323,10 +323,19 @@ const ActiveSmallMarkWrapper = styled.View`
 `;
 
 const ActiveSmallMark = styled.View`
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50px;
   background-color: #3065f4;
+`;
+
+const ActiveSmallestMark = styled.View`
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  background-color: #fff;
+  position: absolute;
+  top: 3px;
 `;
 
 const ActiveDetailTitleWrapper = styled.View`

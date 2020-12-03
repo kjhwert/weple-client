@@ -9,7 +9,10 @@ interface IProps {
 export default ({navigation}: IProps) => {
   return (
     <Container>
-      <LinearGradient colors={['#79a6fa', '#3065f4', '#4e3adf']}>
+      <LinearGradient
+        colors={['#2ec6ba', '#8bc2ea', '#c6cdf9']}
+        start={{x: 1, y: 0}}
+        end={{x: 0, y: 1}}>
         <ContainerCard>
           <AppLogoImageWrapper>
             <AppLogoImage source={require('../../assets/ttamna.png')} />
@@ -78,7 +81,7 @@ const LoginInfoWrapper = styled.View`
 `;
 
 const LoginInfoText = styled.Text`
-  color: #bdc8ff;
+  color: #fefefe;
   font-size: 12px;
   font-weight: bold;
   width: 70%;
@@ -96,7 +99,7 @@ const LoginBtn = styled.TouchableOpacity`
 `;
 
 const LoginBtnText = styled.Text`
-  color: #fff;
+  color: #fefefe;
   font-size: 15px;
   font-weight: bold;
   text-decoration: underline;
@@ -112,7 +115,7 @@ const StartBtn = styled.TouchableOpacity`
 `;
 
 const StartText = styled.Text`
-  color: #007bf1;
+  color: #00bfff;
   font-size: 17px;
   font-weight: bold;
 `;

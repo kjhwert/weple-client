@@ -55,7 +55,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followingMember');
+                        navigation.navigate('profilePoint');
                       }}>
                       <PointNumber>30</PointNumber>
                     </ActiveBtn>
@@ -67,13 +67,22 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   riding a bicycle.
                 </ActiveIntroduceText>
                 <PayBtnWrapper>
-                  <PaymentBtn onPress={() => {}}>
+                  <PaymentBtn
+                    onPress={() => {
+                      navigation.navigate('profilePay');
+                    }}>
                     <PayBtnText>결제내역</PayBtnText>
                   </PaymentBtn>
-                  <MembershipBtn onPress={() => {}}>
+                  <MembershipBtn
+                    onPress={() => {
+                      navigation.navigate('profileMembership');
+                    }}>
                     <PayBtnText>멤버쉽</PayBtnText>
                   </MembershipBtn>
-                  <PointBtn onPress={() => {}}>
+                  <PointBtn
+                    onPress={() => {
+                      navigation.navigate('profilePoint');
+                    }}>
                     <PayBtnText>포인트</PayBtnText>
                   </PointBtn>
                 </PayBtnWrapper>
@@ -390,8 +399,8 @@ const SortBtn = styled.TouchableOpacity`
 `;
 
 const SortImage = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 23px;
+  height: 18px;
 `;
 
 const RecruitWrapper = styled.View`

@@ -446,8 +446,8 @@ const SortBtn = styled.TouchableOpacity`
 `;
 
 const SortImage = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 23px;
+  height: 18px;
 `;
 
 const PostWrapper = styled.View`

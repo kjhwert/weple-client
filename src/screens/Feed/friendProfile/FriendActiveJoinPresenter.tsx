@@ -50,9 +50,11 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is
                   riding a bicycle.
                 </ActiveIntroduceText>
-                <FollowingBtn onPress={() => {}}>
-                  <FollowingBtnText>팔로우 중</FollowingBtnText>
-                </FollowingBtn>
+                <FollowingBtnWrapper>
+                  <FollowingBtn onPress={() => {}}>
+                    <FollowingBtnText>팔로우 중</FollowingBtnText>
+                  </FollowingBtn>
+                </FollowingBtnWrapper>
               </ProfileTopWrapper>
             </BackgroundLine>
 
@@ -225,11 +227,18 @@ const ActiveIntroduceText = styled.Text`
   padding: 10px;
 `;
 
+const FollowingBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
 const FollowingBtn = styled.TouchableOpacity`
   width: 26%;
   padding: 7px;
   align-items: center;
-  justify-content: flex-start;
   border-radius: 5px;
   border-color: #007bf1;
   border-width: 1px;
@@ -312,8 +321,8 @@ const SortBtn = styled.TouchableOpacity`
 `;
 
 const SortImage = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 23px;
+  height: 18px;
 `;
 
 const RecruitWrapper = styled.View`

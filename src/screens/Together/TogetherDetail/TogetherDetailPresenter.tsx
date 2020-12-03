@@ -205,11 +205,12 @@ const JoinInfoNumber = styled.Text`
   font-weight: bold;
   font-size: 14px;
   text-align: right;
+  margin-right: 3px;
 `;
 
 const JoinInfoMoreImage = styled.Image`
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 12px;
 `;
 
 const JoinContentWrapper = styled.View`

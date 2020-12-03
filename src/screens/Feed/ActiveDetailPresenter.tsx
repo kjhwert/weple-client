@@ -75,7 +75,10 @@ export default ({navigation}: IProps) => {
                       source={require('../../assets/heart_icon.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendNice');
+                    }}>
                     <IconText>좋아요</IconText>
                     <IconTextNumber>(56)</IconTextNumber>
                   </IconBtn>
@@ -86,7 +89,10 @@ export default ({navigation}: IProps) => {
                       source={require('../../assets/comment_icon.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <IconText>댓글</IconText>
                     <IconTextNumber>(30)</IconTextNumber>
                   </IconBtn>
@@ -97,7 +103,10 @@ export default ({navigation}: IProps) => {
                       source={require('../../assets/share_icon_2.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendShare');
+                    }}>
                     <IconText>공유</IconText>
                   </IconBtn>
                 </ShareIconBtnText>
@@ -125,6 +134,7 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
                   <ActiveDetailText>"965m"</ActiveDetailText>
@@ -143,6 +153,7 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
                   <ActiveDetailTimeText>
@@ -516,6 +527,15 @@ const ActiveSmallMark = styled.View`
   height: 16px;
   border-radius: 50px;
   background-color: #3065f4;
+`;
+
+const ActiveSmallestMark = styled.View`
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  background-color: #fff;
+  position: absolute;
+  top: 3px;
 `;
 
 const ActiveDetailTitleWrapper = styled.View`

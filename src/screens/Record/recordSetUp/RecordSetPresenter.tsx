@@ -87,7 +87,7 @@ const SetUpActiveText = styled.Text`
 `;
 
 const MoreImage = styled.Image`
-  width: 15px;
+  width: 8px;
   height: 12px;
 `;
 

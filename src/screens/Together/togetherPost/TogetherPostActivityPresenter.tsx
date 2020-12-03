@@ -31,7 +31,7 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
             <ActivityWrapper>
               {ActivityData.map((item, idx) => (
                 <ActivityImageWrapper key={idx}>
-                  <ActivityImage onPress={() => {}} source={item.image} />
+                  <ActivityImage source={item.image} />
                   <ActivityTextWrapper>
                     <ActivityKind>{item.kind}</ActivityKind>
                     <ActivityDistance>{item.distance}KM</ActivityDistance>
@@ -42,11 +42,13 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                       position: 'absolute',
                       right: 8,
                       bottom: 120,
+                      tintColors: 'red',
                     }}
                     boxType={'circle'}
                     disabled={false}
                     value={false}
-                    onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                    // onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                    onValueChange={setToggleCheckBox}
                   />
                 </ActivityImageWrapper>
               ))}
@@ -116,7 +118,8 @@ const ActivityImageWrapper = styled.TouchableOpacity`
   align-items: flex-start;
   justify-content: center;
   border-width: 1px;
-  border-color: #4c585858;
+  border-top-width: 0px;
+  border-color: #e9e9e9;
   border-radius: 5px;
   width: 45%;
   margin-bottom: 20px;
@@ -126,7 +129,9 @@ const ActivityImage = styled.Image`
   width: 100%;
   height: 120px;
   flex-flow: row wrap;
-  border-radius: 4px;
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 `;
 
 const ActivityTextWrapper = styled.View`

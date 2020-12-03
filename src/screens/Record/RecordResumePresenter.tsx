@@ -54,7 +54,7 @@ export default ({navigation}) => {
                   <ResumeBtnWrapper>
                     <ResumeBtn
                       onPress={() => {
-                        navigation.navigate('recordStop');
+                        navigation.navigate('recordMain');
                       }}>
                       <ResumeBtnText>재개</ResumeBtnText>
                     </ResumeBtn>

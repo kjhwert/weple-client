@@ -1,8 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-// import DropdownMenu from 'react-native-dropdown-menu';
-
-// var SearchData = [['싸이클링', '달리기', '걷기', '등산']];
 
 interface IProps {
   navigation: any;
@@ -17,21 +14,6 @@ export default ({navigation}: IProps) => {
             <ActiveSelectTitleWrapper>
               <ProfileTitleBtn onPress={() => {}}>
                 <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
-                {/* <DropdownMenu
-                  style={{
-                    flex: 1,
-                    position: 'absolute',
-                  }}
-                  bgColor={'white'}
-                  tintColor={'#666666'}
-                  activityTintColor={'green'}
-                  // arrowImg={}
-                  // checkImage={}
-                  // optionTextStyle={{color: '#333333'}}
-                  // titleStyle={{color: '#333333'}}
-                  // maxHeight={300}
-                  handler={(selection, row) => console.log(row)}
-                  data={SearchData}></DropdownMenu> */}
               </ProfileTitleBtn>
               <SortBtn>
                 <SortImage source={require('../../../assets/sort_icon.png')} />
@@ -67,24 +49,38 @@ export default ({navigation}: IProps) => {
                       source={require('../../../assets/heart_icon_red.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <IconImage
                       source={require('../../../assets/comment_icon.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
-                <AlarmText>806명이 좋아합니다.</AlarmText>
+                <AlarmBtn
+                  onPress={() => {
+                    navigation.navigate('friendNice');
+                  }}>
+                  <AlarmText>806명이 좋아합니다.</AlarmText>
+                </AlarmBtn>
               </IconWrapper>
               <FollowWrapper>
                 <ProfileImage
                   source={require('../../../assets/profile_2.png')}
                 />
                 <FollowTextWrapper>
-                  <FollowNameBtn onPress={() => {}}>
+                  <FollowNameBtn
+                    onPress={() => {
+                      navigation.navigate('friendActive');
+                    }}>
                     <FollowName>Benjamin</FollowName>
                   </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
+                  <AllCommentBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
                   </AllCommentBtn>
                 </FollowTextWrapper>
@@ -120,24 +116,38 @@ export default ({navigation}: IProps) => {
                       source={require('../../../assets/heart_icon.png')}
                     />
                   </IconBtn>
-                  <IconBtn>
+                  <IconBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <IconImage
                       source={require('../../../assets/comment_icon.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
-                <AlarmText>806명이 좋아합니다.</AlarmText>
+                <AlarmBtn
+                  onPress={() => {
+                    navigation.navigate('friendNice');
+                  }}>
+                  <AlarmText>806명이 좋아합니다.</AlarmText>
+                </AlarmBtn>
               </IconWrapper>
               <FollowWrapper>
                 <ProfileImage
                   source={require('../../../assets/profile_2.png')}
                 />
                 <FollowTextWrapper>
-                  <FollowNameBtn onPress={() => {}}>
+                  <FollowNameBtn
+                    onPress={() => {
+                      navigation.navigate('friendActive');
+                    }}>
                     <FollowName>Benjamin</FollowName>
                   </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
+                  <AllCommentBtn
+                    onPress={() => {
+                      navigation.navigate('friendComment');
+                    }}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
                   </AllCommentBtn>
                 </FollowTextWrapper>
@@ -180,9 +190,9 @@ const ActiveSelectTitleWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  background-color: #f3f3f3;
+  border-bottom-width: 2px;
+  border-color: #f3f3f3;
   padding: 20px;
-  margin-bottom: 5px;
 `;
 
 const ProfileTitleBtn = styled.TouchableOpacity`
@@ -204,8 +214,8 @@ const SortBtn = styled.TouchableOpacity`
 `;
 
 const SortImage = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 23px;
+  height: 18px;
 `;
 
 const PostWrapper = styled.View`
@@ -331,8 +341,12 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 22px;
-  height: 19px;
+  width: 20px;
+  height: 17px;
+`;
+
+const AlarmBtn = styled.TouchableOpacity`
+  width: 100%;
 `;
 
 const AlarmText = styled.Text`
