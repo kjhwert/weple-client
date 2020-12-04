@@ -93,8 +93,6 @@ const JoinInfoWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #d4d4d4;
 `;
 
 const JoinTextWrapper = styled.View`
@@ -136,7 +134,7 @@ const JoinContentWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  border-bottom-width: 1px;
+  border-top-width: 1px;
   border-color: #d4d4d4;
   padding: 20px 0;
 `;

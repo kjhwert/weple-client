@@ -60,7 +60,7 @@ const EventWrapper = styled.View`
   width: 100%;
   align-items: center;
   justify-content: flex-start;
-  border-bottom-width: 2px;
+  border-bottom-width: 1px;
   border-color: #f3f3f3;
   padding: 20px;
 `;

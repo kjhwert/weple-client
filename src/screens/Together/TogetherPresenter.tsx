@@ -180,7 +180,6 @@ const RecruitWrapper = styled.View`
   width: 100%;
   padding: 10px 20px;
   border-top-width: 1px;
-  border-bottom-width: 1px;
   border-color: #eee;
 `;
 

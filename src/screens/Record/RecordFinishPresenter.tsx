@@ -11,7 +11,7 @@ export default ({navigation}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapPlayWrapper onPress={() => {}}>
+            <MapPlayWrapper>
               <MapPlayImage source={require('../../assets/map_1.png')} />
               <PlayBtn>
                 <PlayImage source={require('../../assets/play_icon.png')} />
@@ -174,7 +174,7 @@ const MapPlayWrapper = styled.View`
 
 const MapPlayImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 150px;
 `;
 
 const PlayBtn = styled.TouchableOpacity`
@@ -230,7 +230,7 @@ const RecordWrapper = styled.View`
   margin: 30px 0;
   padding: 10px 0;
   border-width: 1px;
-  border-color: #e1e1e1;
+  border-color: #eeeeee;
 `;
 
 const RecordTextWrapper = styled.View`
@@ -389,12 +389,12 @@ const ActiveDetailImageWrapper = styled.View`
 
 const ActiveDetailMapImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 160px;
 `;
 
 const ActiveDetailImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
 `;
 
 const ActiveDetailFinishTitleWrapper = styled.View`

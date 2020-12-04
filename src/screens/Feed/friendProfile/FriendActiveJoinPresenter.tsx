@@ -47,8 +47,9 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is
-                  riding a bicycle.
+                  {
+                    "Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is riding a bicycle."
+                  }
                 </ActiveIntroduceText>
                 <FollowingBtnWrapper>
                   <FollowingBtn onPress={() => {}}>
@@ -287,8 +288,6 @@ const ProfileActiveTitleWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #d4d4d4;
   padding: 20px;
 `;
 
@@ -333,7 +332,6 @@ const RecruitWrapper = styled.View`
   width: 100%;
   padding: 10px 20px;
   border-top-width: 1px;
-  border-bottom-width: 1px;
   border-color: #eee;
 `;
 

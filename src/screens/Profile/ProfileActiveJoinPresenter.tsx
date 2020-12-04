@@ -63,8 +63,9 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is
-                  riding a bicycle.
+                  {
+                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
+                  }
                 </ActiveIntroduceText>
                 <PayBtnWrapper>
                   <PaymentBtn
@@ -198,7 +199,7 @@ const EditCard = styled.TouchableOpacity`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   position: absolute;
   top: 0px;
   right: 0px;
@@ -213,7 +214,7 @@ const EditBtnText = styled.Text`
   color: #b0b0b0;
   font-size: 10px;
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 5px;
 `;
 
 const ProfileNickName = styled.Text`
@@ -365,8 +366,6 @@ const ProfileActiveTitleWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #d4d4d4;
   padding: 20px;
 `;
 
@@ -411,7 +410,6 @@ const RecruitWrapper = styled.View`
   width: 100%;
   padding: 10px 20px;
   border-top-width: 1px;
-  border-bottom-width: 1px;
   border-color: #eee;
 `;
 

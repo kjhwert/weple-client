@@ -18,6 +18,7 @@ export default ({navigation, member}: IProps) => {
               <MemberWrapper key={idx}>
                 <MembershipWrapper onPress={() => {}}>
                   <MembershipPeriod>{item.period}</MembershipPeriod>
+                  <MembershipMark></MembershipMark>
                 </MembershipWrapper>
                 <MemberTextWrapper>
                   <MemberBtn>
@@ -77,13 +78,24 @@ const MembershipPeriod = styled.Text`
   color: #fff;
 `;
 
+const MembershipMark = styled.View`
+  width: 12px;
+  height: 12px;
+  border-radius: 50px;
+  background-color: #fff;
+  position: absolute;
+  left: -6px;
+  border-right-width: 1px;
+  border-color: #e4e4e4;
+`;
+
 const MemberTextWrapper = styled.View`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 68%;
-  margin-left: 10px;
+  width: 70%;
+  margin: 10px;
 `;
 
 const MemberBtn = styled.TouchableOpacity`

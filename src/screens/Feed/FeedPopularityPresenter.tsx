@@ -33,8 +33,8 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                       start={{x: 0, y: 1}}
                       end={{x: 1, y: 0}}
                       style={{
-                        width: 65,
-                        height: 65,
+                        width: 58,
+                        height: 58,
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 50,
@@ -59,7 +59,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
               onPress={() => {
                 navigation.navigate('feedEventDetail');
               }}>
-              <EventImage source={require('../../assets/event_2.png')} />
+              <EventImage source={require('../../assets/event_1.jpg')} />
             </EventWrapper>
             <Line></Line>
 
@@ -224,8 +224,8 @@ const FollowerImageWrapper = styled.View`
 `;
 
 const FollowerImage = styled.Image`
-  width: 60px;
-  height: 60px;
+  width: 53px;
+  height: 53px;
   border-radius: 50px;
 `;
 
@@ -250,7 +250,7 @@ const EventWrapper = styled.TouchableOpacity`
 
 const EventImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 150px;
 `;
 
 const MenuBarWrapper = styled.View`
@@ -294,7 +294,7 @@ const ProfileWrapper = styled.View`
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-bottom: 10px;
   width: 100%;
 `;
@@ -303,7 +303,6 @@ const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  margin-right: 20px;
 `;
 
 const ProfileTextWrapper = styled.View`
@@ -356,7 +355,7 @@ const PostImageWrapper = styled.TouchableOpacity`
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
   border-radius: 5px;
 `;
 
@@ -425,7 +424,7 @@ const FollowWrapper = styled.View`
   flex-flow: row;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 15px 0;
+  margin: 15px 0;
   width: 100%;
 `;
 
@@ -435,12 +434,12 @@ const FollowTextWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 75%;
+  margin-left: 15px;
 `;
 
 const FollowNameBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -454,13 +453,13 @@ const FollowName = styled.Text`
 const CommentText = styled.Text`
   font-size: 13px;
   color: #5f5e5e;
-  padding-bottom: 5px;
+  margin-top: 2px;
 `;
 
 const AllCommentBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
+  margin: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;

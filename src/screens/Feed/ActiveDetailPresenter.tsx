@@ -31,7 +31,6 @@ export default ({navigation}: IProps) => {
                   <FollowBtnText>팔로우</FollowBtnText>
                 </FollowBtn>
               </ProfileWrapper>
-
               <RecordWrapper>
                 <ActiveTextWrapper>
                   <ActiveLeftImgWrapper>
@@ -46,7 +45,6 @@ export default ({navigation}: IProps) => {
                     <ActiveNumber>5,650</ActiveNumber>
                     <ActiveText>Killometer</ActiveText>
                   </ActiveBtnWrapper>
-
                   <ActiveBtnWrapper>
                     <ActiveBtn>
                       <ClockIconImg
@@ -56,7 +54,6 @@ export default ({navigation}: IProps) => {
                     <FollowerNumber>2:35:08</FollowerNumber>
                     <ActiveText>Duration</ActiveText>
                   </ActiveBtnWrapper>
-
                   <ActiveBtnWrapper>
                     <ActiveBtn>
                       <HeartbeatIconImg
@@ -230,7 +227,7 @@ const MapPlayWrapper = styled.View`
 
 const MapPlayImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 150px;
 `;
 
 const PlayBtn = styled.TouchableOpacity`
@@ -241,8 +238,8 @@ const PlayBtn = styled.TouchableOpacity`
 `;
 
 const PlayImage = styled.Image`
-  width: 45px;
-  height: 45px;
+  width: 35px;
+  height: 35px;
 `;
 
 const ProfileTopWrapper = styled.View`
@@ -262,7 +259,7 @@ const ProfileWrapper = styled.View`
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
 `;
 
@@ -270,7 +267,6 @@ const ProfileImage = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 50px;
-  margin-right: 15px;
   background-color: #007bf1;
 `;
 
@@ -285,7 +281,6 @@ const ProfileTextWrapper = styled.View`
 const ProfileNameBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -306,7 +301,6 @@ const FollowBtn = styled.TouchableOpacity`
   width: 22%;
   padding: 7px;
   align-items: center;
-  justify-content: flex-end;
   border-radius: 5px;
   background-color: #007bf1;
 `;
@@ -323,7 +317,7 @@ const RecordWrapper = styled.View`
   align-items: center;
   margin-top: 10px;
   border-width: 1px;
-  border-color: #e1e1e1;
+  border-color: #ececec;
 `;
 
 const ActiveLeftImgWrapper = styled.View`
@@ -337,8 +331,8 @@ const ActiveLeftImgWrapper = styled.View`
 `;
 
 const ActiveImage = styled.Image`
-  width: 50px;
-  height: 30px;
+  width: 42px;
+  height: 25px;
 `;
 
 const ActiveTextWrapper = styled.View`
@@ -589,12 +583,12 @@ const ActiveDetailImageWrapper = styled.View`
 
 const ActiveDetailMapImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 160px;
 `;
 
 const ActiveDetailImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
 `;
 
 const ActiveDetailFinishTitleWrapper = styled.View`
@@ -615,9 +609,9 @@ const RecordLastWrapper = styled.View`
   display: flex;
   width: 90%;
   align-items: center;
-  margin: 40px 0;
+  margin: 30px 0;
   border-width: 1px;
-  border-color: #e1e1e1;
+  border-color: #ececec;
 `;
 
 const ActiveLastImgWrapper = styled.View`
@@ -625,14 +619,14 @@ const ActiveLastImgWrapper = styled.View`
   align-items: center;
   justify-content: center;
   width: 20%;
-  height: 80px;
-  padding: 10px 5px;
+  height: 70px;
+  padding: 5px;
   background-color: #007bf1;
 `;
 
 const ActiveLastImage = styled.Image`
-  width: 50px;
-  height: 30px;
+  width: 42px;
+  height: 25px;
 `;
 
 const ActiveLastWrapper = styled.View`

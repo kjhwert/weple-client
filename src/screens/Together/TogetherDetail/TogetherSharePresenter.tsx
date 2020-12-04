@@ -86,7 +86,7 @@ const ShareInfoText = styled.Text`
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 230px;
+  height: 200px;
   border-radius: 5px;
 `;
 

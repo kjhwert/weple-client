@@ -108,7 +108,7 @@ const RecordWrapper = styled.View`
   margin-top: 20px;
   padding: 10px 0;
   border-width: 1px;
-  border-color: #e1e1e1;
+  border-color: #eeeeee;
   box-shadow: 0px 3px 6px #e1e1e1;
 `;
 

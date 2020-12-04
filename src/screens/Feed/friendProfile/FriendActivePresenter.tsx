@@ -47,8 +47,9 @@ export default ({navigation, menuList}: IProps) => {
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is
-                  riding a bicycle.
+                  {
+                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
+                  }
                 </ActiveIntroduceText>
                 <FollowingBtnWrapper>
                   <FollowingBtn onPress={() => {}}>
@@ -83,6 +84,7 @@ export default ({navigation, menuList}: IProps) => {
                 <SortImage source={require('../../../assets/sort_icon.png')} />
               </SortBtn>
             </ProfileActiveTitleWrapper>
+
             <PostWrapper>
               <ProfileWrapper>
                 <ProfileImage
@@ -335,7 +337,7 @@ const ProfileActiveTitleWrapper = styled.View`
   justify-content: flex-start;
   width: 100%;
   border-bottom-width: 1px;
-  border-color: #d4d4d4;
+  border-color: #eee;
   padding: 20px;
 `;
 
@@ -383,7 +385,7 @@ const ProfileWrapper = styled.View`
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-bottom: 10px;
   width: 100%;
 `;
@@ -392,7 +394,6 @@ const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  margin-right: 20px;
 `;
 
 const ProfileTextWrapper = styled.View`
@@ -445,7 +446,7 @@ const PostImageWrapper = styled.TouchableOpacity`
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
   border-radius: 5px;
 `;
 
@@ -524,12 +525,12 @@ const FollowTextWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 75%;
+  margin-left: 15px;
 `;
 
 const FollowNameBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -543,7 +544,6 @@ const FollowName = styled.Text`
 const CommentText = styled.Text`
   font-size: 13px;
   color: #5f5e5e;
-  padding-bottom: 5px;
 `;
 
 const AllCommentBtn = styled.TouchableOpacity`
