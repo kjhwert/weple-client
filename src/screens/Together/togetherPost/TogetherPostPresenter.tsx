@@ -93,8 +93,6 @@ const JoinInfoWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #d4d4d4;
 `;
 
 const JoinTextWrapper = styled.View`
@@ -136,7 +134,7 @@ const JoinContentWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  border-bottom-width: 1px;
+  border-top-width: 1px;
   border-color: #d4d4d4;
   padding: 20px 0;
 `;
@@ -154,20 +152,4 @@ const JoinContent = styled.Text`
   font-size: 12px;
   color: #878787;
   padding: 5px 0;
-`;
-
-const NextButton = styled.TouchableOpacity`
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  background-color: #b2b2b2;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
 `;

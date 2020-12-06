@@ -11,7 +11,7 @@ export default ({navigation}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapPlayWrapper onPress={() => {}}>
+            <MapPlayWrapper>
               <MapPlayImage source={require('../../assets/map_1.png')} />
               <PlayBtn>
                 <PlayImage source={require('../../assets/play_icon.png')} />
@@ -90,10 +90,10 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
                   <ActiveDetailText>"965m"</ActiveDetailText>
-                  {/* <ActiveDetailTimeLine></ActiveDetailTimeLine> */}
                   <ActiveDetailTimeText>
                     2.5km 이동 후 오후 16:05
                   </ActiveDetailTimeText>
@@ -112,9 +112,9 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
                   <ActiveSmallMark></ActiveSmallMark>
+                  <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
-                  {/* <ActiveDetailTimeLine></ActiveDetailTimeLine> */}
                   <ActiveDetailTimeText>
                     12.5km 이동 후 오후 16:35에 촬영
                   </ActiveDetailTimeText>
@@ -174,7 +174,7 @@ const MapPlayWrapper = styled.View`
 
 const MapPlayImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 150px;
 `;
 
 const PlayBtn = styled.TouchableOpacity`
@@ -219,7 +219,7 @@ const SetUpListText = styled.Text`
 `;
 
 const MoreImage = styled.Image`
-  width: 15px;
+  width: 8px;
   height: 12px;
 `;
 
@@ -230,7 +230,7 @@ const RecordWrapper = styled.View`
   margin: 30px 0;
   padding: 10px 0;
   border-width: 1px;
-  border-color: #e1e1e1;
+  border-color: #eeeeee;
 `;
 
 const RecordTextWrapper = styled.View`
@@ -323,10 +323,19 @@ const ActiveSmallMarkWrapper = styled.View`
 `;
 
 const ActiveSmallMark = styled.View`
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50px;
   background-color: #3065f4;
+`;
+
+const ActiveSmallestMark = styled.View`
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  background-color: #fff;
+  position: absolute;
+  top: 3px;
 `;
 
 const ActiveDetailTitleWrapper = styled.View`
@@ -380,12 +389,12 @@ const ActiveDetailImageWrapper = styled.View`
 
 const ActiveDetailMapImage = styled.Image`
   width: 100%;
-  height: 200px;
+  height: 160px;
 `;
 
 const ActiveDetailImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
 `;
 
 const ActiveDetailFinishTitleWrapper = styled.View`

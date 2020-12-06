@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Alarm from '../components/Alarm';
+import SetUpBtn from '../components/SetUpBtn';
 import BackBtn from '../components/BackBtn';
 import RecordContainer from '../screens/Record/RecordContainer';
 import RecordStopContainer from '../screens/Record/RecordStopContainer';
@@ -20,7 +20,7 @@ export default ({navigation}) => {
         headerBackTitleVisible: false,
         headerTintColor: 'black',
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <Alarm navigation={navigation} />,
+        headerRight: () => <SetUpBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       }}>
       <Stack.Screen name="recordMain" component={RecordContainer} />

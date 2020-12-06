@@ -13,26 +13,28 @@ export default ({navigation}: IProps) => {
           <ContainerCard>
             <PostWrapper>
               <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
+                <PostImage
+                  source={require('../../../../assets/photo_1.jpeg')}
+                />
               </PostImageWrapper>
               <ShareInfoText>공유하실 플랫폼을 선택하세요.</ShareInfoText>
               <IconWrapper>
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/kakaoLogo.jpg')}
+                      source={require('../../../../assets/kakaoLogo.jpg')}
                     />
                     <IconText>카카오톡</IconText>
                   </IconBtn>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/facebookLogo.png')}
+                      source={require('../../../../assets/facebookLogo.png')}
                     />
                     <IconText>페이스북</IconText>
                   </IconBtn>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/instagramLogo.png')}
+                      source={require('../../../../assets/instagramLogo.png')}
                     />
                     <IconText>인스타그램</IconText>
                   </IconBtn>

@@ -161,7 +161,6 @@
 				E20644AFCAF05E8A68E1796D /* Pods-ttamna-tvOSTests.debug.xcconfig */,
 				FE515D82D560C754F77DDD0D /* Pods-ttamna-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

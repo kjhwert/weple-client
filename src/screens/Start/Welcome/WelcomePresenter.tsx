@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -25,8 +24,11 @@ export default ({navigation}: IProps) => {
           </MemberBtn>
         </MemberBtnWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'login'} navigation={navigation}>
-        {`다음`}
+      <NextBtn
+        onPress={() => {
+          navigation.navigate('login');
+        }}>
+        <NextText>시작하기</NextText>
       </NextBtn>
     </Container>
   );
@@ -68,13 +70,30 @@ const MemberBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-width: 1px;
-  border-color: #eee;
+  border-color: #007bf1;
   border-radius: 5px;
   margin-bottom: 10px;
 `;
 
 const MemberBtnText = styled.Text`
-  color: #333;
+  color: #007bf1;
   font-size: 14px;
+  font-weight: bold;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
   font-weight: bold;
 `;

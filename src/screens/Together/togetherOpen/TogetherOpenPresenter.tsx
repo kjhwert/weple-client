@@ -132,11 +132,12 @@ const RecruitTogetherText = styled.Text`
 const RecruitTogetherNumber = styled.Text`
   color: #007bf1;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 13px;
+  margin-right: 3px;
 `;
 
 const RecruitTogetherMoreImage = styled.Image`
-  width: 10px;
+  width: 6px;
   height: 10px;
 `;
 

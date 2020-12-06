@@ -1,30 +1,85 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface IProps {
   navigation: any;
+  isClick: boolean;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, newFollower, menuList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
-            <ActiveSelectTitleWrapper>
-              <ProfileTitleBtn onPress={() => {}}>
-                <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
-              </ProfileTitleBtn>
-              <SortBtn>
-                <SortImage source={require('../../../assets/sort_icon.png')} />
-              </SortBtn>
-            </ActiveSelectTitleWrapper>
+            <NewFollowerWrapper>
+              <NewFollowerBtn
+                onPress={() => {
+                  navigation.navigate('friendFollower');
+                }}>
+                <NewFollowerText>새로운 팔로워</NewFollowerText>
+                <NewFollowerNumber>8</NewFollowerNumber>
+                <NewFollowerMoreImage
+                  source={require('../../assets/more.png')}
+                />
+              </NewFollowerBtn>
+
+              <FollowerWrapper horizontal={true}>
+                {newFollower.map((item, idx) => (
+                  <FollowerImageWrapper key={idx}>
+                    <LinearGradient
+                      colors={['#61d7ff', '#79a6fa', '#3065f4']}
+                      start={{x: 0, y: 1}}
+                      end={{x: 1, y: 0}}
+                      style={{
+                        width: 58,
+                        height: 58,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 50,
+                      }}>
+                      <FollowerImage source={item.followerImage} />
+                    </LinearGradient>
+
+                    <NewFollowNameBtn
+                      onPress={() => {
+                        navigation.navigate('friendActive');
+                      }}>
+                      <FollowerName>{item.name}</FollowerName>
+                    </NewFollowNameBtn>
+                  </FollowerImageWrapper>
+                ))}
+              </FollowerWrapper>
+            </NewFollowerWrapper>
+
+            <Line></Line>
+
+            <EventWrapper
+              onPress={() => {
+                navigation.navigate('feedEventDetail');
+              }}>
+              <EventImage source={require('../../assets/event_1.jpg')} />
+            </EventWrapper>
+            <Line></Line>
+
+            <MenuBarWrapper>
+              {menuList.map((item, idx) => (
+                <MenuWrapper key={idx} isClick={item.isClick}>
+                  <MenuBtn
+                    onPress={() => {
+                      navigation.navigate('feedMain');
+                    }}>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
+                  </MenuBtn>
+                </MenuWrapper>
+              ))}
+            </MenuBarWrapper>
+            <Line></Line>
 
             <PostWrapper>
               <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
+                <ProfileImage source={require('../../assets/profile_1.png')} />
                 <ProfileTextWrapper>
                   <ProfileNameBtn onPress={() => {}}>
                     <ProfileName>GilDong Hong</ProfileName>
@@ -35,18 +90,22 @@ export default ({navigation}: IProps) => {
                   <FollowBtnText>팔로우</FollowBtnText>
                 </FollowBtn>
               </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
+              <PostImageWrapper
+                onPress={() => {
+                  navigation.navigate('activeDetail');
+                }}>
+                <PostImage source={require('../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage source={require('../../../assets/cycle.png')} />
+                  <RecordImage source={require('../../assets/cycle.png')} />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
+
               <IconWrapper>
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/heart_icon_red.png')}
+                      source={require('../../assets/heart_icon.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -54,7 +113,7 @@ export default ({navigation}: IProps) => {
                       navigation.navigate('friendComment');
                     }}>
                     <IconImage
-                      source={require('../../../assets/comment_icon.png')}
+                      source={require('../../assets/comment_icon.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
@@ -62,80 +121,12 @@ export default ({navigation}: IProps) => {
                   onPress={() => {
                     navigation.navigate('friendNice');
                   }}>
-                  <AlarmText>806명이 좋아합니다.</AlarmText>
+                  <AlarmBtnText>806명이 좋아합니다.</AlarmBtnText>
                 </AlarmBtn>
               </IconWrapper>
+
               <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
-                <FollowTextWrapper>
-                  <FollowNameBtn
-                    onPress={() => {
-                      navigation.navigate('friendActive');
-                    }}>
-                    <FollowName>Benjamin</FollowName>
-                  </FollowNameBtn>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
-            <Line></Line>
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
-                <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
-                    <ProfileName>GilDong Hong</ProfileName>
-                  </ProfileNameBtn>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
-                <RecordWrapper>
-                  <RecordImage source={require('../../../assets/cycle.png')} />
-                  <RecordText>21.7 킬로미터</RecordText>
-                </RecordWrapper>
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/heart_icon.png')}
-                    />
-                  </IconBtn>
-                  <IconBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <IconImage
-                      source={require('../../../assets/comment_icon.png')}
-                    />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmBtn
-                  onPress={() => {
-                    navigation.navigate('friendNice');
-                  }}>
-                  <AlarmText>806명이 좋아합니다.</AlarmText>
-                </AlarmBtn>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
+                <ProfileImage source={require('../../assets/profile_2.png')} />
                 <FollowTextWrapper>
                   <FollowNameBtn
                     onPress={() => {
@@ -184,38 +175,112 @@ const Line = styled.View`
   background-color: #f3f3f3;
 `;
 
-const ActiveSelectTitleWrapper = styled.View`
+const NewFollowerWrapper = styled.ScrollView`
   display: flex;
+  width: 100%;
+  padding: 10px 20px;
+`;
+
+const NewFollowerBtn = styled.TouchableOpacity`
+  width: 100%;
   flex-flow: row wrap;
+  padding: 5px 0;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
-  border-bottom-width: 2px;
-  border-color: #f3f3f3;
-  padding: 20px;
 `;
 
-const ProfileTitleBtn = styled.TouchableOpacity`
-  width: 85%;
-  flex-flow: row wrap;
-`;
-
-const ProfileActiveTitle = styled.Text`
-  font-size: 15px;
+const NewFollowerText = styled.Text`
+  font-size: 13px;
   color: #333;
+  font-weight: bold;
   text-align: left;
   margin-right: 5px;
 `;
 
-const SortBtn = styled.TouchableOpacity`
-  width: 15%;
-  flex-flow: row wrap;
-  justify-content: flex-end;
+const NewFollowerNumber = styled.Text`
+  color: #007bf1;
+  font-weight: bold;
+  font-size: 13px;
+  margin-right: 3px;
 `;
 
-const SortImage = styled.Image`
-  width: 23px;
-  height: 18px;
+const NewFollowerMoreImage = styled.Image`
+  width: 6px;
+  height: 10px;
+`;
+
+const FollowerWrapper = styled.ScrollView`
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  padding-top: 10px;
+`;
+
+const FollowerImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
+`;
+
+const FollowerImage = styled.Image`
+  width: 53px;
+  height: 53px;
+  border-radius: 50px;
+`;
+
+const NewFollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const FollowerName = styled.Text`
+  font-size: 11px;
+  color: #505050;
+  padding-top: 10px;
+`;
+
+const EventWrapper = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const EventImage = styled.Image`
+  width: 100%;
+  height: 150px;
+`;
+
+const MenuBarWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+`;
+
+const MenuWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 3px;
+  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
+`;
+
+const MenuBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+`;
+
+const MenuText = styled.Text`
+  font-size: 16px;
+  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
 `;
 
 const PostWrapper = styled.View`
@@ -229,7 +294,7 @@ const ProfileWrapper = styled.View`
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding-bottom: 10px;
   width: 100%;
 `;
@@ -238,7 +303,6 @@ const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  margin-right: 20px;
 `;
 
 const ProfileTextWrapper = styled.View`
@@ -291,7 +355,7 @@ const PostImageWrapper = styled.TouchableOpacity`
 
 const PostImage = styled.Image`
   width: 100%;
-  height: 250px;
+  height: 200px;
   border-radius: 5px;
 `;
 
@@ -349,7 +413,7 @@ const AlarmBtn = styled.TouchableOpacity`
   width: 100%;
 `;
 
-const AlarmText = styled.Text`
+const AlarmBtnText = styled.Text`
   font-size: 13px;
   color: #303030;
   font-weight: 600;
@@ -360,7 +424,7 @@ const FollowWrapper = styled.View`
   flex-flow: row;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 15px 0;
+  margin: 15px 0;
   width: 100%;
 `;
 
@@ -370,12 +434,12 @@ const FollowTextWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 75%;
+  margin-left: 15px;
 `;
 
 const FollowNameBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -389,13 +453,13 @@ const FollowName = styled.Text`
 const CommentText = styled.Text`
   font-size: 13px;
   color: #5f5e5e;
-  padding-bottom: 5px;
+  margin-top: 2px;
 `;
 
 const AllCommentBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
+  margin: 5px 0;
   align-items: center;
   justify-content: flex-start;
 `;

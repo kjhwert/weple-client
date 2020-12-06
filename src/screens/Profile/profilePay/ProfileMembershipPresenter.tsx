@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
+import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -17,23 +18,23 @@ export default ({navigation, member}: IProps) => {
               <MemberWrapper key={idx}>
                 <MembershipWrapper onPress={() => {}}>
                   <MembershipPeriod>{item.period}</MembershipPeriod>
+                  <MembershipMark></MembershipMark>
                 </MembershipWrapper>
                 <MemberTextWrapper>
-                  <MemberText>{item.titel}</MemberText>
+                  <MemberBtn>
+                    <MemberText>{item.titel}</MemberText>
+                  </MemberBtn>
                   <CommentText>{item.comment}</CommentText>
                   <MoneyText>{item.money}</MoneyText>
                 </MemberTextWrapper>
-
-                <DotMoreBtn>
-                  <DotMoreImage
-                    source={require('../../../assets/dotMore.png')}
-                  />
-                </DotMoreBtn>
               </MemberWrapper>
             ))}
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
+      <NextBtn nextPage={'profileActiveMain'} navigation={navigation}>
+        {`결제`}
+      </NextBtn>
     </Container>
   );
 };
@@ -57,7 +58,7 @@ const MemberWrapper = styled.View`
   width: 100%;
   margin-bottom: 10px;
   border-width: 1px;
-  border-color: #bcbcbc;
+  border-color: #e4e4e4;
 `;
 
 const MembershipWrapper = styled.TouchableOpacity`
@@ -77,17 +78,32 @@ const MembershipPeriod = styled.Text`
   color: #fff;
 `;
 
+const MembershipMark = styled.View`
+  width: 12px;
+  height: 12px;
+  border-radius: 50px;
+  background-color: #fff;
+  position: absolute;
+  left: -6px;
+  border-right-width: 1px;
+  border-color: #e4e4e4;
+`;
+
 const MemberTextWrapper = styled.View`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 65%;
-  margin-left: 10px;
+  width: 70%;
+  margin: 10px;
+`;
+
+const MemberBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
 `;
 
 const MemberText = styled.Text`
-  width: 100%;
   font-size: 14px;
   font-weight: bold;
   color: #040404;
@@ -105,16 +121,4 @@ const MoneyText = styled.Text`
   width: 100%;
   font-size: 11px;
   color: #505050;
-`;
-
-const DotMoreBtn = styled.TouchableOpacity`
-  display: flex;
-  width: 10%;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const DotMoreImage = styled.Image`
-  width: 16px;
-  height: 4px;
 `;

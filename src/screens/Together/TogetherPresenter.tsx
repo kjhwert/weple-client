@@ -164,11 +164,12 @@ const RecruitTogetherNumber = styled.Text`
   color: #007bf1;
   font-weight: bold;
   font-size: 13px;
+  margin-right: 3px;
 `;
 
 const RecruitTogetherMoreImage = styled.Image`
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 10px;
 `;
 
 const RecruitWrapper = styled.View`
@@ -179,7 +180,6 @@ const RecruitWrapper = styled.View`
   width: 100%;
   padding: 10px 20px;
   border-top-width: 1px;
-  border-bottom-width: 1px;
   border-color: #eee;
 `;
 

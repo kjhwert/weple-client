@@ -55,7 +55,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followingMember');
+                        navigation.navigate('profilePoint');
                       }}>
                       <PointNumber>30</PointNumber>
                     </ActiveBtn>
@@ -63,17 +63,27 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is
-                  riding a bicycle.
+                  {
+                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
+                  }
                 </ActiveIntroduceText>
                 <PayBtnWrapper>
-                  <PaymentBtn onPress={() => {}}>
+                  <PaymentBtn
+                    onPress={() => {
+                      navigation.navigate('profilePay');
+                    }}>
                     <PayBtnText>결제내역</PayBtnText>
                   </PaymentBtn>
-                  <MembershipBtn onPress={() => {}}>
+                  <MembershipBtn
+                    onPress={() => {
+                      navigation.navigate('profileMembership');
+                    }}>
                     <PayBtnText>멤버쉽</PayBtnText>
                   </MembershipBtn>
-                  <PointBtn onPress={() => {}}>
+                  <PointBtn
+                    onPress={() => {
+                      navigation.navigate('profilePoint');
+                    }}>
                     <PayBtnText>포인트</PayBtnText>
                   </PointBtn>
                 </PayBtnWrapper>
@@ -189,7 +199,7 @@ const EditCard = styled.TouchableOpacity`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   position: absolute;
   top: 0px;
   right: 0px;
@@ -204,7 +214,7 @@ const EditBtnText = styled.Text`
   color: #b0b0b0;
   font-size: 10px;
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 5px;
 `;
 
 const ProfileNickName = styled.Text`
@@ -356,8 +366,6 @@ const ProfileActiveTitleWrapper = styled.View`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #d4d4d4;
   padding: 20px;
 `;
 
@@ -390,8 +398,8 @@ const SortBtn = styled.TouchableOpacity`
 `;
 
 const SortImage = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 23px;
+  height: 18px;
 `;
 
 const RecruitWrapper = styled.View`
@@ -402,7 +410,6 @@ const RecruitWrapper = styled.View`
   width: 100%;
   padding: 10px 20px;
   border-top-width: 1px;
-  border-bottom-width: 1px;
   border-color: #eee;
 `;
 

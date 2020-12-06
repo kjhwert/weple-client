@@ -97,26 +97,20 @@ export default ({navigation, menuList}: IProps) => {
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    navigation.navigate('');
+                    navigation.navigate('aboutApp');
                   }}>
                   <SetUpListText>이 앱에 대해서</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
-                <SetBtn
-                  onPress={() => {
-                    navigation.navigate('');
-                  }}>
+                <SetBtn onPress={() => {}}>
                   <SetUpListText>회원탈퇴</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
-                <SetBtn
-                  onPress={() => {
-                    navigation.navigate('');
-                  }}>
+                <SetBtn onPress={() => {}}>
                   <SetUpListText>로그아웃</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
@@ -187,6 +181,6 @@ const SetUpListText = styled.Text`
 `;
 
 const MoreImage = styled.Image`
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
 `;
