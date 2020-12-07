@@ -55,7 +55,7 @@ const AlarmWrapper = styled.View`
   align-items: flex-start;
   width: 100%;
   padding: 10px;
-  border-bottom-width: 3px;
+  border-bottom-width: 2px;
   border-color: #f3f3f3;
 `;
 

@@ -158,7 +158,7 @@ export default ({navigation, menuList}: IProps) => {
                 </IconImageWrapper>
                 <AlarmBtn
                   onPress={() => {
-                    navigation.navigate('niceMember');
+                    navigation.navigate('likeMember');
                   }}>
                   <AlarmBtnText>806명이 좋아합니다.</AlarmBtnText>
                 </AlarmBtn>

@@ -4,12 +4,52 @@ import FeedStack from '../navigation/FeedStack';
 import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
+import {Image} from 'react-native';
 
 const Tab = createBottomTabNavigator();
+const tabActiveColor = '#007bf1';
+const tabInActiveColor = '#000';
 
-export default ({navigation}) => {
+export default () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      initialRouteName="feed"
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
+          const tabIcon = () => {
+            if (route.name === 'feed') {
+              return require('../assets/feed.png');
+            } else if (route.name === 'together') {
+              return require('../assets/together.png');
+            } else if (route.name === 'record') {
+              return require('../assets/record.png');
+            } else if (route.name === 'profile') {
+              return require('../assets/profile.png');
+            }
+          };
+          return (
+            <Image
+              source={tabIcon()}
+              resizeMode="contain"
+              style={{
+                width: 20,
+                height: 20,
+                marginBottom: 5,
+                tintColor: focused ? tabActiveColor : tabInActiveColor,
+              }}
+            />
+          );
+        },
+      })}
+      tabBarOptions={{
+        style: {zIndex: 110},
+        inactiveTintColor: '#000',
+        activeTintColor: '#007bf1',
+        tabStyle: {
+          margin: 5,
+        },
+        labelStyle: {fontSize: 11},
+      }}>
       <Tab.Screen
         options={{
           tabBarLabel: '피드',

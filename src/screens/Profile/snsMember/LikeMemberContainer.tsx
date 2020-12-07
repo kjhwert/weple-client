@@ -1,5 +1,5 @@
 import React from 'react';
-import NiceMemberPresenter from './NiceMemberPresenter';
+import LikeMemberPresenter from './LikeMemberPresenter';
 
 const member = [
   {
@@ -27,5 +27,5 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <NiceMemberPresenter navigation={navigation} member={member} />;
+  return <LikeMemberPresenter navigation={navigation} member={member} />;
 };
