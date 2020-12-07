@@ -19,6 +19,11 @@ export default ({navigation}) => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: 'black',
+        headerTitleStyle: {
+          textAlign: 'center',
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
         headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <SetUpBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
@@ -26,14 +31,41 @@ export default ({navigation}) => {
       <Stack.Screen name="recordMain" component={RecordContainer} />
       <Stack.Screen name="recordStop" component={RecordStopContainer} />
       <Stack.Screen name="recordResume" component={RecordResumeContainer} />
-      <Stack.Screen name="recordFinish" component={RecordFinishContainer} />
-      <Stack.Screen name="recordSet" component={RecordSetContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '새로운 활동',
+        }}
+        name="recordFinish"
+        component={RecordFinishContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '설정',
+        }}
+        name="recordSet"
+        component={RecordSetContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '활동 유형',
+        }}
         name="recordActiveType"
         component={RecordActiveTypeContainer}
       />
-      <Stack.Screen name="recordMapStyle" component={RecordMapStyleContainer} />
-      <Stack.Screen name="recordMusic" component={RecordMusicContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '지도 선택',
+        }}
+        name="recordMapStyle"
+        component={RecordMapStyleContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '음악 선택',
+        }}
+        name="recordMusic"
+        component={RecordMusicContainer}
+      />
     </Stack.Navigator>
   );
 };

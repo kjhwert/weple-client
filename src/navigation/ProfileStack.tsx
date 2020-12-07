@@ -9,7 +9,7 @@ import ProfileMembershipContainer from '../screens/Profile/profilePay/ProfileMem
 import ProfilePointContainer from '../screens/Profile/profilePay/ProfilePointContainer';
 import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMemberContainer';
 import FollowingMemberContainer from '../screens/Profile/snsMember/FollowingMemberContainer';
-import NiceMemberContainer from '../screens/Profile/snsMember/NiceMemberContainer';
+import LikeMemberContainer from '../screens/Profile/snsMember/LikeMemberContainer';
 import CommentMemberContainer from '../screens/Profile/snsMember/CommentMemberContainer';
 import ProfileSettingContainer from '../screens/Profile/profileSetUp/ProfileSettingContainer';
 import SetNoticeContainer from '../screens/Profile/profileSetUp/customer/setNotice/SetNoticeContainer';
@@ -39,62 +39,196 @@ export default ({navigation}) => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: 'black',
+        headerTitleStyle: {
+          textAlign: 'center',
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
         headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <SetUpBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       }}>
       <Stack.Screen
+        options={{
+          headerTitle: '프로필',
+        }}
         name="profileActiveMain"
         component={ProfileActiveContainer}
       />
       <Stack.Screen
+        options={{
+          headerTitle: '프로필',
+        }}
         name="profileActiveJoin"
         component={ProfileActiveJoinContainer}
       />
-      <Stack.Screen name="profilePay" component={ProfilePayContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '결제내역',
+        }}
+        name="profilePay"
+        component={ProfilePayContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '멤버십 결제',
+        }}
         name="profileMembership"
         component={ProfileMembershipContainer}
       />
       <Stack.Screen name="profilePoint" component={ProfilePointContainer} />
-      <Stack.Screen name="followerMember" component={FollowerMemberContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '포인트 내역',
+        }}
+        name="followerMember"
+        component={FollowerMemberContainer}
+      />
       <Stack.Screen
         name="followingMember"
         component={FollowingMemberContainer}
       />
-      <Stack.Screen name="niceMember" component={NiceMemberContainer} />
-      <Stack.Screen name="commentMember" component={CommentMemberContainer} />
-      <Stack.Screen name="profileSetting" component={ProfileSettingContainer} />
-      <Stack.Screen name="setNotice" component={SetNoticeContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '좋아하는 사람들',
+        }}
+        name="likeMember"
+        component={LikeMemberContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '댓글',
+        }}
+        name="commentMember"
+        component={CommentMemberContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '설정',
+        }}
+        name="profileSetting"
+        component={ProfileSettingContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '공지사항',
+        }}
+        name="setNotice"
+        component={SetNoticeContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '공지사항',
+        }}
         name="setNoticeDetail"
         component={SetNoticeDetailContainer}
       />
-      <Stack.Screen name="setEvent" component={SetEventContainer} />
-      <Stack.Screen name="setAsk" component={SetAskContainer} />
-      <Stack.Screen name="setAskWrite" component={SetAskWriteContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '이벤트 모두보기',
+        }}
+        name="setEvent"
+        component={SetEventContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '1:1 문의 리스트',
+        }}
+        name="setAsk"
+        component={SetAskContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '1:1 문의 작성',
+        }}
+        name="setAskWrite"
+        component={SetAskWriteContainer}
+      />
       <Stack.Screen name="setAskDetail" component={SetAskDetailContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '1:1 문의 확인',
+        }}
         name="setAnswerDetail"
         component={SetAnswerDetailContainer}
       />
-      <Stack.Screen name="setFaq" component={SetFaqContainer} />
-      <Stack.Screen name="setClause" component={ClauseContainer} />
-      <Stack.Screen name="serviceDetaile" component={ServiceDetailContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: 'FAQ',
+        }}
+        name="setFaq"
+        component={SetFaqContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '약관 및 개인정보 보호정책',
+        }}
+        name="setClause"
+        component={ClauseContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '서비스 약관',
+        }}
+        name="serviceDetaile"
+        component={ServiceDetailContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '구독약관',
+        }}
         name="subscriptionDetaile"
         component={SubscriptionDetailContainer}
       />
-      <Stack.Screen name="privacyDetaile" component={PrivacyDetailContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '개인정보 보호정책',
+        }}
+        name="privacyDetaile"
+        component={PrivacyDetailContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '이용약관',
+        }}
         name="agreementDetaile"
         component={AgreementDetailContainer}
       />
-      <Stack.Screen name="aboutApp" component={AboutAppContainer} />
-      <Stack.Screen name="setProfile" component={SetProfileContainer} />
-      <Stack.Screen name="setPassword" component={SetPasswordContainer} />
-      <Stack.Screen name="setPersonal" component={SetPersonalContainer} />
-      <Stack.Screen name="setAlarm" component={AlarmSetContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '이 앱에 대하서',
+        }}
+        name="aboutApp"
+        component={AboutAppContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '프로필 수정',
+        }}
+        name="setProfile"
+        component={SetProfileContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '비밀번호 변경하기',
+        }}
+        name="setPassword"
+        component={SetPasswordContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '개인정보 보호설정',
+        }}
+        name="setPersonal"
+        component={SetPersonalContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '알림',
+        }}
+        name="setAlarm"
+        component={AlarmSetContainer}
+      />
     </Stack.Navigator>
   );
 };

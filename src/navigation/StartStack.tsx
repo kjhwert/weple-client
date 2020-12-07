@@ -21,29 +21,117 @@ const Stack = createStackNavigator();
 
 export default () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTitleStyle: {
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+      }}>
       <Stack.Screen
         options={{headerShown: false}}
         name="start"
         component={StartContainer}
       />
-      <Stack.Screen name="createAccount" component={CreateAccountContainer} />
-      <Stack.Screen name="login" component={LoginContainer} />
-      <Stack.Screen name="password" component={PasswordContainer} />
-      <Stack.Screen name="signUpEmail" component={SignUpEmailContainer} />
-      <Stack.Screen name="signUpPassword" component={SignUpPasswordContainer} />
-      <Stack.Screen name="signUpNickname" component={SignUpNicknameContainer} />
-      <Stack.Screen name="signUpName" component={SignUpNameContainer} />
-      <Stack.Screen name="startCategory" component={StartCategoryContainer} />
-      <Stack.Screen name="personalData" component={PersonalDataContainer} />
-      <Stack.Screen name="personalVideo" component={PersonalVideoContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="createAccount"
+        component={CreateAccountContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '땀나 로그인하기',
+        }}
+        name="login"
+        component={LoginContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '비밀번호 찾기',
+        }}
+        name="password"
+        component={PasswordContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '이메일로 가입하기',
+        }}
+        name="signUpEmail"
+        component={SignUpEmailContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '비밀번호 설정하기',
+        }}
+        name="signUpPassword"
+        component={SignUpPasswordContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '닉네임 설정하기',
+        }}
+        name="signUpNickname"
+        component={SignUpNicknameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '이름 입력하기',
+        }}
+        name="signUpName"
+        component={SignUpNameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '관심 카테고리',
+        }}
+        name="startCategory"
+        component={StartCategoryContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '개인정보 수집동의',
+        }}
+        name="personalData"
+        component={PersonalDataContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '개인정보 수집동의',
+        }}
+        name="personalVideo"
+        component={PersonalVideoContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '개인정보 수집동의',
+        }}
         name="personalCommunity"
         component={PersonalCommunityContainer}
       />
-      <Stack.Screen name="personalAlarm" component={PersonalAlarmContainer} />
-      <Stack.Screen name="startAlarmSet" component={StartAlarmSetContainer} />
-      <Stack.Screen name="welcome" component={WelcomeContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '개인정보 수집동의',
+        }}
+        name="personalAlarm"
+        component={PersonalAlarmContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '알림 선택',
+        }}
+        name="startAlarmSet"
+        component={StartAlarmSetContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '시작하기',
+        }}
+        name="welcome"
+        component={WelcomeContainer}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="bottomTab"

@@ -10,7 +10,7 @@ export default ({navigation}: IProps) => {
   return (
     <Container>
       <LinearGradient
-        colors={['#2ec6ba', '#8bc2ea', '#c6cdf9']}
+        colors={['#79a6fa', '#3065f4', '#4e3adf']}
         start={{x: 1, y: 0}}
         end={{x: 0, y: 1}}>
         <ContainerCard>
@@ -115,7 +115,7 @@ const StartBtn = styled.TouchableOpacity`
 `;
 
 const StartText = styled.Text`
-  color: #00bfff;
+  color: #007bf1;
   font-size: 17px;
   font-weight: bold;
 `;

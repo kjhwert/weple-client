@@ -60,7 +60,7 @@ export default ({navigation}: IProps) => {
                 </IconImageWrapper>
                 <AlarmBtn
                   onPress={() => {
-                    navigation.navigate('friendNice');
+                    navigation.navigate('friendLike');
                   }}>
                   <AlarmText>806명이 좋아합니다.</AlarmText>
                 </AlarmBtn>
@@ -127,7 +127,7 @@ export default ({navigation}: IProps) => {
                 </IconImageWrapper>
                 <AlarmBtn
                   onPress={() => {
-                    navigation.navigate('friendNice');
+                    navigation.navigate('friendLike');
                   }}>
                   <AlarmText>806명이 좋아합니다.</AlarmText>
                 </AlarmBtn>

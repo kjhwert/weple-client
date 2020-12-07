@@ -74,7 +74,7 @@ export default ({navigation}: IProps) => {
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
-                      navigation.navigate('friendNice');
+                      navigation.navigate('friendLike');
                     }}>
                     <IconText>좋아요</IconText>
                     <IconTextNumber>(56)</IconTextNumber>

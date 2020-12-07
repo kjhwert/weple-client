@@ -1,5 +1,5 @@
 import React from 'react';
-import FriendNicePresenter from './FriendNicePresenter';
+import FriendLikePresenter from './FriendLikePresenter';
 
 const member = [
   {
@@ -27,5 +27,5 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <FriendNicePresenter navigation={navigation} member={member} />;
+  return <FriendLikePresenter navigation={navigation} member={member} />;
 };

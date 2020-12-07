@@ -15,7 +15,7 @@ import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiv
 import FriendCommentContainer from '../screens/Feed/friendProfile/friendSns/FriendCommentContainer';
 import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowerContainer';
 import FriendFollowingContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowingContainer';
-import FriendNiceContainer from '../screens/Feed/friendProfile/friendSns/FriendNiceContainer';
+import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
 
 const Stack = createStackNavigator();
@@ -26,12 +26,18 @@ export default ({navigation}) => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: 'black',
+        headerTitleStyle: {
+          textAlign: 'center',
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
         headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <Alarm navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       }}>
       <Stack.Screen
         options={{
+          headerTitle: '피드',
           headerLeft: () => <Search navigation={navigation} />,
           cardStyle: {backgroundColor: '#f4f5fa'},
         }}
@@ -42,24 +48,60 @@ export default ({navigation}) => {
       <Stack.Screen name="feedPopularity" component={FeedPopularityContainer} />
       <Stack.Screen name="feedRecommend" component={FeedRecommendContainer} />
       <Stack.Screen name="feedSearch" component={FeedSearchContainer} />
-      <Stack.Screen name="alarmInfo" component={AlarmContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '알림',
+        }}
+        name="alarmInfo"
+        component={AlarmContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '이벤트',
+        }}
         name="feedEventDetail"
         component={FeedEventDetailContainer}
       />
-      <Stack.Screen name="friendActive" component={FriendActiveContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '프로필',
+        }}
+        name="friendActive"
+        component={FriendActiveContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '프로필',
+        }}
         name="friendActiveJoin"
         component={FriendActiveJoinContainer}
       />
-      <Stack.Screen name="friendComment" component={FriendCommentContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '댓글',
+        }}
+        name="friendComment"
+        component={FriendCommentContainer}
+      />
       <Stack.Screen name="friendFollower" component={FriendFollowerContainer} />
       <Stack.Screen
         name="friendFollowing"
         component={FriendFollowingContainer}
       />
-      <Stack.Screen name="friendNice" component={FriendNiceContainer} />
-      <Stack.Screen name="friendShare" component={FeedShareContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '좋아하는 사람들',
+        }}
+        name="friendLike"
+        component={FriendLikeContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '공유하기',
+        }}
+        name="friendShare"
+        component={FeedShareContainer}
+      />
     </Stack.Navigator>
   );
 };

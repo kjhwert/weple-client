@@ -12,7 +12,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <ContainerCard>
+          <Card>
             <NewFollowerWrapper>
               <NewFollowerBtn
                 onPress={() => {
@@ -25,7 +25,9 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                 />
               </NewFollowerBtn>
 
-              <FollowerWrapper horizontal={true}>
+              <FollowerWrapper
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
                 {newFollower.map((item, idx) => (
                   <FollowerImageWrapper key={idx}>
                     <LinearGradient
@@ -119,7 +121,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                 </IconImageWrapper>
                 <AlarmBtn
                   onPress={() => {
-                    navigation.navigate('friendNice');
+                    navigation.navigate('friendLike');
                   }}>
                   <AlarmBtnText>806명이 좋아합니다.</AlarmBtnText>
                 </AlarmBtn>
@@ -144,7 +146,7 @@ export default ({navigation, newFollower, menuList}: IProps) => {
                 </FollowTextWrapper>
               </FollowWrapper>
             </PostWrapper>
-          </ContainerCard>
+          </Card>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -162,7 +164,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const ContainerCard = styled.View`
+const Card = styled.View`
   width: 100%;
   height: 100%;
   display: flex;

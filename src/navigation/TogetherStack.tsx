@@ -27,12 +27,18 @@ export default ({navigation}) => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTintColor: 'black',
+        headerTitleStyle: {
+          textAlign: 'center',
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
         headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <Alarm navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       }}>
       <Stack.Screen
         options={{
+          headerTitle: '함께',
           headerLeft: () => <Search navigation={navigation} />,
           cardStyle: {backgroundColor: '#f4f5fa'},
         }}
@@ -40,37 +46,97 @@ export default ({navigation}) => {
         component={TogetherContainer}
       />
       <Stack.Screen name="togetherSearch" component={TogetherSearchContainer} />
-      <Stack.Screen name="togetherOpen" component={TogetherOpenContainer} />
-      <Stack.Screen name="togetherDetail" component={TogetherDetailContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '함께',
+        }}
+        name="togetherOpen"
+        component={TogetherOpenContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께하기',
+        }}
+        name="togetherDetail"
+        component={TogetherDetailContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께하기',
+        }}
         name="togetherParticipate"
         component={TogetherParticipateContainer}
       />
-      <Stack.Screen name="togetherModify" component={TogetherModifyContainer} />
-      <Stack.Screen name="togetherDelete" component={TogetherDeleteContainer} />
-      <Stack.Screen name="togetherMember" component={TogetherMemberContainer} />
-      <Stack.Screen name="togetherShare" component={TogetherShareContainer} />
       <Stack.Screen
+        options={{
+          headerTitle: '함께하기',
+        }}
+        name="togetherModify"
+        component={TogetherModifyContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께하기',
+        }}
+        name="togetherDelete"
+        component={TogetherDeleteContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께하기 참가인원',
+        }}
+        name="togetherMember"
+        component={TogetherMemberContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '공유하기',
+        }}
+        name="togetherShare"
+        component={TogetherShareContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께 개설하기',
+        }}
         name="togetherPostSubject"
         component={TogetherPostSubjectContainer}
       />
       <Stack.Screen
+        options={{
+          headerTitle: '함께 개설하기',
+        }}
         name="togetherPostIntroduce"
         component={TogetherPostIntroduceContainer}
       />
       <Stack.Screen
+        options={{
+          headerTitle: '함께 개설하기',
+        }}
         name="togetherPostPlace"
         component={TogetherPostPlaceContainer}
       />
       <Stack.Screen
+        options={{
+          headerTitle: '함께 개설하기',
+        }}
         name="togetherPostmethod"
         component={TogetherPostMethodContainer}
       />
       <Stack.Screen
+        options={{
+          headerTitle: '함께 개설하기',
+        }}
         name="togetherPostActivity"
         component={TogetherPostActivityContainer}
       />
-      <Stack.Screen name="togetherPost" component={TogetherPostContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '함께하기',
+        }}
+        name="togetherPost"
+        component={TogetherPostContainer}
+      />
     </Stack.Navigator>
   );
 };
