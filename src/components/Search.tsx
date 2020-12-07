@@ -1,11 +1,18 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export default ({navigation}) => {
+export default ({navigation, route}) => {
   return (
     <Container
       onPress={() => {
-        navigation.navigate('feedSearch');
+        const {name} = route;
+        if (name === 'feedMain') {
+          return navigation.navigate('feedSearch');
+        }
+
+        if (name === 'togetherMain') {
+          return navigation.navigate('togetherSearch');
+        }
       }}>
       <SearchImage source={require('../assets/search.png')} />
     </Container>

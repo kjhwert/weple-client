@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import SetUpBtn from '../components/SetUpBtn';
 import BackBtn from '../components/BackBtn';
 import RecordContainer from '../screens/Record/RecordContainer';
 import RecordStopContainer from '../screens/Record/RecordStopContainer';
@@ -10,13 +9,14 @@ import RecordSetContainer from '../screens/Record/recordSetUp/RecordSetContainer
 import RecordActiveTypeContainer from '../screens/Record/recordSetUp/RecordActiveTypeContainer';
 import RecordMapStyleContainer from '../screens/Record/recordStyle/RecordMapStyleContainer';
 import RecordMusicContainer from '../screens/Record/recordStyle/RecordMusicContainer';
+import RecordSetupBtn from '../components/RecordSetupBtn';
 
 const Stack = createStackNavigator();
 
-export default ({navigation}) => {
+export default () => {
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={({navigation}) => ({
         headerBackTitleVisible: false,
         headerTintColor: 'black',
         headerTitleStyle: {
@@ -24,10 +24,10 @@ export default ({navigation}) => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <SetUpBtn navigation={navigation} />,
+        headerLeft: () => null,
+        headerRight: () => <RecordSetupBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
-      }}>
+      })}>
       <Stack.Screen name="recordMain" component={RecordContainer} />
       <Stack.Screen name="recordStop" component={RecordStopContainer} />
       <Stack.Screen name="recordResume" component={RecordResumeContainer} />
