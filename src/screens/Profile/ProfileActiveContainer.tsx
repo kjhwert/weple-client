@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ProfilePresenter from './ProfileActivePresenter';
 
 const menuList = [
@@ -11,5 +11,34 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <ProfilePresenter navigation={navigation} menuList={menuList} />;
+  const [showAlert, setShowAlert] = useState(false);
+
+  const radioBoxSortData = [
+    {
+      label: '거리 가까운 순',
+      value: 'distance',
+    },
+    {
+      label: '참가자 많은 순',
+      value: 'participant',
+    },
+    {
+      label: '최신 등록 순',
+      value: 'registration',
+    },
+    {
+      label: '모집마감 임박 순',
+      value: 'deadline',
+    },
+  ];
+
+  return (
+    <ProfilePresenter
+      navigation={navigation}
+      showAlert={showAlert}
+      setShowAlert={setShowAlert}
+      menuList={menuList}
+      radioBoxSortData={radioBoxSortData}
+    />
+  );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TogetherDeletePresenter from './TogetherDeletePresenter';
 
 const content = [
@@ -27,5 +27,14 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <TogetherDeletePresenter navigation={navigation} content={content} />;
+  const [showAlert, setShowAlert] = useState(false);
+
+  return (
+    <TogetherDeletePresenter
+      navigation={navigation}
+      showAlert={showAlert}
+      setShowAlert={setShowAlert}
+      content={content}
+    />
+  );
 };

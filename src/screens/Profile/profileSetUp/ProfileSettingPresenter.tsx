@@ -1,11 +1,70 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {}
 
-export default ({navigation, menuList}: IProps) => {
+export default ({
+  navigation,
+  dropOutAlert,
+  setDropOutAlert,
+  logOutAlert,
+  setLogOutAlert,
+  menuList,
+}: IProps) => {
   return (
     <Container>
+      {dropOutAlert && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../assets/alertWarn_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'계정을 삭제하시겠습니까?'}</AlertTitleText>
+          <AlertContentText>
+            {'삭제된 데이터는 되돌릴 수 없습니다.'}
+          </AlertContentText>
+          <AlertBtnWrapper>
+            <ConfirmButton
+              onPress={() => {
+                navigation.navigate('login');
+              }}>
+              <ConfirmButtonText>삭제</ConfirmButtonText>
+            </ConfirmButton>
+            <CancelButton
+              onPress={() => {
+                navigation.navigate('profileActiveMain');
+              }}>
+              <CancelButtonText>취소</CancelButtonText>
+            </CancelButton>
+          </AlertBtnWrapper>
+        </AlertWrapper>
+      )}
+      {logOutAlert && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../assets/alertCheck_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'로그아웃 하시겠습니까?'}</AlertTitleText>
+          <AlertBtnWrapper>
+            <ConfirmButton
+              onPress={() => {
+                navigation.navigate('login');
+              }}>
+              <ConfirmButtonText>확인</ConfirmButtonText>
+            </ConfirmButton>
+            <CancelButton
+              onPress={() => {
+                navigation.navigate('profileActiveMain');
+              }}>
+              <CancelButtonText>취소</CancelButtonText>
+            </CancelButton>
+          </AlertBtnWrapper>
+        </AlertWrapper>
+      )}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
@@ -104,13 +163,19 @@ export default ({navigation, menuList}: IProps) => {
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
-                <SetBtn onPress={() => {}}>
+                <SetBtn
+                  onPress={() => {
+                    setDropOutAlert(true);
+                  }}>
                   <SetUpListText>회원탈퇴</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
-                <SetBtn onPress={() => {}}>
+                <SetBtn
+                  onPress={() => {
+                    setLogOutAlert(true);
+                  }}>
                   <SetUpListText>로그아웃</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
@@ -125,6 +190,73 @@ export default ({navigation, menuList}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertContentText = styled.Text`
+  font-size: 12px;
+  color: #878787;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #007bf1;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #efefef;
+`;
+
+const CancelButtonText = styled.Text`
+  font-size: 14px;
+  color: #4e4e4e;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`

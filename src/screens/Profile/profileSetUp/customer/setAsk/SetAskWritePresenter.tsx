@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
-import NextBtn from '../../../../../components/NextBtn';
+import AlertWrapper from '../../../../../components/AlertWrapper';
 import DropdownMenu from 'react-native-dropdown-menu';
 
 var AskType = [['싸이클링', '달리기', '걷기', '등산']];
@@ -11,8 +11,26 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
+  const [showAlert, setShowAlert] = useState(false);
+
   return (
     <Container>
+      {showAlert && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../../../assets/alertCheck_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'문의가 접수되었습니다.'}</AlertTitleText>
+          <ConfirmButton
+            onPress={() => {
+              navigation.navigate('setAsk');
+            }}>
+            <ConfirmButtonText>확인</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
       <ContainerCard>
         <AskDetailTitle>문의 유형 Select Dropdown</AskDetailTitle>
         {/* <DropdownMenu
@@ -40,9 +58,11 @@ export default ({navigation}: IProps) => {
           />
         </AskWriteWrapper>
       </ContainerCard>
-
-      <NextBtn nextPage={'setAsk'} navigation={navigation}>
-        {`문의하기`}
+      <NextBtn
+        onPress={() => {
+          setShowAlert(true);
+        }}>
+        <NextText>문의하기</NextText>
       </NextBtn>
     </Container>
   );
@@ -50,6 +70,44 @@ export default ({navigation}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const AskDetailTitle = styled.Text`
@@ -83,4 +141,21 @@ const AskInput = styled.TextInput`
   border-color: #bcbcbc;
   font-size: 13px;
   color: #cecece;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  background-color: #b2b2b2;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
 `;

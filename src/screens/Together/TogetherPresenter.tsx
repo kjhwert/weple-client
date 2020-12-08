@@ -70,10 +70,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <Line></Line>
 
             <RecruitTogetherWrapper>
-              <RecruitTogetherBtn
-                onPress={() => {
-                  navigation.navigate('togetherSearch');
-                }}>
+              <RecruitTogetherBtn onPress={() => {}}>
                 <RecruitTogetherText>내 주변 개설 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage

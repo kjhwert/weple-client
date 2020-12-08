@@ -35,10 +35,7 @@ export default ({navigation}) => {
 
             <IconWrapper>
               <IconImageWrapper>
-                <IconBtn
-                  onPress={() => {
-                    navigation.navigate('recordSet');
-                  }}>
+                <IconBtn onPress={() => {}}>
                   <IconImage source={require('../../assets/camera.png')} />
                 </IconBtn>
 

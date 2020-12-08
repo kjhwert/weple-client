@@ -23,7 +23,9 @@ export default ({navigation, eventData}: IProps) => {
                       {item.isOpen ? '진행중' : '진행종료'}
                     </EventOpenText>
                   </EventOpenWrapper>
-                  <EventTitle>{item.title}</EventTitle>
+                  <EventTitleBtn onPress={() => {}}>
+                    <EventTitle>{item.title}</EventTitle>
+                  </EventTitleBtn>
                   <EventContent>{item.content}</EventContent>
                   <EventDate>{item.date}</EventDate>
                 </EventTextWrapper>
@@ -102,6 +104,11 @@ const EventOpenText = styled.Text`
   color: #fff;
   font-weight: bold;
   text-align: center;
+`;
+
+const EventTitleBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
 `;
 
 const EventTitle = styled.Text`

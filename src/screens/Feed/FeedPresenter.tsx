@@ -83,7 +83,10 @@ export default ({navigation, newFollower, menuList}: IProps) => {
               <ProfileWrapper>
                 <ProfileImage source={require('../../assets/profile_1.png')} />
                 <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
+                  <ProfileNameBtn
+                    onPress={() => {
+                      navigation.navigate('profileActiveMain');
+                    }}>
                     <ProfileName>GilDong Hong</ProfileName>
                   </ProfileNameBtn>
                   <PostTime>10분 전</PostTime>
@@ -180,13 +183,13 @@ const Line = styled.View`
 const NewFollowerWrapper = styled.ScrollView`
   display: flex;
   width: 100%;
-  padding: 10px 20px;
+  padding: 10px 0;
 `;
 
 const NewFollowerBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;
-  padding: 5px 0;
+  padding: 5px;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -215,7 +218,7 @@ const FollowerWrapper = styled.ScrollView`
   display: flex;
   flex-flow: row;
   width: 100%;
-  padding-top: 10px;
+  padding: 10px 0px 0 5px;
 `;
 
 const FollowerImageWrapper = styled.View`

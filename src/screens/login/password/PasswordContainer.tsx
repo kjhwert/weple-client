@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PasswordPresenter from './PasswordPresenter';
 
 interface IProps {
@@ -6,5 +6,13 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <PasswordPresenter navigation={navigation} />;
+  const [showAlert, setShowAlert] = useState(false);
+
+  return (
+    <PasswordPresenter
+      navigation={navigation}
+      showAlert={showAlert}
+      setShowAlert={setShowAlert}
+    />
+  );
 };

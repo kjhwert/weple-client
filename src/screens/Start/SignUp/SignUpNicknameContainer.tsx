@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import SignUpNicknamePresenter from './SignUpNicknamePresenter';
 
 interface IProps {
@@ -6,5 +6,16 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <SignUpNicknamePresenter navigation={navigation} />;
+  const [usableAlert, setUsableAlert] = useState(false);
+  const [unusableAlert, setUnusableAlert] = useState(false);
+
+  return (
+    <SignUpNicknamePresenter
+      navigation={navigation}
+      usableAlert={usableAlert}
+      setUsableAlert={setUsableAlert}
+      unusableAlert={unusableAlert}
+      setUnusableAlert={setUnusableAlert}
+    />
+  );
 };
