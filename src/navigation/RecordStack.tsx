@@ -24,11 +24,15 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => null,
+        headerLeft: () => <BackBtn navigation={navigation} />,
         headerRight: () => <RecordSetupBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
-      <Stack.Screen name="recordMain" component={RecordContainer} />
+      <Stack.Screen
+        name="recordMain"
+        component={RecordContainer}
+        options={{headerLeft: () => null, headerTitle: '기록하기'}}
+      />
       <Stack.Screen name="recordStop" component={RecordStopContainer} />
       <Stack.Screen name="recordResume" component={RecordResumeContainer} />
       <Stack.Screen

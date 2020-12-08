@@ -2,7 +2,24 @@ import React from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+  record: {
+    init: boolean;
+    start: boolean;
+  };
+  initialRecordStart: Function;
+  changeStartStatus: Function;
+  finishRecording: Function;
+}
+
+export default ({
+  navigation,
+  record,
+  initialRecordStart,
+  changeStartStatus,
+  finishRecording,
+}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -42,8 +59,32 @@ export default ({navigation}) => {
                   <IconImage source={require('../../assets/camera.png')} />
                 </IconBtn>
 
+                {record.init && !record.start && (
+                  <LinearGradient
+                    colors={['#79a6fa', '#3065f4', '#4e3adf']}
+                    start={{x: 1, y: 0}}
+                    end={{x: 0, y: 1}}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 50,
+                      marginRight: 10,
+                    }}>
+                    <StartBtnWrapper>
+                      <ResumeBtn
+                        onPress={() => {
+                          changeStartStatus();
+                        }}>
+                        <ResumeBtnText>재개</ResumeBtnText>
+                      </ResumeBtn>
+                    </StartBtnWrapper>
+                  </LinearGradient>
+                )}
+
                 <LinearGradient
-                  colors={['#61d7ff', '#00bdfd', '#007bf1']}
+                  colors={['#79a6fa', '#3065f4', '#4e3adf']}
                   start={{x: 1, y: 0}}
                   end={{x: 0, y: 1}}
                   style={{
@@ -54,12 +95,31 @@ export default ({navigation}) => {
                     borderRadius: 50,
                   }}>
                   <StartBtnWrapper>
-                    <StartBtn
-                      onPress={() => {
-                        navigation.navigate('recordStop');
-                      }}>
-                      <StartBtnText>시작</StartBtnText>
-                    </StartBtn>
+                    {!record.init && !record.start && (
+                      <StartBtn
+                        onPress={() => {
+                          initialRecordStart();
+                        }}>
+                        <StartBtnText>시작</StartBtnText>
+                      </StartBtn>
+                    )}
+                    {record.init && record.start && (
+                      <StopBtn
+                        onPress={() => {
+                          changeStartStatus();
+                        }}>
+                        <StopBtnText>{'중지'}</StopBtnText>
+                      </StopBtn>
+                    )}
+                    {record.init && !record.start && (
+                      <FinishBtn
+                        onPress={() => {
+                          finishRecording();
+                          navigation.navigate('recordFinish');
+                        }}>
+                        <FinishBtnText>완료</FinishBtnText>
+                      </FinishBtn>
+                    )}
                   </StartBtnWrapper>
                 </LinearGradient>
               </IconImageWrapper>
@@ -184,6 +244,49 @@ const StartBtn = styled.TouchableOpacity`
 const StartBtnText = styled.Text`
   font-size: 18px;
   color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const StopBtn = styled.TouchableOpacity`
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const StopBtnText = styled.Text`
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const FinishBtn = styled.TouchableOpacity`
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const FinishBtnText = styled.Text`
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const ResumeBtn = styled.TouchableOpacity`
+  width: 63px;
+  height: 63px;
+  background-color: #fff;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const ResumeBtnText = styled.Text`
+  font-size: 18px;
+  color: #3065f4;
   font-weight: bold;
   text-align: center;
 `;

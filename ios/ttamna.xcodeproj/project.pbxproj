@@ -19,6 +19,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D2C1BAFBDD71698454024E39 /* libPods-ttamna-ttamnaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF0421BB831EAACBD245DF2 /* libPods-ttamna-ttamnaTests.a */; };
 		EE01634ECD5AA6DD18340C6F /* libPods-ttamna-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F1DA310CEC2FA75C1DB2C60 /* libPods-ttamna-tvOSTests.a */; };
+		FB18B709257F3952004761E2 /* relieve.db in Resources */ = {isa = PBXBuildFile; fileRef = FB18B708257F3952004761E2 /* relieve.db */; };
 		FCE6759902D337C9C2A116D6 /* libPods-ttamna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D7F9AA940E7530597E44C0 /* libPods-ttamna.a */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		E20644AFCAF05E8A68E1796D /* Pods-ttamna-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-ttamna-tvOSTests/Pods-ttamna-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		FB18B708257F3952004761E2 /* relieve.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = relieve.db; path = ttamna/www/relieve.db; sourceTree = "<group>"; };
 		FC88108B1D18E0DC4ED1F74F /* Pods-ttamna-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ttamna-tvOS/Pods-ttamna-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FE515D82D560C754F77DDD0D /* Pods-ttamna-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-ttamna-tvOSTests/Pods-ttamna-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* ttamna */ = {
 			isa = PBXGroup;
 			children = (
+				FB18B708257F3952004761E2 /* relieve.db */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -340,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				FB18B709257F3952004761E2 /* relieve.db in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
