@@ -33,10 +33,10 @@ import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/A
 
 const Stack = createStackNavigator();
 
-export default ({navigation}) => {
+export default () => {
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={({navigation}) => ({
         headerBackTitleVisible: false,
         headerTintColor: 'black',
         headerTitleStyle: {
@@ -44,10 +44,10 @@ export default ({navigation}) => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => <BackBtn navigation={navigation} />,
+        headerLeft: () => null,
         headerRight: () => <SetUpBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
-      }}>
+      })}>
       <Stack.Screen
         options={{
           headerTitle: '프로필',
