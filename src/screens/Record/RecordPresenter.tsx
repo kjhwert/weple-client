@@ -1,33 +1,62 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import RecordContext from '../../module/context/RecordContext';
+import KeepAwake from 'react-native-keep-awake';
+
+MapboxGL.setAccessToken(
+  'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg',
+);
 
 interface IProps {
   navigation: any;
-  record: {
-    init: boolean;
-    start: boolean;
-  };
-  initialRecordStart: Function;
-  changeStartStatus: Function;
-  finishRecording: Function;
 }
 
-export default ({
-  navigation,
-  record,
-  initialRecordStart,
-  changeStartStatus,
-  finishRecording,
-}: IProps) => {
+export default ({navigation}: IProps) => {
+  const {
+    recordSetting,
+    record,
+    initialRecordStart,
+    changeStartStatus,
+    finishRecording,
+    onUpdateUserPosition,
+  }: any = useContext(RecordContext);
   return (
     <Container>
+      {recordSetting.awake && <KeepAwake />}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapPlayWrapper onPress={() => {}}>
-              <MapPlayImage source={require('../../assets/map_2.png')} />
-            </MapPlayWrapper>
+            <MapboxGL.MapView
+              style={{width: '100%', height: 300}}
+              styleURL={'mapbox://styles/kjhwert/ckh44m2dc04f419o8odhe7dz8'}
+              localizeLabels={true}>
+              <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
+              <MapboxGL.UserLocation
+                onUpdate={(location) => onUpdateUserPosition(location)}
+              />
+              <MapboxGL.ShapeSource
+                id="line1"
+                shape={{
+                  type: 'FeatureCollection',
+                  features: [
+                    {
+                      type: 'Feature',
+                      properties: {},
+                      geometry: {
+                        type: 'LineString',
+                        coordinates: record.coordinates,
+                      },
+                    },
+                  ],
+                }}>
+                <MapboxGL.LineLayer
+                  id="linelayer1"
+                  style={{lineColor: 'red'}}
+                />
+              </MapboxGL.ShapeSource>
+            </MapboxGL.MapView>
 
             <RecordWrapper>
               <RecordTextWrapper>
@@ -36,11 +65,11 @@ export default ({
                   <RecordUnitText>Killometer</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0</RecordNumber>
+                  <RecordNumber>{record.speed}</RecordNumber>
                   <RecordUnitText>Km/h</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0:00</RecordNumber>
+                  <RecordNumber>{record.duration}</RecordNumber>
                   <RecordUnitText>Duration</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
@@ -59,7 +88,7 @@ export default ({
                   <IconImage source={require('../../assets/camera.png')} />
                 </IconBtn>
 
-                {record.init && !record.start && (
+                {recordSetting.isInit && !recordSetting.isStart && (
                   <LinearGradient
                     colors={['#79a6fa', '#3065f4', '#4e3adf']}
                     start={{x: 1, y: 0}}
@@ -95,7 +124,7 @@ export default ({
                     borderRadius: 50,
                   }}>
                   <StartBtnWrapper>
-                    {!record.init && !record.start && (
+                    {!recordSetting.isInit && !recordSetting.isStart && (
                       <StartBtn
                         onPress={() => {
                           initialRecordStart();
@@ -103,7 +132,7 @@ export default ({
                         <StartBtnText>시작</StartBtnText>
                       </StartBtn>
                     )}
-                    {record.init && record.start && (
+                    {recordSetting.isInit && recordSetting.isStart && (
                       <StopBtn
                         onPress={() => {
                           changeStartStatus();
@@ -111,7 +140,7 @@ export default ({
                         <StopBtnText>{'중지'}</StopBtnText>
                       </StopBtn>
                     )}
-                    {record.init && !record.start && (
+                    {recordSetting.isInit && !recordSetting.isStart && (
                       <FinishBtn
                         onPress={() => {
                           finishRecording();
@@ -147,18 +176,6 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
-`;
-
-const MapPlayWrapper = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MapPlayImage = styled.Image`
-  width: 100%;
-  height: 300px;
 `;
 
 const RecordWrapper = styled.View`

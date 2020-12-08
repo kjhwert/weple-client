@@ -1,7 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import SetUpBtn from '../components/SetUpBtn';
-import BackBtn from '../components/BackBtn';
 import ProfileActiveContainer from '../screens/Profile/ProfileActiveContainer';
 import ProfileActiveJoinContainer from '../screens/Profile/ProfileActiveJoinContainer';
 import ProfilePayContainer from '../screens/Profile/profilePay/ProfilePayContainer';
@@ -30,6 +29,7 @@ import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfi
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
 import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/AlarmSetContainer';
+import {View} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -44,7 +44,7 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => null,
+        headerLeft: () => <View />,
         headerRight: () => <SetUpBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
