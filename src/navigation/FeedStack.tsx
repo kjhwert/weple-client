@@ -11,7 +11,7 @@ import FriendCommentContainer from '../screens/Feed/friendProfile/friendSns/Frie
 import BackBtn from '../components/BackBtn';
 import FeedEventDetailContainer from '../screens/Feed/FeedEvent/FeedEventDetailContainer';
 import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiveJoinContainer';
-import Alarm from '../components/Alarm';
+import Notification from '../components/Notification';
 import Search from '../components/Search';
 import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
 import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
@@ -32,7 +32,7 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <Alarm navigation={navigation} />,
+        headerRight: () => <Notification navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen

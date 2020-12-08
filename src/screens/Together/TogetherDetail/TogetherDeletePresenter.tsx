@@ -1,14 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../components/NextBtn';
+import {Text} from 'react-native';
+import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation, content}: IProps) => {
+  const [showAlert, setShowAlert] = useState(false);
+
   return (
     <Container>
+      {showAlert && (
+        <AlertWrapper>
+          <Text style={{color: 'white'}}>정말 삭제하겜ㄴㅇㅁ</Text>
+        </AlertWrapper>
+      )}
       <ScrollContainer>
         <ScrollWrapper>
           <JoinImageWrapper>
@@ -65,7 +73,10 @@ export default ({navigation, content}: IProps) => {
                 }}>
                 <ButtonText>수정하기</ButtonText>
               </JoinButton>
-              <DeleteButton onPress={() => {}}>
+              <DeleteButton
+                onPress={() => {
+                  setShowAlert(true);
+                }}>
                 <ButtonText>삭제하기</ButtonText>
               </DeleteButton>
             </JoinWrapper>

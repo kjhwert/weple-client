@@ -11,7 +11,7 @@ import TogetherPostMethodContainer from '../screens/Together/togetherPost/Togeth
 import TogetherPostContainer from '../screens/Together/togetherPost/TogetherPostContainer';
 import BackBtn from '../components/BackBtn';
 import TogetherOpenContainer from '../screens/Together/togetherOpen/TogetherOpenContainer';
-import Alarm from '../components/Alarm';
+import Notification from '../components/Notification';
 import Search from '../components/Search';
 import TogetherContainer from '../screens/Together/TogetherContainer';
 import TogetherDeleteContainer from '../screens/Together/TogetherDetail/TogetherDeleteContainer';
@@ -33,7 +33,7 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <Alarm navigation={navigation} />,
+        headerRight: () => <Notification navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
