@@ -1,14 +1,46 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import AlertWrapper from '../../components/AlertWrapper';
+import RadioButtonRN from 'radio-buttons-react-native';
 
 interface IProps {
   navigation: any;
   isClick: boolean;
 }
 
-export default ({navigation, menuList}: IProps) => {
+export default ({
+  navigation,
+  showAlert,
+  setShowAlert,
+  menuList,
+  radioBoxSortData,
+}: IProps) => {
   return (
     <Container>
+      {showAlert && (
+        <AlertWrapper>
+          <AlertTextWrapper>
+            <AlertTitleText>정렬</AlertTitleText>
+            <RadioButtonRN
+              box={false}
+              circleSize={8}
+              activeColor={'#187fe2'}
+              textStyle={{
+                fontSize: 13,
+                color: '#919191',
+                padding: 3,
+              }}
+              data={radioBoxSortData}
+            />
+          </AlertTextWrapper>
+          <ConfirmButton
+            onPress={() => {
+              navigation.navigate('profileActiveJoin');
+            }}>
+            <ConfirmButtonText>적용</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
@@ -112,7 +144,10 @@ export default ({navigation, menuList}: IProps) => {
                 </ProfileActiveTitle>
                 <ProfileActiveNumber>8</ProfileActiveNumber>
               </ProfileTitleBtn>
-              <SortBtn>
+              <SortBtn
+                onPress={() => {
+                  setShowAlert(true);
+                }}>
                 <SortImage source={require('../../assets/sort_icon.png')} />
               </SortBtn>
             </ProfileActiveTitleWrapper>
@@ -166,7 +201,10 @@ export default ({navigation, menuList}: IProps) => {
               <FollowWrapper>
                 <ProfileImage source={require('../../assets/profile_2.png')} />
                 <FollowTextWrapper>
-                  <FollowNameBtn onPress={() => {}}>
+                  <FollowNameBtn
+                    onPress={() => {
+                      navigation.navigate('friendActive');
+                    }}>
                     <FollowName>Benjamin</FollowName>
                   </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
@@ -188,6 +226,37 @@ export default ({navigation, menuList}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertTextWrapper = styled.View`
+  display: flex;
+  width: 100%;
+  padding: 20px 10px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 13px;
+  color: #121212;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 5px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`

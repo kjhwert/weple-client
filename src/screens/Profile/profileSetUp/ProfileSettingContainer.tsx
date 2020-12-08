@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ProfileSettingPresenter from './ProfileSettingPresenter';
 
 interface IProps {
@@ -6,5 +6,16 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <ProfileSettingPresenter navigation={navigation} />;
+  const [dropOutAlert, setDropOutAlert] = useState(false);
+  const [logOutAlert, setLogOutAlert] = useState(false);
+
+  return (
+    <ProfileSettingPresenter
+      navigation={navigation}
+      dropOutAlert={dropOutAlert}
+      setDropOutAlert={setDropOutAlert}
+      logOutAlert={logOutAlert}
+      setLogOutAlert={setLogOutAlert}
+    />
+  );
 };

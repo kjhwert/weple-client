@@ -1,20 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import {Text} from 'react-native';
 import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
 }
 
-export default ({navigation, content}: IProps) => {
-  const [showAlert, setShowAlert] = useState(false);
-
+export default ({navigation, showAlert, setShowAlert, content}: IProps) => {
   return (
     <Container>
       {showAlert && (
         <AlertWrapper>
-          <Text style={{color: 'white'}}>정말 삭제하겜ㄴㅇㅁ</Text>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../assets/alertWarn_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'정말 삭제하시겠습니까?'}</AlertTitleText>
+          <AlertContentText>
+            {'삭제된 데이터는 되돌릴 수 없습니다.'}
+          </AlertContentText>
+          <AlertBtnWrapper>
+            <ConfirmButton
+              onPress={() => {
+                navigation.navigate('togetherDetail');
+              }}>
+              <ConfirmButtonText>확인</ConfirmButtonText>
+            </ConfirmButton>
+            <CancelButton
+              onPress={() => {
+                navigation.navigate('togetherModify');
+              }}>
+              <CancelButtonText>취소</CancelButtonText>
+            </CancelButton>
+          </AlertBtnWrapper>
         </AlertWrapper>
       )}
       <ScrollContainer>
@@ -89,6 +108,73 @@ export default ({navigation, content}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertContentText = styled.Text`
+  font-size: 12px;
+  color: #878787;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #007bf1;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #efefef;
+`;
+
+const CancelButtonText = styled.Text`
+  font-size: 14px;
+  color: #4e4e4e;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`

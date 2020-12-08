@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import SetUpBtn from '../components/SetUpBtn';
+import ProfileSetupBtn from '../components/ProfileSetupBtn';
+import BackBtn from '../components/BackBtn';
 import ProfileActiveContainer from '../screens/Profile/ProfileActiveContainer';
 import ProfileActiveJoinContainer from '../screens/Profile/ProfileActiveJoinContainer';
 import ProfilePayContainer from '../screens/Profile/profilePay/ProfilePayContainer';
@@ -44,8 +45,8 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => <View />,
-        headerRight: () => <SetUpBtn navigation={navigation} />,
+        headerLeft: () => <View/>,
+        headerRight: () => <ProfileSetupBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen

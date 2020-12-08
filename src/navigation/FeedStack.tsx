@@ -14,7 +14,7 @@ import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiv
 import Notification from '../components/Notification';
 import Search from '../components/Search';
 import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
-import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
+import FeedSearchContainer from '../screens/Feed/FeedSearch/FeedSearchContainer';
 import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowerContainer';
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
 
@@ -47,7 +47,13 @@ export default () => {
       <Stack.Screen name="activeDetail" component={ActiveDetailContainer} />
       <Stack.Screen name="feedPopularity" component={FeedPopularityContainer} />
       <Stack.Screen name="feedRecommend" component={FeedRecommendContainer} />
-      <Stack.Screen name="feedSearch" component={FeedSearchContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '피드 검색결과',
+        }}
+        name="feedSearch"
+        component={FeedSearchContainer}
+      />
       <Stack.Screen
         options={{
           headerTitle: '알림',
