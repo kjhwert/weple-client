@@ -1,33 +1,79 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import RecordContext from '../../module/context/RecordContext';
+import KeepAwake from 'react-native-keep-awake';
 
-export default ({navigation}) => {
+MapboxGL.setAccessToken(
+  'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg',
+);
+
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
+  const {
+    recordSetting,
+    record,
+    initialRecordStart,
+    changeStartStatus,
+    finishRecording,
+    onUpdateUserPosition,
+  }: any = useContext(RecordContext);
   return (
     <Container>
+      {recordSetting.awake && <KeepAwake />}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapPlayWrapper onPress={() => {}}>
-              <MapPlayImage source={require('../../assets/map_2.png')} />
-            </MapPlayWrapper>
+            <MapboxGL.MapView
+              style={{width: '100%', height: 300}}
+              styleURL={'mapbox://styles/kjhwert/ckh44m2dc04f419o8odhe7dz8'}
+              localizeLabels={true}>
+              <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
+              <MapboxGL.UserLocation
+                onUpdate={(location) => onUpdateUserPosition(location)}
+              />
+              <MapboxGL.ShapeSource
+                id="line1"
+                shape={{
+                  type: 'FeatureCollection',
+                  features: [
+                    {
+                      type: 'Feature',
+                      properties: {},
+                      geometry: {
+                        type: 'LineString',
+                        coordinates: record.coordinates,
+                      },
+                    },
+                  ],
+                }}>
+                <MapboxGL.LineLayer
+                  id="linelayer1"
+                  style={{lineColor: 'red'}}
+                />
+              </MapboxGL.ShapeSource>
+            </MapboxGL.MapView>
 
             <RecordWrapper>
               <RecordTextWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
+                  <RecordNumber>{record.speed}</RecordNumber>
                   <RecordUnitText>Killometer</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0</RecordNumber>
+                  <RecordNumber>{record.speed}</RecordNumber>
                   <RecordUnitText>Km/h</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0:00</RecordNumber>
+                  <RecordNumber>{record.duration}</RecordNumber>
                   <RecordUnitText>Duration</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
+                  <RecordNumber>{record.calorie}</RecordNumber>
                   <RecordUnitText>Kcal</RecordUnitText>
                 </RecordCheckWrapper>
               </RecordTextWrapper>
@@ -39,8 +85,32 @@ export default ({navigation}) => {
                   <IconImage source={require('../../assets/camera.png')} />
                 </IconBtn>
 
+                {recordSetting.isInit && !recordSetting.isStart && (
+                  <LinearGradient
+                    colors={['#79a6fa', '#3065f4', '#4e3adf']}
+                    start={{x: 1, y: 0}}
+                    end={{x: 0, y: 1}}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 50,
+                      marginRight: 10,
+                    }}>
+                    <StartBtnWrapper>
+                      <ResumeBtn
+                        onPress={() => {
+                          changeStartStatus();
+                        }}>
+                        <ResumeBtnText>재개</ResumeBtnText>
+                      </ResumeBtn>
+                    </StartBtnWrapper>
+                  </LinearGradient>
+                )}
+
                 <LinearGradient
-                  colors={['#61d7ff', '#00bdfd', '#007bf1']}
+                  colors={['#79a6fa', '#3065f4', '#4e3adf']}
                   start={{x: 1, y: 0}}
                   end={{x: 0, y: 1}}
                   style={{
@@ -51,12 +121,31 @@ export default ({navigation}) => {
                     borderRadius: 50,
                   }}>
                   <StartBtnWrapper>
-                    <StartBtn
-                      onPress={() => {
-                        navigation.navigate('recordStop');
-                      }}>
-                      <StartBtnText>시작</StartBtnText>
-                    </StartBtn>
+                    {!recordSetting.isInit && !recordSetting.isStart && (
+                      <StartBtn
+                        onPress={() => {
+                          initialRecordStart();
+                        }}>
+                        <StartBtnText>시작</StartBtnText>
+                      </StartBtn>
+                    )}
+                    {recordSetting.isInit && recordSetting.isStart && (
+                      <StopBtn
+                        onPress={() => {
+                          changeStartStatus();
+                        }}>
+                        <StopBtnText>{'중지'}</StopBtnText>
+                      </StopBtn>
+                    )}
+                    {recordSetting.isInit && !recordSetting.isStart && (
+                      <FinishBtn
+                        onPress={() => {
+                          finishRecording();
+                          navigation.navigate('recordFinish');
+                        }}>
+                        <FinishBtnText>완료</FinishBtnText>
+                      </FinishBtn>
+                    )}
                   </StartBtnWrapper>
                 </LinearGradient>
               </IconImageWrapper>
@@ -84,18 +173,6 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
-`;
-
-const MapPlayWrapper = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MapPlayImage = styled.Image`
-  width: 100%;
-  height: 300px;
 `;
 
 const RecordWrapper = styled.View`
@@ -181,6 +258,49 @@ const StartBtn = styled.TouchableOpacity`
 const StartBtnText = styled.Text`
   font-size: 18px;
   color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const StopBtn = styled.TouchableOpacity`
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const StopBtnText = styled.Text`
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const FinishBtn = styled.TouchableOpacity`
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const FinishBtnText = styled.Text`
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const ResumeBtn = styled.TouchableOpacity`
+  width: 63px;
+  height: 63px;
+  background-color: #fff;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
+const ResumeBtnText = styled.Text`
+  font-size: 18px;
+  color: #3065f4;
   font-weight: bold;
   text-align: center;
 `;

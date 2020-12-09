@@ -1,16 +1,14 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {Switch} from 'react-native';
+import RecordContext from '../../../module/context/RecordContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const [isScreen, seIsScreen] = useState();
-  const toggleScreenSwitch = () =>
-    seIsScreen((previousState) => !previousState);
-
+  const {recordSetting, toggleAwakeSwitch}: any = useContext(RecordContext);
   return (
     <Container>
       <Card>
@@ -20,7 +18,11 @@ export default ({navigation}: IProps) => {
               navigation.navigate('recordActiveType');
             }}>
             <SetUpListText>활동</SetUpListText>
-            <SetUpActiveText>싸이클링</SetUpActiveText>
+            <SetUpActiveText>
+              {!recordSetting.activity.name
+                ? '활동을 선택하세요'
+                : recordSetting.activity.name}
+            </SetUpActiveText>
             <MoreImage source={require('../../../assets/set_more.png')} />
           </SetBtn>
         </SetBtnWrapper>
@@ -34,10 +36,12 @@ export default ({navigation}: IProps) => {
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
-            thumbColor={isScreen ? '#fff' : '#f4f3f4'}
+            thumbColor={recordSetting.awake ? '#fff' : '#f4f3f4'}
             ios_backgroundColor="#c1c1c1"
-            onValueChange={toggleScreenSwitch}
-            value={isScreen}
+            onValueChange={() => {
+              toggleAwakeSwitch();
+            }}
+            value={recordSetting.awake}
           />
         </AlarmSetWrapper>
       </Card>

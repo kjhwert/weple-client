@@ -1,6 +1,9 @@
 import React from 'react';
 import RecordPresenter from './RecordPresenter';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+export default ({navigation}: IProps) => {
   return <RecordPresenter navigation={navigation} />;
 };

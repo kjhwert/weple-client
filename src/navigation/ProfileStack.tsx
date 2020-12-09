@@ -30,6 +30,7 @@ import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfi
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
 import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/AlarmSetContainer';
+import {View} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -44,7 +45,7 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => null,
+        headerLeft: () => <View/>,
         headerRight: () => <ProfileSetupBtn navigation={navigation} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>

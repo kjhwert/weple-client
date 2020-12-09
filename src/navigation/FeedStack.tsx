@@ -6,15 +6,15 @@ import FriendActiveContainer from '../screens/Feed/friendProfile/FriendActiveCon
 import ActiveDetailContainer from '../screens/Feed/ActiveDetailContainer';
 import FriendFollowingContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowingContainer';
 import FeedContainer from '../screens/Feed/FeedContainer';
+import Notification from '../components/Notification';
 import FeedRecommendContainer from '../screens/Feed/FeedRecommendContainer';
 import FriendCommentContainer from '../screens/Feed/friendProfile/friendSns/FriendCommentContainer';
 import BackBtn from '../components/BackBtn';
 import FeedEventDetailContainer from '../screens/Feed/FeedEvent/FeedEventDetailContainer';
 import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiveJoinContainer';
-import Notification from '../components/Notification';
 import Search from '../components/Search';
 import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
-import FeedSearchContainer from '../screens/Feed/FeedSearch/FeedSearchContainer';
+import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
 import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowerContainer';
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
 

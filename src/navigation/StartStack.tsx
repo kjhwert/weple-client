@@ -1,22 +1,22 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginContainer from '../screens/Login/LoginContainer';
+import LoginContainer from '../screens/login/LoginContainer';
 import SignUpEmailContainer from '../screens/Start/SignUp/SignUpEmailContainer';
 import PersonalDataContainer from '../screens/Start/PersonalData/PersonalDataContainer';
 import WelcomeContainer from '../screens/Start/Welcome/WelcomeContainer';
 import SignUpNicknameContainer from '../screens/Start/SignUp/SignUpNicknameContainer';
 import StartAlarmSetContainer from '../screens/Start/startAlarmSet/StartAlarmSetContainer';
-import PasswordContainer from '../screens/Login/password/PasswordContainer';
+import PasswordContainer from '../screens/login/password/PasswordContainer';
 import SignUpPasswordContainer from '../screens/Start/SignUp/SignUpPasswordContainer';
 import PersonalCommunityContainer from '../screens/Start/PersonalData/PersonalCommunityContainer';
 import BottomTab from './BottomTab';
+import BackBtn from '../components/BackBtn';
 import StartContainer from '../screens/Start/StartContainer';
 import PersonalAlarmContainer from '../screens/Start/PersonalData/PersonalAlarmContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
 import PersonalVideoContainer from '../screens/Start/PersonalData/PersonalVideoContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
-import BackBtn from '../components/BackBtn';
 
 const Stack = createStackNavigator();
 

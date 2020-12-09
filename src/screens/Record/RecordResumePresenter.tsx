@@ -218,10 +218,7 @@ const FinishBtnWrapper = styled.View`
 const FinishBtn = styled.TouchableOpacity`
   width: 70px;
   height: 70px;
-  /* border-width: 1px; */
   border-radius: 50px;
-  /* border-color: #007bf1;
-  background-color: #007bf1; */
   justify-content: center;
 `;
 
