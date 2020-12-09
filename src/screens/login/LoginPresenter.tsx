@@ -6,7 +6,7 @@ interface IProps {
   navigation: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, login, onChangeLogin}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -15,11 +15,22 @@ export default ({navigation}: IProps) => {
             <SignInWrapper>
               <LoginTitle>로그인</LoginTitle>
               <SignInTitle>이메일</SignInTitle>
-              <LoginInput placeholder="이메일을 입력하세요." />
+              <LoginInput
+                placeholder="이메일을 입력하세요."
+                name="email"
+                autoCapitalize="none"
+                onChange={onChangeLogin}
+              />
               <PasswordSearchWrapper>
                 <PasswordWrapper>
                   <SignInTitle>비밀번호</SignInTitle>
-                  <LoginInput placeholder="비밀번호를 입력하세요." />
+                  <LoginInput
+                    placeholder="비밀번호를 입력하세요."
+                    name="password"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    onChange={onChangeLogin}
+                  />
                 </PasswordWrapper>
                 <PasswordBtn
                   onPress={() => {
@@ -31,7 +42,10 @@ export default ({navigation}: IProps) => {
 
               <LoginButton
                 onPress={() => {
+                  // navigation.navigate('bottomTab');
+                  // login();
                   navigation.navigate('bottomTab');
+                  login();
                 }}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
