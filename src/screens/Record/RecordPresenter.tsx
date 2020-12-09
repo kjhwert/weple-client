@@ -61,7 +61,7 @@ export default ({navigation}: IProps) => {
             <RecordWrapper>
               <RecordTextWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
+                  <RecordNumber>{record.speed}</RecordNumber>
                   <RecordUnitText>Killometer</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
@@ -73,7 +73,7 @@ export default ({navigation}: IProps) => {
                   <RecordUnitText>Duration</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
+                  <RecordNumber>{record.calorie}</RecordNumber>
                   <RecordUnitText>Kcal</RecordUnitText>
                 </RecordCheckWrapper>
               </RecordTextWrapper>

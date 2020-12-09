@@ -13,6 +13,7 @@ interface IActivity {
   categoryActivity: Array<{
     id: number;
     name: string;
+    caloriesPerMinute: number;
   }>;
 }
 
@@ -25,16 +26,22 @@ export default ({navigation, activities}: IProps) => {
           <CategoryWrapper key={activity.id}>
             <CategoryTitle>{activity.name}</CategoryTitle>
             <ActivityWrapper>
-              {activity.categoryActivity.map(({id, name}) => (
-                <CategoryBtn
-                  key={id}
-                  onPress={() => {
-                    setActivityCategory({id, name});
-                    navigation.goBack();
-                  }}>
-                  <CategoryText>{name}</CategoryText>
-                </CategoryBtn>
-              ))}
+              {activity.categoryActivity.map(
+                ({id, name, caloriesPerMinute}) => (
+                  <CategoryBtn
+                    key={id}
+                    onPress={() => {
+                      setActivityCategory({
+                        id,
+                        name,
+                        caloriesPerMinute,
+                      });
+                      navigation.goBack();
+                    }}>
+                    <CategoryText>{name}</CategoryText>
+                  </CategoryBtn>
+                ),
+              )}
             </ActivityWrapper>
           </CategoryWrapper>
         ))}

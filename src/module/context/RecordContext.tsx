@@ -8,6 +8,7 @@ import React, {
 import {IMapBoxLocation} from '../type/mapbox';
 import {Database} from '../Database';
 import {ISetActivityCategory} from '../type/recordContext';
+import {MINUTE} from '../staticVariables';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -24,6 +25,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     activity: {
       id: 0,
       name: '',
+      caloriesPerMinute: 0,
     },
   });
   const timer: any = useRef(null);
@@ -31,11 +33,22 @@ export const RecordContextProvider = ({children}: IProps) => {
   const [record, setRecord] = useState({
     duration: 0,
     speed: 0,
+    calorie: 0,
     coordinates: [],
   });
 
-  const setActivityCategory = ({id, name}: ISetActivityCategory) => {
-    setRecordSetting({...recordSetting, activity: {id, name}});
+  const setActivityCategory = ({
+    id,
+    name,
+    caloriesPerMinute,
+  }: ISetActivityCategory) => {
+    const calorie = Math.floor(record.duration / MINUTE) * caloriesPerMinute;
+
+    setRecordSetting({
+      ...recordSetting,
+      activity: {id, name, caloriesPerMinute},
+    });
+    setRecord({...record, calorie});
   };
 
   const toggleAwakeSwitch = () => {
@@ -73,18 +86,27 @@ export const RecordContextProvider = ({children}: IProps) => {
     sqlite.insertRecord([longitude, latitude]);
   };
 
+  const updateRecordOnInterval = () => {
+    const {
+      activity: {caloriesPerMinute},
+    } = recordSetting;
+    const duration = record.duration + 1;
+    if (record.duration % MINUTE === 0) {
+      const calorie = Math.floor(record.duration / MINUTE) * caloriesPerMinute;
+      return setRecord({...record, calorie, duration});
+    }
+    setRecord({...record, duration});
+  };
+
   useEffect(() => {
     if (recordSetting.isStart) {
-      timer.current = setInterval(
-        () => setRecord({...record, duration: record.duration + 1}),
-        1000,
-      );
+      timer.current = setInterval(() => updateRecordOnInterval(), 1000);
     }
 
     return () => {
       clearInterval(timer.current);
     };
-  }, [recordSetting, record]);
+  }, [recordSetting, record.duration]);
 
   return (
     <RecordContext.Provider
