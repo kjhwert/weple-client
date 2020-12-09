@@ -15,6 +15,14 @@ target 'ttamna' do
     # Pods for testing
   end
 
+    pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+    permissions_path = '../node_modules/react-native-permissions/ios'
+
+    pod 'Permission-Camera', :path => "#{permissions_path}/Camera/Permission-Camera.podspec"
+    pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways/Permission-LocationAlways.podspec"
+    pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse/Permission-LocationWhenInUse.podspec"
+    pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary/Permission-PhotoLibrary.podspec"
+
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and

@@ -8,7 +8,7 @@ import React, {
 import {IMapBoxLocation} from '../type/mapbox';
 import {Database} from '../Database';
 import {ISetActivityCategory} from '../type/recordContext';
-import {MINUTE} from '../staticVariables';
+import {getDistanceBetweenTwoGPS, MINUTE} from '../common';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -32,8 +32,15 @@ export const RecordContextProvider = ({children}: IProps) => {
 
   const [record, setRecord] = useState({
     duration: 0,
-    speed: 0,
     calorie: 0,
+  });
+  const [mapboxRecord, setMapboxRecord] = useState<{
+    speed: number;
+    distance: number;
+    coordinates: Array<Array<number>>;
+  }>({
+    speed: 0,
+    distance: 0,
     coordinates: [],
   });
 
@@ -71,18 +78,27 @@ export const RecordContextProvider = ({children}: IProps) => {
     if (!recordSetting.isStart) {
       return;
     }
-
     if (record.duration % 10 !== 0) {
       return;
     }
 
     const {
-      coords: {latitude, longitude, speed},
+      coords: {latitude, longitude, speed: mapboxSpeed},
     } = location;
-    const {coordinates} = record;
+    const {coordinates} = mapboxRecord;
 
-    const newPolyLine = coordinates.concat([longitude, latitude]);
-    setRecord({...record, coordinates: newPolyLine, speed});
+    const speed = Math.floor(mapboxSpeed / 10) * 10;
+
+    // const {coordinates} = mapboxRecord;
+    // const newPolyLine = coordinates.concat([longitude, latitude]);
+
+    let distance = 0;
+    if (coordinates.length !== 0) {
+      distance = getDistanceBetweenTwoGPS(
+        coordinates.concat([longitude, latitude]),
+      );
+    }
+    setMapboxRecord({distance, speed, coordinates: [[longitude, latitude]]});
     sqlite.insertRecord([longitude, latitude]);
   };
 
@@ -106,13 +122,14 @@ export const RecordContextProvider = ({children}: IProps) => {
     return () => {
       clearInterval(timer.current);
     };
-  }, [recordSetting, record.duration]);
+  }, [recordSetting, record, mapboxRecord]);
 
   return (
     <RecordContext.Provider
       value={{
         recordSetting,
         record,
+        mapboxRecord,
         initialRecordStart,
         changeStartStatus,
         finishRecording,

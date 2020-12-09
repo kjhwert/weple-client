@@ -17,6 +17,7 @@ export default ({navigation}: IProps) => {
   const {
     recordSetting,
     record,
+    mapboxRecord,
     initialRecordStart,
     changeStartStatus,
     finishRecording,
@@ -46,7 +47,7 @@ export default ({navigation}: IProps) => {
                       properties: {},
                       geometry: {
                         type: 'LineString',
-                        coordinates: record.coordinates,
+                        coordinates: [],
                       },
                     },
                   ],
@@ -61,20 +62,32 @@ export default ({navigation}: IProps) => {
             <RecordWrapper>
               <RecordTextWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.speed}</RecordNumber>
-                  <RecordUnitText>Killometer</RecordUnitText>
+                  <RecordNumber>
+                    {mapboxRecord.distance}
+                    <UnitNumber> km</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Distance</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.speed}</RecordNumber>
-                  <RecordUnitText>Km/h</RecordUnitText>
+                  <RecordNumber>
+                    {mapboxRecord.speed}
+                    <UnitNumber> km/h</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Speed</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.duration}</RecordNumber>
+                  <RecordNumber>
+                    {record.duration}
+                    <UnitNumber> s</UnitNumber>
+                  </RecordNumber>
                   <RecordUnitText>Duration</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.calorie}</RecordNumber>
-                  <RecordUnitText>Kcal</RecordUnitText>
+                  <RecordNumber>
+                    {record.calorie}
+                    <UnitNumber> kcal</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Calorie</RecordUnitText>
                 </RecordCheckWrapper>
               </RecordTextWrapper>
             </RecordWrapper>
@@ -202,10 +215,14 @@ const RecordCheckWrapper = styled.View`
 `;
 
 const RecordNumber = styled.Text`
-  font-size: 21px;
+  font-size: 18px;
   color: #2f2f2f;
   font-weight: bold;
   text-align: center;
+`;
+
+const UnitNumber = styled.Text`
+  font-size: 12px;
 `;
 
 const RecordUnitText = styled.Text`

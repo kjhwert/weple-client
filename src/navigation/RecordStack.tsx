@@ -36,6 +36,7 @@ export default () => {
         />
         <Stack.Screen
           options={{
+            headerRight: () => <View />,
             headerTitle: '새로운 활동',
           }}
           name="recordFinish"
