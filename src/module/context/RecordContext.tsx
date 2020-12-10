@@ -7,8 +7,14 @@ import React, {
 } from 'react';
 import {IMapBoxLocation} from '../type/mapbox';
 import {Database} from '../Database';
-import {ISetActivityCategory} from '../type/recordContext';
-import {MINUTE} from '../staticVariables';
+import {
+  IIntervalRecord,
+  IMapboxRecord,
+  IRecordSetting,
+  ISetActivityCategory,
+} from '../type/recordContext';
+import {getDistanceBetweenTwoGPS, MINUTE} from '../common';
+import ImagePicker from 'react-native-image-picker';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -18,7 +24,7 @@ interface IProps {
 }
 
 export const RecordContextProvider = ({children}: IProps) => {
-  const [recordSetting, setRecordSetting] = useState({
+  const [recordSetting, setRecordSetting] = useState<IRecordSetting>({
     isInit: false,
     isStart: false,
     awake: false,
@@ -30,12 +36,25 @@ export const RecordContextProvider = ({children}: IProps) => {
   });
   const timer: any = useRef(null);
 
-  const [record, setRecord] = useState({
+  const [record, setRecord] = useState<IIntervalRecord>({
     duration: 0,
-    speed: 0,
     calorie: 0,
-    coordinates: [],
   });
+  const [mapboxRecord, setMapboxRecord] = useState<IMapboxRecord>({
+    speed: 0,
+    distance: 0,
+    coordinates: [],
+    updated: false,
+    map: 0,
+    music: 0,
+    images: [],
+  });
+
+  const showCamera = () => {
+    ImagePicker.launchCamera({}, (response) => {
+      console.log(response.uri);
+    });
+  };
 
   const setActivityCategory = ({
     id,
@@ -73,16 +92,35 @@ export const RecordContextProvider = ({children}: IProps) => {
     }
 
     if (record.duration % 10 !== 0) {
+      setMapboxRecord({...mapboxRecord, updated: false});
       return;
     }
 
     const {
-      coords: {latitude, longitude, speed},
+      coords: {latitude, longitude, speed: mapboxSpeed},
     } = location;
-    const {coordinates} = record;
+    const {coordinates, distance: mapboxDistance, updated} = mapboxRecord;
+    if (updated) {
+      return;
+    }
 
-    const newPolyLine = coordinates.concat([longitude, latitude]);
-    setRecord({...record, coordinates: newPolyLine, speed});
+    const speed = Math.floor(mapboxSpeed * 10) / 10;
+
+    let distance = 0;
+    if (coordinates.length !== 0) {
+      distance =
+        getDistanceBetweenTwoGPS(coordinates.concat([[longitude, latitude]])) +
+        mapboxDistance;
+      distance = Math.floor(distance * 1000) / 1000;
+    }
+
+    setMapboxRecord({
+      ...mapboxRecord,
+      updated: true,
+      distance,
+      speed,
+      coordinates: [[longitude, latitude]],
+    });
     sqlite.insertRecord([longitude, latitude]);
   };
 
@@ -106,19 +144,21 @@ export const RecordContextProvider = ({children}: IProps) => {
     return () => {
       clearInterval(timer.current);
     };
-  }, [recordSetting, record.duration]);
+  }, [recordSetting, record, mapboxRecord.distance, mapboxRecord.speed]);
 
   return (
     <RecordContext.Provider
       value={{
         recordSetting,
         record,
+        mapboxRecord,
         initialRecordStart,
         changeStartStatus,
         finishRecording,
         onUpdateUserPosition,
         toggleAwakeSwitch,
         setActivityCategory,
+        showCamera,
       }}>
       {children}
     </RecordContext.Provider>

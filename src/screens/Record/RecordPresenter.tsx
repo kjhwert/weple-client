@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext from '../../module/context/RecordContext';
 import KeepAwake from 'react-native-keep-awake';
+import {secondsToHms} from '../../module/common';
 
 MapboxGL.setAccessToken(
   'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg',
@@ -17,11 +18,16 @@ export default ({navigation}: IProps) => {
   const {
     recordSetting,
     record,
+    mapboxRecord,
     initialRecordStart,
     changeStartStatus,
     finishRecording,
     onUpdateUserPosition,
+    showCamera,
   }: any = useContext(RecordContext);
+
+  const {hour, minute, second} = secondsToHms(record.duration);
+
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
@@ -35,53 +41,65 @@ export default ({navigation}: IProps) => {
               <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
               <MapboxGL.UserLocation
                 onUpdate={(location) => onUpdateUserPosition(location)}
+                minDisplacement={5}
               />
-              <MapboxGL.ShapeSource
-                id="line1"
-                shape={{
-                  type: 'FeatureCollection',
-                  features: [
-                    {
-                      type: 'Feature',
-                      properties: {},
-                      geometry: {
-                        type: 'LineString',
-                        coordinates: record.coordinates,
-                      },
-                    },
-                  ],
-                }}>
-                <MapboxGL.LineLayer
-                  id="linelayer1"
-                  style={{lineColor: 'red'}}
-                />
-              </MapboxGL.ShapeSource>
             </MapboxGL.MapView>
 
             <RecordWrapper>
               <RecordTextWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.speed}</RecordNumber>
-                  <RecordUnitText>Killometer</RecordUnitText>
+                  <RecordNumber>
+                    {mapboxRecord.distance}
+                    <UnitNumber> km</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Distance</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.speed}</RecordNumber>
-                  <RecordUnitText>Km/h</RecordUnitText>
+                  <RecordNumber>
+                    {mapboxRecord.speed}
+                    <UnitNumber> km/h</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Speed</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.duration}</RecordNumber>
+                  <RecordDurationContainer>
+                    {hour > 0 && (
+                      <RecordDurationWrapper>
+                        <RecordNumber>{hour}</RecordNumber>
+                        <UnitNumber>h </UnitNumber>
+                      </RecordDurationWrapper>
+                    )}
+                    {minute > 0 && (
+                      <RecordDurationWrapper>
+                        <RecordNumber>{minute}</RecordNumber>
+                        <UnitNumber>m </UnitNumber>
+                      </RecordDurationWrapper>
+                    )}
+                    {second >= 0 && (
+                      <RecordDurationWrapper>
+                        <RecordNumber>{second}</RecordNumber>
+                        <UnitNumber>s</UnitNumber>
+                      </RecordDurationWrapper>
+                    )}
+                  </RecordDurationContainer>
                   <RecordUnitText>Duration</RecordUnitText>
                 </RecordCheckWrapper>
                 <RecordCheckWrapper>
-                  <RecordNumber>{record.calorie}</RecordNumber>
-                  <RecordUnitText>Kcal</RecordUnitText>
+                  <RecordNumber>
+                    {record.calorie}
+                    <UnitNumber> kcal</UnitNumber>
+                  </RecordNumber>
+                  <RecordUnitText>Calorie</RecordUnitText>
                 </RecordCheckWrapper>
               </RecordTextWrapper>
             </RecordWrapper>
 
             <IconWrapper>
               <IconImageWrapper>
-                <IconBtn onPress={() => {}}>
+                <IconBtn
+                  onPress={() => {
+                    showCamera();
+                  }}>
                   <IconImage source={require('../../assets/camera.png')} />
                 </IconBtn>
 
@@ -201,11 +219,26 @@ const RecordCheckWrapper = styled.View`
   width: 25%;
 `;
 
+const RecordDurationContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+`;
+
+const RecordDurationWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+
 const RecordNumber = styled.Text`
-  font-size: 21px;
+  font-size: 18px;
   color: #2f2f2f;
   font-weight: bold;
   text-align: center;
+`;
+
+const UnitNumber = styled.Text`
+  font-size: 12px;
 `;
 
 const RecordUnitText = styled.Text`
