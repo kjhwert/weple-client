@@ -15,3 +15,23 @@ export const categoryApi = {
     }
   },
 };
+
+const apiRequest = async (request: Object) => {
+  try {
+    const {data}: any = await request;
+    return data;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const userApi = async (loginState) => {
+  const response = await api.post('/login', loginState);
+  return response;
+};
+
+export const nickNameApi = {
+  hasNickName: (nickName) => {
+    return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
+  },
+};

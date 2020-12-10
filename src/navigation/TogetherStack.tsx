@@ -1,10 +1,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import TogetherParticipateContainer from '../screens/Together/TogetherDetail/TogetherParticipateContainer';
-import TogetherShareContainer from '../screens/Together/TogetherDetail/TogetherShareContainer';
+import TogetherParticipateContainer from '../screens/Together/togetherDetail/TogetherParticipateContainer';
+import TogetherShareContainer from '../screens/Together/togetherDetail/TogetherShareContainer';
 import TogetherPostIntroduceContainer from '../screens/Together/togetherPost/TogetherPostIntroduceContainer';
 import TogetherSearchContainer from '../screens/Together/togetherSearch/TogetherSearchContainer';
-import TogetherMemberContainer from '../screens/Together/TogetherDetail/TogetherMemberContainer';
+import TogetherMemberContainer from '../screens/Together/togetherDetail/TogetherMemberContainer';
 import TogetherPostSubjectContainer from '../screens/Together/togetherPost/TogetherPostSubjectContainer';
 import TogetherPostPlaceContainer from '../screens/Together/togetherPost/TogetherPostPlaceContainer';
 import Notification from '../components/Notification';
@@ -14,10 +14,10 @@ import BackBtn from '../components/BackBtn';
 import TogetherOpenContainer from '../screens/Together/togetherOpen/TogetherOpenContainer';
 import Search from '../components/Search';
 import TogetherContainer from '../screens/Together/TogetherContainer';
-import TogetherDeleteContainer from '../screens/Together/TogetherDetail/TogetherDeleteContainer';
+import TogetherDeleteContainer from '../screens/Together/togetherDetail/TogetherDeleteContainer';
 import TogetherPostActivityContainer from '../screens/Together/togetherPost/TogetherPostActivityContainer';
-import TogetherModifyContainer from '../screens/Together/TogetherDetail/TogetherModifyContainer';
-import TogetherDetailContainer from '../screens/Together/TogetherDetail/TogetherDetailContainer';
+import TogetherModifyContainer from '../screens/Together/togetherDetail/TogetherModifyContainer';
+import TogetherDetailContainer from '../screens/Together/togetherDetail/TogetherDetailContainer';
 
 const Stack = createStackNavigator();
 

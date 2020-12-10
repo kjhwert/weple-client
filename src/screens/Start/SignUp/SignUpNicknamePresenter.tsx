@@ -11,9 +11,9 @@ interface IProps {
 export default ({
   navigation,
   usableAlert,
-  setUsableAlert,
   unusableAlert,
-  setUnusableAlert,
+  onChangeNickName,
+  hasNickName,
 }: IProps) => {
   return (
     <Container>
@@ -56,10 +56,13 @@ export default ({
         <SignUpWrapper>
           <SignUpTitle>닉네임</SignUpTitle>
           <NickNameWrapper>
-            <NickNameInput placeholder="닉네임을 입력하세요." />
+            <NickNameInput
+              placeholder="닉네임을 입력하세요."
+              onChange={onChangeNickName}
+            />
             <DuplicateBtn
               onPress={() => {
-                setUsableAlert(true);
+                hasNickName();
               }}>
               <DuplicateText>중복확인</DuplicateText>
             </DuplicateBtn>
