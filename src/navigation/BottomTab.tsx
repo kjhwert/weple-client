@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeedStack from '../navigation/FeedStack';
 import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
 import {Image} from 'react-native';
+import RecordContext from '../module/context/RecordContext';
 
 const Tab = createBottomTabNavigator();
 const tabActiveColor = '#007bf1';
 const tabInActiveColor = '#000';
 
 export default () => {
+  const {
+    recordSetting: {isStart},
+  }: any = useContext(RecordContext);
   return (
     <Tab.Navigator
       initialRouteName="feed"
@@ -67,6 +71,7 @@ export default () => {
       <Tab.Screen
         options={{
           tabBarLabel: '기록',
+          tabBarVisible: !isStart,
         }}
         name="record"
         component={RecordStack}

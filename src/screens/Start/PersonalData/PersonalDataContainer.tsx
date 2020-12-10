@@ -9,6 +9,11 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const confirmPermission = async () => {
+    await confirmUserLocation();
+    await confirmCameraAccess();
+  };
+
+  const confirmUserLocation = async () => {
     if (Platform.OS === 'ios') {
       await request(PERMISSIONS.IOS.LOCATION_ALWAYS).then((result) => {
         if (result === 'granted') {
@@ -18,6 +23,22 @@ export default ({navigation}: IProps) => {
 
     if (Platform.OS === 'android') {
       await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+        if (result === 'granted') {
+        }
+      });
+    }
+  };
+
+  const confirmCameraAccess = async () => {
+    if (Platform.OS === 'ios') {
+      await request(PERMISSIONS.IOS.CAMERA).then((result) => {
+        if (result === 'granted') {
+        }
+      });
+    }
+
+    if (Platform.OS === 'android') {
+      await request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
         if (result === 'granted') {
         }
       });
