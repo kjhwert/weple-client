@@ -8,7 +8,6 @@ export const categoryApi = {
   activities: async () => {
     try {
       const {data} = await api.get('/activity-group');
-
       return data;
     } catch ({message}) {
       return message;
@@ -25,13 +24,12 @@ const apiRequest = async (request: Object) => {
   }
 };
 
-export const userApi = async (loginState) => {
-  const response = await api.post('/login', loginState);
-  return response;
-};
-
-export const nickNameApi = {
-  hasNickName: (nickName) => {
+export const userApi = {
+  login: (loginState: {email: string; password: string}) => {
+    const response = apiRequest(api.post('/login', loginState));
+    return response;
+  },
+  hasNickName: (nickName: string) => {
     return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
   },
 };

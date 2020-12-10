@@ -22,7 +22,7 @@ export default ({navigation}: IProps) => {
   };
 
   const userEmailValidation = () => {
-    if (userEmail.data.indexOf('@') < 0 || userEmail.data.indexOf('.') < 0) {
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userEmail.data)) {
       setUserEmail({...userEmail, activeFlag: -1});
       return false;
     }

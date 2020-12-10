@@ -7,7 +7,7 @@ export default ({navigation}) => {
       onPress={() => {
         navigation.navigate('recordSet');
       }}>
-      <SetImage source={require('../assets/setting_icon.png')} />
+      <SetImage source={require('../assets/header_setting.png')} />
     </Container>
   );
 };

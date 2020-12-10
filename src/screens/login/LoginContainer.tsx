@@ -1,26 +1,27 @@
 import React, {useState} from 'react';
 import LoginPresenter from './LoginPresenter';
 import {userApi} from '../../module/api';
+import {ILogin} from '../../module/type/user';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const [loginState, setLoginState] = useState({
+  const [loginState, setLoginState] = useState<ILogin>({
     email: '',
     password: '',
   });
 
   const login = async () => {
     try {
-      const loginData = await userApi(loginState);
+      const loginData = await userApi.login(loginState);
       if (loginData.status !== 201) {
         return;
       }
       console.log('로그인 성공');
-
-      setLoginState({...loginState, email: '', password: ''});
+      setLoginState({email: '', password: ''});
+      navigation.navigate('bottomTab');
     } catch (e) {
       console.log('로그인 실패');
     }

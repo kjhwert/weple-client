@@ -17,7 +17,9 @@ export default ({navigation}) => {
           <OrderWrapper>
             <PersonalOrder>04</PersonalOrder>
             <PersonalImageWrapper>
-              <PersonalImage source={require('../../../assets/alarm.png')} />
+              <PersonalImage
+                source={require('../../../assets/personal_alarm.png')}
+              />
             </PersonalImageWrapper>
           </OrderWrapper>
         </PersonalWrapper>
@@ -86,8 +88,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 65px;
-  height: 65px;
+  width: 70px;
+  height: 70px;
 `;
 
 const LineWrapper = styled.View`

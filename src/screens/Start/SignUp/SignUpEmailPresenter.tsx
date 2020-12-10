@@ -3,10 +3,11 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import {InputBox} from '../../../components/CommonInput';
 import {StartNextBtn} from '../../../components/SnsAccountBtn';
-// import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
+  userEmailChange: Function;
+  userEmailValidation: Function;
 }
 
 export default ({

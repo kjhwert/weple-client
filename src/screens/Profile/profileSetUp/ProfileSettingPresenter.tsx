@@ -10,7 +10,7 @@ export default ({
   setDropOutAlert,
   logOutAlert,
   setLogOutAlert,
-  menuList,
+  clearAlertFrame,
 }: IProps) => {
   return (
     <Container>

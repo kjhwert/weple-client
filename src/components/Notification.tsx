@@ -7,7 +7,7 @@ export default ({navigation}) => {
       onPress={() => {
         navigation.navigate('alarmInfo');
       }}>
-      <AlarmImage source={require('../assets/alarmTop.png')} />
+      <AlarmImage source={require('../assets/header_alarm.png')} />
     </Container>
   );
 };
@@ -20,6 +20,6 @@ const Container = styled.TouchableOpacity`
 `;
 
 const AlarmImage = styled.Image`
-  width: 18px;
-  height: 24px;
+  width: 23px;
+  height: 23px;
 `;

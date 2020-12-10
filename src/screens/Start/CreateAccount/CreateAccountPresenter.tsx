@@ -31,25 +31,25 @@ export default ({navigation, snsType, snsTypeClick, isActive}: IProps) => {
             text={'카카오톡으로 가입하기'}
             onPress={() => snsTypeClick('kakaoAccount')}
             isSelect={snsType === 'kakaoAccount'}
-            imgPath={require('../../../assets/kakaoLogo.jpg')}
+            imgPath={require('../../../assets/logo_kakao.jpg')}
           />
           <SnsBtn
             text={'FaceBook으로 가입하기'}
             onPress={() => snsTypeClick('facebookAccount')}
             isSelect={snsType === 'facebookAccount'}
-            imgPath={require('../../../assets/facebookLogo.png')}
+            imgPath={require('../../../assets/logo_facebook.png')}
           />
           <SnsBtn
             text={'Apple로 가입하기'}
             onPress={() => snsTypeClick('appleAccount')}
             isSelect={snsType === 'appleAccount'}
-            imgPath={require('../../../assets/appleLogo.png')}
+            imgPath={require('../../../assets/logo_apple.png')}
           />
           <SnsBtn
             text={'Google로 가입하기'}
             onPress={() => snsTypeClick('googleAccount')}
             isSelect={snsType === 'googleAccount'}
-            imgPath={require('../../../assets/googleLogo.png')}
+            imgPath={require('../../../assets/logo_google.png')}
           />
         </SocialLoginWrapper>
       </ContainerCard>

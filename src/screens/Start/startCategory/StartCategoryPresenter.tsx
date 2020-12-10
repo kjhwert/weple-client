@@ -7,39 +7,29 @@ interface IProps {
   navigation: any;
 }
 
-export default ({
-  navigation,
-  sportCategories,
-  travelCategories,
-  hobbyCategories,
-}: IProps) => {
+export default ({navigation, activities}: IProps) => {
   return (
     <Container>
       <ContainerCard>
-        <CategoryWrapper>
+        <ScrollContainer>
           <InfoText>1개 이상 선택해주세요.</InfoText>
-          <CategoryTitle>운동</CategoryTitle>
-          {sportCategories.map((item, idx) => (
-            <CategoryBtn key={idx} onPress={() => {}}>
-              <CategoryText>{item.name}</CategoryText>
-            </CategoryBtn>
+          {activities.map((activity) => (
+            <CategoryWrapper key={activity.id}>
+              <CategoryTitle>{activity.name}</CategoryTitle>
+              <ActivityWrapper>
+                {activity.categoryActivity.map(
+                  ({id, name, caloriesPerMinute}) => (
+                    <CategoryBtn key={id} onPress={() => {}}>
+                      <CategoryText>{name}</CategoryText>
+                    </CategoryBtn>
+                  ),
+                )}
+              </ActivityWrapper>
+            </CategoryWrapper>
           ))}
-
-          <CategoryTitle>여행</CategoryTitle>
-          {travelCategories.map((item, idx) => (
-            <CategoryBtn key={idx} onPress={() => {}}>
-              <CategoryText>{item.name}</CategoryText>
-            </CategoryBtn>
-          ))}
-
-          <CategoryTitle>취미</CategoryTitle>
-          {hobbyCategories.map((item, idx) => (
-            <CategoryBtn key={idx} onPress={() => {}}>
-              <CategoryText>{item.name}</CategoryText>
-            </CategoryBtn>
-          ))}
-        </CategoryWrapper>
+        </ScrollContainer>
       </ContainerCard>
+
       <NextBtn nextPage={'personalData'} navigation={navigation}>
         {`다음`}
       </NextBtn>
@@ -50,6 +40,8 @@ export default ({
 const Container = styled.View`
   flex: 1;
 `;
+
+const ScrollContainer = styled.ScrollView``;
 
 const InfoText = styled.Text`
   width: 100%;
@@ -66,6 +58,12 @@ const CategoryTitle = styled.Text`
   color: #1f1f1f;
   text-align: left;
   margin: 10px 0;
+`;
+
+const ActivityWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  flex-flow: row wrap;
 `;
 
 const CategoryWrapper = styled.View`

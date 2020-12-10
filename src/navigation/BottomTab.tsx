@@ -18,13 +18,13 @@ export default () => {
         tabBarIcon: ({focused}) => {
           const tabIcon = () => {
             if (route.name === 'feed') {
-              return require('../assets/feed.png');
+              return require('../assets/bottomTab_feed.png');
             } else if (route.name === 'together') {
-              return require('../assets/together.png');
+              return require('../assets/bottomTab_together.png');
             } else if (route.name === 'record') {
-              return require('../assets/record.png');
+              return require('../assets/bottomTab_record.png');
             } else if (route.name === 'profile') {
-              return require('../assets/profile.png');
+              return require('../assets/bottomTab_profile.png');
             }
           };
           return (

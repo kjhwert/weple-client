@@ -1,57 +1,48 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {InputPasswordBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  userPasswordChange1: Function;
+  userPasswordChange2: Function;
+  userPasswordValidation: Function;
 }
 
-export default ({navigation}: IProps) => {
+export default ({
+  navigation,
+  userPassword,
+  userPasswordChange1,
+  userPasswordChange2,
+  userPasswordValidation,
+  isActive,
+}) => {
   return (
     <Container>
       <ContainerCard>
-        <SignUpWrapper>
-          <SignUpTitle>비밀번호</SignUpTitle>
-          <SignUpInput
-            placeholder="비밀번호를 입력하세요."
-            secureTextEntry={true}
-          />
-          <SignUpInput
-            placeholder="비밀번호를 한번 더 입력하세요."
-            secureTextEntry={true}
-          />
-        </SignUpWrapper>
+        <InputPasswordBox
+          title={'비밀번호'}
+          placeholder1="비밀번호를 입력하세요."
+          placeholder2="비밀번호를 한번 더 입력하세요."
+          onChange1={userPasswordChange1}
+          onChange2={userPasswordChange2}
+          activeFlag1={userPassword.activeFlag1}
+          activeFlag2={userPassword.activeFlag2}
+        />
       </ContainerCard>
-      <NextBtn nextPage={'signUpNickname'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+      <StartNextBtn
+        StartNextPage={'signUpNickname'}
+        text={'다음'}
+        navigation={navigation}
+        validation={userPasswordValidation}
+        isActive={isActive}
+      />
     </Container>
   );
 };
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const SignUpWrapper = styled.View`
-  display: flex;
-  width: 100%;
-`;
-
-const SignUpTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const SignUpInput = styled.TextInput`
-  padding: 5px 10px;
-  margin-bottom: 20px;
-  border-bottom-width: 1px;
-  border-color: #acacac;
-  font-size: 14px;
-  color: #6f6f6f;
 `;

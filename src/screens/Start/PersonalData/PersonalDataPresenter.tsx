@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import ContainerCard from '../../../components/ContainerCard';
 import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
@@ -10,7 +9,7 @@ interface IProps {
 export default ({navigation}: IProps) => {
   return (
     <Container>
-      <ContainerCard>
+      <Card>
         <PersonalWrapper>
           <PersonalTitle>개인정보에 대해서</PersonalTitle>
           <PersonalContent>
@@ -21,7 +20,9 @@ export default ({navigation}: IProps) => {
           <OrderWrapper>
             <PersonalOrder>01</PersonalOrder>
             <PersonalImageWrapper>
-              <PersonalImage source={require('../../../assets/shield.png')} />
+              <PersonalImage
+                source={require('../../../assets/personal_shield.png')}
+              />
             </PersonalImageWrapper>
           </OrderWrapper>
         </PersonalWrapper>
@@ -29,7 +30,7 @@ export default ({navigation}: IProps) => {
           <NowLine></NowLine>
           <NextLine></NextLine>
         </LineWrapper>
-      </ContainerCard>
+      </Card>
       <NextBtn nextPage={'personalVideo'} navigation={navigation}>
         {`동의함`}
       </NextBtn>
@@ -39,6 +40,15 @@ export default ({navigation}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const Card = styled.View`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #f9f9f9;
 `;
 
 const PersonalWrapper = styled.View`
@@ -91,8 +101,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 60px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 `;
 
 const LineWrapper = styled.View`

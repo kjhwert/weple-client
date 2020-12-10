@@ -20,19 +20,19 @@ export default ({navigation}: IProps) => {
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/kakaoLogo.jpg')}
+                      source={require('../../../assets/logo_kakao.jpg')}
                     />
                     <IconText>카카오톡</IconText>
                   </IconBtn>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/facebookLogo.png')}
+                      source={require('../../../assets/logo_facebook.png')}
                     />
                     <IconText>페이스북</IconText>
                   </IconBtn>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/instagramLogo.png')}
+                      source={require('../../../assets/logo_instagram.png')}
                     />
                     <IconText>인스타그램</IconText>
                   </IconBtn>

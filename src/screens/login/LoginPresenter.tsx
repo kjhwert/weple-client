@@ -4,6 +4,8 @@ import ContainerCard from '../../components/ContainerCard';
 
 interface IProps {
   navigation: any;
+  login: Function;
+  onChangeLogin: Function;
 }
 
 export default ({navigation, login, onChangeLogin}: IProps) => {
@@ -42,8 +44,6 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
 
               <LoginButton
                 onPress={() => {
-                  // navigation.navigate('bottomTab');
-                  // login();
                   navigation.navigate('bottomTab');
                   login();
                 }}>
@@ -56,19 +56,19 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
                 onPress={() => {
                   navigation.navigate('signIn');
                 }}>
-                <LogoImage source={require('../../assets/kakaoLogo.jpg')} />
+                <LogoImage source={require('../../assets/logo_kakao.jpg')} />
                 <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
               </KakaoLoginBtn>
               <FaceBookLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/facebookLogo.png')} />
+                <LogoImage source={require('../../assets/logo_facebook.png')} />
                 <FaceBookLoginText>FaceBook으로 로그인</FaceBookLoginText>
               </FaceBookLoginBtn>
               <AppleLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/appleLogo.png')} />
+                <LogoImage source={require('../../assets/logo_apple.png')} />
                 <AppleLoginText>Apple로 로그인</AppleLoginText>
               </AppleLoginBtn>
               <GoogleLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/googleLogo.png')} />
+                <LogoImage source={require('../../assets/logo_google.png')} />
                 <GoogleLoginText>Google로 로그인</GoogleLoginText>
               </GoogleLoginBtn>
 

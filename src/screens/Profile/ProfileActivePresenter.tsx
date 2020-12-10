@@ -240,6 +240,7 @@ const AlertTitleText = styled.Text`
   font-weight: bold;
   text-align: left;
   margin-left: 5px;
+  padding: 5px 0;
 `;
 
 const ConfirmButton = styled.TouchableOpacity`

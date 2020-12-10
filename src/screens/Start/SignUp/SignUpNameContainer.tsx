@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SignUpNamePresenter from './SignUpNamePresenter';
 
 interface IProps {
@@ -6,5 +6,31 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <SignUpNamePresenter navigation={navigation} />;
+  const [isActive, setIsActive] = useState(false);
+  const [userName, setUserName] = useState({
+    data: '',
+    activeFlag: 0,
+  });
+
+  const userNameChange = (e) => {
+    const value = e.nativeEvent.text;
+    setUserName({
+      ...userName,
+      data: value,
+      activeFlag: value.length,
+    });
+  };
+
+  useEffect(() => {
+    setIsActive(userName.data.length > 0);
+  });
+
+  return (
+    <SignUpNamePresenter
+      navigation={navigation}
+      userNameChange={userNameChange}
+      userName={userName}
+      isActive={isActive}
+    />
+  );
 };
