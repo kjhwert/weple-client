@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import WebView from 'react-native-webview';
 
 interface IProps {
   navigation: any;
@@ -12,10 +13,11 @@ export default ({navigation}: IProps) => {
         <ScrollWrapper>
           <Card>
             <MapPlayWrapper>
-              <MapPlayImage source={require('../../assets/map_1.png')} />
-              <PlayBtn>
-                <PlayImage source={require('../../assets/play_icon.png')} />
-              </PlayBtn>
+              <WebView
+                source={{
+                  uri: 'http://sinshin.hlabpartner.com/test.html',
+                }}
+              />
             </MapPlayWrapper>
 
             <SetUpWrapper>
@@ -166,27 +168,8 @@ const Card = styled.View`
 `;
 
 const MapPlayWrapper = styled.View`
-  display: flex;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MapPlayImage = styled.Image`
-  width: 100%;
-  height: 150px;
-`;
-
-const PlayBtn = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap;
-  position: absolute;
-`;
-
-const PlayImage = styled.Image`
-  width: 35px;
-  height: 35px;
+  height: 200px;
 `;
 
 const SetUpWrapper = styled.View`

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {SnsBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, snsType, snsTypeClick, isActive}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -21,30 +21,54 @@ export default ({navigation}: IProps) => {
         </CreateAccountWrapper>
 
         <SocialLoginWrapper>
-          <SocialLogin onPress={() => {}}>
-            <SocialLoginText>이메일로 가입하기</SocialLoginText>
-          </SocialLogin>
-          <SocialLogin onPress={() => {}}>
-            <LogoImage source={require('../../../assets/kakaoLogo.jpg')} />
-            <SocialLoginText>카카오톡으로 시작하기</SocialLoginText>
-          </SocialLogin>
-          <SocialLogin onPress={() => {}}>
-            <LogoImage source={require('../../../assets/facebookLogo.png')} />
-            <SocialLoginText>FaceBook으로 시작하기</SocialLoginText>
-          </SocialLogin>
-          <SocialLogin onPress={() => {}}>
-            <LogoImage source={require('../../../assets/appleLogo.png')} />
-            <SocialLoginText>Apple로 시작하기</SocialLoginText>
-          </SocialLogin>
-          <SocialLogin onPress={() => {}}>
-            <LogoImage source={require('../../../assets/googleLogo.png')} />
-            <SocialLoginText>Google로 시작하기</SocialLoginText>
-          </SocialLogin>
+          <SnsBtn
+            text={'이메일로 가입하기'}
+            onPress={() => snsTypeClick('emailAccount')}
+            isSelect={snsType === 'emailAccount'}
+            imgPath={''}
+          />
+          <SnsBtn
+            text={'카카오톡으로 가입하기'}
+            onPress={() => snsTypeClick('kakaoAccount')}
+            isSelect={snsType === 'kakaoAccount'}
+            imgPath={require('../../../assets/kakaoLogo.jpg')}
+          />
+          <SnsBtn
+            text={'FaceBook으로 가입하기'}
+            onPress={() => snsTypeClick('facebookAccount')}
+            isSelect={snsType === 'facebookAccount'}
+            imgPath={require('../../../assets/facebookLogo.png')}
+          />
+          <SnsBtn
+            text={'Apple로 가입하기'}
+            onPress={() => snsTypeClick('appleAccount')}
+            isSelect={snsType === 'appleAccount'}
+            imgPath={require('../../../assets/appleLogo.png')}
+          />
+          <SnsBtn
+            text={'Google로 가입하기'}
+            onPress={() => snsTypeClick('googleAccount')}
+            isSelect={snsType === 'googleAccount'}
+            imgPath={require('../../../assets/googleLogo.png')}
+          />
         </SocialLoginWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'signUpEmail'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+
+      {snsType === 'emailAccount' ? (
+        <StartNextBtn
+          StartNextPage={'signUpEmail'}
+          text={'다음'}
+          navigation={navigation}
+          isActive={isActive}
+        />
+      ) : (
+        <StartNextBtn
+          StartNextPage={'signUpNickname'}
+          text={'다음'}
+          navigation={navigation}
+          isActive={isActive}
+        />
+      )}
     </Container>
   );
 };
@@ -76,32 +100,4 @@ const SocialLoginWrapper = styled.View`
   display: flex;
   width: 100%;
   flex-direction: column;
-`;
-
-const LogoImage = styled.Image`
-  width: 22px;
-  height: 22px;
-`;
-
-const SocialLogin = styled.TouchableOpacity`
-  background-color: white;
-  width: 100%;
-  padding: 15px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  align-items: center;
-  border-width: 1px;
-  border-color: #eee;
-  border-radius: 5px;
-  margin-bottom: 10px;
-`;
-
-const SocialLoginText = styled.Text`
-  color: #333;
-  font-size: 15px;
-  font-weight: bold;
-  width: 70%;
-  text-align: center;
 `;
