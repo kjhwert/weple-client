@@ -100,7 +100,9 @@ export default ({navigation}: IProps) => {
                   onPress={() => {
                     showCamera();
                   }}>
-                  <IconImage source={require('../../assets/camera.png')} />
+                  <IconImage
+                    source={require('../../assets/record_camera.png')}
+                  />
                 </IconBtn>
 
                 {recordSetting.isInit && !recordSetting.isStart && (
@@ -269,8 +271,8 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 33px;
-  height: 29px;
+  width: 30px;
+  height: 30px;
 `;
 
 const StartBtnWrapper = styled.View`

@@ -38,7 +38,9 @@ export default ({navigation}: IProps) => {
               <PostImageWrapper>
                 <PostImage source={require('../../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage source={require('../../../assets/cycle.png')} />
+                  <RecordImage
+                    source={require('../../../assets/active_cycle.png')}
+                  />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
@@ -46,7 +48,7 @@ export default ({navigation}: IProps) => {
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/heart_icon_red.png')}
+                      source={require('../../../assets/icon_heart.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -54,7 +56,7 @@ export default ({navigation}: IProps) => {
                       navigation.navigate('friendComment');
                     }}>
                     <IconImage
-                      source={require('../../../assets/comment_icon.png')}
+                      source={require('../../../assets/icon_comment.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
@@ -105,7 +107,9 @@ export default ({navigation}: IProps) => {
               <PostImageWrapper>
                 <PostImage source={require('../../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage source={require('../../../assets/cycle.png')} />
+                  <RecordImage
+                    source={require('../../../assets/active_cycle.png')}
+                  />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
@@ -113,7 +117,7 @@ export default ({navigation}: IProps) => {
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../../assets/heart_icon.png')}
+                      source={require('../../../assets/icon_heart.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -121,7 +125,7 @@ export default ({navigation}: IProps) => {
                       navigation.navigate('friendComment');
                     }}>
                     <IconImage
-                      source={require('../../../assets/comment_icon.png')}
+                      source={require('../../../assets/icon_comment.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
@@ -341,8 +345,8 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 20px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
 `;
 
 const AlarmBtn = styled.TouchableOpacity`

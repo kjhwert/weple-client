@@ -14,6 +14,10 @@ export default ({navigation}: IProps) => {
 
   const [showAlert, setShowAlert] = useState(false);
 
+  const alertFrame = (showFlag) => {
+    setShowAlert(showFlag);
+  };
+
   const userEmailChange = (e) => {
     const value = e.nativeEvent.text;
     setUserEmail({
@@ -43,6 +47,7 @@ export default ({navigation}: IProps) => {
       userEmail={userEmail}
       isActive={isActive}
       showAlert={showAlert}
+      alertFrame={alertFrame}
     />
   );
 };

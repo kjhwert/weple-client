@@ -25,6 +25,7 @@ export const InputBox = ({
         placeholder={placeholder}
         onChange={onChange}
         borderColor={borderColor}
+        autoFocus={true}
       />
     </InputBoxWrapper>
   );
@@ -72,6 +73,7 @@ export const NickNameInputBox = ({
         placeholder={placeholder}
         onChange={onChange}
         borderColor={borderColor}
+        autoFocus={true}
       />
     </NickNameInputBoxWrapper>
   );
@@ -127,6 +129,7 @@ export const InputPasswordBox = ({
         placeholder={placeholder1}
         onChange={onChange1}
         borderColor={borderColor1}
+        autoFocus={true}
       />
       <InputBoxData
         name={name}

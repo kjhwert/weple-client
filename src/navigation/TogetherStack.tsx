@@ -18,13 +18,14 @@ import TogetherDeleteContainer from '../screens/Together/togetherDetail/Together
 import TogetherPostActivityContainer from '../screens/Together/togetherPost/TogetherPostActivityContainer';
 import TogetherModifyContainer from '../screens/Together/togetherDetail/TogetherModifyContainer';
 import TogetherDetailContainer from '../screens/Together/togetherDetail/TogetherDetailContainer';
+import TogetherAlarmContainer from '../screens/Together/togetherAlarm/TogetherAlarmContainer';
 
 const Stack = createStackNavigator();
 
 export default () => {
   return (
     <Stack.Navigator
-      screenOptions={({navigation}) => ({
+      screenOptions={({navigation, route}) => ({
         headerBackTitleVisible: false,
         headerTintColor: 'black',
         headerTitleStyle: {
@@ -33,7 +34,9 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <Notification navigation={navigation} />,
+        headerRight: () => (
+          <Notification navigation={navigation} route={route} />
+        ),
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
@@ -51,6 +54,13 @@ export default () => {
         }}
         name="togetherSearch"
         component={TogetherSearchContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '알림',
+        }}
+        name="togetherAlarmInfo"
+        component={TogetherAlarmContainer}
       />
       <Stack.Screen
         options={{

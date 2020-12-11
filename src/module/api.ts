@@ -1,7 +1,17 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const api = axios.create({
   baseURL: 'http://ttamna-api.hlabpartner.com',
+});
+
+api.interceptors.request.use(async (config) => {
+  const user = await AsyncStorage.getItem('@user');
+  if (user) {
+    const {access_token} = JSON.parse(user);
+    config.headers.Authorization = access_token;
+  }
+  return config;
 });
 
 export const categoryApi = {

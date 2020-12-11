@@ -9,6 +9,10 @@ interface IProps {
   navigation: any;
   userEmailChange: Function;
   userEmailValidation: Function;
+  userEmail: any;
+  isActive: boolean;
+  showAlert: boolean;
+  alertFrame: Function;
 }
 
 export default ({
@@ -18,6 +22,7 @@ export default ({
   userEmail,
   isActive,
   showAlert,
+  alertFrame,
 }: IProps) => {
   return (
     <Container>
@@ -33,7 +38,8 @@ export default ({
           </AlertTitleText>
           <ConfirmButton
             onPress={() => {
-              navigation.navigate('login');
+              // navigation.navigate('login');
+              // alertFrame(true);
             }}>
             <ConfirmButtonText>확인</ConfirmButtonText>
           </ConfirmButton>
@@ -46,11 +52,6 @@ export default ({
           onChange={userEmailChange}
           activeFlag={userEmail.activeFlag}
         />
-
-        {/* <PasswordWrapper>
-          <PasswordTitle>이메일</PasswordTitle>
-          <PasswordInput placeholder="이메일를 입력하세요." />
-        </PasswordWrapper> */}
       </ContainerCard>
 
       {/* <NextBtn
@@ -66,6 +67,9 @@ export default ({
         navigation={navigation}
         validation={userEmailValidation}
         isActive={isActive}
+        // onPress={() => {
+        //   alertFrame(true);
+        // }}
       />
     </Container>
   );

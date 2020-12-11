@@ -31,7 +31,7 @@ export default ({navigation}: IProps) => {
 
   useEffect(() => {
     setIsActive(userEmail.data.length > 0);
-  });
+  }, []);
 
   return (
     <SignUpEmailPresenter

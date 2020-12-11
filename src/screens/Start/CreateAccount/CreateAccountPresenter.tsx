@@ -5,6 +5,9 @@ import {SnsBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  snsType: string;
+  snsTypeClick: Function;
+  isActive: boolean;
 }
 
 export default ({navigation, snsType, snsTypeClick, isActive}: IProps) => {

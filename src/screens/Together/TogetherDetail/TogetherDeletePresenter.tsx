@@ -4,9 +4,11 @@ import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
+  showAlert: boolean;
+  alertFrame: Function;
 }
 
-export default ({navigation, showAlert, setShowAlert, content}: IProps) => {
+export default ({navigation, showAlert, alertFrame, content}: IProps) => {
   return (
     <Container>
       {showAlert && (
@@ -23,13 +25,13 @@ export default ({navigation, showAlert, setShowAlert, content}: IProps) => {
           <AlertBtnWrapper>
             <ConfirmButton
               onPress={() => {
-                navigation.navigate('togetherDetail');
+                navigation.navigate('togetherModify');
               }}>
               <ConfirmButtonText>확인</ConfirmButtonText>
             </ConfirmButton>
             <CancelButton
               onPress={() => {
-                navigation.navigate('togetherModify');
+                alertFrame(false);
               }}>
               <CancelButtonText>취소</CancelButtonText>
             </CancelButton>
@@ -51,7 +53,7 @@ export default ({navigation, showAlert, setShowAlert, content}: IProps) => {
                       navigation.navigate('togetherShare');
                     }}>
                     <ShareImage
-                      source={require('../../../assets/share_icon.png')}
+                      source={require('../../../assets/icon_share.png')}
                     />
                   </ShareBtn>
                 </JoinTitleWrapper>
@@ -94,7 +96,7 @@ export default ({navigation, showAlert, setShowAlert, content}: IProps) => {
               </JoinButton>
               <DeleteButton
                 onPress={() => {
-                  setShowAlert(true);
+                  alertFrame(true);
                 }}>
                 <ButtonText>삭제하기</ButtonText>
               </DeleteButton>
@@ -254,8 +256,8 @@ const ShareBtn = styled.TouchableOpacity`
 `;
 
 const ShareImage = styled.Image`
-  width: 22px;
-  height: 19px;
+  width: 23px;
+  height: 23px;
 `;
 
 const JoinInfoTitle = styled.Text`

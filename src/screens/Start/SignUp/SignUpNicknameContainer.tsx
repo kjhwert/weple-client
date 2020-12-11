@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import SignUpNicknamePresenter from './SignUpNicknamePresenter';
-import {accountApi} from '../../../module/api';
+import {userApi} from '../../../module/api';
 import {IUser} from '../../../module/type/user';
 
 interface IProps {
@@ -45,7 +45,7 @@ export default ({navigation}: IProps) => {
   };
 
   const hasNickName = async () => {
-    const data = await accountApi.hasNickName(nickNameState.nickName);
+    const data = await userApi.hasNickName(nickNameState.nickName);
     if (data.statusCode === 200) {
       console.log('닉네임 사용가능');
       setAlertFrame({showAlert: true, usable: true});

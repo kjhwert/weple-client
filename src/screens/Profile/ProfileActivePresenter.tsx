@@ -6,12 +6,14 @@ import RadioButtonRN from 'radio-buttons-react-native';
 interface IProps {
   navigation: any;
   isClick: boolean;
+  showAlert: boolean;
+  alertFrame: Function;
 }
 
 export default ({
   navigation,
   showAlert,
-  setShowAlert,
+  alertFrame,
   menuList,
   radioBoxSortData,
 }: IProps) => {
@@ -35,7 +37,7 @@ export default ({
           </AlertTextWrapper>
           <ConfirmButton
             onPress={() => {
-              navigation.navigate('profileActiveJoin');
+              alertFrame(false);
             }}>
             <ConfirmButtonText>적용</ConfirmButtonText>
           </ConfirmButton>
@@ -146,7 +148,7 @@ export default ({
               </ProfileTitleBtn>
               <SortBtn
                 onPress={() => {
-                  setShowAlert(true);
+                  alertFrame(true);
                 }}>
                 <SortImage source={require('../../assets/sort_icon.png')} />
               </SortBtn>
@@ -171,7 +173,9 @@ export default ({
                 }}>
                 <PostImage source={require('../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage source={require('../../assets/cycle.png')} />
+                  <RecordImage
+                    source={require('../../assets/active_cycle.png')}
+                  />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
@@ -179,7 +183,7 @@ export default ({
                 <IconImageWrapper>
                   <IconBtn>
                     <IconImage
-                      source={require('../../assets/heart_icon.png')}
+                      source={require('../../assets/icon_heart.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -187,7 +191,7 @@ export default ({
                       navigation.navigate('commentMember');
                     }}>
                     <IconImage
-                      source={require('../../assets/comment_icon.png')}
+                      source={require('../../assets/icon_comment.png')}
                     />
                   </IconBtn>
                 </IconImageWrapper>
@@ -644,8 +648,8 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 20px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
 `;
 
 const AlarmBtn = styled.TouchableOpacity`

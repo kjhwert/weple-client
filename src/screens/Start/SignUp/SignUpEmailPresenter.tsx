@@ -8,6 +8,8 @@ interface IProps {
   navigation: any;
   userEmailChange: Function;
   userEmailValidation: Function;
+  userEmail: any;
+  isActive: boolean;
 }
 
 export default ({

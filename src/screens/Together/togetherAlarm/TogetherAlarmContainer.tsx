@@ -1,5 +1,5 @@
 import React from 'react';
-import AlarmPresenter from './AlarmPresenter';
+import TogetherAlarmPresenter from './TogetherAlarmPresenter';
 
 const alarmData = [
   {
@@ -27,5 +27,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <AlarmPresenter navigation={navigation} alarmData={alarmData} />;
+  return (
+    <TogetherAlarmPresenter navigation={navigation} alarmData={alarmData} />
+  );
 };

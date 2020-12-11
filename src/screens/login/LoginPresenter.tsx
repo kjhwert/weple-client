@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../components/ContainerCard';
+import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
-  login: Function;
-  onChangeLogin: Function;
 }
 
-export default ({navigation, login, onChangeLogin}: IProps) => {
+export default ({navigation}: IProps) => {
+  const {onChangeLogin, login}: any = useContext(UserContext);
+
   return (
     <Container>
       <ScrollContainer>
@@ -21,6 +22,7 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
                 placeholder="이메일을 입력하세요."
                 name="email"
                 autoCapitalize="none"
+                autoFocus={true}
                 onChange={onChangeLogin}
               />
               <PasswordSearchWrapper>
@@ -52,10 +54,7 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
             </SignInWrapper>
 
             <SnsLoginWrapper>
-              <KakaoLoginBtn
-                onPress={() => {
-                  navigation.navigate('signIn');
-                }}>
+              <KakaoLoginBtn onPress={() => {}}>
                 <LogoImage source={require('../../assets/logo_kakao.jpg')} />
                 <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
               </KakaoLoginBtn>

@@ -1,11 +1,18 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export default ({navigation}) => {
+export default ({navigation, route}) => {
   return (
     <Container
       onPress={() => {
-        navigation.navigate('alarmInfo');
+        const {name} = route;
+        if (name === 'feedMain') {
+          return navigation.navigate('feedAlarmInfo');
+        }
+
+        if (name === 'togetherMain') {
+          return navigation.navigate('togetherAlarmInfo');
+        }
       }}>
       <AlarmImage source={require('../assets/header_alarm.png')} />
     </Container>
