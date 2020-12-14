@@ -5,6 +5,15 @@ import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
+  activities: Array<IActivity>;
+}
+interface IActivity {
+  id: number;
+  name: string;
+  categoryActivity: Array<{
+    id: number;
+    name: string;
+  }>;
 }
 
 export default ({navigation, activities}: IProps) => {
@@ -17,13 +26,11 @@ export default ({navigation, activities}: IProps) => {
             <CategoryWrapper key={activity.id}>
               <CategoryTitle>{activity.name}</CategoryTitle>
               <ActivityWrapper>
-                {activity.categoryActivity.map(
-                  ({id, name, caloriesPerMinute}) => (
-                    <CategoryBtn key={id} onPress={() => {}}>
-                      <CategoryText>{name}</CategoryText>
-                    </CategoryBtn>
-                  ),
-                )}
+                {activity.categoryActivity.map(({id, name}) => (
+                  <CategoryBtn key={id} onPress={() => {}}>
+                    <CategoryText>{name}</CategoryText>
+                  </CategoryBtn>
+                ))}
               </ActivityWrapper>
             </CategoryWrapper>
           ))}

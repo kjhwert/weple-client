@@ -37,7 +37,7 @@ export default ({navigation}: IProps) => {
 
   useEffect(() => {
     setIsActive(userEmail.data.length > 0);
-  });
+  }, [userEmail]);
 
   return (
     <PasswordPresenter

@@ -8,9 +8,16 @@ interface IProps {
   navigation: any;
   clearAlertFrame: Function;
   userNameChange: Function;
+  setCreateUserName: Function;
 }
 
-export default ({navigation, userNameChange, userName, isActive}: IProps) => {
+export default ({
+  navigation,
+  userNameChange,
+  userName,
+  isActive,
+  setCreateUserName,
+}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -26,6 +33,7 @@ export default ({navigation, userNameChange, userName, isActive}: IProps) => {
         text={'다음'}
         navigation={navigation}
         isActive={isActive}
+        callBack={setCreateUserName}
       />
     </Container>
   );

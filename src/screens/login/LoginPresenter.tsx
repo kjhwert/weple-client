@@ -5,10 +5,11 @@ import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
+  isActive: boolean;
 }
 
 export default ({navigation}: IProps) => {
-  const {onChangeLogin, login}: any = useContext(UserContext);
+  const {onChangeLogin, login, isLoginBtnActive}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -45,9 +46,9 @@ export default ({navigation}: IProps) => {
               </PasswordSearchWrapper>
 
               <LoginButton
-                onPress={() => {
-                  navigation.navigate('bottomTab');
-                  login();
+                isActive={isLoginBtnActive}
+                onPress={async () => {
+                  (await login()) ? navigation.navigate('bottomTab') : {};
                 }}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
@@ -164,7 +165,8 @@ const LoginButton = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: #b2b2b2;
+  background-color: ${(props: IProps) =>
+    props.isActive ? '#007bf1' : '#b2b2b2'};
 `;
 
 const LoginText = styled.Text`

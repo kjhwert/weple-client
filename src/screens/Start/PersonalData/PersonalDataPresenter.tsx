@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -31,8 +30,12 @@ export default ({navigation}: IProps) => {
           <NextLine></NextLine>
         </LineWrapper>
       </Card>
-      <NextBtn nextPage={'personalVideo'} navigation={navigation}>
-        {`동의함`}
+
+      <NextBtn
+        onPress={() => {
+          navigation.navigate('personalVideo');
+        }}>
+        <NextText>동의함</NextText>
       </NextBtn>
     </Container>
   );
@@ -72,6 +75,7 @@ const PersonalTitle = styled.Text`
 `;
 
 const PersonalContent = styled.Text`
+  flex: 6;
   font-size: 13px;
   text-align: left;
   line-height: 25px;
@@ -81,6 +85,7 @@ const PersonalContent = styled.Text`
 
 const OrderWrapper = styled.View`
   display: flex;
+  flex: 4;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
@@ -126,4 +131,21 @@ const NextLine = styled.View`
   width: 75%;
   border-width: 3px;
   border-color: #b2b2b2;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

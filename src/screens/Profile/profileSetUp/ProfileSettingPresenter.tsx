@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import AlertWrapper from '../../../components/AlertWrapper';
+import UserContext from '../../../module/context/UserContext';
+import {CommonActions} from '@react-navigation/native';
 
 interface IProps {
   navigation: any;
@@ -17,6 +19,8 @@ export default ({
   dropOutAlertFrame,
   logOutAlertFrame,
 }: IProps) => {
+  const {userLogout}: any = useContext(UserContext);
+
   return (
     <Container>
       {dropOutAlert && (
@@ -57,7 +61,15 @@ export default ({
           <AlertBtnWrapper>
             <ConfirmButton
               onPress={() => {
-                navigation.navigate('login');
+                userLogout();
+                logOutAlertFrame(false);
+
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [{name: 'login'}],
+                  }),
+                );
               }}>
               <ConfirmButtonText>확인</ConfirmButtonText>
             </ConfirmButton>

@@ -39,6 +39,20 @@ export const userApi = {
     const response = apiRequest(api.post('/login', loginState));
     return response;
   },
+  join: (createUserData: {
+    name: string;
+    nickName: string;
+    email: string;
+    password: string;
+    activityCategories: [];
+  }) => {
+    const response = apiRequest(api.post('/user', createUserData));
+    console.log('join:', response);
+    return response;
+  },
+  hasEmail: (email: string) => {
+    return apiRequest(api.get('/user/hasEmail?email=' + email));
+  },
   hasNickName: (nickName: string) => {
     return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
   },

@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import SignUpNicknamePresenter from './SignUpNicknamePresenter';
 import {userApi} from '../../../module/api';
 import {IUser} from '../../../module/type/user';
+import UserContext from '../../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {createUser, setCreateUser}: any = useContext(UserContext);
+
   const [isActive, setIsActive] = useState(false);
   const [userNick, setUserNick] = useState({
     data: '',
@@ -19,10 +22,6 @@ export default ({navigation}: IProps) => {
     usable: false,
   });
 
-  const [nickNameState, setNickNameState] = useState<IUser>({
-    nickName: '',
-  });
-
   const userNickChange = (e) => {
     const value = e.nativeEvent.text;
     setUserNick({
@@ -30,11 +29,7 @@ export default ({navigation}: IProps) => {
       data: value,
       activeFlag: value.length,
     });
-
-    setNickNameState({
-      ...nickNameState,
-      nickName: value,
-    });
+    setIsActive(false);
   };
 
   const clearAlertFrame = () => {
@@ -45,21 +40,32 @@ export default ({navigation}: IProps) => {
   };
 
   const hasNickName = async () => {
-    const data = await userApi.hasNickName(nickNameState.nickName);
+    if (userNick.data.length <= 0) {
+      setAlertFrame({showAlert: true, usable: false});
+      return;
+    }
+
+    const data = await userApi.hasNickName(userNick.data);
     if (data.statusCode === 200) {
       console.log('닉네임 사용가능');
       setAlertFrame({showAlert: true, usable: true});
+      setIsActive(true);
       return;
     } else {
       console.log('닉네임 중복');
       setAlertFrame({showAlert: true, usable: false});
+      setIsActive(false);
       return;
     }
   };
 
-  useEffect(() => {
-    setIsActive(userNick.data.length > 0);
-  });
+  const setCreateUserNickName = () => {
+    setCreateUser({
+      ...createUser,
+      nickName: userNick.data,
+    });
+  };
+  console.log('nickName: ', createUser);
 
   return (
     <SignUpNicknamePresenter
@@ -69,8 +75,8 @@ export default ({navigation}: IProps) => {
       isActive={isActive}
       alertFrame={alertFrame}
       clearAlertFrame={clearAlertFrame}
-      nickNameState={nickNameState}
       hasNickName={hasNickName}
+      setCreateUserNickName={setCreateUserNickName}
     />
   );
 };

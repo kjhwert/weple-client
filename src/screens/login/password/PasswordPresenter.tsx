@@ -38,8 +38,7 @@ export default ({
           </AlertTitleText>
           <ConfirmButton
             onPress={() => {
-              // navigation.navigate('login');
-              // alertFrame(true);
+              navigation.navigate('login');
             }}>
             <ConfirmButtonText>확인</ConfirmButtonText>
           </ConfirmButton>
@@ -54,22 +53,14 @@ export default ({
         />
       </ContainerCard>
 
-      {/* <NextBtn
-        onPress={() => {
-          setShowAlert(true);
-        }}>
-        <NextText>확인</NextText>
-      </NextBtn> */}
-
       <StartNextBtn
-        StartNextPage={'login'}
         text={'확인'}
         navigation={navigation}
         validation={userEmailValidation}
         isActive={isActive}
-        // onPress={() => {
-        //   alertFrame(true);
-        // }}
+        callBack={() => {
+          alertFrame(true);
+        }}
       />
     </Container>
   );

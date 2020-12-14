@@ -10,6 +10,7 @@ interface IProps {
   clearAlertFrame: Function;
   onChangeNickName: Function;
   hasNickName: Function;
+  setCreateUserNickName: Function;
 }
 
 export default ({
@@ -20,6 +21,7 @@ export default ({
   alertFrame,
   clearAlertFrame,
   hasNickName,
+  setCreateUserNickName,
 }: IProps) => {
   return (
     <Container>
@@ -79,6 +81,7 @@ export default ({
         text={'다음'}
         navigation={navigation}
         isActive={isActive}
+        callBack={setCreateUserNickName}
       />
     </Container>
   );

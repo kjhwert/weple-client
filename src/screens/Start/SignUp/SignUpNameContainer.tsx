@@ -1,11 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import SignUpNamePresenter from './SignUpNamePresenter';
+import UserContext from '../../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {createUser, setCreateUser}: any = useContext(UserContext);
+
   const [isActive, setIsActive] = useState(false);
   const [userName, setUserName] = useState({
     data: '',
@@ -21,9 +24,17 @@ export default ({navigation}: IProps) => {
     });
   };
 
+  const setCreateUserName = () => {
+    setCreateUser({
+      ...createUser,
+      name: userName.data,
+    });
+  };
+  console.log('name: ', createUser);
+
   useEffect(() => {
     setIsActive(userName.data.length > 0);
-  });
+  }, [userName]);
 
   return (
     <SignUpNamePresenter
@@ -31,6 +42,7 @@ export default ({navigation}: IProps) => {
       userNameChange={userNameChange}
       userName={userName}
       isActive={isActive}
+      setCreateUserName={setCreateUserName}
     />
   );
 };
