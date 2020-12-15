@@ -1,39 +1,60 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components/native';
+import Swiper from 'react-native-swiper';
 
 interface IProps {
   navigation: any;
+  process: string;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, slideData}: IProps) => {
+  const swiperRef = useRef(null);
+  const nextSlider = () => {
+    if (!!swiperRef) {
+      swiperRef.current.scrollBy(1);
+      const indexNumber = swiperRef.current.state.index + 1;
+      const totalNumber = swiperRef.current.state.total;
+      if (indexNumber === totalNumber) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
   return (
     <Container>
       <Card>
-        <PersonalWrapper>
-          <PersonalTitle>개인정보에 대해서</PersonalTitle>
-          <PersonalContent>
-            {
-              '개인정보는 땀나의 주요 관심사 중 하나입니다.\n만약 개인정보가 당신에게 중요하다면\n개인정보 정책 조건에 동의하기 전에\n땀나가 어떻게 당신의 데이터를 보호하는지 확인하실\n수 있습니다.'
-            }
-          </PersonalContent>
-          <OrderWrapper>
-            <PersonalOrder>01</PersonalOrder>
-            <PersonalImageWrapper>
-              <PersonalImage
-                source={require('../../../assets/personal_shield.png')}
-              />
-            </PersonalImageWrapper>
-          </OrderWrapper>
-        </PersonalWrapper>
-        <LineWrapper>
-          <NowLine></NowLine>
-          <NextLine></NextLine>
-        </LineWrapper>
+        <Swiper
+          style={styles.wrapper}
+          showsButtons={false}
+          showsPagination={false}
+          loop={false}
+          ref={swiperRef}>
+          {slideData.map((item, idx) => (
+            <Wrapper key={idx}>
+              <PersonalWrapper>
+                <PersonalTitle>{item.title}</PersonalTitle>
+                <PersonalContent>{item.text}</PersonalContent>
+                <OrderWrapper>
+                  <PersonalOrder>{item.number}</PersonalOrder>
+                  <PersonalImageWrapper>
+                    <PersonalImage source={item.image} />
+                  </PersonalImageWrapper>
+                </OrderWrapper>
+              </PersonalWrapper>
+              <LineWrapper>
+                <NowLine process={item.nowProcess}></NowLine>
+                <NextLine process={item.nextProcess}></NextLine>
+              </LineWrapper>
+            </Wrapper>
+          ))}
+        </Swiper>
       </Card>
 
       <NextBtn
         onPress={() => {
-          navigation.navigate('personalVideo');
+          nextSlider() && navigation.navigate('startAlarmSet');
         }}>
         <NextText>동의함</NextText>
       </NextBtn>
@@ -41,7 +62,15 @@ export default ({navigation}: IProps) => {
   );
 };
 
+var styles = {
+  wrapper: {},
+};
+
 const Container = styled.View`
+  flex: 1;
+`;
+
+const Wrapper = styled.View`
   flex: 1;
 `;
 
@@ -55,7 +84,7 @@ const Card = styled.View`
 `;
 
 const PersonalWrapper = styled.View`
-  flex: 6;
+  flex: 7;
   display: flex;
   width: 100%;
   border-width: 1px;
@@ -69,7 +98,7 @@ const PersonalTitle = styled.Text`
   font-weight: bold;
   text-align: center;
   color: #fff;
-  max-width: 50%;
+  max-width: 60%;
   background-color: #007bf1;
   padding: 5px;
 `;
@@ -121,14 +150,14 @@ const LineWrapper = styled.View`
 
 const NowLine = styled.View`
   display: flex;
-  width: 25%;
+  width: ${(props: IProps) => props.process};
   border-width: 3px;
   border-color: #007bf1;
 `;
 
 const NextLine = styled.View`
   display: flex;
-  width: 75%;
+  width: ${(props: IProps) => props.process};
   border-width: 3px;
   border-color: #b2b2b2;
 `;

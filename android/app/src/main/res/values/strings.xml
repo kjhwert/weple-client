@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">땀나</string>
+    <string name="kakao_app_key">1c299398562a2f16149cb6fc67c19525</string>
 </resources>

@@ -8,10 +8,11 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {createUser, setCreateUser}: any = useContext(UserContext);
+  const {createUser}: any = useContext(UserContext);
 
   const joinMembership = async () => {
-    const joinData = await userApi.join(createUser);
+    const joinData = await userApi.create(createUser);
+    console.log('joinMembership', joinData);
     console.log('createUser:', createUser);
   };
 

@@ -16,6 +16,7 @@ export const UserContextProvider = ({children}: IProps) => {
     nickName: '',
     email: '',
     password: '',
+    description: '',
   });
 
   const [loginState, setLoginState] = useState({
@@ -49,9 +50,9 @@ export const UserContextProvider = ({children}: IProps) => {
       return false;
     }
     console.log('로그인 성공');
-    setLoginUserInfo(loginData);
+    setLoginUser(loginData);
 
-    setAsyncStorage('user', JSON.stringify(loginData));
+    setAsyncStorage('@user', JSON.stringify(loginData));
 
     setLoginState({...loginState, email: '', password: ''});
     return true;
@@ -64,7 +65,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const getAccess_token = async () => {
-    const result = await AsyncStorage.getItem('user');
+    const result = await AsyncStorage.getItem('@user');
     return JSON.parse(result);
   };
 
@@ -82,13 +83,9 @@ export const UserContextProvider = ({children}: IProps) => {
   // console.log('loginUser:', loginUser);
 
   const userLogout = async () => {
-    await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('@user');
     setLoginUser(null);
   };
-
-  function setLoginUserInfo(loginData) {
-    setLoginUser(loginData);
-  }
 
   useEffect(() => {
     setIsLoginBtnActive(
@@ -102,7 +99,6 @@ export const UserContextProvider = ({children}: IProps) => {
         loginUser,
         onChangeLogin,
         login,
-        setLoginUserInfo,
         createUser,
         setCreateUser,
         getAccess_token,

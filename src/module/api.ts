@@ -39,6 +39,7 @@ export const userApi = {
     const response = apiRequest(api.post('/login', loginState));
     return response;
   },
+
   create: (createUserData: {
     name: string;
     nickName: string;
@@ -46,9 +47,11 @@ export const userApi = {
     password: string;
     activityCategories: [];
   }) => apiRequest(api.post('/user', createUserData)),
+
   hasEmail: (email: string) => {
     return apiRequest(api.get('/user/hasEmail?email=' + email));
   },
+
   hasNickName: (nickName: string) => {
     return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
   },

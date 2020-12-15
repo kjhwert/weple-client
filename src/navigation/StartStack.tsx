@@ -8,13 +8,10 @@ import SignUpNicknameContainer from '../screens/Start/SignUp/SignUpNicknameConta
 import StartAlarmSetContainer from '../screens/Start/startAlarmSet/StartAlarmSetContainer';
 import PasswordContainer from '../screens/login/password/PasswordContainer';
 import SignUpPasswordContainer from '../screens/Start/SignUp/SignUpPasswordContainer';
-import PersonalCommunityContainer from '../screens/Start/PersonalData/PersonalCommunityContainer';
 import BottomTab from './BottomTab';
 import BackBtn from '../components/BackBtn';
 import StartContainer from '../screens/Start/StartContainer';
-import PersonalAlarmContainer from '../screens/Start/PersonalData/PersonalAlarmContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
-import PersonalVideoContainer from '../screens/Start/PersonalData/PersonalVideoContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
 import {RecordContextProvider} from '../module/context/RecordContext';
@@ -100,27 +97,6 @@ export default () => {
           }}
           name="personalData"
           component={PersonalDataContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalVideo"
-          component={PersonalVideoContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalCommunity"
-          component={PersonalCommunityContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalAlarm"
-          component={PersonalAlarmContainer}
         />
         <Stack.Screen
           options={{

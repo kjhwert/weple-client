@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {CategoryBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
   activities: Array<IActivity>;
+  categoriesClick: Function;
+  isActive: boolean;
+  setCreateUserCategory: Function;
 }
 interface IActivity {
   id: number;
@@ -16,7 +19,13 @@ interface IActivity {
   }>;
 }
 
-export default ({navigation, activities}: IProps) => {
+export default ({
+  navigation,
+  activities,
+  categoriesClick,
+  isActive,
+  setCreateUserCategory,
+}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -26,10 +35,15 @@ export default ({navigation, activities}: IProps) => {
             <CategoryWrapper key={activity.id}>
               <CategoryTitle>{activity.name}</CategoryTitle>
               <ActivityWrapper>
-                {activity.categoryActivity.map(({id, name}) => (
-                  <CategoryBtn key={id} onPress={() => {}}>
-                    <CategoryText>{name}</CategoryText>
-                  </CategoryBtn>
+                {activity.categoryActivity.map(({id, name, isSelect}) => (
+                  <CategoryBtn
+                    key={id}
+                    text={name}
+                    onPress={() => {
+                      categoriesClick(activity.id, id);
+                    }}
+                    isSelect={isSelect}
+                  />
                 ))}
               </ActivityWrapper>
             </CategoryWrapper>
@@ -37,9 +51,13 @@ export default ({navigation, activities}: IProps) => {
         </ScrollContainer>
       </ContainerCard>
 
-      <NextBtn nextPage={'personalData'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+      <StartNextBtn
+        StartNextPage={'personalData'}
+        text={'다음'}
+        navigation={navigation}
+        callBack={setCreateUserCategory}
+        isActive={isActive}
+      />
     </Container>
   );
 };
@@ -78,20 +96,4 @@ const CategoryWrapper = styled.View`
   display: flex;
   width: 100%;
   flex-flow: row wrap;
-`;
-
-const CategoryBtn = styled.TouchableOpacity`
-  max-width: 40%;
-  justify-content: center;
-  align-items: center;
-  border-width: 1px;
-  border-color: #bfbfbf;
-  padding: 10px;
-  margin: 0 20px 10px 0;
-`;
-
-const CategoryText = styled.Text`
-  color: #6f6f6f;
-  font-size: 14px;
-  text-align: center;
 `;

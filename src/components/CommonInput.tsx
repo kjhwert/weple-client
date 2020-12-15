@@ -129,6 +129,7 @@ export const InputPasswordBox = ({
         placeholder={placeholder1}
         onChange={onChange1}
         borderColor={borderColor1}
+        secureTextEntry={true}
         autoFocus={true}
       />
       <InputBoxData
@@ -136,6 +137,7 @@ export const InputPasswordBox = ({
         placeholder={placeholder2}
         onChange={onChange2}
         borderColor={borderColor2}
+        secureTextEntry={true}
       />
     </InputBoxWrapper>
   );
