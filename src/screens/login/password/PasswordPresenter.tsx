@@ -2,12 +2,28 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import AlertWrapper from '../../../components/AlertWrapper';
+import {InputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  userEmailChange: Function;
+  userEmailValidation: Function;
+  userEmail: any;
+  isActive: boolean;
+  showAlert: boolean;
+  alertFrame: Function;
 }
 
-export default ({navigation, showAlert, setShowAlert}: IProps) => {
+export default ({
+  navigation,
+  userEmailChange,
+  userEmailValidation,
+  userEmail,
+  isActive,
+  showAlert,
+  alertFrame,
+}: IProps) => {
   return (
     <Container>
       {showAlert && (
@@ -29,17 +45,23 @@ export default ({navigation, showAlert, setShowAlert}: IProps) => {
         </AlertWrapper>
       )}
       <ContainerCard>
-        <PasswordWrapper>
-          <PasswordTitle>이메일</PasswordTitle>
-          <PasswordInput placeholder="이메일를 입력하세요." />
-        </PasswordWrapper>
+        <InputBox
+          title={'이메일'}
+          placeholder="이메일을 입력하세요."
+          onChange={userEmailChange}
+          activeFlag={userEmail.activeFlag}
+        />
       </ContainerCard>
-      <NextBtn
-        onPress={() => {
-          setShowAlert(true);
-        }}>
-        <NextText>확인</NextText>
-      </NextBtn>
+
+      <StartNextBtn
+        text={'확인'}
+        navigation={navigation}
+        validation={userEmailValidation}
+        isActive={isActive}
+        callBack={() => {
+          alertFrame(true);
+        }}
+      />
     </Container>
   );
 };
@@ -82,47 +104,6 @@ const ConfirmButton = styled.TouchableOpacity`
 const ConfirmButtonText = styled.Text`
   font-size: 14px;
   color: #fff;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const PasswordWrapper = styled.View`
-  flex: 9;
-  display: flex;
-  width: 100%;
-`;
-
-const PasswordTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const PasswordInput = styled.TextInput`
-  padding: 5px 10px;
-  border-bottom-width: 1px;
-  border-color: #babfc7;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  color: #6f6f6f;
-`;
-
-const NextBtn = styled.TouchableOpacity`
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  background-color: #b2b2b2;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 15px;
   font-weight: bold;
   text-align: center;
 `;

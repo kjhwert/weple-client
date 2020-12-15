@@ -13,6 +13,10 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const [showAlert, setShowAlert] = useState(false);
 
+  const alertFrame = (showFlag) => {
+    setShowAlert(showFlag);
+  };
+
   const radioBoxSortData = [
     {
       label: '거리 가까운 순',
@@ -36,7 +40,7 @@ export default ({navigation}: IProps) => {
     <ProfilePresenter
       navigation={navigation}
       showAlert={showAlert}
-      setShowAlert={setShowAlert}
+      alertFrame={alertFrame}
       menuList={menuList}
       radioBoxSortData={radioBoxSortData}
     />

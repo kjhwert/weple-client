@@ -14,7 +14,7 @@ export default ({navigation, route}) => {
           return navigation.navigate('togetherSearch');
         }
       }}>
-      <SearchImage source={require('../assets/search.png')} />
+      <SearchImage source={require('../assets/header_search.png')} />
     </Container>
   );
 };
@@ -27,6 +27,6 @@ const Container = styled.TouchableOpacity`
 `;
 
 const SearchImage = styled.Image`
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
 `;

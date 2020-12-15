@@ -34,12 +34,14 @@ export default ({navigation}: IProps) => {
               <RecordWrapper>
                 <ActiveTextWrapper>
                   <ActiveLeftImgWrapper>
-                    <ActiveImage source={require('../../assets/cycle.png')} />
+                    <ActiveImage
+                      source={require('../../assets/active_cycle.png')}
+                    />
                   </ActiveLeftImgWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>
                       <KmIconImg
-                        source={require('../../assets/ruler_icon.png')}
+                        source={require('../../assets/icon_ruler.png')}
                       />
                     </ActiveBtn>
                     <ActiveNumber>5,650</ActiveNumber>
@@ -48,7 +50,7 @@ export default ({navigation}: IProps) => {
                   <ActiveBtnWrapper>
                     <ActiveBtn>
                       <ClockIconImg
-                        source={require('../../assets/clock_icon.png')}
+                        source={require('../../assets/icon_clock.png')}
                       />
                     </ActiveBtn>
                     <FollowerNumber>2:35:08</FollowerNumber>
@@ -57,7 +59,7 @@ export default ({navigation}: IProps) => {
                   <ActiveBtnWrapper>
                     <ActiveBtn>
                       <HeartbeatIconImg
-                        source={require('../../assets/heartbeat_icon.png')}
+                        source={require('../../assets/icon_heartbeat.png')}
                       />
                     </ActiveBtn>
                     <FollowingNumber>420</FollowingNumber>
@@ -69,7 +71,7 @@ export default ({navigation}: IProps) => {
                 <IconBtnText>
                   <IconBtn>
                     <IconImage
-                      source={require('../../assets/heart_icon.png')}
+                      source={require('../../assets/icon_heart.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -83,7 +85,7 @@ export default ({navigation}: IProps) => {
                 <IconBtnText>
                   <IconBtn>
                     <IconImage
-                      source={require('../../assets/comment_icon.png')}
+                      source={require('../../assets/icon_comment.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -97,7 +99,7 @@ export default ({navigation}: IProps) => {
                 <ShareIconBtnText>
                   <IconBtn>
                     <IconImage
-                      source={require('../../assets/share_icon_2.png')}
+                      source={require('../../assets/icon_share_2.png')}
                     />
                   </IconBtn>
                   <IconBtn
@@ -176,7 +178,9 @@ export default ({navigation}: IProps) => {
             <RecordLastWrapper>
               <ActiveTextWrapper>
                 <ActiveLastImgWrapper>
-                  <ActiveLastImage source={require('../../assets/cycle.png')} />
+                  <ActiveLastImage
+                    source={require('../../assets/active_cycle.png')}
+                  />
                 </ActiveLastImgWrapper>
                 <ActiveLastWrapper>
                   <ActiveLastNumber>5,650</ActiveLastNumber>
@@ -331,8 +335,8 @@ const ActiveLeftImgWrapper = styled.View`
 `;
 
 const ActiveImage = styled.Image`
-  width: 42px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
 `;
 
 const ActiveTextWrapper = styled.View`
@@ -359,17 +363,17 @@ const ActiveBtn = styled.View`
 
 const KmIconImg = styled.Image`
   width: 45px;
-  height: 15px;
+  height: 20px;
 `;
 
 const ClockIconImg = styled.Image`
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
 `;
 
 const HeartbeatIconImg = styled.Image`
-  width: 25px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 `;
 
 const ActiveNumber = styled.Text`
@@ -429,7 +433,7 @@ const IconBtn = styled.TouchableOpacity`
 
 const IconImage = styled.Image`
   width: 16px;
-  height: 14px;
+  height: 16px;
   margin-right: 8px;
 `;
 
@@ -618,15 +622,15 @@ const ActiveLastImgWrapper = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20%;
+  width: 18%;
   height: 70px;
   padding: 5px;
   background-color: #007bf1;
 `;
 
 const ActiveLastImage = styled.Image`
-  width: 42px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
 `;
 
 const ActiveLastWrapper = styled.View`

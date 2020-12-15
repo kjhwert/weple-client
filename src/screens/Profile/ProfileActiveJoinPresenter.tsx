@@ -1,14 +1,49 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import AlertWrapper from '../../components/AlertWrapper';
+import RadioButtonRN from 'radio-buttons-react-native';
 
 interface IProps {
   navigation: any;
   isClick: boolean;
+  showAlert: boolean;
+  alertFrame: Function;
 }
 
-export default ({navigation, menuList, openClub}: IProps) => {
+export default ({
+  navigation,
+  showAlert,
+  alertFrame,
+  radioBoxSortData,
+  menuList,
+  openClub,
+}: IProps) => {
   return (
     <Container>
+      {showAlert && (
+        <AlertWrapper>
+          <AlertTextWrapper>
+            <AlertTitleText>정렬</AlertTitleText>
+            <RadioButtonRN
+              box={false}
+              circleSize={8}
+              activeColor={'#187fe2'}
+              textStyle={{
+                fontSize: 13,
+                color: '#919191',
+                padding: 3,
+              }}
+              data={radioBoxSortData}
+            />
+          </AlertTextWrapper>
+          <ConfirmButton
+            onPress={() => {
+              alertFrame(false);
+            }}>
+            <ConfirmButtonText>적용</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
@@ -110,7 +145,10 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 </ProfileActiveTitle>
                 <ProfileActiveNumber>8</ProfileActiveNumber>
               </ProfileTitleBtn>
-              <SortBtn>
+              <SortBtn
+                onPress={() => {
+                  alertFrame(true);
+                }}>
                 <SortImage source={require('../../assets/sort_icon.png')} />
               </SortBtn>
             </ProfileActiveTitleWrapper>
@@ -140,6 +178,38 @@ export default ({navigation, menuList, openClub}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertTextWrapper = styled.View`
+  display: flex;
+  width: 100%;
+  padding: 20px 10px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 13px;
+  color: #121212;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 5px;
+  padding: 5px 0;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`

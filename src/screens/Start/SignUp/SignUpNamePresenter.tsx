@@ -1,50 +1,44 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {InputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  clearAlertFrame: Function;
+  userNameChange: Function;
+  setCreateUserName: Function;
 }
 
-export default ({navigation}: IProps) => {
+export default ({
+  navigation,
+  userNameChange,
+  userName,
+  isActive,
+  setCreateUserName,
+}: IProps) => {
   return (
     <Container>
       <ContainerCard>
-        <SignUpWrapper>
-          <SignUpTitle>이름</SignUpTitle>
-          <SignUpInput placeholder="이름을 입력하세요." />
-        </SignUpWrapper>
+        <InputBox
+          title={'이름'}
+          placeholder="이름을 입력하세요."
+          onChange={userNameChange}
+          activeFlag={userName.activeFlag}
+        />
       </ContainerCard>
-      <NextBtn nextPage={'startCategory'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+      <StartNextBtn
+        StartNextPage={'startCategory'}
+        text={'다음'}
+        navigation={navigation}
+        isActive={isActive}
+        callBack={setCreateUserName}
+      />
     </Container>
   );
 };
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const SignUpWrapper = styled.View`
-  display: flex;
-  width: 100%;
-`;
-
-const SignUpTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const SignUpInput = styled.TextInput`
-  padding: 5px 10px;
-  margin-bottom: 20px;
-  border-bottom-width: 1px;
-  border-color: #acacac;
-  font-size: 14px;
-  color: #6f6f6f;
 `;

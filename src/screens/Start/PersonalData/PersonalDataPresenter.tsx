@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
@@ -10,7 +8,7 @@ interface IProps {
 export default ({navigation}: IProps) => {
   return (
     <Container>
-      <ContainerCard>
+      <Card>
         <PersonalWrapper>
           <PersonalTitle>개인정보에 대해서</PersonalTitle>
           <PersonalContent>
@@ -21,7 +19,9 @@ export default ({navigation}: IProps) => {
           <OrderWrapper>
             <PersonalOrder>01</PersonalOrder>
             <PersonalImageWrapper>
-              <PersonalImage source={require('../../../assets/shield.png')} />
+              <PersonalImage
+                source={require('../../../assets/personal_shield.png')}
+              />
             </PersonalImageWrapper>
           </OrderWrapper>
         </PersonalWrapper>
@@ -29,9 +29,13 @@ export default ({navigation}: IProps) => {
           <NowLine></NowLine>
           <NextLine></NextLine>
         </LineWrapper>
-      </ContainerCard>
-      <NextBtn nextPage={'personalVideo'} navigation={navigation}>
-        {`동의함`}
+      </Card>
+
+      <NextBtn
+        onPress={() => {
+          navigation.navigate('personalVideo');
+        }}>
+        <NextText>동의함</NextText>
       </NextBtn>
     </Container>
   );
@@ -39,6 +43,15 @@ export default ({navigation}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const Card = styled.View`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #f9f9f9;
 `;
 
 const PersonalWrapper = styled.View`
@@ -62,6 +75,7 @@ const PersonalTitle = styled.Text`
 `;
 
 const PersonalContent = styled.Text`
+  flex: 6;
   font-size: 13px;
   text-align: left;
   line-height: 25px;
@@ -71,6 +85,7 @@ const PersonalContent = styled.Text`
 
 const OrderWrapper = styled.View`
   display: flex;
+  flex: 4;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
@@ -91,8 +106,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 60px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 `;
 
 const LineWrapper = styled.View`
@@ -116,4 +131,21 @@ const NextLine = styled.View`
   width: 75%;
   border-width: 3px;
   border-color: #b2b2b2;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

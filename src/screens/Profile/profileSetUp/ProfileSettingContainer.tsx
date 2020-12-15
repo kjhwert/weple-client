@@ -9,13 +9,21 @@ export default ({navigation}: IProps) => {
   const [dropOutAlert, setDropOutAlert] = useState(false);
   const [logOutAlert, setLogOutAlert] = useState(false);
 
+  const dropOutAlertFrame = (showFlag) => {
+    setDropOutAlert(showFlag);
+  };
+
+  const logOutAlertFrame = (showFlag) => {
+    setLogOutAlert(showFlag);
+  };
+
   return (
     <ProfileSettingPresenter
       navigation={navigation}
       dropOutAlert={dropOutAlert}
-      setDropOutAlert={setDropOutAlert}
       logOutAlert={logOutAlert}
-      setLogOutAlert={setLogOutAlert}
+      dropOutAlertFrame={dropOutAlertFrame}
+      logOutAlertFrame={logOutAlertFrame}
     />
   );
 };

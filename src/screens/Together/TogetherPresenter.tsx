@@ -32,7 +32,9 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 }}>
                 <RecruitImage source={require('../../assets/photo_4.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage source={require('../../assets/cycle.png')} />
+                  <RecordImage
+                    source={require('../../assets/active_cycle.png')}
+                  />
                   <RecordText>21.7 KM</RecordText>
                 </RecordWrapper>
               </RecruitImageWrapper>

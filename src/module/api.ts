@@ -1,37 +1,45 @@
 import axios from 'axios';
+import {BASE_URL} from './common';
+import AsyncStorage from '@react-native-community/async-storage';
+import {IUserApiCreate, IUserApiLogin} from './type/api';
 
 const api = axios.create({
-  baseURL: 'http://ttamna-api.hlabpartner.com',
+  baseURL: BASE_URL,
 });
 
-export const categoryApi = {
-  activities: async () => {
-    try {
-      const {data} = await api.get('/activity-group');
-
-      return data;
-    } catch ({message}) {
-      return message;
-    }
-  },
-};
+api.interceptors.request.use(async (config) => {
+  const user = await AsyncStorage.getItem('@user');
+  if (user) {
+    const {access_token} = JSON.parse(user);
+    config.headers.Authorization = access_token;
+  }
+  return config;
+});
 
 const apiRequest = async (request: Object) => {
   try {
     const {data}: any = await request;
     return data;
   } catch (e) {
-    return e;
+    console.log(e);
+    return {statusCode: 500, message: e.message};
   }
 };
 
-export const userApi = async (loginState) => {
-  const response = await api.post('/login', loginState);
-  return response;
+export const categoryApi = {
+  activities: () => apiRequest(api.get('/activity-group')),
 };
 
-export const nickNameApi = {
-  hasNickName: (nickName) => {
-    return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
-  },
+export const utilitiesApi = {
+  maps: () => apiRequest(api.get('/map-group')),
+  musics: () => apiRequest(api.get('/music-group')),
+};
+
+export const userApi = {
+  login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
+  create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
+  hasEmail: (email: string) =>
+    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) =>
+    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
 };

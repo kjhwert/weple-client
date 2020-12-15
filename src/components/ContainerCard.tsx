@@ -7,9 +7,9 @@ interface IProps {
   margin?: number;
 }
 
-export default ({children, paddingTop, margin}: IProps) => {
+export default ({children, padding, margin}: IProps) => {
   return (
-    <Container paddingTop={paddingTop} margin={margin}>
+    <Container padding={padding} margin={margin}>
       {children}
     </Container>
   );
@@ -19,7 +19,7 @@ const Container = styled.View`
   background-color: white;
   width: 100%;
   height: 100%;
-  padding-top: ${({paddingTop}) => (paddingTop ? paddingTop : 0)}px;
+  padding-top: ${({padding}) => (padding ? padding : 0)}px;
   margin: ${({margin}) => (margin ? margin : 0)}px;
   padding: 20px;
   display: flex;

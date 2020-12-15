@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
 
 export default ({navigation}) => {
   return (
     <Container>
-      <ContainerCard>
+      <Card>
         <PersonalWrapper>
           <PersonalTitle>무슨 일이 일어나는지 알기</PersonalTitle>
           <PersonalContent>
@@ -17,16 +15,22 @@ export default ({navigation}) => {
           <OrderWrapper>
             <PersonalOrder>04</PersonalOrder>
             <PersonalImageWrapper>
-              <PersonalImage source={require('../../../assets/alarm.png')} />
+              <PersonalImage
+                source={require('../../../assets/personal_alarm.png')}
+              />
             </PersonalImageWrapper>
           </OrderWrapper>
         </PersonalWrapper>
         <LineWrapper>
           <NowLine></NowLine>
         </LineWrapper>
-      </ContainerCard>
-      <NextBtn nextPage={'startAlarmSet'} navigation={navigation}>
-        {`동의함`}
+      </Card>
+
+      <NextBtn
+        onPress={() => {
+          navigation.navigate('startAlarmSet');
+        }}>
+        <NextText>동의함</NextText>
       </NextBtn>
     </Container>
   );
@@ -34,6 +38,15 @@ export default ({navigation}) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const Card = styled.View`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #f9f9f9;
 `;
 
 const PersonalWrapper = styled.View`
@@ -57,6 +70,7 @@ const PersonalTitle = styled.Text`
 `;
 
 const PersonalContent = styled.Text`
+  flex: 6;
   font-size: 13px;
   text-align: left;
   line-height: 25px;
@@ -66,6 +80,7 @@ const PersonalContent = styled.Text`
 
 const OrderWrapper = styled.View`
   display: flex;
+  flex: 4;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
@@ -86,8 +101,8 @@ const PersonalImageWrapper = styled.View`
 `;
 
 const PersonalImage = styled.Image`
-  width: 65px;
-  height: 65px;
+  width: 70px;
+  height: 70px;
 `;
 
 const LineWrapper = styled.View`
@@ -104,4 +119,21 @@ const NowLine = styled.View`
   width: 100%;
   border-width: 3px;
   border-color: #007bf1;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

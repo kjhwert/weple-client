@@ -30,7 +30,7 @@ export default ({navigation}: IProps) => {
         </SignUpWrapper>
       </ContainerCard>
       <NextBtn nextPage={'profileSetting'} navigation={navigation}>
-        {`다음`}
+        {`변경하기`}
       </NextBtn>
     </Container>
   );

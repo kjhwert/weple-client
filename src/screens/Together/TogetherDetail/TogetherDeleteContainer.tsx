@@ -29,11 +29,15 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const [showAlert, setShowAlert] = useState(false);
 
+  const alertFrame = (showFlag) => {
+    setShowAlert(showFlag);
+  };
+
   return (
     <TogetherDeletePresenter
       navigation={navigation}
       showAlert={showAlert}
-      setShowAlert={setShowAlert}
+      alertFrame={alertFrame}
       content={content}
     />
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
-import AlarmContainer from '../screens/Feed/Alarm/AlarmContainer';
+import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
 import FriendActiveContainer from '../screens/Feed/friendProfile/FriendActiveContainer';
 import ActiveDetailContainer from '../screens/Feed/ActiveDetailContainer';
 import FriendFollowingContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowingContainer';
@@ -23,7 +23,7 @@ const Stack = createStackNavigator();
 export default () => {
   return (
     <Stack.Navigator
-      screenOptions={({navigation}) => ({
+      screenOptions={({navigation, route}) => ({
         headerBackTitleVisible: false,
         headerTintColor: 'black',
         headerTitleStyle: {
@@ -32,7 +32,9 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => <Notification navigation={navigation} />,
+        headerRight: () => (
+          <Notification navigation={navigation} route={route} />
+        ),
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
@@ -58,8 +60,8 @@ export default () => {
         options={{
           headerTitle: '알림',
         }}
-        name="alarmInfo"
-        component={AlarmContainer}
+        name="feedAlarmInfo"
+        component={FeedAlarmContainer}
       />
       <Stack.Screen
         options={{

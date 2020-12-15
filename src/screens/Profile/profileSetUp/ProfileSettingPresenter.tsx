@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import AlertWrapper from '../../../components/AlertWrapper';
+import UserContext from '../../../module/context/UserContext';
+import {CommonActions} from '@react-navigation/native';
 
-interface IProps {}
+interface IProps {
+  navigation: any;
+  dropOutAlert: boolean;
+  logOutAlert: boolean;
+  dropOutAlertFrame: Function;
+  logOutAlertFrame: Function;
+}
 
 export default ({
   navigation,
   dropOutAlert,
-  setDropOutAlert,
   logOutAlert,
-  setLogOutAlert,
-  menuList,
+  dropOutAlertFrame,
+  logOutAlertFrame,
 }: IProps) => {
+  const {userLogout}: any = useContext(UserContext);
+
   return (
     <Container>
       {dropOutAlert && (
@@ -34,7 +43,7 @@ export default ({
             </ConfirmButton>
             <CancelButton
               onPress={() => {
-                navigation.navigate('profileActiveMain');
+                dropOutAlertFrame(false);
               }}>
               <CancelButtonText>취소</CancelButtonText>
             </CancelButton>
@@ -52,13 +61,21 @@ export default ({
           <AlertBtnWrapper>
             <ConfirmButton
               onPress={() => {
-                navigation.navigate('login');
+                userLogout();
+                logOutAlertFrame(false);
+
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [{name: 'login'}],
+                  }),
+                );
               }}>
               <ConfirmButtonText>확인</ConfirmButtonText>
             </ConfirmButton>
             <CancelButton
               onPress={() => {
-                navigation.navigate('profileActiveMain');
+                logOutAlertFrame(false);
               }}>
               <CancelButtonText>취소</CancelButtonText>
             </CancelButton>
@@ -165,7 +182,7 @@ export default ({
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    setDropOutAlert(true);
+                    dropOutAlertFrame(true);
                   }}>
                   <SetUpListText>회원탈퇴</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
@@ -174,7 +191,7 @@ export default ({
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    setLogOutAlert(true);
+                    logOutAlertFrame(true);
                   }}>
                   <SetUpListText>로그아웃</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />

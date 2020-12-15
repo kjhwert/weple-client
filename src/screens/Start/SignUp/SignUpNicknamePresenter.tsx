@@ -1,23 +1,31 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
 import AlertWrapper from '../../../components/AlertWrapper';
+import {NickNameInputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  clearAlertFrame: Function;
+  onChangeNickName: Function;
+  hasNickName: Function;
+  setCreateUserNickName: Function;
 }
 
 export default ({
   navigation,
-  usableAlert,
-  unusableAlert,
-  onChangeNickName,
+  userNickChange,
+  userNick,
+  isActive,
+  alertFrame,
+  clearAlertFrame,
   hasNickName,
+  setCreateUserNickName,
 }: IProps) => {
   return (
     <Container>
-      {usableAlert && (
+      {alertFrame.showAlert && alertFrame.usable && (
         <AlertWrapper>
           <AlertImageWrapper>
             <AlertImage
@@ -28,24 +36,24 @@ export default ({
           <AlertContentText>{'계속 진행하세요.'}</AlertContentText>
           <ConfirmButton
             onPress={() => {
-              navigation.navigate('signUpPassword');
+              clearAlertFrame();
             }}>
             <ConfirmButtonText>확인</ConfirmButtonText>
           </ConfirmButton>
         </AlertWrapper>
       )}
-      {unusableAlert && (
+      {alertFrame.showAlert && !alertFrame.usable && (
         <AlertWrapper>
           <AlertImageWrapper>
             <AlertImage
-              source={require('../../../assets/alertDelete_icon.png')}
+              source={require('../../../assets/alertWarn_icon.png')}
             />
           </AlertImageWrapper>
           <AlertTitleText>{'사용하실 수 없는 닉네임입니다.'}</AlertTitleText>
           <AlertContentText>{'다른 닉네임을 사용하세요.'}</AlertContentText>
           <ConfirmButton
             onPress={() => {
-              navigation.navigate('signUpPassword');
+              clearAlertFrame();
             }}>
             <ConfirmButtonText>확인</ConfirmButtonText>
           </ConfirmButton>
@@ -54,24 +62,27 @@ export default ({
 
       <ContainerCard>
         <SignUpWrapper>
-          <SignUpTitle>닉네임</SignUpTitle>
-          <NickNameWrapper>
-            <NickNameInput
-              placeholder="닉네임을 입력하세요."
-              onChange={onChangeNickName}
-            />
-            <DuplicateBtn
-              onPress={() => {
-                hasNickName();
-              }}>
-              <DuplicateText>중복확인</DuplicateText>
-            </DuplicateBtn>
-          </NickNameWrapper>
+          <NickNameInputBox
+            title={'닉네임'}
+            placeholder="닉네임을 입력하세요."
+            onChange={userNickChange}
+            activeFlag={userNick.activeFlag}
+          />
+          <DuplicateBtn
+            onPress={() => {
+              hasNickName();
+            }}>
+            <DuplicateText>중복확인</DuplicateText>
+          </DuplicateBtn>
         </SignUpWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'signUpName'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+      <StartNextBtn
+        StartNextPage={'signUpName'}
+        text={'다음'}
+        navigation={navigation}
+        isActive={isActive}
+        callBack={setCreateUserNickName}
+      />
     </Container>
   );
 };
@@ -129,44 +140,25 @@ const ConfirmButtonText = styled.Text`
 const SignUpWrapper = styled.View`
   display: flex;
   width: 100%;
-`;
-
-const SignUpTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
+  flex-direction: row;
+  align-items: flex-start;
 `;
 
 const DuplicateBtn = styled.TouchableOpacity`
-  width: 25%;
+  width: 22%;
   align-items: center;
   border-radius: 5px;
   margin-left: 3%;
-  padding: 10px 5px;
+  padding: 10px 3px;
   background-color: #fff;
   border-width: 1px;
   border-color: #acacac;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `;
 
 const DuplicateText = styled.Text`
   color: #2b2b2b;
   font-size: 12px;
-`;
-
-const NickNameWrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-`;
-
-const NickNameInput = styled.TextInput`
-  width: 70%;
-  padding: 5px 10px;
-  margin-bottom: 20px;
-  border-bottom-width: 1px;
-  border-color: #acacac;
-  font-size: 14px;
-  color: #6f6f6f;
 `;

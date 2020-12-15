@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../components/ContainerCard';
+import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
+  isActive: boolean;
 }
 
-export default ({navigation, login, onChangeLogin}: IProps) => {
+export default ({navigation}: IProps) => {
+  const {onChangeLogin, login, isLoginBtnActive}: any = useContext(UserContext);
+
   return (
     <Container>
       <ScrollContainer>
@@ -19,6 +23,7 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
                 placeholder="이메일을 입력하세요."
                 name="email"
                 autoCapitalize="none"
+                autoFocus={true}
                 onChange={onChangeLogin}
               />
               <PasswordSearchWrapper>
@@ -41,34 +46,29 @@ export default ({navigation, login, onChangeLogin}: IProps) => {
               </PasswordSearchWrapper>
 
               <LoginButton
-                onPress={() => {
-                  // navigation.navigate('bottomTab');
-                  // login();
-                  navigation.navigate('bottomTab');
-                  login();
+                isActive={isLoginBtnActive}
+                onPress={async () => {
+                  (await login()) ? navigation.navigate('bottomTab') : {};
                 }}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
             </SignInWrapper>
 
             <SnsLoginWrapper>
-              <KakaoLoginBtn
-                onPress={() => {
-                  navigation.navigate('signIn');
-                }}>
-                <LogoImage source={require('../../assets/kakaoLogo.jpg')} />
+              <KakaoLoginBtn onPress={() => {}}>
+                <LogoImage source={require('../../assets/logo_kakao.jpg')} />
                 <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
               </KakaoLoginBtn>
               <FaceBookLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/facebookLogo.png')} />
+                <LogoImage source={require('../../assets/logo_facebook.png')} />
                 <FaceBookLoginText>FaceBook으로 로그인</FaceBookLoginText>
               </FaceBookLoginBtn>
               <AppleLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/appleLogo.png')} />
+                <LogoImage source={require('../../assets/logo_apple.png')} />
                 <AppleLoginText>Apple로 로그인</AppleLoginText>
               </AppleLoginBtn>
               <GoogleLoginBtn onPress={() => {}}>
-                <LogoImage source={require('../../assets/googleLogo.png')} />
+                <LogoImage source={require('../../assets/logo_google.png')} />
                 <GoogleLoginText>Google로 로그인</GoogleLoginText>
               </GoogleLoginBtn>
 
@@ -165,7 +165,8 @@ const LoginButton = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: #b2b2b2;
+  background-color: ${(props: IProps) =>
+    props.isActive ? '#007bf1' : '#b2b2b2'};
 `;
 
 const LoginText = styled.Text`

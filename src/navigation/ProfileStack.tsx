@@ -45,21 +45,29 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => <View/>,
-        headerRight: () => <ProfileSetupBtn navigation={navigation} />,
+        headerLeft: () => <BackBtn navigation={navigation} />,
+        headerRight: () => <View />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
-        options={{
+        options={({route, navigation}) => ({
           headerTitle: '프로필',
-        }}
+          headerLeft: () => <View />,
+          headerRight: () => (
+            <ProfileSetupBtn navigation={navigation} route={route} />
+          ),
+        })}
         name="profileActiveMain"
         component={ProfileActiveContainer}
       />
       <Stack.Screen
-        options={{
+        options={({route, navigation}) => ({
           headerTitle: '프로필',
-        }}
+          headerLeft: () => <View />,
+          headerRight: () => (
+            <ProfileSetupBtn navigation={navigation} route={route} />
+          ),
+        })}
         name="profileActiveJoin"
         component={ProfileActiveJoinContainer}
       />

@@ -6,7 +6,7 @@ interface IProps {
   navigation: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, joinMembership}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -26,6 +26,7 @@ export default ({navigation}: IProps) => {
       </ContainerCard>
       <NextBtn
         onPress={() => {
+          joinMembership();
           navigation.navigate('login');
         }}>
         <NextText>시작하기</NextText>

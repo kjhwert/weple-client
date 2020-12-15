@@ -36,7 +36,9 @@ export default ({navigation}) => {
             <IconWrapper>
               <IconImageWrapper>
                 <IconBtn>
-                  <IconImage source={require('../../assets/camera.png')} />
+                  <IconImage
+                    source={require('../../assets/record_camera.png')}
+                  />
                 </IconBtn>
 
                 <LinearGradient
@@ -158,8 +160,8 @@ const IconBtn = styled.TouchableOpacity`
 `;
 
 const IconImage = styled.Image`
-  width: 33px;
-  height: 29px;
+  width: 30px;
+  height: 30px;
 `;
 
 const StopBtnWrapper = styled.View`

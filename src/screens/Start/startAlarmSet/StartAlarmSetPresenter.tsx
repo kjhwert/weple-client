@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {SnsBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
+  alarmType: any;
+  alarmTypeClick: Function;
+  isActive: boolean;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, alarmType, alarmTypeClick, isActive}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -19,19 +22,29 @@ export default ({navigation}: IProps) => {
         </AlarmWrapper>
 
         <AlarmBtnWrapper>
-          <AlarmBtn onPress={() => {}}>
-            <AlarmBtnText>알람 설정 켜기</AlarmBtnText>
-          </AlarmBtn>
-
-          <AlarmBtn onPress={() => {}}>
-            <AlarmBtnText>나중에 설정하기</AlarmBtnText>
-          </AlarmBtn>
+          <SnsBtn
+            text={'알람 설정 켜기'}
+            isSelect={alarmType === 'ON'}
+            onPress={() => {
+              alarmTypeClick('ON');
+            }}
+          />
+          <SnsBtn
+            text={'나중에 설정하기'}
+            isSelect={alarmType === 'OFF'}
+            onPress={() => {
+              alarmTypeClick('OFF');
+            }}
+          />
         </AlarmBtnWrapper>
       </ContainerCard>
 
-      <NextBtn nextPage={'welcome'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+      <StartNextBtn
+        StartNextPage={'welcome'}
+        text={'다음'}
+        navigation={navigation}
+        isActive={isActive}
+      />
     </Container>
   );
 };
@@ -63,22 +76,4 @@ const AlarmBtnWrapper = styled.View`
   display: flex;
   width: 100%;
   flex-direction: column;
-`;
-
-const AlarmBtn = styled.TouchableOpacity`
-  background-color: white;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  justify-content: center;
-  border-width: 1px;
-  border-color: #eee;
-  border-radius: 5px;
-  margin-bottom: 10px;
-`;
-
-const AlarmBtnText = styled.Text`
-  color: #333;
-  font-size: 14px;
-  font-weight: bold;
 `;

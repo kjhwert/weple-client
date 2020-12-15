@@ -23,7 +23,7 @@ export default ({navigation, content}: IProps) => {
                       navigation.navigate('togetherShare');
                     }}>
                     <ShareImage
-                      source={require('../../../assets/share_icon.png')}
+                      source={require('../../../assets/icon_share.png')}
                     />
                   </ShareBtn>
                 </JoinTitleWrapper>
@@ -164,8 +164,8 @@ const ShareBtn = styled.TouchableOpacity`
 `;
 
 const ShareImage = styled.Image`
-  width: 22px;
-  height: 19px;
+  width: 23px;
+  height: 23px;
 `;
 
 const JoinTextWrapper = styled.View`

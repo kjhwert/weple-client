@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import StartAlarmSetPresenter from './StartAlarmSetPresenter';
 
 interface IProps {
@@ -6,5 +6,23 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <StartAlarmSetPresenter navigation={navigation} />;
+  const [isActive, setIsActive] = useState(false);
+  const [alarmType, setAlarmType] = useState('');
+
+  const alarmTypeClick = (alarmType) => {
+    setAlarmType(alarmType);
+  };
+
+  useEffect(() => {
+    setIsActive(alarmType.length > 0);
+  });
+
+  return (
+    <StartAlarmSetPresenter
+      navigation={navigation}
+      alarmType={alarmType}
+      isActive={isActive}
+      alarmTypeClick={alarmTypeClick}
+    />
+  );
 };
