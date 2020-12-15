@@ -1,5 +1,16 @@
 import {IGps} from './type/common';
 
+export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
+export const MAPBOX_TOKEN =
+  'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
+export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
+
+export const ACTIVE_BUTTON = '#007bf1';
+export const ACTIVE_TEXT = '#007bf1';
+
+export const INACTIVE_BUTTON = '#bfbfbf';
+export const INACTIVE_TEXT = '#6f6f6f';
+
 export const MINUTE = 60;
 
 export const getDistanceBetweenTwoGPS = (gps: IGps) => {
@@ -31,4 +42,13 @@ export const secondsToHms = (seconds: number) => {
   const second = Math.floor((seconds % 3600) % 60);
 
   return {hour, minute, second};
+};
+
+export const showDateToAmPmHourMinute = (date: Date) => {
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const head = hour > 12 ? '오후' : '오전';
+  const minuteDisplay = minute < 10 ? `0${minute}` : minute;
+
+  return `${head} ${hour}:${minuteDisplay}`;
 };

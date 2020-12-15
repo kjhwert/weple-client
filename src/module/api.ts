@@ -1,8 +1,10 @@
 import axios from 'axios';
+import {BASE_URL} from './common';
 import AsyncStorage from '@react-native-community/async-storage';
+import {IUserApiCreate, IUserApiLogin} from './type/api';
 
 const api = axios.create({
-  baseURL: 'http://ttamna-api.hlabpartner.com',
+  baseURL: BASE_URL,
 });
 
 api.interceptors.request.use(async (config) => {
@@ -14,42 +16,30 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-export const categoryApi = {
-  activities: async () => {
-    try {
-      const {data} = await api.get('/activity-group');
-      return data;
-    } catch ({message}) {
-      return message;
-    }
-  },
-};
-
 const apiRequest = async (request: Object) => {
   try {
     const {data}: any = await request;
     return data;
   } catch (e) {
-    return e;
+    console.log(e);
+    return {statusCode: 500, message: e.message};
   }
 };
 
+export const categoryApi = {
+  activities: () => apiRequest(api.get('/activity-group')),
+};
+
+export const utilitiesApi = {
+  maps: () => apiRequest(api.get('/map-group')),
+  musics: () => apiRequest(api.get('/music-group')),
+};
+
 export const userApi = {
-  login: (loginState: {email: string; password: string}) => {
-    const response = apiRequest(api.post('/login', loginState));
-    return response;
-  },
-  create: (createUserData: {
-    name: string;
-    nickName: string;
-    email: string;
-    password: string;
-    activityCategories: [];
-  }) => apiRequest(api.post('/user', createUserData)),
-  hasEmail: (email: string) => {
-    return apiRequest(api.get('/user/hasEmail?email=' + email));
-  },
-  hasNickName: (nickName: string) => {
-    return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
-  },
+  login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
+  create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
+  hasEmail: (email: string) =>
+    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) =>
+    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
 };
