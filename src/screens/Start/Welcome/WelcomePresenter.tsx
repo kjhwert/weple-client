@@ -6,7 +6,7 @@ interface IProps {
   navigation: any;
 }
 
-export default ({navigation, joinMembership}: IProps) => {
+export default ({ navigation, joinMembership }: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -19,7 +19,7 @@ export default ({navigation, joinMembership}: IProps) => {
           </AlarmContent>
         </AlarmWrapper>
         <MemberBtnWrapper>
-          <MemberBtn onPress={() => {}}>
+          <MemberBtn onPress={() => { }}>
             <MemberBtnText>멤버십 가입하기</MemberBtnText>
           </MemberBtn>
         </MemberBtnWrapper>

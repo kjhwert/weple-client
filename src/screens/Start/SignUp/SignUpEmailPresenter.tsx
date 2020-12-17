@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {NickNameInputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import { NickNameInputBox } from '../../../components/CommonInput';
+import { StartNextBtn } from '../../../components/SnsAccountBtn';
 import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   userEmailValidation: Function;
   userEmail: any;
   isActive: boolean;
-  setCreateUserEmail: Function;
+  createUserEmail: Function;
   clearAlertFrame: Function;
   hasEmail: Function;
 }
@@ -22,7 +22,7 @@ export default ({
   userEmailValidation,
   userEmail,
   isActive,
-  setCreateUserEmail,
+  createUserEmail,
   alertFrame,
   clearAlertFrame,
   hasEmail,
@@ -86,7 +86,7 @@ export default ({
         navigation={navigation}
         validation={userEmailValidation}
         isActive={isActive}
-        callBack={setCreateUserEmail}
+        callBack={createUserEmail}
       />
     </Container>
   );

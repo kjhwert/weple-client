@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {InputPasswordBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import { InputPasswordBox } from '../../../components/CommonInput';
+import { StartNextBtn } from '../../../components/SnsAccountBtn';
 import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   userPasswordChange1: Function;
   userPasswordChange2: Function;
   userPasswordValidation: Function;
-  setCreateUserPassword: Function;
+  createUserPassword: Function;
   isActive: boolean;
   alertFrame: Function;
   clearAlertFrame: Function;
@@ -24,7 +24,7 @@ export default ({
   userPasswordChange2,
   userPasswordValidation,
   isActive,
-  setCreateUserPassword,
+  createUserPassword,
   alertFrame,
   clearAlertFrame,
 }: IProps) => {
@@ -67,7 +67,7 @@ export default ({
         navigation={navigation}
         validation={userPasswordValidation}
         isActive={isActive}
-        callBack={setCreateUserPassword}
+        callBack={createUserPassword}
       />
     </Container>
   );

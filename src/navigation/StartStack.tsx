@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import LoginContainer from '../screens/login/LoginContainer';
 import SignUpEmailContainer from '../screens/Start/SignUp/SignUpEmailContainer';
 import PersonalDataContainer from '../screens/Start/PersonalData/PersonalDataContainer';
@@ -8,16 +8,13 @@ import SignUpNicknameContainer from '../screens/Start/SignUp/SignUpNicknameConta
 import StartAlarmSetContainer from '../screens/Start/startAlarmSet/StartAlarmSetContainer';
 import PasswordContainer from '../screens/login/password/PasswordContainer';
 import SignUpPasswordContainer from '../screens/Start/SignUp/SignUpPasswordContainer';
-import PersonalCommunityContainer from '../screens/Start/PersonalData/PersonalCommunityContainer';
 import BottomTab from './BottomTab';
 import BackBtn from '../components/BackBtn';
 import StartContainer from '../screens/Start/StartContainer';
-import PersonalAlarmContainer from '../screens/Start/PersonalData/PersonalAlarmContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
-import PersonalVideoContainer from '../screens/Start/PersonalData/PersonalVideoContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
-import {RecordContextProvider} from '../module/context/RecordContext';
+import { RecordContextProvider } from '../module/context/RecordContext';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +22,7 @@ export default () => {
   return (
     <RecordContextProvider>
       <Stack.Navigator
-        screenOptions={({navigation}) => ({
+        screenOptions={({ navigation }) => ({
           headerBackTitleVisible: false,
           headerTitleStyle: {
             fontSize: 16,
@@ -34,7 +31,7 @@ export default () => {
           headerLeft: () => <BackBtn navigation={navigation} />,
         })}>
         <Stack.Screen
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
           name="start"
           component={StartContainer}
         />
@@ -103,27 +100,6 @@ export default () => {
         />
         <Stack.Screen
           options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalVideo"
-          component={PersonalVideoContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalCommunity"
-          component={PersonalCommunityContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '개인정보 수집동의',
-          }}
-          name="personalAlarm"
-          component={PersonalAlarmContainer}
-        />
-        <Stack.Screen
-          options={{
             headerTitle: '알림 선택',
           }}
           name="startAlarmSet"
@@ -137,7 +113,7 @@ export default () => {
           component={WelcomeContainer}
         />
         <Stack.Screen
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
           name="bottomTab"
           component={BottomTab}
         />
