@@ -1,11 +1,11 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { IUser } from '../../module/type/user';
-import { userApi } from '../../module/api';
+import React, {createContext, useState, useEffect} from 'react';
+import {IUser} from '../../module/type/user';
+import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const UserContext = createContext({});
 
-export const UserContextProvider = ({ children }: IProps) => {
+export const UserContextProvider = ({children}: IProps) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [isLoginBtnActive, setIsLoginBtnActive] = useState(false);
@@ -44,6 +44,7 @@ export const UserContextProvider = ({ children }: IProps) => {
   };
 
   const login = async () => {
+    setLoading(true);
     const loginData = await userApi.login(loginState);
     console.log('loginContext:', loginData);
 
@@ -56,7 +57,8 @@ export const UserContextProvider = ({ children }: IProps) => {
 
     setAsyncStorage('@user', JSON.stringify(loginData));
 
-    setLoginState({ ...loginState, email: '', password: '' });
+    setLoginState({...loginState, email: '', password: ''});
+    setLoading(false);
     return true;
   };
 
@@ -72,17 +74,19 @@ export const UserContextProvider = ({ children }: IProps) => {
   };
 
   const autoLogin = async () => {
+    setLoading(true);
     const autoLoginData = await getAccess_token();
     if (autoLoginData) {
       console.log('자동 로그인 성공');
       setLoginUser(autoLoginData);
+      setLoading(false);
       return true;
     } else {
       console.log('자동 로그인 실패');
+      setLoading(false);
       return false;
     }
   };
-  // console.log('loginUser:', loginUser);
 
   const userLogout = async () => {
     await AsyncStorage.removeItem('@user');

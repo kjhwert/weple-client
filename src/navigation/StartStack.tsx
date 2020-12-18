@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import LoginContainer from '../screens/login/LoginContainer';
 import SignUpEmailContainer from '../screens/Start/SignUp/SignUpEmailContainer';
 import PersonalDataContainer from '../screens/Start/PersonalData/PersonalDataContainer';
@@ -14,7 +14,10 @@ import StartContainer from '../screens/Start/StartContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
-import { RecordContextProvider } from '../module/context/RecordContext';
+import {RecordContextProvider} from '../module/context/RecordContext';
+import FacebookLogin from '../screens/Start/socialLogin/FacebookLogin';
+import GoogleLogin from '../screens/Start/socialLogin/GoogleLogin';
+import KakaoLogin from '../screens/Start/socialLogin/KakaoLogin';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +25,7 @@ export default () => {
   return (
     <RecordContextProvider>
       <Stack.Navigator
-        screenOptions={({ navigation }) => ({
+        screenOptions={({navigation}) => ({
           headerBackTitleVisible: false,
           headerTitleStyle: {
             fontSize: 16,
@@ -31,7 +34,7 @@ export default () => {
           headerLeft: () => <BackBtn navigation={navigation} />,
         })}>
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{headerShown: false}}
           name="start"
           component={StartContainer}
         />
@@ -113,9 +116,30 @@ export default () => {
           component={WelcomeContainer}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{headerShown: false}}
           name="bottomTab"
           component={BottomTab}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpFacebook"
+          component={FacebookLogin}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpGoogle"
+          component={GoogleLogin}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpKakao"
+          component={KakaoLogin}
         />
       </Stack.Navigator>
     </RecordContextProvider>

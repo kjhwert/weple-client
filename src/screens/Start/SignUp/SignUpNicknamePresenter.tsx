@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import AlertWrapper from '../../../components/AlertWrapper';
-import { NickNameInputBox } from '../../../components/CommonInput';
-import { StartNextBtn } from '../../../components/SnsAccountBtn';
+import {DuplicateInputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
@@ -62,11 +62,12 @@ export default ({
 
       <ContainerCard>
         <SignUpWrapper>
-          <NickNameInputBox
+          <DuplicateInputBox
             title={'닉네임'}
             placeholder="닉네임을 입력하세요."
             onChange={userNickChange}
             activeFlag={userNick.activeFlag}
+            value={userNick.data}
           />
           <DuplicateBtn
             onPress={() => {
