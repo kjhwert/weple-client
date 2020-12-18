@@ -1,11 +1,13 @@
-import React, {createContext, useState, useEffect} from 'react';
-import {IUser} from '../../module/type/user';
-import {userApi} from '../../module/api';
+import React, { createContext, useState, useEffect } from 'react';
+import { IUser } from '../../module/type/user';
+import { userApi } from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const UserContext = createContext({});
 
-export const UserContextProvider = ({children}: IProps) => {
+export const UserContextProvider = ({ children }: IProps) => {
+  const [loading, setLoading] = useState<boolean>(true);
+
   const [isLoginBtnActive, setIsLoginBtnActive] = useState(false);
 
   const [loginUser, setLoginUser] = useState({
@@ -16,6 +18,7 @@ export const UserContextProvider = ({children}: IProps) => {
     nickName: '',
     email: '',
     password: '',
+    description: '',
   });
 
   const [loginState, setLoginState] = useState({
@@ -49,11 +52,11 @@ export const UserContextProvider = ({children}: IProps) => {
       return false;
     }
     console.log('로그인 성공');
-    setLoginUserInfo(loginData);
+    setLoginUser(loginData);
 
-    setAsyncStorage('user', JSON.stringify(loginData));
+    setAsyncStorage('@user', JSON.stringify(loginData));
 
-    setLoginState({...loginState, email: '', password: ''});
+    setLoginState({ ...loginState, email: '', password: '' });
     return true;
   };
 
@@ -64,7 +67,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const getAccess_token = async () => {
-    const result = await AsyncStorage.getItem('user');
+    const result = await AsyncStorage.getItem('@user');
     return JSON.parse(result);
   };
 
@@ -82,13 +85,16 @@ export const UserContextProvider = ({children}: IProps) => {
   // console.log('loginUser:', loginUser);
 
   const userLogout = async () => {
-    await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('@user');
     setLoginUser(null);
   };
 
-  function setLoginUserInfo(loginData) {
-    setLoginUser(loginData);
-  }
+  const createUserData = (name, signUpData) => {
+    setCreateUser({
+      ...createUser,
+      [name]: signUpData,
+    });
+  };
 
   useEffect(() => {
     setIsLoginBtnActive(
@@ -102,13 +108,13 @@ export const UserContextProvider = ({children}: IProps) => {
         loginUser,
         onChangeLogin,
         login,
-        setLoginUserInfo,
         createUser,
-        setCreateUser,
+        createUserData,
         getAccess_token,
         autoLogin,
         userLogout,
         isLoginBtnActive,
+        loading,
       }}>
       {children}
     </UserContext.Provider>
@@ -117,6 +123,7 @@ export const UserContextProvider = ({children}: IProps) => {
 
 export interface IUserContext {
   createUser: IUser;
+  loading: boolean;
 }
 
 export default UserContext;

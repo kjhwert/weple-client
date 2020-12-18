@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {InputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import { InputBox } from '../../../components/CommonInput';
+import { StartNextBtn } from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
   clearAlertFrame: Function;
   userNameChange: Function;
-  setCreateUserName: Function;
+  createUserName: Function;
 }
 
 export default ({
@@ -16,7 +16,7 @@ export default ({
   userNameChange,
   userName,
   isActive,
-  setCreateUserName,
+  createUserName,
 }: IProps) => {
   return (
     <Container>
@@ -33,7 +33,7 @@ export default ({
         text={'다음'}
         navigation={navigation}
         isActive={isActive}
-        callBack={setCreateUserName}
+        callBack={createUserName}
       />
     </Container>
   );
