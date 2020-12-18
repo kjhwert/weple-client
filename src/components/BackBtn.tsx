@@ -1,10 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import RecordContext from '../module/context/RecordContext';
+import {IRecordContext} from '../module/type/recordContext';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+  route?: any;
+}
+
+export default ({navigation, route}: IProps) => {
+  const {onChangeBackButtonAlert}: IRecordContext = useContext(RecordContext);
   return (
     <Container
       onPress={() => {
+        if (route && route.name === 'recordFinish') {
+          return onChangeBackButtonAlert && onChangeBackButtonAlert();
+        }
         navigation.goBack();
       }}>
       <ArrowImage source={require('../assets/arrowBlack.png')} />

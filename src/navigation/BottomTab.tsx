@@ -12,9 +12,7 @@ const tabActiveColor = '#007bf1';
 const tabInActiveColor = '#000';
 
 export default () => {
-  const {
-    recordSetting: {isStart},
-  }: any = useContext(RecordContext);
+  const {tabBarVisible}: any = useContext(RecordContext);
   return (
     <Tab.Navigator
       initialRouteName="feed"
@@ -71,7 +69,7 @@ export default () => {
       <Tab.Screen
         options={{
           tabBarLabel: '기록',
-          tabBarVisible: !isStart,
+          tabBarVisible: tabBarVisible,
         }}
         name="record"
         component={RecordStack}

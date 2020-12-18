@@ -1,75 +1,95 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import CheckBox from '@react-native-community/checkbox';
+import {IMusicGroup, IMusics} from '../../../module/type/music';
+import RecordContext from '../../../module/context/RecordContext';
+import {IRecordContext} from '../../../module/type/recordContext';
 
 interface IProps {
-  navigation: any;
-  isNew: boolean;
+  musicGroup: Array<IMusicGroup>;
+  musicPlay: (track: IMusics) => void;
+  musicPause: () => void;
+  playedMusic: number;
 }
+export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
+  const {
+    mapboxRecord: {music: recordMusic},
+    setRecordMusic,
+  }: IRecordContext = useContext(RecordContext);
 
-export default ({navigation, FreeMusic, MumbershipMusic}: IProps) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  useEffect(() => {
+    return () => {
+      musicPause();
+    };
+  }, []);
 
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
-            <MusicStyleTitle>무료</MusicStyleTitle>
-            {FreeMusic.map((item, idx) => (
-              <MusicStyleWrapper key={idx}>
-                <CheckBox
-                  style={{
-                    position: 'absolute',
-                    right: 6,
-                    bottom: 1,
-                  }}
-                  boxType={'circle'}
-                  disabled={false}
-                  value={false}
-                  onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                />
-                <AlbumImageWrapper onPress={() => {}}>
-                  <FreeAlbumImage />
-                </AlbumImageWrapper>
-                <MusicTextWrapper>
-                  <MusicTitleText>{item.title}</MusicTitleText>
-                  <MusicText></MusicText>
-                </MusicTextWrapper>
-                <PlayBtn>
-                  <PlayImage />
-                </PlayBtn>
-              </MusicStyleWrapper>
-            ))}
-
-            <MusicStyleTitle>멤버 전용</MusicStyleTitle>
-            {MumbershipMusic.map((item, idx) => (
-              <MusicStyleWrapper key={idx}>
-                <CheckBox
-                  style={{
-                    position: 'absolute',
-                    right: 6,
-                    bottom: 1,
-                  }}
-                  boxType={'circle'}
-                  disabled={false}
-                  value={false}
-                  onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                />
-                <AlbumImageWrapper onPress={() => {}}>
-                  <AlbumImage source={item.image} />
-                </AlbumImageWrapper>
-                <MusicTextWrapper>
-                  <MusicTitleText>{item.title}</MusicTitleText>
-                  <MusicText>{item.name}</MusicText>
-                </MusicTextWrapper>
-                <PlayBtn>
-                  <PlayImage
-                    source={require('../../../assets/play_icon.png')}
-                  />
-                </PlayBtn>
-              </MusicStyleWrapper>
+            {musicGroup.map(({id, name, musics}) => (
+              <MusicGroupContainer key={id}>
+                <MusicGroupName>{name}</MusicGroupName>
+                <MusicContainer>
+                  {musics.length > 0 ? (
+                    musics.map((music) => (
+                      <MusicWrapper key={music.id}>
+                        <CheckBox
+                          disabled={false}
+                          value={recordMusic === music}
+                          onValueChange={() => {
+                            setRecordMusic && setRecordMusic(music);
+                          }}
+                        />
+                        <MusicContentWrapper>
+                          <MusicArtWorkImage
+                            source={{
+                              uri: music.artwork,
+                            }}
+                            resizeMode="cover"
+                          />
+                          <MusicTiTleArtistWrapper>
+                            <MusicTitleText>{music.title}</MusicTitleText>
+                            <MusicArtistText>{music.artist}</MusicArtistText>
+                          </MusicTiTleArtistWrapper>
+                          {playedMusic !== music.id ? (
+                            <PlayBtn onPress={() => musicPlay(music)}>
+                              <PlayImage
+                                source={require('../../../assets/play_icon.png')}
+                              />
+                            </PlayBtn>
+                          ) : (
+                            <PauseBtn onPress={musicPause}>
+                              <PauseImage
+                                source={require('../../../assets/icon_pause.png')}
+                              />
+                            </PauseBtn>
+                          )}
+                        </MusicContentWrapper>
+                      </MusicWrapper>
+                    ))
+                  ) : (
+                    <MusicWrapper>
+                      <CheckBox
+                        value={recordMusic === null}
+                        onValueChange={() =>
+                          setRecordMusic && setRecordMusic(null)
+                        }
+                      />
+                      <MusicContentWrapper>
+                        <MusicEmptyImage />
+                        <MusicTiTleArtistWrapper>
+                          <MusicTitleText>
+                            재생 가능한 음악이 없습니다.
+                          </MusicTitleText>
+                        </MusicTiTleArtistWrapper>
+                      </MusicContentWrapper>
+                    </MusicWrapper>
+                  )}
+                </MusicContainer>
+              </MusicGroupContainer>
             ))}
           </ContainerCard>
         </ScrollWrapper>
@@ -89,71 +109,69 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const MusicStyleTitle = styled.Text`
-  display: flex;
+const MusicGroupContainer = styled.View`
   width: 100%;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
+`;
+
+const MusicGroupName = styled.Text`
   padding: 10px 0;
   font-size: 15px;
   color: #181818;
   font-weight: bold;
-  text-align: left;
 `;
 
-const MusicStyleWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-end;
+const MusicContainer = styled.View`
   width: 100%;
-  padding: 10px 20px;
-  border-bottom-width: 1px;
-  border-color: #eee;
-  border-width: 1px;
-`;
-
-const AlbumImageWrapper = styled.TouchableOpacity`
   display: flex;
-  height: 100%;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-right: 10px;
+  flex-direction: column;
 `;
 
-const FreeAlbumImage = styled.Image`
+const MusicWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 0 10px 0;
+`;
+
+const MusicContentWrapper = styled.View`
+  width: 88%;
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  justify-content: space-around;
+`;
+
+const MusicArtWorkImage = styled.Image`
   width: 50px;
   height: 50px;
-  background-color: #f8f8f8;
-  border-width: 1px;
-  border-color: #d4d4d4;
 `;
 
-const AlbumImage = styled.Image`
-  width: 50px;
-  height: 50px;
-`;
-
-const MusicTextWrapper = styled.View`
+const MusicTiTleArtistWrapper = styled.View`
   display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 62%;
-  margin-right: 5px;
+  flex-direction: column;
+  width: 65%;
+  align-self: center;
 `;
 
 const MusicTitleText = styled.Text`
-  width: 100%;
   font-size: 13px;
   font-weight: bold;
   color: #333;
   padding-bottom: 5px;
 `;
 
-const MusicText = styled.TextInput`
-  width: 100%;
+const MusicArtistText = styled.Text`
   font-size: 10px;
   color: #b5b5b5;
+`;
+
+const MusicEmptyImage = styled.View`
+  border-width: 1px;
+  border-color: #d4d4d4;
+  padding: 25px;
 `;
 
 const PlayBtn = styled.TouchableOpacity`
@@ -164,6 +182,18 @@ const PlayBtn = styled.TouchableOpacity`
 `;
 
 const PlayImage = styled.Image`
+  width: 30px;
+  height: 30px;
+`;
+
+const PauseBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 10%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PauseImage = styled.Image`
   width: 30px;
   height: 30px;
 `;

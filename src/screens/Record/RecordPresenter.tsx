@@ -4,11 +4,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext from '../../module/context/RecordContext';
 import KeepAwake from 'react-native-keep-awake';
-import {secondsToHms} from '../../module/common';
+import RecordUnits from '../../components/RecordUnits';
+import {MAPBOX_STYLE, MAPBOX_TOKEN} from '../../module/common';
+import AlertWrapper from '../../components/AlertWrapper';
 
-MapboxGL.setAccessToken(
-  'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg',
-);
+MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;
@@ -19,24 +19,43 @@ export default ({navigation}: IProps) => {
     recordSetting,
     record,
     mapboxRecord,
-    initialRecordStart,
+    initializeRecordStart,
     changeStartStatus,
     finishRecording,
     onUpdateUserPosition,
     showCamera,
+    alertManager,
+    clearAllState,
   }: any = useContext(RecordContext);
-
-  const {hour, minute, second} = secondsToHms(record.duration);
 
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
       <ScrollContainer>
+        {/*{<AlertWrapper>*/}
+        {/*      <AlertImageWrapper>*/}
+        {/*        <AlertImage*/}
+        {/*          source={require('../../assets/alertWarn_icon.png')}*/}
+        {/*        />*/}
+        {/*      </AlertImageWrapper>*/}
+        {/*      <AlertTitleText>*/}
+        {/*        {'아직 루트가 저장되지 않았어요.'}*/}
+        {/*      </AlertTitleText>*/}
+        {/*      <AlertBtnWrapper>*/}
+        {/*        <ConfirmButton onPress={clearAllState}>*/}
+        {/*          <ConfirmButtonText>기록중지</ConfirmButtonText>*/}
+        {/*        </ConfirmButton>*/}
+        {/*        <CancelButton onPress={changeStartStatus}>*/}
+        {/*          <CancelButtonText>기록재개</CancelButtonText>*/}
+        {/*        </CancelButton>*/}
+        {/*      </AlertBtnWrapper>*/}
+        {/*    </AlertWrapper>*/}
+        {/*  }*/}
         <ScrollWrapper>
           <Card>
             <MapboxGL.MapView
               style={{width: '100%', height: 300}}
-              styleURL={'mapbox://styles/kjhwert/ckh44m2dc04f419o8odhe7dz8'}
+              styleURL={MAPBOX_STYLE}
               localizeLabels={true}>
               <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
               <MapboxGL.UserLocation
@@ -45,54 +64,12 @@ export default ({navigation}: IProps) => {
               />
             </MapboxGL.MapView>
 
-            <RecordWrapper>
-              <RecordTextWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>
-                    {mapboxRecord.distance}
-                    <UnitNumber> km</UnitNumber>
-                  </RecordNumber>
-                  <RecordUnitText>Distance</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>
-                    {mapboxRecord.speed}
-                    <UnitNumber> km/h</UnitNumber>
-                  </RecordNumber>
-                  <RecordUnitText>Speed</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordDurationContainer>
-                    {hour > 0 && (
-                      <RecordDurationWrapper>
-                        <RecordNumber>{hour}</RecordNumber>
-                        <UnitNumber>h </UnitNumber>
-                      </RecordDurationWrapper>
-                    )}
-                    {minute > 0 && (
-                      <RecordDurationWrapper>
-                        <RecordNumber>{minute}</RecordNumber>
-                        <UnitNumber>m </UnitNumber>
-                      </RecordDurationWrapper>
-                    )}
-                    {second >= 0 && (
-                      <RecordDurationWrapper>
-                        <RecordNumber>{second}</RecordNumber>
-                        <UnitNumber>s</UnitNumber>
-                      </RecordDurationWrapper>
-                    )}
-                  </RecordDurationContainer>
-                  <RecordUnitText>Duration</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>
-                    {record.calorie}
-                    <UnitNumber> kcal</UnitNumber>
-                  </RecordNumber>
-                  <RecordUnitText>Calorie</RecordUnitText>
-                </RecordCheckWrapper>
-              </RecordTextWrapper>
-            </RecordWrapper>
+            <RecordUnits
+              distance={mapboxRecord.distance}
+              speed={mapboxRecord.speed}
+              calorie={record.calorie}
+              duration={record.duration}
+            />
 
             <IconWrapper>
               <IconImageWrapper>
@@ -144,7 +121,7 @@ export default ({navigation}: IProps) => {
                     {!recordSetting.isInit && !recordSetting.isStart && (
                       <StartBtn
                         onPress={() => {
-                          initialRecordStart();
+                          initializeRecordStart();
                         }}>
                         <StartBtnText>시작</StartBtnText>
                       </StartBtn>
@@ -160,8 +137,7 @@ export default ({navigation}: IProps) => {
                     {recordSetting.isInit && !recordSetting.isStart && (
                       <FinishBtn
                         onPress={() => {
-                          finishRecording();
-                          navigation.navigate('recordFinish');
+                          finishRecording(navigation);
                         }}>
                         <FinishBtnText>완료</FinishBtnText>
                       </FinishBtn>
@@ -193,61 +169,6 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
-`;
-
-const RecordWrapper = styled.View`
-  display: flex;
-  width: 90%;
-  align-items: center;
-  margin-top: 20px;
-  padding: 10px 0;
-  border-width: 1px;
-  border-color: #eeeeee;
-  box-shadow: 0px 3px 6px #e1e1e1;
-`;
-
-const RecordTextWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const RecordCheckWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 25%;
-`;
-
-const RecordDurationContainer = styled.View`
-  display: flex;
-  flex-direction: row;
-`;
-
-const RecordDurationWrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-`;
-
-const RecordNumber = styled.Text`
-  font-size: 18px;
-  color: #2f2f2f;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const UnitNumber = styled.Text`
-  font-size: 12px;
-`;
-
-const RecordUnitText = styled.Text`
-  font-size: 12px;
-  color: #ababab;
-  font-weight: bold;
-  text-align: center;
 `;
 
 const IconWrapper = styled.View`
@@ -336,6 +257,65 @@ const ResumeBtn = styled.TouchableOpacity`
 const ResumeBtnText = styled.Text`
   font-size: 18px;
   color: #3065f4;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const AlertBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #007bf1;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #efefef;
+`;
+
+const CancelButtonText = styled.Text`
+  font-size: 14px;
+  color: #4e4e4e;
   font-weight: bold;
   text-align: center;
 `;

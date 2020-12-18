@@ -1,24 +1,28 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import RecordContext from '../../../module/context/RecordContext';
+import {IRecordContext} from '../../../module/type/recordContext';
+import {
+  ACTIVE_BUTTON,
+  ACTIVE_TEXT,
+  INACTIVE_BUTTON,
+  INACTIVE_TEXT,
+} from '../../../module/common';
+import {ICategoryActivity} from '../../../module/type/category-activity';
 
 interface IProps {
   navigation: any;
-  activities: Array<IActivity>;
+  activities: Array<ICategoryActivity>;
 }
 
-interface IActivity {
-  id: number;
-  name: string;
-  categoryActivity: Array<{
-    id: number;
-    name: string;
-    caloriesPerMinute: number;
-  }>;
+interface IStyledProps {
+  isActive: boolean;
 }
 
 export default ({navigation, activities}: IProps) => {
-  const {setActivityCategory}: any = useContext(RecordContext);
+  const {setActivityCategory, recordSetting}: IRecordContext = useContext(
+    RecordContext,
+  );
   return (
     <Container>
       <ScrollContainer>
@@ -30,7 +34,9 @@ export default ({navigation, activities}: IProps) => {
                 ({id, name, caloriesPerMinute}) => (
                   <CategoryBtn
                     key={id}
+                    isActive={recordSetting?.activity.id === id}
                     onPress={() => {
+                      // @ts-ignore
                       setActivityCategory({
                         id,
                         name,
@@ -38,7 +44,9 @@ export default ({navigation, activities}: IProps) => {
                       });
                       navigation.goBack();
                     }}>
-                    <CategoryText>{name}</CategoryText>
+                    <CategoryText isActive={recordSetting?.activity.id === id}>
+                      {name}
+                    </CategoryText>
                   </CategoryBtn>
                 ),
               )}
@@ -80,13 +88,15 @@ const CategoryBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   border-width: 1px;
-  border-color: #bfbfbf;
+  border-color: ${({isActive}: IStyledProps) =>
+    isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON};
   padding: 10px;
   margin: 0 10px 10px 0;
 `;
 
 const CategoryText = styled.Text`
-  color: #6f6f6f;
   font-size: 14px;
   text-align: center;
+  color: ${({isActive}: IStyledProps) =>
+    isActive ? ACTIVE_TEXT : INACTIVE_TEXT};
 `;

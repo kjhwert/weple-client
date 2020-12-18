@@ -17,6 +17,7 @@ interface IInstance {
 export class Database {
   private static instance: IInstance | null = null;
   private db: IDatabase | null = null;
+  private records = [];
 
   public static getInstance() {
     if (this.instance === null) {
@@ -42,10 +43,9 @@ export class Database {
 
   getRecords = (callback: Function) => {
     this.db?.transaction(
-      async (tx) => {
+      (tx) => {
         tx.executeSql('SELECT * FROM record', [], (tx, results) => {
-          const result = results.rows.raw();
-          callback(result);
+          callback(results.rows.raw());
         });
       },
       (error) => console.log(error),
@@ -54,7 +54,6 @@ export class Database {
 
   insertRecord = (records: IInsert) => {
     const recordsToJson = JSON.stringify(records);
-
     this.db?.transaction(
       (tx) => {
         tx.executeSql(
@@ -63,7 +62,9 @@ export class Database {
           () => {},
         );
       },
-      (error) => {},
+      (error) => {
+        console.log('insert error', error);
+      },
     );
   };
 

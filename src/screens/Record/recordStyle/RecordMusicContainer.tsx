@@ -1,57 +1,61 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import RecordMusicPresenter from './RecordMusicPresenter';
+import {utilitiesApi} from '../../../module/api';
+import Loading from '../../../components/Loading';
+import RNTrackPlayer from 'react-native-track-player';
+import {IMusicGroup, IMusics} from '../../../module/type/music';
+import {MUSIC_PATH} from '../../../module/common';
 
-const FreeMusic = [
-  {
-    id: 0,
-    image: require('../../../assets/music_1.png'),
-    title: '재생 가능한 음악이 없습니다.',
-    name: 'Maroon 5',
-    isClick: true,
-  },
-];
+export default () => {
+  const [musicGroup, setMusicGroup] = useState<Array<IMusicGroup>>([]);
+  const [playedMusic, setPlayedMusic] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-const MumbershipMusic = [
-  {
-    id: 0,
-    image: require('../../../assets/music_1.png'),
-    title: 'Memories',
-    name: 'Maroon 5',
-    isClick: true,
-  },
-  {
-    id: 1,
-    image: require('../../../assets/music_2.png'),
-    title: 'Memories',
-    name: 'Maroon 5',
-    isClick: true,
-  },
-  {
-    id: 2,
-    image: require('../../../assets/music_3.png'),
-    title: 'Memories',
-    name: 'Maroon 5',
-    isClick: true,
-  },
-  {
-    id: 3,
-    image: require('../../../assets/music_1.png'),
-    title: 'Memories',
-    name: 'Maroon 5',
-    isClick: false,
-  },
-];
+  const musicTrackSetUp = async () => {
+    await RNTrackPlayer.setupPlayer().then(() => {
+      console.log('player is setup');
+    });
+  };
 
-interface IProps {
-  navigation: any;
-}
+  const getMusicGroup = async () => {
+    const {data, statusCode, message} = await utilitiesApi.musics();
+    if (statusCode !== 200) {
+      console.log(statusCode, message);
+      return;
+    }
+    setMusicGroup(data);
+    setLoading(false);
+  };
 
-export default ({navigation}: IProps) => {
-  return (
+  const musicPlay = async (track: IMusics) => {
+    const music = {
+      ...track,
+      id: track.id.toString(),
+    };
+    setPlayedMusic(track.id);
+    await RNTrackPlayer.add(music);
+    await RNTrackPlayer.play();
+  };
+
+  const musicPause = async () => {
+    setPlayedMusic(0);
+    await RNTrackPlayer.pause();
+    await RNTrackPlayer.destroy();
+  };
+
+  useEffect(() => {
+    getMusicGroup();
+    musicTrackSetUp();
+  }, []);
+
+  return loading ? (
+    <Loading />
+  ) : (
     <RecordMusicPresenter
-      navigation={navigation}
-      FreeMusic={FreeMusic}
-      MumbershipMusic={MumbershipMusic}
+      musicGroup={musicGroup}
+      musicPlay={musicPlay}
+      musicPause={musicPause}
+      playedMusic={playedMusic}
     />
   );
 };

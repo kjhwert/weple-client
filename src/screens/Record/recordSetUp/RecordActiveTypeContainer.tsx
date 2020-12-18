@@ -12,9 +12,11 @@ export default ({navigation}: IProps) => {
   const [loading, setLoading] = useState(true);
 
   const getActivities = async () => {
-    const result = await categoryApi.activities();
-    setActivities(result);
-    setLoading(false);
+    const {data, statusCode} = await categoryApi.activities();
+    if (statusCode === 200) {
+      setActivities(data);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
