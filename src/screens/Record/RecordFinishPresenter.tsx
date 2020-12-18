@@ -1,22 +1,98 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
+import RecordContext from '../../module/context/RecordContext';
+import RecordUnits from '../../components/RecordUnits';
+import {showDateToAmPmHourMinute} from '../../module/common';
+import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
+import AlertWrapper from '../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {
+    recordSetting,
+    mapboxRecord,
+    record,
+    webViewRef,
+    createFeed,
+    alertManager: {activityUnSelected, created, backButtonOnClicked},
+    onChangeActivityUnSelectedAlert,
+    onChangeBackButtonAlert,
+    clearAllState,
+  }: any = useContext(RecordContext);
+
+  console.log(mapboxRecord);
+
   return (
     <Container>
       <ScrollContainer>
+        {activityUnSelected && (
+          <AlertWrapper>
+            <AlertImageWrapper>
+              <AlertImage source={require('../../assets/alertWarn_icon.png')} />
+            </AlertImageWrapper>
+            <AlertTitleText>{'활동을 선택해주세요.'}</AlertTitleText>
+            <ConfirmFullButton onPress={onChangeActivityUnSelectedAlert}>
+              <ConfirmButtonText>확인</ConfirmButtonText>
+            </ConfirmFullButton>
+          </AlertWrapper>
+        )}
+        {created && (
+          <AlertWrapper>
+            <AlertImageWrapper>
+              <AlertImage
+                source={require('../../assets/alertCheck_icon.png')}
+              />
+            </AlertImageWrapper>
+            <AlertTitleText>{'등록되었습니다.'}</AlertTitleText>
+            <ConfirmFullButton
+              onPress={() => {
+                clearAllState();
+                navigation.navigate('recordMain');
+              }}>
+              <ConfirmButtonText>확인</ConfirmButtonText>
+            </ConfirmFullButton>
+          </AlertWrapper>
+        )}
+        {backButtonOnClicked && (
+          <AlertWrapper>
+            <AlertImageWrapper>
+              <AlertImage source={require('../../assets/alertWarn_icon.png')} />
+            </AlertImageWrapper>
+            <AlertTitleText>{'종료하시겠습니까?'}</AlertTitleText>
+            <AlertContentText>
+              {'기록된 데이터는 초기화됩니다.'}
+            </AlertContentText>
+            <AlertBtnWrapper>
+              <ConfirmButton
+                onPress={() => {
+                  clearAllState();
+                  navigation.navigate('recordMain');
+                }}>
+                <ConfirmButtonText>확인</ConfirmButtonText>
+              </ConfirmButton>
+              <CancelButton onPress={onChangeBackButtonAlert}>
+                <CancelButtonText>취소</CancelButtonText>
+              </CancelButton>
+            </AlertBtnWrapper>
+          </AlertWrapper>
+        )}
         <ScrollWrapper>
           <Card>
             <MapPlayWrapper>
               <WebView
+                ref={(ref) => (webViewRef.current = ref)}
                 source={{
-                  uri: 'http://sinshin.hlabpartner.com/test.html',
+                  uri: 'http://ttamna-api.hlabpartner.com/public/map/test.html',
                 }}
+                injectedJavaScript={webViewJavaScriptCode({
+                  coordinates: mapboxRecord.records,
+                  map: mapboxRecord.map,
+                  music: mapboxRecord.music,
+                })}
               />
             </MapPlayWrapper>
 
@@ -50,26 +126,12 @@ export default ({navigation}: IProps) => {
               </SetBtnWrapper>
             </SetUpWrapper>
 
-            <RecordWrapper>
-              <RecordTextWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
-                  <RecordUnitText>Killometer</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>0</RecordNumber>
-                  <RecordUnitText>Km/h</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>0:00</RecordNumber>
-                  <RecordUnitText>Duration</RecordUnitText>
-                </RecordCheckWrapper>
-                <RecordCheckWrapper>
-                  <RecordNumber>0.0</RecordNumber>
-                  <RecordUnitText>Kcal</RecordUnitText>
-                </RecordCheckWrapper>
-              </RecordTextWrapper>
-            </RecordWrapper>
+            <RecordUnits
+              distance={mapboxRecord.distance}
+              speed={mapboxRecord.speed}
+              calorie={record.calorie}
+              duration={record.duration}
+            />
 
             <ActiveDetailWrapper>
               <ActiveVerticalLine></ActiveVerticalLine>
@@ -81,48 +143,37 @@ export default ({navigation}: IProps) => {
                     />
                   </ActiveStartMark>
                 </ActiveMarkWrapper>
-                <ActiveDetailTitle>오후 15:35에 출발</ActiveDetailTitle>
+                <ActiveDetailTitle>
+                  {recordSetting.startDate &&
+                    showDateToAmPmHourMinute(recordSetting.startDate)}
+                  에 출발
+                </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
 
-              <ActiveDetailImageWrapper>
-                <ActiveDetailMapImage
-                  source={require('../../assets/map_2.png')}
-                />
-              </ActiveDetailImageWrapper>
-              <ActiveDetailTextWrapper>
-                <ActiveSmallMarkWrapper>
-                  <ActiveSmallMark></ActiveSmallMark>
-                  <ActiveSmallestMark></ActiveSmallestMark>
-                </ActiveSmallMarkWrapper>
-                <DetailTextWrapper>
-                  <ActiveDetailText>"965m"</ActiveDetailText>
-                  <ActiveDetailTimeText>
-                    2.5km 이동 후 오후 16:05
-                  </ActiveDetailTimeText>
-                </DetailTextWrapper>
-              </ActiveDetailTextWrapper>
-
-              <ActiveDetailImageWrapper>
-                <ActiveDetailImage
-                  source={require('../../assets/photo_3.jpeg')}
-                />
-                <ImgChangeBtn>
-                  <ChangeImage source={require('../../assets/edit_icon.png')} />
-                  <ChangeImageText>이미지 변경</ChangeImageText>
-                </ImgChangeBtn>
-              </ActiveDetailImageWrapper>
-              <ActiveDetailTextWrapper>
-                <ActiveSmallMarkWrapper>
-                  <ActiveSmallMark></ActiveSmallMark>
-                  <ActiveSmallestMark></ActiveSmallestMark>
-                </ActiveSmallMarkWrapper>
-                <DetailTextWrapper>
-                  <ActiveDetailTimeText>
-                    12.5km 이동 후 오후 16:35에 촬영
-                  </ActiveDetailTimeText>
-                </DetailTextWrapper>
-              </ActiveDetailTextWrapper>
-
+              {mapboxRecord.images.map((image: any, idx: number) => (
+                <ActiveDetailWrapper key={idx}>
+                  <ActiveDetailImageWrapper>
+                    <ActiveDetailImage
+                      source={{uri: image.uri}}
+                      resizeMode="contain"
+                      style={{aspectRatio: 1}}
+                    />
+                  </ActiveDetailImageWrapper>
+                  <ActiveDetailTextWrapper>
+                    <ActiveSmallMarkWrapper>
+                      <ActiveSmallMark></ActiveSmallMark>
+                      <ActiveSmallestMark></ActiveSmallestMark>
+                    </ActiveSmallMarkWrapper>
+                    <DetailTextWrapper>
+                      <ActiveDetailTimeText>
+                        {mapboxRecord.distance}km 이동 후{' '}
+                        {image.timestamp &&
+                          showDateToAmPmHourMinute(image.timestamp)}
+                      </ActiveDetailTimeText>
+                    </DetailTextWrapper>
+                  </ActiveDetailTextWrapper>
+                </ActiveDetailWrapper>
+              ))}
               <ActiveDetailFinishTitleWrapper>
                 <ActiveMarkFinishWrapper>
                   <ActiveFinishMark>
@@ -132,14 +183,13 @@ export default ({navigation}: IProps) => {
                   </ActiveFinishMark>
                 </ActiveMarkFinishWrapper>
                 <ActiveDetailFinishTitle>
-                  오후 17:10에 끝맞쳤습니다.
+                  {recordSetting.endDate &&
+                    showDateToAmPmHourMinute(recordSetting.endDate)}
+                  에 끝마쳤습니다.
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
-            <NextBtn
-              onPress={() => {
-                navigation.navigate('recordMain');
-              }}>
+            <NextBtn onPress={createFeed}>
               <NextText>게시하기</NextText>
             </NextBtn>
           </Card>
@@ -206,49 +256,11 @@ const MoreImage = styled.Image`
   height: 12px;
 `;
 
-const RecordWrapper = styled.View`
-  display: flex;
-  width: 90%;
-  align-items: center;
-  margin: 30px 0;
-  padding: 10px 0;
-  border-width: 1px;
-  border-color: #eeeeee;
-`;
-
-const RecordTextWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const RecordCheckWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 25%;
-`;
-
-const RecordNumber = styled.Text`
-  font-size: 21px;
-  color: #2f2f2f;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const RecordUnitText = styled.Text`
-  font-size: 12px;
-  color: #ababab;
-  font-weight: bold;
-  text-align: center;
-`;
-
 const ActiveDetailWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   width: 100%;
+  margin-top: 10px;
 `;
 
 const ActiveVerticalLine = styled.View`
@@ -325,6 +337,8 @@ const ActiveDetailTitleWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   width: 100%;
+  margin-bottom: 20px;
+  align-items: center;
 `;
 
 const ActiveDetailTitle = styled.Text`
@@ -332,8 +346,6 @@ const ActiveDetailTitle = styled.Text`
   font-size: 15px;
   font-weight: bold;
   color: #1c1c1c;
-  padding: 10px 0;
-  margin-bottom: 20px;
 `;
 
 const ActiveDetailTextWrapper = styled.View`
@@ -349,18 +361,11 @@ const DetailTextWrapper = styled.View`
   width: 80%;
 `;
 
-const ActiveDetailText = styled.Text`
-  font-size: 12px;
-  font-weight: bold;
-  color: #353434;
-  margin-top: 10px;
-`;
-
 const ActiveDetailTimeText = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #494848;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const ActiveDetailImageWrapper = styled.View`
@@ -370,14 +375,8 @@ const ActiveDetailImageWrapper = styled.View`
   width: 100%;
 `;
 
-const ActiveDetailMapImage = styled.Image`
-  width: 100%;
-  height: 160px;
-`;
-
 const ActiveDetailImage = styled.Image`
   width: 100%;
-  height: 200px;
 `;
 
 const ActiveDetailFinishTitleWrapper = styled.View`
@@ -394,32 +393,13 @@ const ActiveDetailFinishTitle = styled.Text`
   color: #1c1c1c;
 `;
 
-const ImgChangeBtn = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  flex-flow: column;
-  position: absolute;
-`;
-
-const ChangeImage = styled.Image`
-  width: 45px;
-  height: 45px;
-`;
-
-const ChangeImageText = styled.Text`
-  color: #fff;
-  font-size: 15px;
-  font-weight: bold;
-  margin-top: 10px;
-`;
-
 const NextBtn = styled.TouchableOpacity`
   display: flex;
   width: 100%;
   padding: 15px;
   align-items: center;
   justify-content: center;
-  background-color: #b2b2b2;
+  background-color: #007bf1;
   margin-top: 50px;
 `;
 
@@ -427,4 +407,81 @@ const NextText = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertContentText = styled.Text`
+  font-size: 12px;
+  color: #878787;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #007bf1;
+`;
+
+const ConfirmFullButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const AlertBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  background-color: #efefef;
+`;
+
+const CancelButtonText = styled.Text`
+  font-size: 14px;
+  color: #4e4e4e;
+  font-weight: bold;
+  text-align: center;
 `;

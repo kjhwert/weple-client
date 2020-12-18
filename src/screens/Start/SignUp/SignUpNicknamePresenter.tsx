@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import AlertWrapper from '../../../components/AlertWrapper';
-import {NickNameInputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import { NickNameInputBox } from '../../../components/CommonInput';
+import { StartNextBtn } from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
   clearAlertFrame: Function;
   onChangeNickName: Function;
   hasNickName: Function;
-  setCreateUserNickName: Function;
+  createUserNickName: Function;
 }
 
 export default ({
@@ -21,7 +21,7 @@ export default ({
   alertFrame,
   clearAlertFrame,
   hasNickName,
-  setCreateUserNickName,
+  createUserNickName,
 }: IProps) => {
   return (
     <Container>
@@ -81,7 +81,7 @@ export default ({
         text={'다음'}
         navigation={navigation}
         isActive={isActive}
-        callBack={setCreateUserNickName}
+        callBack={createUserNickName}
       />
     </Container>
   );

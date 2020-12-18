@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import { CategoryBtn, StartNextBtn } from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
   activities: Array<IActivity>;
+  categoriesClick: Function;
+  isActive: boolean;
+  createUserCategory: Function;
 }
 interface IActivity {
   id: number;
@@ -16,30 +19,48 @@ interface IActivity {
   }>;
 }
 
-export default ({navigation, activities}: IProps) => {
+export default ({
+  navigation,
+  activities,
+  categoriesClick,
+  isActive,
+  createUserCategory,
+}: IProps) => {
   return (
     <Container>
-      <ContainerCard>
-        <ScrollContainer>
-          <InfoText>1개 이상 선택해주세요.</InfoText>
-          {activities.map((activity) => (
-            <CategoryWrapper key={activity.id}>
-              <CategoryTitle>{activity.name}</CategoryTitle>
-              <ActivityWrapper>
-                {activity.categoryActivity.map(({id, name}) => (
-                  <CategoryBtn key={id} onPress={() => {}}>
-                    <CategoryText>{name}</CategoryText>
-                  </CategoryBtn>
-                ))}
-              </ActivityWrapper>
-            </CategoryWrapper>
-          ))}
-        </ScrollContainer>
-      </ContainerCard>
+      <ScrollContainer>
+        <ScrollWrapper>
+          <ContainerCard>
+            <InfoText>1개 이상 선택해주세요.</InfoText>
+            {activities.map((activity) => (
+              <CategoryWrapper key={activity.id}>
+                <CategoryTitle>{activity.name}</CategoryTitle>
+                <ActivityWrapper>
+                  {activity.categoryActivity.map(({ id, name, isSelect }) => (
+                    <CategoryBtn
+                      key={id}
+                      text={name}
+                      onPress={() => {
+                        categoriesClick(activity.id, id);
+                      }}
+                      isSelect={isSelect}
+                    />
+                  ))}
+                </ActivityWrapper>
+              </CategoryWrapper>
+            ))}
 
-      <NextBtn nextPage={'personalData'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+          </ContainerCard>
+        </ScrollWrapper>
+      </ScrollContainer>
+
+      <StartNextBtn
+        StartNextPage={'personalData'}
+        text={'다음'}
+        navigation={navigation}
+        callBack={createUserCategory}
+        isActive={isActive}
+      />
     </Container>
   );
 };
@@ -48,7 +69,12 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const ScrollContainer = styled.ScrollView``;
+const ScrollContainer = styled.View`
+  height: 100%;
+  background-color: #fff;
+`;
+
+const ScrollWrapper = styled.ScrollView``;
 
 const InfoText = styled.Text`
   width: 100%;
@@ -78,20 +104,4 @@ const CategoryWrapper = styled.View`
   display: flex;
   width: 100%;
   flex-flow: row wrap;
-`;
-
-const CategoryBtn = styled.TouchableOpacity`
-  max-width: 40%;
-  justify-content: center;
-  align-items: center;
-  border-width: 1px;
-  border-color: #bfbfbf;
-  padding: 10px;
-  margin: 0 20px 10px 0;
-`;
-
-const CategoryText = styled.Text`
-  color: #6f6f6f;
-  font-size: 14px;
-  text-align: center;
 `;

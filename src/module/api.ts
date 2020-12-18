@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {BASE_URL} from './common';
 import AsyncStorage from '@react-native-community/async-storage';
-import {IUserApiCreate, IUserApiLogin} from './type/api';
+import {IFeedCreate, IUserApiCreate, IUserApiLogin} from './type/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -21,7 +21,6 @@ const apiRequest = async (request: Object) => {
     const {data}: any = await request;
     return data;
   } catch (e) {
-    console.log(e);
     return {statusCode: 500, message: e.message};
   }
 };
@@ -42,4 +41,9 @@ export const userApi = {
     apiRequest(api.get(`/user/hasEmail?email=${email}`)),
   hasNickName: (nickName: string) =>
     apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+};
+
+export const feedApi = {
+  create: (data: IFeedCreate) => apiRequest(api.post('/feed', data)),
+  imagesCreate: (data) => apiRequest(api.post('/feed/images', data)),
 };

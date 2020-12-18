@@ -130,12 +130,14 @@ export const InputPasswordBox = ({
         onChange={onChange1}
         borderColor={borderColor1}
         autoFocus={true}
+        secureTextEntry={true}
       />
       <InputBoxData
         name={name}
         placeholder={placeholder2}
         onChange={onChange2}
         borderColor={borderColor2}
+        secureTextEntry={true}
       />
     </InputBoxWrapper>
   );

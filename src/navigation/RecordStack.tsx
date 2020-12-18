@@ -42,10 +42,11 @@ export default () => {
         })}
       />
       <Stack.Screen
-        options={{
+        options={({navigation, route}) => ({
+          headerLeft: () => <BackBtn navigation={navigation} route={route} />,
           headerRight: () => <View />,
           headerTitle: '새로운 활동',
-        }}
+        })}
         name="recordFinish"
         component={RecordFinishContainer}
       />
@@ -60,6 +61,7 @@ export default () => {
       <Stack.Screen
         options={{
           headerTitle: '활동 유형',
+          headerRight: () => <View />,
         }}
         name="recordActiveType"
         component={RecordActiveTypeContainer}
@@ -67,6 +69,7 @@ export default () => {
       <Stack.Screen
         options={{
           headerTitle: '지도 선택',
+          headerRight: () => <View />,
         }}
         name="recordMapStyle"
         component={RecordMapStyleContainer}
@@ -74,6 +77,7 @@ export default () => {
       <Stack.Screen
         options={{
           headerTitle: '음악 선택',
+          headerRight: () => <View />,
         }}
         name="recordMusic"
         component={RecordMusicContainer}
