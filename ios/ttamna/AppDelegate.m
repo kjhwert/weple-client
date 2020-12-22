@@ -64,6 +64,10 @@ return false;
   [self.window makeKeyAndVisible];
 
 
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+
   [[FBSDKApplicationDelegate sharedInstance] application:application
   didFinishLaunchingWithOptions:launchOptions];
 

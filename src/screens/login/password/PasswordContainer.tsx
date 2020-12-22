@@ -1,11 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PasswordPresenter from './PasswordPresenter';
+import UserContext from '../../../module/context/UserContext';
+import {userApi} from '../../../module/api';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {createUser}: any = useContext(UserContext);
+
   const [isActive, setIsActive] = useState(false);
   const [userEmail, setUserEmail] = useState({
     data: '',
@@ -35,9 +39,24 @@ export default ({navigation}: IProps) => {
     return true;
   };
 
+  const passwordInfoMail = async () => {
+    const emailRequest = {
+      email: userEmail.data,
+    };
+    const passwordInfoData = await userApi.passwordForget(emailRequest);
+    console.log('passwordInfoData:', passwordInfoData);
+  };
+
   useEffect(() => {
     setIsActive(userEmail.data.length > 0);
   }, [userEmail]);
+
+  useEffect(() => {
+    setUserEmail({
+      ...userEmail,
+      data: createUser.email,
+    });
+  }, []);
 
   return (
     <PasswordPresenter
@@ -48,6 +67,7 @@ export default ({navigation}: IProps) => {
       isActive={isActive}
       showAlert={showAlert}
       alertFrame={alertFrame}
+      passwordInfoMail={passwordInfoMail}
     />
   );
 };

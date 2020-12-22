@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {createUserData}: any = useContext(UserContext);
+  const {snsUserData}: any = useContext(UserContext);
 
   const initGoogleLogin = () => {
     GoogleSignin.configure({
@@ -23,14 +23,15 @@ export default ({navigation}: IProps) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      createUserData('email', userInfo.user.email);
-      createUserData('name', userInfo.user.name);
+      console.log('google user:', userInfo.user);
 
-      console.log('google userInfo:', userInfo.user);
-      console.log('google email:', userInfo.user.email);
-      console.log('google name:', userInfo.user.name);
-
-      navigation.navigate('signUpNickname');
+      snsUserData(
+        userInfo.user.email,
+        userInfo.user.name,
+        userInfo.user.name,
+        userInfo.user.id,
+      );
+      navigation.navigate('socialNickname');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -41,7 +42,7 @@ export default ({navigation}: IProps) => {
       } else {
         // some other error happened
       }
-      navigation.goBack();
+      navigation.navigate('createAccount');
     }
   };
 

@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import ProfilePresenter from './ProfileActivePresenter';
 
 const menuList = [
-  {id: 0, name: '활동', isClick: true},
-  {id: 1, name: '참여중인 함께', isClick: false},
+  {id: 0, name: '나의 활동', isClick: true},
+  {id: 1, name: '내가 참여중인 함께', isClick: false},
 ];
 
 interface IProps {

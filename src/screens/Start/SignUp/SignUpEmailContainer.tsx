@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {createUser, createUserData}: any = useContext(UserContext);
+  const {createUser, emailUserData}: any = useContext(UserContext);
 
   const [isActive, setIsActive] = useState(false);
   const [userEmail, setUserEmail] = useState({
@@ -44,7 +44,7 @@ export default ({navigation}: IProps) => {
   };
 
   const createUserEmail = () => {
-    createUserData('email', userEmail.data);
+    emailUserData(userEmail.data, false);
   };
 
   const clearAlertFrame = () => {

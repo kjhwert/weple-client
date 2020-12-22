@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
+import UserContext from '../../../module/context/UserContext';
 
 if (!KakaoLogins) {
   console.error('Module is Not Linked');
@@ -11,7 +12,6 @@ const logCallback = (log, callback) => {
 };
 
 const TOKEN_EMPTY = 'token has not fetched';
-
 const PROFILE_EMPTY = {
   id: 'profile has not fetched',
   email: 'profile has not fetched',
@@ -23,9 +23,11 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
+  const {snsUserData}: any = useContext(UserContext);
+
   const [loginLoading, setLoginLoading] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
   const [profile, setProfile] = useState(PROFILE_EMPTY);
@@ -39,30 +41,24 @@ export default ({navigation}: IProps) => {
 
         console.log(KAKAO_AUTH_TYPES.Talk);
         console.log('kakao result:', result);
-        console.log('kakao accessToken:', result.accessToken);
-        console.log('kakao scopes:', result.scopes);
-        console.log('kakao refreshToken:', result.refreshToken);
 
-        getProfile();
         logCallback(
           `Login Finished:${JSON.stringify(result)}`,
           setLoginLoading(false),
         );
         getProfile();
-
-        navigation.navigate('signUpNickname');
       })
 
       .catch((err) => {
         if (err.code === 'E_CANCELLED_OPERATION') {
           logCallback(`Login Cancelled:${err.message}`, setLoginLoading(false));
-          navigation.goBack();
+          navigation.navigate('createAccount');
         } else {
           logCallback(
             `Login Failed:${err.code} ${err.message}`,
             setLoginLoading(false),
           );
-          navigation.goBack();
+          navigation.navigate('createAccount');
         }
       });
   };
@@ -90,16 +86,26 @@ export default ({navigation}: IProps) => {
     KakaoLogins.getProfile()
       .then((result) => {
         setProfile(result);
+
+        if (result.email == null || result.email.length <= 0) {
+          // throw 'Cannot get User Email.';
+          navigation.navigate('createAccount');
+          return;
+        }
+        snsUserData(result.email, result.nickname, result.nickname, result.id);
+
         logCallback(
           `Get Profile Finished:${JSON.stringify(result)}`,
           setProfileLoading(false),
         );
+        navigation.navigate('socialNickname');
       })
       .catch((err) => {
         logCallback(
           `Get Profile Failed:${err.code} ${err.message}`,
           setProfileLoading(false),
         );
+        navigation.navigate('createAccount');
       });
   };
 

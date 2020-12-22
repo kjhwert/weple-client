@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import SignUpNicknamePresenter from './SignUpNicknamePresenter';
+import SocialNicknamePresenter from './SocialNicknamePresenter';
 import {userApi} from '../../../module/api';
 import UserContext from '../../../module/context/UserContext';
 
@@ -71,7 +71,7 @@ export default ({navigation}: IProps) => {
   }, []);
 
   return (
-    <SignUpNicknamePresenter
+    <SocialNicknamePresenter
       navigation={navigation}
       userNickChange={userNickChange}
       userNick={userNick}

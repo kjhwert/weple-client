@@ -7,6 +7,7 @@ import ProfileActiveJoinContainer from '../screens/Profile/ProfileActiveJoinCont
 import ProfilePayContainer from '../screens/Profile/profilePay/ProfilePayContainer';
 import ProfileMembershipContainer from '../screens/Profile/profilePay/ProfileMembershipContainer';
 import ProfilePointContainer from '../screens/Profile/profilePay/ProfilePointContainer';
+import ProfileActiveStatisticContainer from '../screens/Profile/profilePay/ProfileActiveStatisticContainer';
 import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMemberContainer';
 import FollowingMemberContainer from '../screens/Profile/snsMember/FollowingMemberContainer';
 import LikeMemberContainer from '../screens/Profile/snsMember/LikeMemberContainer';
@@ -86,6 +87,13 @@ export default () => {
         component={ProfileMembershipContainer}
       />
       <Stack.Screen name="profilePoint" component={ProfilePointContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '활동 통계',
+        }}
+        name="ProfileActiveStatistic"
+        component={ProfileActiveStatisticContainer}
+      />
       <Stack.Screen
         options={{
           headerTitle: '포인트 내역',

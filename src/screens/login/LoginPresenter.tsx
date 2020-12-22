@@ -2,17 +2,45 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../components/ContainerCard';
 import UserContext from '../../module/context/UserContext';
+import AlertWrapper from '../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
+  alertFrame: any;
+  clearAlertFrame: Function;
+}
+
+interface IActiveProps {
   isActive: boolean;
 }
 
 export default ({navigation}: IProps) => {
-  const {onChangeLogin, login, isLoginBtnActive}: any = useContext(UserContext);
+  const {
+    onChangeLogin,
+    login,
+    isLoginBtnActive,
+    alertFrame,
+    clearAlertFrame,
+  }: any = useContext(UserContext);
 
   return (
     <Container>
+      {alertFrame.showAlert && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage source={require('../../assets/alertWarn_icon.png')} />
+          </AlertImageWrapper>
+          <AlertTitleText>{alertFrame.message}</AlertTitleText>
+          <AlertContentText>{'다시 입력하세요.'}</AlertContentText>
+          <ConfirmButton
+            onPress={() => {
+              clearAlertFrame();
+            }}>
+            <ConfirmButtonText>확인</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
+
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
@@ -55,11 +83,17 @@ export default ({navigation}: IProps) => {
             </SignInWrapper>
 
             <SnsLoginWrapper>
-              <KakaoLoginBtn onPress={() => {}}>
+              <KakaoLoginBtn
+                onPress={() => {
+                  navigation.navigate('kakaoLogin');
+                }}>
                 <LogoImage source={require('../../assets/logo_kakao.jpg')} />
                 <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
               </KakaoLoginBtn>
-              <FaceBookLoginBtn onPress={() => {}}>
+              <FaceBookLoginBtn
+                onPress={() => {
+                  navigation.navigate('facebookLogin');
+                }}>
                 <LogoImage source={require('../../assets/logo_facebook.png')} />
                 <FaceBookLoginText>FaceBook으로 로그인</FaceBookLoginText>
               </FaceBookLoginBtn>
@@ -67,7 +101,10 @@ export default ({navigation}: IProps) => {
                 <LogoImage source={require('../../assets/logo_apple.png')} />
                 <AppleLoginText>Apple로 로그인</AppleLoginText>
               </AppleLoginBtn>
-              <GoogleLoginBtn onPress={() => {}}>
+              <GoogleLoginBtn
+                onPress={() => {
+                  navigation.navigate('googleLogin');
+                }}>
                 <LogoImage source={require('../../assets/logo_google.png')} />
                 <GoogleLoginText>Google로 로그인</GoogleLoginText>
               </GoogleLoginBtn>
@@ -76,7 +113,7 @@ export default ({navigation}: IProps) => {
                 <SignInInfoText>아직 계정이 없으신가요?</SignInInfoText>
                 <SignInButton
                   onPress={() => {
-                    navigation.navigate('signUpEmail');
+                    navigation.navigate('createAccount');
                   }}>
                   <SignInText>무료 회원가입</SignInText>
                 </SignInButton>
@@ -91,6 +128,52 @@ export default ({navigation}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertContentText = styled.Text`
+  font-size: 12px;
+  color: #878787;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`
@@ -165,7 +248,7 @@ const LoginButton = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: ${(props: IProps) =>
+  background-color: ${(props: IActiveProps) =>
     props.isActive ? '#007bf1' : '#b2b2b2'};
 `;
 
