@@ -21,7 +21,7 @@ const apiRequest = async (request: Object) => {
     const {data}: any = await request;
     return data;
   } catch (e) {
-    return {statusCode: 500, message: e.message};
+    return e;
   }
 };
 
@@ -35,12 +35,26 @@ export const utilitiesApi = {
 };
 
 export const userApi = {
-  login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
-  hasEmail: (email: string) =>
-    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
-  hasNickName: (nickName: string) =>
-    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+  login: (loginState: {email: string; password: string}) => {
+    const response = apiRequest(api.post('/login', loginState));
+    return response;
+  },
+
+  create: (createUserData: {
+    name: string;
+    nickName: string;
+    email: string;
+    password: string;
+    activityCategories: [];
+  }) => apiRequest(api.post('/user', createUserData)),
+
+  hasEmail: (email: string) => {
+    return apiRequest(api.get('/user/hasEmail?email=' + email));
+  },
+
+  hasNickName: (nickName: string) => {
+    return apiRequest(api.get('/user/hasNickName?nickname=' + nickName));
+  },
 };
 
 export const feedApi = {

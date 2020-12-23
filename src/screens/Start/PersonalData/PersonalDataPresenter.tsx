@@ -1,16 +1,13 @@
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
 
 interface IProps {
   navigation: any;
-  slideData: any;
-}
-interface IColorChangeProps {
   process: string;
 }
 
-export default ({ navigation, slideData }: IProps) => {
+export default ({navigation, slideData}: IProps) => {
   const swiperRef = useRef(null);
   const nextSlider = () => {
     if (!!swiperRef) {

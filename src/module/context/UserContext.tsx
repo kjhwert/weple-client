@@ -1,13 +1,11 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { IUser } from '../../module/type/user';
-import { userApi } from '../../module/api';
+import React, {createContext, useState, useEffect} from 'react';
+import {IUser} from '../../module/type/user';
+import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const UserContext = createContext({});
 
-export const UserContextProvider = ({ children }: IProps) => {
-  const [loading, setLoading] = useState<boolean>(true);
-
+export const UserContextProvider = ({children}: IProps) => {
   const [isLoginBtnActive, setIsLoginBtnActive] = useState(false);
 
   const [loginUser, setLoginUser] = useState({
@@ -56,7 +54,7 @@ export const UserContextProvider = ({ children }: IProps) => {
 
     setAsyncStorage('@user', JSON.stringify(loginData));
 
-    setLoginState({ ...loginState, email: '', password: '' });
+    setLoginState({...loginState, email: '', password: ''});
     return true;
   };
 
@@ -89,13 +87,6 @@ export const UserContextProvider = ({ children }: IProps) => {
     setLoginUser(null);
   };
 
-  const createUserData = (name, signUpData) => {
-    setCreateUser({
-      ...createUser,
-      [name]: signUpData,
-    });
-  };
-
   useEffect(() => {
     setIsLoginBtnActive(
       loginState.email.length > 0 && loginState.password.length > 0,
@@ -109,12 +100,11 @@ export const UserContextProvider = ({ children }: IProps) => {
         onChangeLogin,
         login,
         createUser,
-        createUserData,
+        setCreateUser,
         getAccess_token,
         autoLogin,
         userLogout,
         isLoginBtnActive,
-        loading,
       }}>
       {children}
     </UserContext.Provider>
@@ -123,7 +113,6 @@ export const UserContextProvider = ({ children }: IProps) => {
 
 export interface IUserContext {
   createUser: IUser;
-  loading: boolean;
 }
 
 export default UserContext;
