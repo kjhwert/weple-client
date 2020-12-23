@@ -1,6 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginContainer from '../screens/login/LoginContainer';
+import FacebookLogin from '../screens/login/socialLogin/FacebookLogin';
+import GoogleLogin from '../screens/login/socialLogin/GoogleLogin';
+import KakaoLogin from '../screens/login/socialLogin/KakaoLogin';
 import SignUpEmailContainer from '../screens/Start/SignUp/SignUpEmailContainer';
 import PersonalDataContainer from '../screens/Start/PersonalData/PersonalDataContainer';
 import WelcomeContainer from '../screens/Start/Welcome/WelcomeContainer';
@@ -10,11 +13,16 @@ import PasswordContainer from '../screens/login/password/PasswordContainer';
 import SignUpPasswordContainer from '../screens/Start/SignUp/SignUpPasswordContainer';
 import BottomTab from './BottomTab';
 import BackBtn from '../components/BackBtn';
+import SocialBackBtn from '../components/SocialBackBtn';
 import StartContainer from '../screens/Start/StartContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
 import {RecordContextProvider} from '../module/context/RecordContext';
+import SocialNicknameContainer from '../screens/Start/SignUp/SocialNicknameContainer';
+import FacebookCreate from '../screens/Start/socialCreate/FacebookCreate';
+import GoogleCreate from '../screens/Start/socialCreate/GoogleCreate';
+import KakaoCreate from '../screens/Start/socialCreate/KakaoCreate';
 
 const Stack = createStackNavigator();
 
@@ -43,11 +51,33 @@ export default () => {
           component={CreateAccountContainer}
         />
         <Stack.Screen
-          options={{
+          options={({route, navigation}) => ({
             headerTitle: '땀나 로그인하기',
-          }}
+            headerLeft: () => <BackBtn navigation={navigation} route={route} />,
+          })}
           name="login"
           component={LoginContainer}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="facebookLogin"
+          component={FacebookLogin}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="googleLogin"
+          component={GoogleLogin}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="kakaoLogin"
+          component={KakaoLogin}
         />
         <Stack.Screen
           options={{
@@ -116,6 +146,37 @@ export default () => {
           options={{headerShown: false}}
           name="bottomTab"
           component={BottomTab}
+        />
+        <Stack.Screen
+          options={({route, navigation}) => ({
+            headerTitle: '닉네임 설정하기',
+            headerLeft: () => (
+              <SocialBackBtn navigation={navigation} route={route} />
+            ),
+          })}
+          name="socialNickname"
+          component={SocialNicknameContainer}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpFacebook"
+          component={FacebookCreate}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpGoogle"
+          component={GoogleCreate}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: '',
+          }}
+          name="signUpKakao"
+          component={KakaoCreate}
         />
       </Stack.Navigator>
     </RecordContextProvider>

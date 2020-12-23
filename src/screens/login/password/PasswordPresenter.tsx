@@ -13,6 +13,7 @@ interface IProps {
   isActive: boolean;
   showAlert: boolean;
   alertFrame: Function;
+  passwordInfoMail: Function;
 }
 
 export default ({
@@ -23,6 +24,7 @@ export default ({
   isActive,
   showAlert,
   alertFrame,
+  passwordInfoMail,
 }: IProps) => {
   return (
     <Container>
@@ -50,6 +52,7 @@ export default ({
           placeholder="이메일을 입력하세요."
           onChange={userEmailChange}
           activeFlag={userEmail.activeFlag}
+          value={userEmail.data}
         />
       </ContainerCard>
 
@@ -59,6 +62,7 @@ export default ({
         validation={userEmailValidation}
         isActive={isActive}
         callBack={() => {
+          passwordInfoMail();
           alertFrame(true);
         }}
       />

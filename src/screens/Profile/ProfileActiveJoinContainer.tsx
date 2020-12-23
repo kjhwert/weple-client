@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import ProfileActiveJoinPresenter from './ProfileActiveJoinPresenter';
 
 const menuList = [
-  {id: 0, name: '활동', isClick: false},
-  {id: 1, name: '참여중인 함께', isClick: true},
+  {id: 0, name: '나의 활동', isClick: false},
+  {id: 1, name: '내가 참여중인 함께', isClick: true},
 ];
 
 const openClub = [

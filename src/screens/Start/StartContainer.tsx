@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import StartPresenter from './StartPresenter';
 import UserContext from '../../module/context/UserContext';
 
@@ -8,10 +8,14 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {autoLogin}: any = useContext(UserContext);
+  const [isAutoLogin, setIsAutoLogin] = useState(true);
 
   const autoStartLogin = async () => {
     if (await autoLogin()) {
+      setIsAutoLogin(true);
       navigation.navigate('bottomTab');
+    } else {
+      setIsAutoLogin(false);
     }
   };
 
@@ -19,5 +23,5 @@ export default ({navigation}: IProps) => {
     autoStartLogin();
   }, []);
 
-  return <StartPresenter navigation={navigation} />;
+  return <StartPresenter navigation={navigation} isAutoLogin={isAutoLogin} />;
 };

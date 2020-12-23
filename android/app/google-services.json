@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "615602388074",
+    "project_id": "ttamna-b5b13",
+    "storage_bucket": "ttamna-b5b13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615602388074:android:9bebade55157a1e3751e13",
+        "android_client_info": {
+          "package_name": "com.ttamna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615602388074-uod12neekqb0k08g17ahl6e4duoorgml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7uI9-TmampE-7YmefmhDlZpBqnzIau98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615602388074-uod12neekqb0k08g17ahl6e4duoorgml.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "615602388074-732v1212hnvo5ni2uc6qvobm628tclsk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.ttamna"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

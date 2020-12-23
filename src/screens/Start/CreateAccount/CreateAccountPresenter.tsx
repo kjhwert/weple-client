@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import { SnsBtn, StartNextBtn } from '../../../components/SnsAccountBtn';
+import {SnsBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
 
 interface IProps {
   navigation: any;
@@ -10,7 +10,7 @@ interface IProps {
   isActive: boolean;
 }
 
-export default ({ navigation, snsType, snsTypeClick, isActive }: IProps) => {
+export default ({navigation, snsType, snsTypeClick, isActive}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -61,21 +61,12 @@ export default ({ navigation, snsType, snsTypeClick, isActive }: IProps) => {
         </ScrollWrapper>
       </ScrollContainer>
 
-      {snsType === 'signUpEmail' ? (
-        <StartNextBtn
-          StartNextPage={'signUpEmail'}
-          text={'다음'}
-          navigation={navigation}
-          isActive={isActive}
-        />
-      ) : (
-          <StartNextBtn
-            StartNextPage={'signUpNickname'}
-            text={'다음'}
-            navigation={navigation}
-            isActive={isActive}
-          />
-        )}
+      <StartNextBtn
+        StartNextPage={snsType}
+        text={'다음'}
+        navigation={navigation}
+        isActive={isActive}
+      />
     </Container>
   );
 };

@@ -12,6 +12,8 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
+#import <Firebase.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <KakaoOpenSDK/KakaoOpenSDK.h>
 
 static void InitializeFlipper(UIApplication *application) {
@@ -60,6 +62,16 @@ return false;
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+  didFinishLaunchingWithOptions:launchOptions];
+
+
   return YES;
 }
 
