@@ -254,6 +254,8 @@ PODS:
     - React
   - react-native-keep-awake (4.0.0):
     - React
+  - react-native-location (2.5.0):
+    - React
   - react-native-mapbox-gl (8.1.0-rc.9):
     - "@react-native-mapbox-gl-mapbox-static (~> 5.8.0)"
     - Mapbox-iOS-SDK (~> 5.8.0)
@@ -401,6 +403,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
+  - react-native-location (from `../node_modules/react-native-location`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -488,6 +491,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
+  react-native-location:
+    :path: "../node_modules/react-native-location"
   react-native-mapbox-gl:
     :path: "../node_modules/@react-native-mapbox-gl/maps"
   react-native-safe-area-context:
@@ -572,6 +577,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
+  react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
   react-native-mapbox-gl: 2a4b1bbfb5708b4c997d312ad73337bafdc5baf5
   react-native-safe-area-context: 86612d2c9a9e94e288319262d10b5f93f0b395f5
   react-native-sqlite-storage: ce71689c5a73b79390a1ab213555ae80979a5dc7

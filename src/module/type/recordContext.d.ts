@@ -8,9 +8,9 @@ export interface IRecordContext {
   record?: IIntervalRecord;
   mapboxRecord?: IMapboxRecord;
   initializeRecordStart?: Function;
-  changeStartStatus?: Function;
+  onPauseRecord?: Function;
+  onStartRecord?: () => void;
   finishRecording?: Function;
-  onUpdateUserPosition?: Function;
   toggleAwakeSwitch?: Function;
   setActivityCategory?: Function;
   showCamera?: Function;
@@ -20,7 +20,7 @@ export interface IRecordContext {
   onChangeActivityUnSelectedAlert?: Function;
   onChangeBackButtonAlert?: Function;
   onChangeCreateAlert?: Function;
-  clearAllState?: Function;
+  clearAllState?: () => void;
 }
 
 export interface IAlertManager {
@@ -54,12 +54,11 @@ export interface IRecordSetting {
 }
 
 export interface IMapboxRecord {
-  speed: number;
+  speed: Array<number>;
   distance: number;
-  coordinates: Array<Array<number>>;
   records: Array<Array<number>>;
-  updated: boolean;
   isRecordsUpdate: boolean;
+  coordinates: Array<Array<number>>;
   map: IMapboxRecordMap;
   music: IMusics;
   images: Array<IMapboxRecordImage>;

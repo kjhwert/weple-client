@@ -1,7 +1,9 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import RecordContext from '../module/context/RecordContext';
 import {IRecordContext} from '../module/type/recordContext';
+import AlertContext from '../module/context/AlertContext';
+import ConfirmAlert from './ConfirmAlert';
 
 interface IProps {
   navigation: any;
@@ -9,15 +11,33 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {onChangeBackButtonAlert}: IRecordContext = useContext(RecordContext);
+  const {setAlertVisible, setAlertInvisible}: any = useContext(AlertContext);
+  const {clearAllState}: IRecordContext = useContext(RecordContext);
+
+  const onPressed = () => {
+    if (route && route.name === 'recordFinish') {
+      return setAlertVisible(
+        <ConfirmAlert
+          confirm={{
+            type: 'warning',
+            title: '종료하시겠습니까?',
+            description: '기록된 데이터는 초기화됩니다.',
+            confirmedText: '종료',
+            canceledText: '취소',
+          }}
+          confirmed={() => {
+            clearAllState && clearAllState();
+            navigation.goBack();
+          }}
+          canceled={() => setAlertInvisible()}
+        />,
+      );
+    }
+    navigation.goBack();
+  };
+
   return (
-    <Container
-      onPress={() => {
-        if (route && route.name === 'recordFinish') {
-          return onChangeBackButtonAlert && onChangeBackButtonAlert();
-        }
-        navigation.goBack();
-      }}>
+    <Container onPress={onPressed}>
       <ArrowImage source={require('../assets/arrowBlack.png')} />
     </Container>
   );

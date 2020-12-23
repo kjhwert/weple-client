@@ -1,11 +1,11 @@
 import React, {
   createContext,
   ReactNode,
+  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import {IMapBoxLocation} from '../type/mapbox';
 import {Database} from '../Database';
 import {
   IIntervalRecord,
@@ -15,10 +15,19 @@ import {
   ISetActivityCategory,
   ISqliteCallBack,
 } from '../type/recordContext';
-import {getDistanceBetweenTwoGPS, MINUTE} from '../common';
+import {DURATION_TIME, getDistanceWithSpeedAndTime, MINUTE} from '../common';
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
+import {
+  checkPermission,
+  configure,
+  getLatestLocation,
+  requestPermission,
+} from 'react-native-location';
+import AlertContext from './AlertContext';
+import ConfirmAlert from '../../components/ConfirmAlert';
+import CheckAlert from '../../components/CheckAlert';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -41,9 +50,9 @@ const recordSettingInitialState = {
   isStart: false,
   awake: true,
   activity: {
-    id: 0,
-    name: '',
-    caloriesPerMinute: 0,
+    id: 1,
+    name: '싸이클링',
+    caloriesPerMinute: 7,
   },
   startDate: null,
   endDate: null,
@@ -55,12 +64,11 @@ const recordInitialState = {
 };
 
 const mapboxRecordInitialState = {
-  speed: 0,
+  speed: [],
   distance: 0,
-  coordinates: [], // 이전 좌표와 비교하기 위한 변수
   records: [], // 좌표 데이터를 모으기 위한 변수
-  updated: false, // onUpdateUserPosition 함수에서 같은 위치에 여러번 데이터를 보낼 때 하나만 담기 위한 validator
   isRecordsUpdate: false, // sqlite에서 데이터를 가져왔는지 체크하기 위한 변수
+  coordinates: [],
   map: {
     id: 1,
     style: 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx',
@@ -68,7 +76,7 @@ const mapboxRecordInitialState = {
   music: {
     id: 0,
     url: '',
-    title: '',
+    title: '음악을 선택해주세요',
     artist: '',
     artwork: '',
   },
@@ -76,6 +84,7 @@ const mapboxRecordInitialState = {
 };
 
 export const RecordContextProvider = ({children}: IProps) => {
+  const {setAlertVisible} = useContext(AlertContext);
   const [alertManager, setAlertManager] = useState(alertManagerInitialState);
   const [tabBarVisible, setTabBarVisible] = useState(tabBarVisibleInitialState);
   const [recordSetting, setRecordSetting] = useState<IRecordSetting>(
@@ -141,7 +150,7 @@ export const RecordContextProvider = ({children}: IProps) => {
   };
 
   const setRecordMap = (map: IMapboxRecordMap) => {
-    setMapboxRecord({...mapboxRecord, map: map});
+    setMapboxRecord({...mapboxRecord, map});
     // @ts-ignore webview reload
     webViewRef.current.reload();
   };
@@ -183,12 +192,32 @@ export const RecordContextProvider = ({children}: IProps) => {
     setTabBarVisible(false);
   };
 
-  const changeStartStatus = () => {
-    setRecordSetting({...recordSetting, isStart: !recordSetting.isStart});
+  const onStartRecord = () => {
+    setRecordSetting({...recordSetting, isInit: true, isStart: true});
+  };
+
+  const onPauseRecord = () => {
+    setRecordSetting({...recordSetting, isInit: true, isStart: false});
   };
 
   const finishRecording = (navigation: any) => {
-    getRecords();
+    const {coordinates} = mapboxRecord;
+    if (coordinates.length === 0) {
+      return setAlertVisible(
+        <ConfirmAlert
+          confirm={{
+            type: 'warning',
+            title: '아직 루트가 저장되지 않았어요.',
+            description: '',
+            confirmedText: '기록재개',
+            canceledText: '기록중지',
+          }}
+          canceled={clearAllState}
+          confirmed={onStartRecord}
+        />,
+      );
+    }
+    // getRecords();
     setRecordSetting({
       ...recordSetting,
       isInit: false,
@@ -196,48 +225,6 @@ export const RecordContextProvider = ({children}: IProps) => {
       endDate: new Date(),
     });
     navigation.navigate('recordFinish');
-  };
-
-  /**
-   *  mapbox user location update
-   * */
-  const onUpdateUserPosition = (location: IMapBoxLocation) => {
-    if (!recordSetting.isStart) {
-      return;
-    }
-
-    /** 5초에 한번씩 데이터를 쌓는다. */
-    if (record.duration % 5 !== 0) {
-      setMapboxRecord({...mapboxRecord, updated: false});
-      return;
-    }
-
-    const {
-      coords: {latitude, longitude, speed: mapboxSpeed},
-    } = location;
-    const {coordinates, distance: mapboxDistance, updated} = mapboxRecord;
-    if (updated) {
-      return;
-    }
-
-    const speed = Math.floor(mapboxSpeed * 10) / 10;
-
-    let distance = 0;
-    if (coordinates.length !== 0) {
-      distance =
-        getDistanceBetweenTwoGPS(coordinates.concat([[longitude, latitude]])) +
-        mapboxDistance;
-      distance = Math.floor(distance * 1000) / 1000;
-    }
-
-    setMapboxRecord({
-      ...mapboxRecord,
-      updated: true,
-      distance,
-      speed,
-      coordinates: [[longitude, latitude]],
-    });
-    sqlite.insertRecord([longitude, latitude]);
   };
 
   const getRecords = () => {
@@ -253,7 +240,43 @@ export const RecordContextProvider = ({children}: IProps) => {
   /**
    * interval event
    * */
-  const updateRecordOnInterval = () => {
+  const updateRecordOnInterval = async () => {
+    onDurationAndCalorieUpdate();
+    await getUserLocation();
+  };
+
+  const getUserLocation = async () => {
+    if (record.duration % DURATION_TIME !== 0) return;
+    const {
+      latitude,
+      longitude,
+      speed: locationSpeed,
+    } = await getLatestLocation();
+
+    //TODO Distance 데이터가 오차율이 큼.
+    const {distance: recordedDistance} = mapboxRecord;
+
+    if (!locationSpeed || locationSpeed < 0) return;
+
+    const currentSpeed = Math.floor(locationSpeed * 10) / 10;
+
+    const distance =
+      getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) +
+      recordedDistance;
+
+    const coordinates = mapboxRecord.coordinates.concat([longitude, latitude]);
+
+    const speed = mapboxRecord.speed.concat(currentSpeed);
+    setMapboxRecord({
+      ...mapboxRecord,
+      coordinates,
+      distance,
+      speed,
+    });
+    // sqlite.insertRecord([longitude, latitude]);
+  };
+
+  const onDurationAndCalorieUpdate = () => {
     const {
       activity: {caloriesPerMinute},
     } = recordSetting;
@@ -265,11 +288,8 @@ export const RecordContextProvider = ({children}: IProps) => {
     setRecord({...record, duration});
   };
 
-  const createFeed = async () => {
+  const createFeed = async (navigation) => {
     const {activity, startDate, endDate} = recordSetting;
-    if (activity.id === 0) {
-      return onChangeActivityUnSelectedAlert();
-    }
     const {duration, calorie} = record;
     const {distance, images, map, music, records} = mapboxRecord;
     const coordinates = JSON.stringify(records);
@@ -289,11 +309,56 @@ export const RecordContextProvider = ({children}: IProps) => {
     // 피드 업로드 먼저 하고, 이미지 업로드
     console.log(statusCode, message, data);
     if (statusCode === 201) {
-      return onChangeCreateAlert();
+      return setAlertVisible(
+        <CheckAlert
+          check={{type: 'check', title: '등록되었습니다.', description: ''}}
+          checked={() => {
+            clearAllState();
+            navigation.navigate('recordMain');
+          }}
+        />,
+      );
+    }
+  };
+
+  //TODO 얘 위치 옮겨야함
+  const userLocatePermission = async () => {
+    const checkPermissionResult = await checkPermission({
+      ios: 'whenInUse',
+      android: {detail: 'coarse'},
+    });
+    if (!checkPermissionResult) {
+      const result = await requestPermission({
+        android: {
+          detail: 'coarse',
+        },
+        ios: 'whenInUse',
+      });
+    } else {
+      await configure({
+        distanceFilter: 0, // Meters
+        desiredAccuracy: {
+          ios: 'best',
+          android: 'highAccuracy',
+        },
+        // Android only
+        androidProvider: 'auto',
+        interval: 5000, // Milliseconds
+        fastestInterval: 5000, // Milliseconds
+        maxWaitTime: 5000, // Milliseconds
+        // iOS Only
+        activityType: 'other',
+        allowsBackgroundLocationUpdates: false,
+        headingFilter: 1, // Degrees
+        headingOrientation: 'portrait',
+        pausesLocationUpdatesAutomatically: false,
+        showsBackgroundLocationIndicator: false,
+      });
     }
   };
 
   useEffect(() => {
+    userLocatePermission();
     if (recordSetting.isStart) {
       timer.current = setInterval(() => updateRecordOnInterval(), 1000);
     }
@@ -319,9 +384,9 @@ export const RecordContextProvider = ({children}: IProps) => {
         tabBarVisible,
         alertManager,
         initializeRecordStart,
-        changeStartStatus,
+        onPauseRecord,
+        onStartRecord,
         finishRecording,
-        onUpdateUserPosition,
         toggleAwakeSwitch,
         setActivityCategory,
         showCamera,

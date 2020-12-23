@@ -12,6 +12,15 @@ export const INACTIVE_BUTTON = '#bfbfbf';
 export const INACTIVE_TEXT = '#6f6f6f';
 
 export const MINUTE = 60;
+export const DURATION_TIME = 5;
+
+export const getDistanceWithSpeedAndTime = (speed: number, time: number) => {
+  /**
+   * speed : km/h
+   * time : second
+   * */
+  return Math.floor(speed * (time / 3600) * 1000) / 1000;
+};
 
 export const getDistanceBetweenTwoGPS = (gps: IGps) => {
   const lat1 = gps[0][0];

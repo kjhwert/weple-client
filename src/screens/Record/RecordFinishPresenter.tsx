@@ -5,81 +5,24 @@ import RecordContext from '../../module/context/RecordContext';
 import RecordUnits from '../../components/RecordUnits';
 import {showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
-import AlertWrapper from '../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
+  getAverageSpeed: (speed: Array<number>) => number;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, getAverageSpeed}: IProps) => {
   const {
     recordSetting,
     mapboxRecord,
     record,
     webViewRef,
     createFeed,
-    alertManager: {activityUnSelected, created, backButtonOnClicked},
-    onChangeActivityUnSelectedAlert,
-    onChangeBackButtonAlert,
-    clearAllState,
   }: any = useContext(RecordContext);
-
-  console.log(mapboxRecord);
 
   return (
     <Container>
       <ScrollContainer>
-        {activityUnSelected && (
-          <AlertWrapper>
-            <AlertImageWrapper>
-              <AlertImage source={require('../../assets/alertWarn_icon.png')} />
-            </AlertImageWrapper>
-            <AlertTitleText>{'활동을 선택해주세요.'}</AlertTitleText>
-            <ConfirmFullButton onPress={onChangeActivityUnSelectedAlert}>
-              <ConfirmButtonText>확인</ConfirmButtonText>
-            </ConfirmFullButton>
-          </AlertWrapper>
-        )}
-        {created && (
-          <AlertWrapper>
-            <AlertImageWrapper>
-              <AlertImage
-                source={require('../../assets/alertCheck_icon.png')}
-              />
-            </AlertImageWrapper>
-            <AlertTitleText>{'등록되었습니다.'}</AlertTitleText>
-            <ConfirmFullButton
-              onPress={() => {
-                clearAllState();
-                navigation.navigate('recordMain');
-              }}>
-              <ConfirmButtonText>확인</ConfirmButtonText>
-            </ConfirmFullButton>
-          </AlertWrapper>
-        )}
-        {backButtonOnClicked && (
-          <AlertWrapper>
-            <AlertImageWrapper>
-              <AlertImage source={require('../../assets/alertWarn_icon.png')} />
-            </AlertImageWrapper>
-            <AlertTitleText>{'종료하시겠습니까?'}</AlertTitleText>
-            <AlertContentText>
-              {'기록된 데이터는 초기화됩니다.'}
-            </AlertContentText>
-            <AlertBtnWrapper>
-              <ConfirmButton
-                onPress={() => {
-                  clearAllState();
-                  navigation.navigate('recordMain');
-                }}>
-                <ConfirmButtonText>확인</ConfirmButtonText>
-              </ConfirmButton>
-              <CancelButton onPress={onChangeBackButtonAlert}>
-                <CancelButtonText>취소</CancelButtonText>
-              </CancelButton>
-            </AlertBtnWrapper>
-          </AlertWrapper>
-        )}
         <ScrollWrapper>
           <Card>
             <MapPlayWrapper>
@@ -89,7 +32,7 @@ export default ({navigation}: IProps) => {
                   uri: 'http://ttamna-api.hlabpartner.com/public/map/test.html',
                 }}
                 injectedJavaScript={webViewJavaScriptCode({
-                  coordinates: mapboxRecord.records,
+                  coordinates: mapboxRecord.coordinates,
                   map: mapboxRecord.map,
                   music: mapboxRecord.music,
                 })}
@@ -112,7 +55,10 @@ export default ({navigation}: IProps) => {
                     navigation.navigate('recordActiveType');
                   }}>
                   <SetUpListText>활동</SetUpListText>
-                  <MoreImage source={require('../../assets/set_more.png')} />
+                  <SetUpTypeWrapper>
+                    <SetUpTypeText>{recordSetting.activity.name}</SetUpTypeText>
+                    <MoreImage source={require('../../assets/set_more.png')} />
+                  </SetUpTypeWrapper>
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
@@ -121,14 +67,17 @@ export default ({navigation}: IProps) => {
                     navigation.navigate('recordMusic');
                   }}>
                   <SetUpListText>음악선택</SetUpListText>
-                  <MoreImage source={require('../../assets/set_more.png')} />
+                  <SetUpTypeWrapper>
+                    <SetUpTypeText>{mapboxRecord.music.title}</SetUpTypeText>
+                    <MoreImage source={require('../../assets/set_more.png')} />
+                  </SetUpTypeWrapper>
                 </SetBtn>
               </SetBtnWrapper>
             </SetUpWrapper>
 
             <RecordUnits
               distance={mapboxRecord.distance}
-              speed={mapboxRecord.speed}
+              speed={getAverageSpeed(mapboxRecord.speed)}
               calorie={record.calorie}
               duration={record.duration}
             />
@@ -189,7 +138,7 @@ export default ({navigation}: IProps) => {
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
-            <NextBtn onPress={createFeed}>
+            <NextBtn onPress={() => createFeed(navigation)}>
               <NextText>게시하기</NextText>
             </NextBtn>
           </Card>
@@ -239,16 +188,27 @@ const SetBtnWrapper = styled.View`
 
 const SetBtn = styled.TouchableOpacity`
   width: 100%;
-  flex-flow: row wrap;
-  align-items: center;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+`;
+
+const SetUpTypeWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SetUpTypeText = styled.Text`
+  font-size: 12px;
+  margin-right: 10px;
+  color: #b5b5b5;
 `;
 
 const SetUpListText = styled.Text`
   font-size: 13px;
   text-align: left;
   color: #333333;
-  width: 85%;
 `;
 
 const MoreImage = styled.Image`
