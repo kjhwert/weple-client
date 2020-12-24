@@ -1,15 +1,68 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
-import NextBtn from '../../../../../components/NextBtn';
+import {DuplicateInputBox} from '../../../../../components/CommonInput';
+import {StartNextBtn} from '../../../../../components/CommonBtn';
+import AlertWrapper from '../../../../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
+  profileData: any;
+  onChangeProfile: Function;
+  profileInfoChange: Function;
+  isActive: boolean;
+  alertFrame: any;
+  clearAlertFrame: Function;
+  hasNickName: Function;
 }
 
-export default ({navigation}: IProps) => {
+export default ({
+  navigation,
+  profileData,
+  onChangeProfile,
+  profileInfoChange,
+  isActive,
+  alertFrame,
+  clearAlertFrame,
+  hasNickName,
+}: IProps) => {
   return (
     <Container>
+      {alertFrame.showAlert && alertFrame.usable && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../../../assets/alertCheck_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'사용할 수 있는 닉네임입니다.'}</AlertTitleText>
+          <AlertContentText>{'계속 진행하세요.'}</AlertContentText>
+          <ConfirmButton
+            onPress={() => {
+              clearAlertFrame();
+            }}>
+            <ConfirmButtonText>확인</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
+      {alertFrame.showAlert && !alertFrame.usable && (
+        <AlertWrapper>
+          <AlertImageWrapper>
+            <AlertImage
+              source={require('../../../../../assets/alertWarn_icon.png')}
+            />
+          </AlertImageWrapper>
+          <AlertTitleText>{'사용하실 수 없는 닉네임입니다.'}</AlertTitleText>
+          <AlertContentText>{'다른 닉네임을 사용하세요.'}</AlertContentText>
+          <ConfirmButton
+            onPress={() => {
+              clearAlertFrame();
+            }}>
+            <ConfirmButtonText>확인</ConfirmButtonText>
+          </ConfirmButton>
+        </AlertWrapper>
+      )}
+
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
@@ -27,36 +80,99 @@ export default ({navigation}: IProps) => {
             </ProfileTopWrapper>
 
             <SignUpWrapper>
-              <SignUpTitle>닉네임</SignUpTitle>
-              <NickNameWrapper>
-                <NickNameInput
-                  placeholder="닉네임을 입력하세요."
-                  autoFocus={true}
-                />
-                <DuplicateBtn>
-                  <DuplicateText>중복확인</DuplicateText>
-                </DuplicateBtn>
-              </NickNameWrapper>
+              <DuplicateInputBox
+                title={'닉네임'}
+                placeholder="닉네임을 입력하세요."
+                name="nickName"
+                value={profileData.nickName}
+                onChange={onChangeProfile}
+                activeFlag={profileData.activeFlag}
+              />
+              <DuplicateBtn
+                onPress={() => {
+                  hasNickName();
+                }}>
+                <DuplicateText>중복확인</DuplicateText>
+              </DuplicateBtn>
             </SignUpWrapper>
 
             <IntroduceWrapper>
               <IntroduceTitle>
                 간략하게 자신을 소개해주세요 (최대 500자)
               </IntroduceTitle>
-              <IntroduceInput multiline={true} maxLength={500} />
+              <IntroduceInput
+                multiline={true}
+                maxLength={500}
+                name="description"
+                value={profileData.description}
+                onChange={onChangeProfile}
+              />
             </IntroduceWrapper>
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
-      <NextBtn nextPage={'profileActiveMain'} navigation={navigation}>
-        {`저장`}
-      </NextBtn>
+      <StartNextBtn
+        text={'저장'}
+        navigation={navigation}
+        isActive={isActive}
+        callBack={() => {
+          hasNickName();
+          profileInfoChange();
+          navigation.navigate('profileActiveMain');
+        }}
+      />
     </Container>
   );
 };
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const AlertImageWrapper = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 30px;
+`;
+
+const AlertImage = styled.Image`
+  width: 70px;
+  height: 70px;
+`;
+
+const AlertTitleText = styled.Text`
+  font-size: 14px;
+  color: #181818;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const AlertContentText = styled.Text`
+  font-size: 12px;
+  color: #878787;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
+const ConfirmButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const ConfirmButtonText = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ScrollContainer = styled.View`
@@ -111,29 +227,8 @@ const EditImage = styled.Image`
 const SignUpWrapper = styled.View`
   display: flex;
   width: 100%;
-`;
-
-const SignUpTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const NickNameWrapper = styled.View`
-  display: flex;
   flex-direction: row;
   align-items: flex-start;
-`;
-
-const NickNameInput = styled.TextInput`
-  width: 70%;
-  padding: 5px 10px;
-  border-bottom-width: 1px;
-  border-color: #acacac;
-  font-size: 14px;
-  color: #6f6f6f;
 `;
 
 const DuplicateBtn = styled.TouchableOpacity`
@@ -171,6 +266,7 @@ const IntroduceTitle = styled.Text`
 
 const IntroduceInput = styled.TextInput`
   width: 100%;
+  max-height: 100px;
   padding: 10px;
   margin-bottom: 100px;
   border-width: 1px;
@@ -178,5 +274,4 @@ const IntroduceInput = styled.TextInput`
   border-radius: 5px;
   font-size: 14px;
   color: #6f6f6f;
-  max-height: 150px;
 `;

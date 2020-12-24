@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import AlertWrapper from '../../../components/AlertWrapper';
 import {InputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;

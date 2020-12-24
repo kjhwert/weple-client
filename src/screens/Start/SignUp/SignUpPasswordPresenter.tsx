@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import {InputPasswordBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {

@@ -52,10 +52,10 @@ export const userApi = {
   hasNickName: (nickName: string) =>
     apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
   passwordForget: (passwordForget: IUserApiPwForget) =>
-    apiRequest(api.post(`/user/password-forget`, passwordForget)),
+    apiRequest(api.post('/user/password-forget', passwordForget)),
   passwordChange: (passwordChange: IUserApiPwChange) =>
     apiRequest(api.post('/user/password-change', passwordChange)),
-  getProfile: (id: string) => apiRequest(api.get('/user' + id)),
-  putProfile: (putProfile: IUserApiProfile, id: string) =>
-    apiRequest(api.put('/user' + id, putProfile)),
+  getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
+  putProfile: (putProfile: IUserApiProfile) =>
+    apiRequest(api.put('/user/', putProfile)),
 };

@@ -7,6 +7,7 @@ interface IProps {
   navigation: any;
   showAlert: boolean;
   alertFrame: Function;
+  loginUser: any;
 }
 
 interface IColorChangeProps {
@@ -19,6 +20,7 @@ export default ({
   alertFrame,
   menuList,
   radioBoxSortData,
+  loginUser,
 }: IProps) => {
   return (
     <Container>
@@ -63,7 +65,7 @@ export default ({
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>GilDong Hong</ProfileNickName>
+                <ProfileNickName>{loginUser.name}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
@@ -90,6 +92,7 @@ export default ({
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
+
                 <ActiveIntroduceText>
                   {
                     "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."

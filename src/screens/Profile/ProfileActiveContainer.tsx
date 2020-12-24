@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import ProfilePresenter from './ProfileActivePresenter';
+import UserContext from '../../module/context/UserContext';
 
 const menuList = [
   {id: 0, name: '나의 활동', isClick: true},
@@ -11,6 +12,8 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
+  const {loginUser}: any = useContext(UserContext);
+
   const [showAlert, setShowAlert] = useState(false);
 
   const alertFrame = (showFlag) => {
@@ -43,6 +46,7 @@ export default ({navigation}: IProps) => {
       alertFrame={alertFrame}
       menuList={menuList}
       radioBoxSortData={radioBoxSortData}
+      loginUser={loginUser}
     />
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import {DuplicateInputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
@@ -12,6 +12,7 @@ interface IProps {
   userEmail: any;
   isActive: boolean;
   createUserEmail: Function;
+  alertFrame: any;
   clearAlertFrame: Function;
   hasEmail: Function;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import { CategoryBtn, StartNextBtn } from '../../../components/SnsAccountBtn';
+import {CategoryBtn, StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
@@ -36,7 +36,7 @@ export default ({
               <CategoryWrapper key={activity.id}>
                 <CategoryTitle>{activity.name}</CategoryTitle>
                 <ActivityWrapper>
-                  {activity.categoryActivity.map(({ id, name, isSelect }) => (
+                  {activity.categoryActivity.map(({id, name, isSelect}) => (
                     <CategoryBtn
                       key={id}
                       text={name}
@@ -49,7 +49,6 @@ export default ({
                 </ActivityWrapper>
               </CategoryWrapper>
             ))}
-
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
