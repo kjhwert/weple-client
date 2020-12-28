@@ -45,23 +45,40 @@ export const utilitiesApi = {
 
 export const userApi = {
   login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) =>
-    apiRequest(api.post('/social-login', socialLogin)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
-  hasEmail: (email: string) =>
-    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
-  hasNickName: (nickName: string) =>
-    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
-  passwordForget: (passwordForget: IUserApiPwForget) =>
-    apiRequest(api.post(`/user/password-forget`, passwordForget)),
-  passwordChange: (passwordChange: IUserApiPwChange) =>
-    apiRequest(api.post('/user/password-change', passwordChange)),
+  hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+  passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post(`/user/password-forget`, passwordForget)),
+  passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user' + id)),
-  putProfile: (putProfile: IUserApiProfile, id: string) =>
-    apiRequest(api.put('/user' + id, putProfile)),
+  putProfile: (putProfile: IUserApiProfile, id: string) => apiRequest(api.put('/user' + id, putProfile)),
 };
 
 export const feedApi = {
   create: (data: IFeedCreate) => apiRequest(api.post('/feed', data)),
-  imagesCreate: (data) => apiRequest(api.post('/feed/images', data)),
+  imagesCreate: async (file) => {
+    try {
+      const {data} = await api.post('/feed/image', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return data;
+    } catch (e) {
+      return {statusCode: 500, message: e.message};
+    }
+  },
+  thumbnailCreate: async (file) => {
+    try {
+      const {data} = await api.post('/feed/thumbnail', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return data;
+    } catch (e) {
+      return {statusCode: 500, message: e.message};
+    }
+  },
 };

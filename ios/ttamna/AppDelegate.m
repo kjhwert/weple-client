@@ -63,14 +63,12 @@ return false;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
 
-
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
+//   if ([FIRApp defaultApp] == nil) {
+//          [FIRApp configure];
+//     }
 
   [[FBSDKApplicationDelegate sharedInstance] application:application
   didFinishLaunchingWithOptions:launchOptions];
-
 
   return YES;
 }

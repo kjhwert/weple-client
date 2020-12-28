@@ -4,14 +4,14 @@ import AlertContext from '../module/context/AlertContext';
 
 interface IProps {
   check: IAlertCheck;
-  checked: () => void;
+  checked?: () => void;
 }
 
 export default ({check, checked}: IProps) => {
   const {setAlertInvisible}: any = useContext(AlertContext);
 
   const checkOnPressed = () => {
-    checked();
+    checked && checked();
     setAlertInvisible();
   };
 

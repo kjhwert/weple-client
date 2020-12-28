@@ -75,6 +75,8 @@ export interface IMapboxRecordImage {
   uri: string;
   distance: number;
   timestamp: Date;
+  type?: string;
+  fileName?: string;
 }
 
 export interface ISqliteCallBack {

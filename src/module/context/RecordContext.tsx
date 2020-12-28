@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {Database} from '../Database';
 import {
   IIntervalRecord,
@@ -15,19 +8,17 @@ import {
   ISetActivityCategory,
   ISqliteCallBack,
 } from '../type/recordContext';
-import {DURATION_TIME, getDistanceWithSpeedAndTime, MINUTE} from '../common';
+import {DURATION_TIME, getDistanceBetweenTwoGPS, getDistanceWithSpeedAndTime, MINUTE} from '../common';
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
-import {
-  checkPermission,
-  configure,
-  getLatestLocation,
-  requestPermission,
-} from 'react-native-location';
+import {checkPermission, configure, getLatestLocation, requestPermission} from 'react-native-location';
 import AlertContext from './AlertContext';
 import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
+import {Platform} from 'react-native';
+import SaveLoading from '../../components/SaveLoading';
+import {captureRef} from 'react-native-view-shot';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -84,19 +75,18 @@ const mapboxRecordInitialState = {
 };
 
 export const RecordContextProvider = ({children}: IProps) => {
-  const {setAlertVisible} = useContext(AlertContext);
+  const {setAlertVisible}: any = useContext(AlertContext);
   const [alertManager, setAlertManager] = useState(alertManagerInitialState);
   const [tabBarVisible, setTabBarVisible] = useState(tabBarVisibleInitialState);
-  const [recordSetting, setRecordSetting] = useState<IRecordSetting>(
-    recordSettingInitialState,
-  );
+  const [recordSetting, setRecordSetting] = useState<IRecordSetting>(recordSettingInitialState);
   const timer: any = useRef(null);
   const webViewRef = useRef(null);
+  const thumbnailRef = useRef(null);
 
   const [record, setRecord] = useState<IIntervalRecord>(recordInitialState);
-  const [mapboxRecord, setMapboxRecord] = useState<IMapboxRecord>(
-    mapboxRecordInitialState,
-  );
+  const [mapboxRecord, setMapboxRecord] = useState<IMapboxRecord>(mapboxRecordInitialState);
+
+  const [finishLoading, setFinishLoading] = useState(false);
 
   const clearAllState = () => {
     setAlertManager(alertManagerInitialState);
@@ -132,21 +122,73 @@ export const RecordContextProvider = ({children}: IProps) => {
     if (!recordSetting.isStart) {
       return;
     }
-    ImagePicker.launchCamera(
-      {},
-      ({latitude, longitude, uri, data, timestamp}) => {
-        const {distance} = mapboxRecord;
-        const timeStringToDate = new Date(timestamp ? timestamp : '');
-        const images = mapboxRecord.images.concat({
-          latitude,
-          longitude,
-          uri,
-          distance,
-          timestamp: timeStringToDate,
+
+    ImagePicker.launchCamera({}, ({latitude, longitude, uri, timestamp, type, fileName}) => {
+      const {distance} = mapboxRecord;
+      const timeStringToDate = new Date(timestamp ? timestamp : '');
+      const images = mapboxRecord.images.concat({
+        latitude,
+        longitude,
+        uri,
+        distance,
+        timestamp: timeStringToDate,
+        type,
+        fileName,
+      });
+      setMapboxRecord({...mapboxRecord, images});
+    });
+  };
+
+  const uploadThumbnailImage = async () => {
+    const thumbnail = await captureRef(thumbnailRef, {
+      format: 'jpg',
+      quality: 0.8,
+    });
+
+    const image = new FormData();
+    image.append('image', {
+      name: 'thumbnail.jpg',
+      type: 'image/jpg',
+      uri: Platform.OS === 'android' ? thumbnail : thumbnail.replace('file://', ''),
+    });
+
+    return await feedApi.thumbnailCreate(image);
+  };
+
+  const uploadImages = async (feedId: number) => {
+    return await Promise.all(
+      mapboxRecord.images.map(async (image) => {
+        const data = new FormData();
+        data.append('image', {
+          name: image.fileName,
+          type: image.type,
+          uri: Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
         });
-        setMapboxRecord({...mapboxRecord, images});
-      },
+
+        const {distance, latitude, longitude} = image;
+
+        const info = {
+          distance: distance,
+          lat: latitude,
+          lon: longitude,
+          feed: feedId,
+        };
+
+        data.append('imageInfo', JSON.stringify(info));
+
+        const {statusCode} = await feedApi.imagesCreate(data);
+        return statusCode;
+      }),
     );
+  };
+
+  const changeImage = (idx: number) => {
+    const options = {storageOptions: {skipBackup: true, path: 'image'}};
+    ImagePicker.launchImageLibrary(options, ({uri}) => {
+      let images = [...mapboxRecord.images];
+      images[idx] = {...images[idx], uri};
+      setMapboxRecord({...mapboxRecord, images});
+    });
   };
 
   const setRecordMap = (map: IMapboxRecordMap) => {
@@ -164,11 +206,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     webViewRef.current.reload();
   };
 
-  const setActivityCategory = ({
-    id,
-    name,
-    caloriesPerMinute,
-  }: ISetActivityCategory) => {
+  const setActivityCategory = ({id, name, caloriesPerMinute}: ISetActivityCategory) => {
     const calorie = Math.floor(record.duration / MINUTE) * caloriesPerMinute;
 
     setRecordSetting({
@@ -247,11 +285,7 @@ export const RecordContextProvider = ({children}: IProps) => {
 
   const getUserLocation = async () => {
     if (record.duration % DURATION_TIME !== 0) return;
-    const {
-      latitude,
-      longitude,
-      speed: locationSpeed,
-    } = await getLatestLocation();
+    const {latitude, longitude, speed: locationSpeed}: any = await getLatestLocation();
 
     //TODO Distance 데이터가 오차율이 큼.
     const {distance: recordedDistance} = mapboxRecord;
@@ -260,10 +294,15 @@ export const RecordContextProvider = ({children}: IProps) => {
 
     const currentSpeed = Math.floor(locationSpeed * 10) / 10;
 
-    const distance =
-      getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) +
-      recordedDistance;
-
+    const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
+    // let currentDistance = 0;
+    // if (mapboxRecord.coordinates.length > 0) {
+    //   currentDistance = getDistanceBetweenTwoGPS([
+    //     mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1],
+    //     [longitude, latitude],
+    //   ]);
+    // }
+    // const distance = currentDistance + recordedDistance;
     const coordinates = mapboxRecord.coordinates.concat([longitude, latitude]);
 
     const speed = mapboxRecord.speed.concat(currentSpeed);
@@ -288,10 +327,36 @@ export const RecordContextProvider = ({children}: IProps) => {
     setRecord({...record, duration});
   };
 
-  const createFeed = async (navigation) => {
+  const createFeed = async (navigation: any) => {
+    setFinishLoading(true);
+
+    /**
+     * Thumbnail image upload
+     * */
+    let thumbnail = null;
+    if (mapboxRecord.images.length === 0) {
+      const {
+        statusCode,
+        message,
+        data: {path},
+      } = await uploadThumbnailImage();
+      if (statusCode !== 201) {
+        setFinishLoading(false);
+        return setAlertVisible(
+          <CheckAlert
+            check={{
+              type: 'warning',
+              title: '등록에 실패했습니다.',
+              description: message,
+            }}
+          />,
+        );
+      }
+      thumbnail = path;
+    }
     const {activity, startDate, endDate} = recordSetting;
     const {duration, calorie} = record;
-    const {distance, images, map, music, records} = mapboxRecord;
+    const {distance, map, music, records} = mapboxRecord;
     const coordinates = JSON.stringify(records);
     const feedRecords = {
       activityId: activity.id,
@@ -303,22 +368,52 @@ export const RecordContextProvider = ({children}: IProps) => {
       mapId: map.id,
       musicId: music.id,
       coordinates,
+      thumbnail,
     };
 
     const {data, statusCode, message} = await feedApi.create(feedRecords);
     // 피드 업로드 먼저 하고, 이미지 업로드
-    console.log(statusCode, message, data);
-    if (statusCode === 201) {
+    if (statusCode !== 201) {
+      setFinishLoading(false);
       return setAlertVisible(
         <CheckAlert
-          check={{type: 'check', title: '등록되었습니다.', description: ''}}
-          checked={() => {
-            clearAllState();
-            navigation.navigate('recordMain');
+          check={{
+            type: 'warning',
+            title: '등록에 실패했습니다.',
+            description: message,
           }}
         />,
       );
     }
+    const result: number[] = await uploadImages(data.id);
+    const errorResult = result.find((statusCode) => statusCode !== 201);
+    if (errorResult) {
+      setFinishLoading(false);
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '일부 사진 업로드 중 오류가 발생했습니다.',
+            description: '',
+          }}
+        />,
+      );
+    }
+
+    setFinishLoading(false);
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'check',
+          title: '등록되었습니다.',
+          description: '',
+        }}
+        checked={() => {
+          clearAllState();
+          navigation.navigate('recordMain');
+        }}
+      />,
+    );
   };
 
   //TODO 얘 위치 옮겨야함
@@ -370,6 +465,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     record,
     mapboxRecord.distance,
     mapboxRecord.speed,
+    mapboxRecord.coordinates,
     tabBarVisible,
     alertManager,
   ]);
@@ -383,6 +479,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         webViewRef,
         tabBarVisible,
         alertManager,
+        thumbnailRef,
         initializeRecordStart,
         onPauseRecord,
         onStartRecord,
@@ -397,6 +494,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         onChangeBackButtonAlert,
         onChangeCreateAlert,
         clearAllState,
+        changeImage,
       }}>
       {children}
     </RecordContext.Provider>

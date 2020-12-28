@@ -3,8 +3,12 @@ import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordContext from '../../module/context/RecordContext';
 import RecordUnits from '../../components/RecordUnits';
-import {showDateToAmPmHourMinute} from '../../module/common';
+import {MAPBOX_STYLE, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
+import {Image} from 'react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+
+MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;
@@ -12,13 +16,9 @@ interface IProps {
 }
 
 export default ({navigation, getAverageSpeed}: IProps) => {
-  const {
-    recordSetting,
-    mapboxRecord,
-    record,
-    webViewRef,
-    createFeed,
-  }: any = useContext(RecordContext);
+  const {recordSetting, mapboxRecord, record, webViewRef, createFeed, changeImage, thumbnailRef}: any = useContext(
+    RecordContext,
+  );
 
   return (
     <Container>
@@ -87,25 +87,64 @@ export default ({navigation, getAverageSpeed}: IProps) => {
               <ActiveDetailTitleWrapper>
                 <ActiveMarkWrapper>
                   <ActiveStartMark>
-                    <StartImage
-                      source={require('../../assets/start_icon.png')}
-                    />
+                    <StartImage source={require('../../assets/start_icon.png')} />
                   </ActiveStartMark>
                 </ActiveMarkWrapper>
                 <ActiveDetailTitle>
-                  {recordSetting.startDate &&
-                    showDateToAmPmHourMinute(recordSetting.startDate)}
-                  에 출발
+                  {recordSetting.startDate && showDateToAmPmHourMinute(recordSetting.startDate)}에 출발
                 </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
 
+              <MapboxGL.MapView
+                ref={thumbnailRef}
+                style={{width: '100%', height: 200}}
+                styleURL={MAPBOX_STYLE}
+                localizeLabels={true}
+                zoomEnabled={false}
+                scrollEnabled={false}
+                pitchEnabled={false}
+                rotateEnabled={false}>
+                <MapboxGL.Camera
+                  zoomLevel={13}
+                  // centerCoordinate={mapboxRecord.coordinates[Math.floor(mapboxRecord.coordinates.length / 2)]}
+                />
+                {/*<MapboxGL.ShapeSource*/}
+                {/*  id="shapeSource"*/}
+                {/*  shape={{*/}
+                {/*    type: 'Feature',*/}
+                {/*    id: 'shapeSource',*/}
+                {/*    properties: {},*/}
+                {/*    geometry: {*/}
+                {/*      type: 'LineString',*/}
+                {/*      coordinates: mapboxRecord.coordinates,*/}
+                {/*    },*/}
+                {/*  }}>*/}
+                {/*  <MapboxGL.LineLayer*/}
+                {/*    id="lineLayer"*/}
+                {/*    style={{*/}
+                {/*      lineWidth: 5,*/}
+                {/*      lineJoin: 'bevel',*/}
+                {/*      lineColor: '#fff',*/}
+                {/*    }}*/}
+                {/*  />*/}
+                {/*</MapboxGL.ShapeSource>*/}
+              </MapboxGL.MapView>
+
               {mapboxRecord.images.map((image: any, idx: number) => (
                 <ActiveDetailWrapper key={idx}>
-                  <ActiveDetailImageWrapper>
-                    <ActiveDetailImage
-                      source={{uri: image.uri}}
-                      resizeMode="contain"
-                      style={{aspectRatio: 1}}
+                  <ActiveDetailImageWrapper
+                    onPress={() => {
+                      changeImage(idx);
+                    }}>
+                    <ActiveDetailImage source={{uri: image.uri}} resizeMode="contain" style={{aspectRatio: 1}} />
+                    <Image
+                      source={require('../../assets/edit_icon.png')}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        position: 'absolute',
+                        alignSelf: 'center',
+                      }}
                     />
                   </ActiveDetailImageWrapper>
                   <ActiveDetailTextWrapper>
@@ -115,9 +154,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                     </ActiveSmallMarkWrapper>
                     <DetailTextWrapper>
                       <ActiveDetailTimeText>
-                        {mapboxRecord.distance}km 이동 후{' '}
-                        {image.timestamp &&
-                          showDateToAmPmHourMinute(image.timestamp)}
+                        {mapboxRecord.distance}km 이동 후 {image.timestamp && showDateToAmPmHourMinute(image.timestamp)}
                       </ActiveDetailTimeText>
                     </DetailTextWrapper>
                   </ActiveDetailTextWrapper>
@@ -126,15 +163,11 @@ export default ({navigation, getAverageSpeed}: IProps) => {
               <ActiveDetailFinishTitleWrapper>
                 <ActiveMarkFinishWrapper>
                   <ActiveFinishMark>
-                    <FinishImage
-                      source={require('../../assets/finish_icon.png')}
-                    />
+                    <FinishImage source={require('../../assets/finish_icon.png')} />
                   </ActiveFinishMark>
                 </ActiveMarkFinishWrapper>
                 <ActiveDetailFinishTitle>
-                  {recordSetting.endDate &&
-                    showDateToAmPmHourMinute(recordSetting.endDate)}
-                  에 끝마쳤습니다.
+                  {recordSetting.endDate && showDateToAmPmHourMinute(recordSetting.endDate)}에 끝마쳤습니다.
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
@@ -328,7 +361,7 @@ const ActiveDetailTimeText = styled.Text`
   margin-top: 20px;
 `;
 
-const ActiveDetailImageWrapper = styled.View`
+const ActiveDetailImageWrapper = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -367,81 +400,4 @@ const NextText = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-`;
-
-const AlertImageWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 30px;
-`;
-
-const AlertImage = styled.Image`
-  width: 70px;
-  height: 70px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 14px;
-  color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const AlertContentText = styled.Text`
-  font-size: 12px;
-  color: #878787;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 50%;
-  padding: 10px;
-  background-color: #007bf1;
-`;
-
-const ConfirmFullButton = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 10px;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const AlertBtnWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  position: absolute;
-  bottom: 0;
-`;
-
-const CancelButton = styled.TouchableOpacity`
-  display: flex;
-  width: 50%;
-  padding: 10px;
-  background-color: #efefef;
-`;
-
-const CancelButtonText = styled.Text`
-  font-size: 14px;
-  color: #4e4e4e;
-  font-weight: bold;
-  text-align: center;
 `;

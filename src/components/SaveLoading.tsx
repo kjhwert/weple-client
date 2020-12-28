@@ -28,7 +28,7 @@ export default () => {
             ]}
             leftDistance={-150}
             rightDistance={-200}
-            speed={500}
+            speed={1000}
             size={100}
           />
 
@@ -39,7 +39,7 @@ export default () => {
             ]}
             leftDistance={-200}
             rightDistance={-150}
-            speed={500}
+            speed={1000}
             size={30}
           />
         </ContainerCard>
