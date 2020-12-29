@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {createUser, setCreateUser}: any = useContext(UserContext);
+  const {createUserData}: any = useContext(UserContext);
 
   const [isActive, setIsActive] = useState(false);
   const [activities, setActivities] = useState([
@@ -30,7 +30,6 @@ export default ({navigation}: IProps) => {
 
   const getActivities = async () => {
     const {data, statusCode} = await categoryApi.activities();
-    console.log('data:', data);
 
     if (statusCode !== 200) {
       console.log('category error');
@@ -81,13 +80,9 @@ export default ({navigation}: IProps) => {
     return selectActivities;
   };
 
-  const setCreateUserCategory = () => {
-    setCreateUser({
-      ...createUser,
-      activityCategories: getSelectedActivity(),
-    });
+  const createUserCategory = () => {
+    createUserData('activityCategories', getSelectedActivity());
   };
-  console.log('Category: ', createUser);
 
   useEffect(() => {
     getActivities();
@@ -105,7 +100,7 @@ export default ({navigation}: IProps) => {
       activities={activities}
       categoriesClick={categoriesClick}
       isActive={isActive}
-      setCreateUserCategory={setCreateUserCategory}
+      createUserCategory={createUserCategory}
     />
   );
 };

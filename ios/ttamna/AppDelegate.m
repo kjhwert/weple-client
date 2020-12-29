@@ -39,7 +39,11 @@ return false;
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
 if ([KOSession isKakaoAccountLoginCallback:url]) {
 return [KOSession handleOpenURL:url];
-}
+} else {
+    return [[FBSDKApplicationDelegate sharedInstance]application:application
+                                                       openURL:url
+                                                       options:options];
+  }
 return false;
 }
 

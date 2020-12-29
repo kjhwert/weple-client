@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {SnsBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
+import {SnsBtn, StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;

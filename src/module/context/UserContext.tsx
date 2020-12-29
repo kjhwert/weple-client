@@ -42,6 +42,12 @@ export const UserContextProvider = ({children}: IProps) => {
 
   const login = async () => {
     setLoading(true);
+
+    if (loginState.email.length <= 0 || loginState.password.length <= 0) {
+      showAlertFrame('이메일 또는 비밀번호를');
+      return false;
+    }
+
     const loginData = await userApi.login(loginState);
     console.log('loginContext:', loginData);
 
@@ -59,7 +65,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const socialLogin = async (Email: string, Uid: string) => {
-    // setLoading(true);
+    setLoading(true);
     const socialRequest = {
       email: Email,
       socialUid: Uid,
@@ -77,7 +83,7 @@ export const UserContextProvider = ({children}: IProps) => {
     console.log('소셜 로그인 성공');
     setSocialLoginUserData(socialLoginData);
 
-    // setLoading(false);
+    setLoading(false);
     return true;
   };
 

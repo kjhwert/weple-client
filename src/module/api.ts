@@ -45,14 +45,20 @@ export const utilitiesApi = {
 
 export const userApi = {
   login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) =>
+    apiRequest(api.post('/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
-  hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
-  hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
-  passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post(`/user/password-forget`, passwordForget)),
-  passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
-  getProfile: (id: string) => apiRequest(api.get('/user' + id)),
-  putProfile: (putProfile: IUserApiProfile, id: string) => apiRequest(api.put('/user' + id, putProfile)),
+  hasEmail: (email: string) =>
+    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) =>
+    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+  passwordForget: (passwordForget: IUserApiPwForget) =>
+    apiRequest(api.post('/user/password-forget', passwordForget)),
+  passwordChange: (passwordChange: IUserApiPwChange) =>
+    apiRequest(api.post('/user/password-change', passwordChange)),
+  getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
+  putProfile: (putProfile: IUserApiProfile) =>
+    apiRequest(api.put('/user/', putProfile)),
 };
 
 export const feedApi = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IProps {
+interface IColorChangeProps {
   borderColor: string;
 }
 
@@ -50,7 +50,7 @@ const InputBoxData = styled.TextInput`
   padding: 5px 10px;
   margin-bottom: 20px;
   border-bottom-width: 1px;
-  border-color: ${(props: IProps) =>
+  border-color: ${(props: IColorChangeProps) =>
     props.borderColor ? props.borderColor : '#acacac'};
   font-size: 15px;
   color: #6f6f6f;
@@ -99,7 +99,7 @@ const DuplicateInputBoxTitle = styled.Text`
 const DuplicateInputBoxData = styled.TextInput`
   padding: 5px 10px;
   border-bottom-width: 1px;
-  border-color: ${(props: IProps) =>
+  border-color: ${(props: IColorChangeProps) =>
     props.borderColor ? props.borderColor : '#acacac'};
   font-size: 15px;
   color: #6f6f6f;

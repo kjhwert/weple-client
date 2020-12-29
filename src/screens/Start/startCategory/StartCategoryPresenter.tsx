@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {CategoryBtn, StartNextBtn} from '../../../components/SnsAccountBtn';
+import {CategoryBtn, StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
   activities: Array<IActivity>;
   categoriesClick: Function;
   isActive: boolean;
-  setCreateUserCategory: Function;
+  createUserCategory: Function;
 }
 interface IActivity {
   id: number;
@@ -24,38 +24,40 @@ export default ({
   activities,
   categoriesClick,
   isActive,
-  setCreateUserCategory,
+  createUserCategory,
 }: IProps) => {
   return (
     <Container>
-      <ContainerCard>
-        <ScrollContainer>
-          <InfoText>1개 이상 선택해주세요.</InfoText>
-          {activities.map((activity) => (
-            <CategoryWrapper key={activity.id}>
-              <CategoryTitle>{activity.name}</CategoryTitle>
-              <ActivityWrapper>
-                {activity.categoryActivity.map(({id, name, isSelect}) => (
-                  <CategoryBtn
-                    key={id}
-                    text={name}
-                    onPress={() => {
-                      categoriesClick(activity.id, id);
-                    }}
-                    isSelect={isSelect}
-                  />
-                ))}
-              </ActivityWrapper>
-            </CategoryWrapper>
-          ))}
-        </ScrollContainer>
-      </ContainerCard>
+      <ScrollContainer>
+        <ScrollWrapper>
+          <ContainerCard>
+            <InfoText>1개 이상 선택해주세요.</InfoText>
+            {activities.map((activity) => (
+              <CategoryWrapper key={activity.id}>
+                <CategoryTitle>{activity.name}</CategoryTitle>
+                <ActivityWrapper>
+                  {activity.categoryActivity.map(({id, name, isSelect}) => (
+                    <CategoryBtn
+                      key={id}
+                      text={name}
+                      onPress={() => {
+                        categoriesClick(activity.id, id);
+                      }}
+                      isSelect={isSelect}
+                    />
+                  ))}
+                </ActivityWrapper>
+              </CategoryWrapper>
+            ))}
+          </ContainerCard>
+        </ScrollWrapper>
+      </ScrollContainer>
 
       <StartNextBtn
         StartNextPage={'personalData'}
         text={'다음'}
         navigation={navigation}
-        callBack={setCreateUserCategory}
+        callBack={createUserCategory}
         isActive={isActive}
       />
     </Container>
@@ -66,7 +68,12 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const ScrollContainer = styled.ScrollView``;
+const ScrollContainer = styled.View`
+  height: 100%;
+  background-color: #fff;
+`;
+
+const ScrollWrapper = styled.ScrollView``;
 
 const InfoText = styled.Text`
   width: 100%;
