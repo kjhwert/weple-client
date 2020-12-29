@@ -1,20 +1,18 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import RecordFinishPresenter from './RecordFinishPresenter';
-import RecordContext from '../../module/context/RecordContext';
-import Loading from '../../components/Loading';
-import {IRecordContext} from '../../module/type/recordContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const {
-    mapboxRecord: {isRecordsUpdate},
-  }: IRecordContext = useContext(RecordContext);
-  return !isRecordsUpdate ? (
-    <Loading />
-  ) : (
-    <RecordFinishPresenter navigation={navigation} />
-  );
+  const getAverageSpeed = (speed: Array<number>) => {
+    if (speed.length === 0) {
+      return 0;
+    }
+    const sumSpeed = speed.reduce((prev, next) => prev + next, 0);
+    return Math.floor((sumSpeed / speed.length) * 10) / 10;
+  };
+
+  return <RecordFinishPresenter navigation={navigation} getAverageSpeed={getAverageSpeed} />;
 };

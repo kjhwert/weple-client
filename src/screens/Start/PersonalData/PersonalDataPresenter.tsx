@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
 
@@ -7,19 +7,30 @@ interface IProps {
   slideData: any;
 }
 interface IColorChangeProps {
-  process: string;
+  process: number;
 }
 
-export default ({ navigation, slideData }: IProps) => {
+const renderPagination = (index: number, total: number) => {
+  const now = (100 / total) * (index + 1);
+  const next = 100 - now;
+  return (
+    <LineWrapper>
+      <NowLine process={now}></NowLine>
+      <NextLine process={next}></NextLine>
+    </LineWrapper>
+  );
+};
+
+export default ({navigation, slideData}: IProps) => {
   const swiperRef = useRef(null);
   const nextSlider = () => {
-    if (!!swiperRef) {
-      swiperRef.current.scrollBy(1);
+    if (swiperRef) {
       const indexNumber = swiperRef.current.state.index + 1;
       const totalNumber = swiperRef.current.state.total;
       if (indexNumber === totalNumber) {
         return true;
       } else {
+        swiperRef.current.scrollBy(1);
         return false;
       }
     }
@@ -28,15 +39,16 @@ export default ({ navigation, slideData }: IProps) => {
   return (
     <Container>
       <Card>
-        <Swiper
-          style={styles.wrapper}
-          showsButtons={false}
-          showsPagination={false}
-          loop={false}
-          ref={swiperRef}>
-          {slideData.map((item, idx) => (
-            <Wrapper key={idx}>
-              <PersonalWrapper>
+        <SwiperWrapper>
+          <Swiper
+            style={styles.wrapper}
+            showsButtons={false}
+            showsPagination={true}
+            loop={false}
+            ref={swiperRef}
+            renderPagination={renderPagination}>
+            {slideData.map((item, idx) => (
+              <PersonalWrapper key={idx}>
                 <PersonalTitle>{item.title}</PersonalTitle>
                 <PersonalContent>{item.text}</PersonalContent>
                 <OrderWrapper>
@@ -46,13 +58,9 @@ export default ({ navigation, slideData }: IProps) => {
                   </PersonalImageWrapper>
                 </OrderWrapper>
               </PersonalWrapper>
-              <LineWrapper>
-                <NowLine process={item.nowProcess}></NowLine>
-                <NextLine process={item.nextProcess}></NextLine>
-              </LineWrapper>
-            </Wrapper>
-          ))}
-        </Swiper>
+            ))}
+          </Swiper>
+        </SwiperWrapper>
       </Card>
 
       <NextBtn
@@ -73,11 +81,8 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Wrapper = styled.View`
-  flex: 1;
-`;
-
 const Card = styled.View`
+  flex: 1;
   display: flex;
   align-items: center;
   width: 100%;
@@ -86,8 +91,14 @@ const Card = styled.View`
   background-color: #f9f9f9;
 `;
 
+const SwiperWrapper = styled.View`
+  flex: 0.7;
+  display: flex;
+  width: 100%;
+`;
+
 const PersonalWrapper = styled.View`
-  flex: 7;
+  flex: 1;
   display: flex;
   width: 100%;
   border-width: 1px;
@@ -107,7 +118,7 @@ const PersonalTitle = styled.Text`
 `;
 
 const PersonalContent = styled.Text`
-  flex: 6;
+  flex: 0.6;
   font-size: 13px;
   text-align: left;
   line-height: 25px;
@@ -117,7 +128,7 @@ const PersonalContent = styled.Text`
 
 const OrderWrapper = styled.View`
   display: flex;
-  flex: 4;
+  flex: 0.3;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
@@ -143,25 +154,29 @@ const PersonalImage = styled.Image`
 `;
 
 const LineWrapper = styled.View`
-  flex: 3;
+  flex: 0.7;
   display: flex;
   width: 100%;
   flex-direction: row;
   align-items: flex-start;
   padding-top: 30px;
+  border-top-width: 1px;
+  border-color: #eee;
 `;
 
 const NowLine = styled.View`
   display: flex;
-  width: ${(props: IProps) => props.process};
-  border-width: 3px;
+  width: ${(props: IColorChangeProps) => props.process}%;
+  border-width: ${(props: IColorChangeProps) =>
+    props.process === 0 ? 0 : 3}px;
   border-color: #007bf1;
 `;
 
 const NextLine = styled.View`
   display: flex;
-  width: ${(props: IProps) => props.process};
-  border-width: 3px;
+  width: ${(props: IColorChangeProps) => props.process}%;
+  border-width: ${(props: IColorChangeProps) =>
+    props.process === 0 ? 0 : 3}px;
   border-color: #b2b2b2;
 `;
 

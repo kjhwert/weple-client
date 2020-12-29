@@ -6,7 +6,6 @@ import RecordContext from '../../module/context/RecordContext';
 import KeepAwake from 'react-native-keep-awake';
 import RecordUnits from '../../components/RecordUnits';
 import {MAPBOX_STYLE, MAPBOX_TOKEN} from '../../module/common';
-import AlertWrapper from '../../components/AlertWrapper';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -20,57 +19,37 @@ export default ({navigation}: IProps) => {
     record,
     mapboxRecord,
     initializeRecordStart,
-    changeStartStatus,
-    finishRecording,
-    onUpdateUserPosition,
+    onStartRecord,
+    onPauseRecord,
     showCamera,
-    alertManager,
-    clearAllState,
+    finishRecording,
   }: any = useContext(RecordContext);
 
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
       <ScrollContainer>
-        {/*{<AlertWrapper>*/}
-        {/*      <AlertImageWrapper>*/}
-        {/*        <AlertImage*/}
-        {/*          source={require('../../assets/alertWarn_icon.png')}*/}
-        {/*        />*/}
-        {/*      </AlertImageWrapper>*/}
-        {/*      <AlertTitleText>*/}
-        {/*        {'아직 루트가 저장되지 않았어요.'}*/}
-        {/*      </AlertTitleText>*/}
-        {/*      <AlertBtnWrapper>*/}
-        {/*        <ConfirmButton onPress={clearAllState}>*/}
-        {/*          <ConfirmButtonText>기록중지</ConfirmButtonText>*/}
-        {/*        </ConfirmButton>*/}
-        {/*        <CancelButton onPress={changeStartStatus}>*/}
-        {/*          <CancelButtonText>기록재개</CancelButtonText>*/}
-        {/*        </CancelButton>*/}
-        {/*      </AlertBtnWrapper>*/}
-        {/*    </AlertWrapper>*/}
-        {/*  }*/}
         <ScrollWrapper>
           <Card>
             <MapboxGL.MapView
               style={{width: '100%', height: 300}}
               styleURL={MAPBOX_STYLE}
+              userTrackingMode={MapboxGL.UserTrackingModes.Follow}
               localizeLabels={true}>
               <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
-              <MapboxGL.UserLocation
-                onUpdate={(location) => onUpdateUserPosition(location)}
-                minDisplacement={5}
-              />
+              <MapboxGL.UserLocation />
             </MapboxGL.MapView>
 
             <RecordUnits
               distance={mapboxRecord.distance}
-              speed={mapboxRecord.speed}
+              speed={
+                mapboxRecord.speed.length > 0
+                  ? mapboxRecord.speed[mapboxRecord.speed.length - 1]
+                  : 0
+              }
               calorie={record.calorie}
               duration={record.duration}
             />
-
             <IconWrapper>
               <IconImageWrapper>
                 <IconBtn
@@ -96,10 +75,7 @@ export default ({navigation}: IProps) => {
                       marginRight: 10,
                     }}>
                     <StartBtnWrapper>
-                      <ResumeBtn
-                        onPress={() => {
-                          changeStartStatus();
-                        }}>
+                      <ResumeBtn onPress={onStartRecord}>
                         <ResumeBtnText>재개</ResumeBtnText>
                       </ResumeBtn>
                     </StartBtnWrapper>
@@ -127,17 +103,14 @@ export default ({navigation}: IProps) => {
                       </StartBtn>
                     )}
                     {recordSetting.isInit && recordSetting.isStart && (
-                      <StopBtn
-                        onPress={() => {
-                          changeStartStatus();
-                        }}>
+                      <StopBtn onPress={onPauseRecord}>
                         <StopBtnText>{'중지'}</StopBtnText>
                       </StopBtn>
                     )}
                     {recordSetting.isInit && !recordSetting.isStart && (
                       <FinishBtn
                         onPress={() => {
-                          finishRecording(navigation);
+                          finishRecording && finishRecording(navigation);
                         }}>
                         <FinishBtnText>완료</FinishBtnText>
                       </FinishBtn>

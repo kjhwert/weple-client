@@ -50,7 +50,7 @@ export default () => {
         tabStyle: {
           margin: 5,
         },
-        labelStyle: {fontSize: 11},
+        labelStyle: {fontSize: 11, fontWeight: '600'},
       }}>
       <Tab.Screen
         options={{

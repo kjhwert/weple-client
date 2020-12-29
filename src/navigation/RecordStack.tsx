@@ -8,12 +8,14 @@ import RecordActiveTypeContainer from '../screens/Record/recordSetUp/RecordActiv
 import RecordMapStyleContainer from '../screens/Record/recordStyle/RecordMapStyleContainer';
 import RecordMusicContainer from '../screens/Record/recordStyle/RecordMusicContainer';
 import RecordSetupBtn from '../components/RecordSetupBtn';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import RecordContext from '../module/context/RecordContext';
+import styled from 'styled-components/native';
 
 const Stack = createStackNavigator();
 
 export default () => {
+  const {recordSetting}: any = useContext(RecordContext);
   const {
     recordSetting: {isStart},
   }: any = useContext(RecordContext);
@@ -38,7 +40,15 @@ export default () => {
           headerLeft: () => <View />,
           headerRight: () =>
             isStart ? <View /> : <RecordSetupBtn navigation={navigation} />,
-          headerTitle: '기록하기',
+          headerTitle: () => (
+            <HeaderTitleWrapper
+              onPress={() =>
+                !isStart && navigation.navigate('recordActiveType')
+              }>
+              <HeaderTitle>{recordSetting.activity.name}</HeaderTitle>
+              <HeaderArrowImage source={require('../assets/arrowBlack.png')} />
+            </HeaderTitleWrapper>
+          ),
         })}
       />
       <Stack.Screen
@@ -85,3 +95,22 @@ export default () => {
     </Stack.Navigator>
   );
 };
+
+const HeaderTitleWrapper = styled.TouchableOpacity`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const HeaderTitle = styled.Text`
+  margin-right: 5px;
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const HeaderArrowImage = styled.Image`
+  width: 10px;
+  height: 10px;
+  transform: rotate(270deg);
+`;

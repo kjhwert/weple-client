@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import StartCategoryPresenter from './StartCategoryPresenter';
-import { categoryApi } from '../../../module/api';
+import {categoryApi} from '../../../module/api';
 import Loading from '../../../components/Loading';
 import UserContext from '../../../module/context/UserContext';
 
@@ -8,8 +8,8 @@ interface IProps {
   navigation: any;
 }
 
-export default ({ navigation }: IProps) => {
-  const { createUserData }: any = useContext(UserContext);
+export default ({navigation}: IProps) => {
+  const {createUserData}: any = useContext(UserContext);
 
   const [isActive, setIsActive] = useState(false);
   const [activities, setActivities] = useState([
@@ -29,7 +29,7 @@ export default ({ navigation }: IProps) => {
   const [loading, setLoading] = useState(true);
 
   const getActivities = async () => {
-    const { data, statusCode } = await categoryApi.activities();
+    const {data, statusCode} = await categoryApi.activities();
 
     if (statusCode !== 200) {
       console.log('category error');
@@ -43,12 +43,12 @@ export default ({ navigation }: IProps) => {
     const newCategory = activities.map((item) =>
       item.id === catId
         ? {
-          ...item,
-          categoryActivity: categoriesActivityClick(
-            selectId,
-            item.categoryActivity,
-          ),
-        }
+            ...item,
+            categoryActivity: categoriesActivityClick(
+              selectId,
+              item.categoryActivity,
+            ),
+          }
         : item,
     );
     setActivities(newCategory);
@@ -56,7 +56,7 @@ export default ({ navigation }: IProps) => {
 
   const categoriesActivityClick = (selectId, categoryActivity) => {
     const subCategory = categoryActivity.map((item) =>
-      item.id === selectId ? { ...item, isSelect: !item.isSelect } : item,
+      item.id === selectId ? {...item, isSelect: !item.isSelect} : item,
     );
     return subCategory;
   };
@@ -95,12 +95,12 @@ export default ({ navigation }: IProps) => {
   return loading ? (
     <Loading />
   ) : (
-      <StartCategoryPresenter
-        navigation={navigation}
-        activities={activities}
-        categoriesClick={categoriesClick}
-        isActive={isActive}
-        createUserCategory={createUserCategory}
-      />
-    );
+    <StartCategoryPresenter
+      navigation={navigation}
+      activities={activities}
+      categoriesClick={categoriesClick}
+      isActive={isActive}
+      createUserCategory={createUserCategory}
+    />
+  );
 };

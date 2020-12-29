@@ -4,7 +4,8 @@ export interface IUser {
   nickName: string;
   email: string;
   password: string;
-  token: string;
+  access_token: string;
+  description: string;
   activeCategories: {
     userCategory?: Array<number>;
   };

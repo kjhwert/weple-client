@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import { InputBox } from '../../../components/CommonInput';
-import { StartNextBtn } from '../../../components/SnsAccountBtn';
+import {InputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
+  isActive: boolean;
   clearAlertFrame: Function;
+  userName: any;
   userNameChange: Function;
   createUserName: Function;
 }
@@ -26,6 +28,7 @@ export default ({
           placeholder="이름을 입력하세요."
           onChange={userNameChange}
           activeFlag={userName.activeFlag}
+          value={userName.data}
         />
       </ContainerCard>
       <StartNextBtn

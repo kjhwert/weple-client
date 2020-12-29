@@ -24,6 +24,8 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
     };
   }, []);
 
+  console.log(recordMusic);
+
   return (
     <Container>
       <ScrollContainer>
@@ -38,7 +40,7 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
                       <MusicWrapper key={music.id}>
                         <CheckBox
                           disabled={false}
-                          value={recordMusic === music}
+                          value={recordMusic.id === music.id}
                           onValueChange={() => {
                             setRecordMusic && setRecordMusic(music);
                           }}

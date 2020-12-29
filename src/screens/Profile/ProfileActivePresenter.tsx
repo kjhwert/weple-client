@@ -5,9 +5,13 @@ import RadioButtonRN from 'radio-buttons-react-native';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
   showAlert: boolean;
   alertFrame: Function;
+  loginUser: any;
+}
+
+interface IColorChangeProps {
+  isClick: boolean;
 }
 
 export default ({
@@ -16,6 +20,7 @@ export default ({
   alertFrame,
   menuList,
   radioBoxSortData,
+  loginUser,
 }: IProps) => {
   return (
     <Container>
@@ -60,7 +65,7 @@ export default ({
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>GilDong Hong</ProfileNickName>
+                <ProfileNickName>{loginUser.name}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
@@ -86,16 +91,8 @@ export default ({
                     </ActiveBtn>
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
-                  <ActiveBtnWrapper>
-                    <ActiveBtn
-                      onPress={() => {
-                        navigation.navigate('profilePoint');
-                      }}>
-                      <PointNumber>30</PointNumber>
-                    </ActiveBtn>
-                    <ActiveText>포인트</ActiveText>
-                  </ActiveBtnWrapper>
                 </ActiveTextWrapper>
+
                 <ActiveIntroduceText>
                   {
                     "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
@@ -117,9 +114,9 @@ export default ({
                   </MembershipBtn>
                   <PointBtn
                     onPress={() => {
-                      navigation.navigate('profilePoint');
+                      navigation.navigate('ProfileActiveStatistic');
                     }}>
-                    <PayBtnText>포인트</PayBtnText>
+                    <PayBtnText>활동통계</PayBtnText>
                   </PointBtn>
                 </PayBtnWrapper>
               </ProfileTopWrapper>
@@ -360,7 +357,7 @@ const ActiveBtnWrapper = styled.View`
   align-items: center;
   justify-content: center;
   padding: 10px;
-  width: 25%;
+  width: 30%;
 `;
 
 const ActiveBtn = styled.TouchableOpacity`
@@ -387,13 +384,6 @@ const FollowerNumber = styled.Text`
 const FollowingNumber = styled.Text`
   font-size: 19px;
   color: #8784ff;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const PointNumber = styled.Text`
-  font-size: 19px;
-  color: #ffb284;
   font-weight: bold;
   text-align: center;
 `;
@@ -465,7 +455,8 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
+  border-color: ${(props: IColorChangeProps) =>
+    props.isClick ? '#007bf1' : '#fff'};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -476,7 +467,7 @@ const MenuBtn = styled.TouchableOpacity`
 
 const MenuText = styled.Text`
   font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
+  color: ${(props: IColorChangeProps) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;

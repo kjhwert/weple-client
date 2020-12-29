@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IProps {
+interface IColorChangeProps {
   borderColor: string;
 }
 
@@ -11,6 +11,7 @@ export const InputBox = ({
   name = '',
   onChange = {},
   activeFlag = 0,
+  value = '',
 }) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';
@@ -26,6 +27,7 @@ export const InputBox = ({
         onChange={onChange}
         borderColor={borderColor}
         autoFocus={true}
+        value={value}
       />
     </InputBoxWrapper>
   );
@@ -48,43 +50,45 @@ const InputBoxData = styled.TextInput`
   padding: 5px 10px;
   margin-bottom: 20px;
   border-bottom-width: 1px;
-  border-color: ${(props: IProps) =>
+  border-color: ${(props: IColorChangeProps) =>
     props.borderColor ? props.borderColor : '#acacac'};
   font-size: 15px;
   color: #6f6f6f;
 `;
 
-export const NickNameInputBox = ({
+export const DuplicateInputBox = ({
   title = '',
   placeholder = '',
   name = '',
   onChange = {},
   activeFlag = 0,
+  value = '',
 }) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';
   else borderColor = '#acacac';
 
   return (
-    <NickNameInputBoxWrapper>
-      <NickNameInputBoxTitle>{title}</NickNameInputBoxTitle>
-      <NickNameInputBoxData
+    <DuplicateInputBoxWrapper>
+      <DuplicateInputBoxTitle>{title}</DuplicateInputBoxTitle>
+      <DuplicateInputBoxData
         name={name}
         placeholder={placeholder}
         onChange={onChange}
         borderColor={borderColor}
         autoFocus={true}
+        value={value}
       />
-    </NickNameInputBoxWrapper>
+    </DuplicateInputBoxWrapper>
   );
 };
 
-const NickNameInputBoxWrapper = styled.View`
+const DuplicateInputBoxWrapper = styled.View`
   display: flex;
   width: 70%;
 `;
 
-const NickNameInputBoxTitle = styled.Text`
+const DuplicateInputBoxTitle = styled.Text`
   font-size: 12px;
   color: #6f6f6f;
   font-weight: bold;
@@ -92,10 +96,10 @@ const NickNameInputBoxTitle = styled.Text`
   margin-bottom: 5px;
 `;
 
-const NickNameInputBoxData = styled.TextInput`
+const DuplicateInputBoxData = styled.TextInput`
   padding: 5px 10px;
   border-bottom-width: 1px;
-  border-color: ${(props: IProps) =>
+  border-color: ${(props: IColorChangeProps) =>
     props.borderColor ? props.borderColor : '#acacac'};
   font-size: 15px;
   color: #6f6f6f;
@@ -110,6 +114,8 @@ export const InputPasswordBox = ({
   onChange2 = {},
   activeFlag1 = 0,
   activeFlag2 = 0,
+  value1 = '',
+  value2 = '',
 }) => {
   let borderColor1 = '';
   let borderColor2 = '';
@@ -129,8 +135,10 @@ export const InputPasswordBox = ({
         placeholder={placeholder1}
         onChange={onChange1}
         borderColor={borderColor1}
+        secureTextEntry={true}
         autoFocus={true}
         secureTextEntry={true}
+        value={value1}
       />
       <InputBoxData
         name={name}
@@ -138,6 +146,7 @@ export const InputPasswordBox = ({
         onChange={onChange2}
         borderColor={borderColor2}
         secureTextEntry={true}
+        value={value2}
       />
     </InputBoxWrapper>
   );

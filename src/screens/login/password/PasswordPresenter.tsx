@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import AlertWrapper from '../../../components/AlertWrapper';
 import {InputBox} from '../../../components/CommonInput';
-import {StartNextBtn} from '../../../components/SnsAccountBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
@@ -13,6 +13,7 @@ interface IProps {
   isActive: boolean;
   showAlert: boolean;
   alertFrame: Function;
+  passwordInfoMail: Function;
 }
 
 export default ({
@@ -23,6 +24,7 @@ export default ({
   isActive,
   showAlert,
   alertFrame,
+  passwordInfoMail,
 }: IProps) => {
   return (
     <Container>
@@ -50,6 +52,7 @@ export default ({
           placeholder="이메일을 입력하세요."
           onChange={userEmailChange}
           activeFlag={userEmail.activeFlag}
+          value={userEmail.data}
         />
       </ContainerCard>
 
@@ -59,6 +62,7 @@ export default ({
         validation={userEmailValidation}
         isActive={isActive}
         callBack={() => {
+          passwordInfoMail();
           alertFrame(true);
         }}
       />

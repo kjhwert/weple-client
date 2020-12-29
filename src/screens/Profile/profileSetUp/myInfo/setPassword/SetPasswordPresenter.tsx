@@ -16,6 +16,7 @@ export default ({navigation}: IProps) => {
           <SignUpInput
             placeholder="기존 비밀번호를 입력하세요."
             secureTextEntry={true}
+            autoFocus={true}
           />
           <SignUpTitle>새 비밀번호</SignUpTitle>
           <SignUpInput
