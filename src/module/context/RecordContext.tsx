@@ -333,27 +333,24 @@ export const RecordContextProvider = ({children}: IProps) => {
     /**
      * Thumbnail image upload
      * */
-    let thumbnail = null;
-    if (mapboxRecord.images.length === 0) {
-      const {
-        statusCode,
-        message,
-        data: {path},
-      } = await uploadThumbnailImage();
-      if (statusCode !== 201) {
-        setFinishLoading(false);
-        return setAlertVisible(
-          <CheckAlert
-            check={{
-              type: 'warning',
-              title: '등록에 실패했습니다.',
-              description: message,
-            }}
-          />,
-        );
-      }
-      thumbnail = path;
+    const {
+      statusCode: thumbnailStatus,
+      message: thumbnailMessage,
+      data: {path},
+    } = await uploadThumbnailImage();
+    if (thumbnailStatus !== 201) {
+      setFinishLoading(false);
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '등록에 실패했습니다.',
+            description: thumbnailMessage,
+          }}
+        />,
+      );
     }
+    const thumbnail = path;
     const {activity, startDate, endDate} = recordSetting;
     const {duration, calorie} = record;
     const {distance, map, music, coordinates: records} = mapboxRecord;
