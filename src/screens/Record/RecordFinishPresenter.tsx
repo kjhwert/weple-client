@@ -106,28 +106,28 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                 rotateEnabled={false}>
                 <MapboxGL.Camera
                   zoomLevel={13}
-                  // centerCoordinate={mapboxRecord.coordinates[Math.floor(mapboxRecord.coordinates.length / 2)]}
+                  centerCoordinate={mapboxRecord.coordinates[Math.floor(mapboxRecord.coordinates.length / 2)]}
                 />
-                {/*<MapboxGL.ShapeSource*/}
-                {/*  id="shapeSource"*/}
-                {/*  shape={{*/}
-                {/*    type: 'Feature',*/}
-                {/*    id: 'shapeSource',*/}
-                {/*    properties: {},*/}
-                {/*    geometry: {*/}
-                {/*      type: 'LineString',*/}
-                {/*      coordinates: mapboxRecord.coordinates,*/}
-                {/*    },*/}
-                {/*  }}>*/}
-                {/*  <MapboxGL.LineLayer*/}
-                {/*    id="lineLayer"*/}
-                {/*    style={{*/}
-                {/*      lineWidth: 5,*/}
-                {/*      lineJoin: 'bevel',*/}
-                {/*      lineColor: '#fff',*/}
-                {/*    }}*/}
-                {/*  />*/}
-                {/*</MapboxGL.ShapeSource>*/}
+                <MapboxGL.ShapeSource
+                  id="shapeSource"
+                  shape={{
+                    type: 'Feature',
+                    id: 'shapeSource',
+                    properties: {},
+                    geometry: {
+                      type: 'LineString',
+                      coordinates: mapboxRecord.coordinates,
+                    },
+                  }}>
+                  <MapboxGL.LineLayer
+                    id="lineLayer"
+                    style={{
+                      lineWidth: 5,
+                      lineJoin: 'bevel',
+                      lineColor: '#fff',
+                    }}
+                  />
+                </MapboxGL.ShapeSource>
               </MapboxGL.MapView>
 
               {mapboxRecord.images.map((image: any, idx: number) => (

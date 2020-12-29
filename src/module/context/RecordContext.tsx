@@ -294,16 +294,16 @@ export const RecordContextProvider = ({children}: IProps) => {
 
     const currentSpeed = Math.floor(locationSpeed * 10) / 10;
 
-    const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
-    // let currentDistance = 0;
-    // if (mapboxRecord.coordinates.length > 0) {
-    //   currentDistance = getDistanceBetweenTwoGPS([
-    //     mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1],
-    //     [longitude, latitude],
-    //   ]);
-    // }
-    // const distance = currentDistance + recordedDistance;
-    const coordinates = mapboxRecord.coordinates.concat([longitude, latitude]);
+    // const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
+    let currentDistance = 0;
+    if (mapboxRecord.coordinates.length > 0) {
+      currentDistance = getDistanceBetweenTwoGPS([
+        mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1],
+        [longitude, latitude],
+      ]);
+    }
+    const distance = Math.floor(currentDistance * 1000) / 10 + recordedDistance;
+    const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
 
     const speed = mapboxRecord.speed.concat(currentSpeed);
     setMapboxRecord({
@@ -356,7 +356,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     }
     const {activity, startDate, endDate} = recordSetting;
     const {duration, calorie} = record;
-    const {distance, map, music, records} = mapboxRecord;
+    const {distance, map, music, coordinates: records} = mapboxRecord;
     const coordinates = JSON.stringify(records);
     const feedRecords = {
       activityId: activity.id,
@@ -466,6 +466,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     mapboxRecord.distance,
     mapboxRecord.speed,
     mapboxRecord.coordinates,
+    mapboxRecord.images,
     tabBarVisible,
     alertManager,
   ]);
