@@ -9,6 +9,8 @@ import {
   IUserApiPwChange,
   IUserApiProfile,
   IFeedCreate,
+  IFeedIndex,
+  IFeedCreateComment,
 } from './type/api';
 
 const api = axios.create({
@@ -41,24 +43,19 @@ export const categoryApi = {
 export const utilitiesApi = {
   maps: () => apiRequest(api.get('/map-group')),
   musics: () => apiRequest(api.get('/music-group')),
+  events: ({page}) => apiRequest(api.get(`/event?page=${page}`)),
 };
 
 export const userApi = {
   login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) =>
-    apiRequest(api.post('/social-login', socialLogin)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
-  hasEmail: (email: string) =>
-    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
-  hasNickName: (nickName: string) =>
-    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
-  passwordForget: (passwordForget: IUserApiPwForget) =>
-    apiRequest(api.post('/user/password-forget', passwordForget)),
-  passwordChange: (passwordChange: IUserApiPwChange) =>
-    apiRequest(api.post('/user/password-change', passwordChange)),
+  hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+  passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post('/user/password-forget', passwordForget)),
+  passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
-  putProfile: (putProfile: IUserApiProfile) =>
-    apiRequest(api.put('/user/', putProfile)),
+  putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
 };
 
 export const feedApi = {
@@ -87,4 +84,10 @@ export const feedApi = {
       return {statusCode: 500, message: e.message};
     }
   },
+  index: ({page, sort, order}: IFeedIndex) => apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}`)),
+  show: (feedId: number) => apiRequest(api.get(`/feed/${feedId}`)),
+  showComments: (feedId: number) => apiRequest(api.get(`/feed/comments/${feedId}`)),
+  feedLike: (feedId: number) => apiRequest(api.post(`/feed/like`, {feedId})),
+  feedDisLike: (feedId: number) => apiRequest(api.post(`/feed/dis-like`, {feedId})),
+  createComment: (data: IFeedCreateComment) => apiRequest(api.post(`/feed/comment`, data)),
 };

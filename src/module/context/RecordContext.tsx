@@ -19,6 +19,7 @@ import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
 import SaveLoading from '../../components/SaveLoading';
 import {captureRef} from 'react-native-view-shot';
+import {PERMISSIONS, request} from 'react-native-permissions';
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -118,25 +119,34 @@ export const RecordContextProvider = ({children}: IProps) => {
     });
   };
 
-  const showCamera = () => {
+  const showCamera = async () => {
     if (!recordSetting.isStart) {
       return;
     }
 
-    ImagePicker.launchCamera({}, ({latitude, longitude, uri, timestamp, type, fileName}) => {
-      const {distance} = mapboxRecord;
-      const timeStringToDate = new Date(timestamp ? timestamp : '');
-      const images = mapboxRecord.images.concat({
-        latitude,
-        longitude,
-        uri,
-        distance,
-        timestamp: timeStringToDate,
-        type,
-        fileName,
-      });
-      setMapboxRecord({...mapboxRecord, images});
-    });
+    ImagePicker.launchCamera(
+      {storageOptions: {privateDirectory: true}},
+      ({didCancel, error, latitude, longitude, uri, timestamp, type, fileName}) => {
+        if (didCancel) {
+          return;
+        }
+        if (error) {
+          return;
+        }
+        const {distance} = mapboxRecord;
+        const timeStringToDate = new Date(timestamp ? timestamp : '');
+        const images = mapboxRecord.images.concat({
+          latitude,
+          longitude,
+          uri,
+          distance,
+          timestamp: timeStringToDate,
+          type,
+          fileName,
+        });
+        setMapboxRecord({...mapboxRecord, images});
+      },
+    );
   };
 
   const uploadThumbnailImage = async () => {
@@ -413,6 +423,20 @@ export const RecordContextProvider = ({children}: IProps) => {
     );
   };
 
+  const userCameraPermission = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        const camera = await request(PERMISSIONS.ANDROID.CAMERA);
+        console.log('android: ', camera);
+      }
+      if (Platform.OS === 'android') {
+        const camera = await request(PERMISSIONS.IOS.CAMERA);
+        console.log('ios: ', camera);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   //TODO 얘 위치 옮겨야함
   const userLocatePermission = async () => {
     const checkPermissionResult = await checkPermission({

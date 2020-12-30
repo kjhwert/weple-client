@@ -1,38 +1,68 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import {IFeedComments} from '../../../../module/type/feed';
+import {ACTIVE_BUTTON, BASE_URL, INACTIVE_BUTTON} from '../../../../module/common';
+import UserContext from '../../../../module/context/UserContext';
+import {IFeedCreateComment} from '../../../../module/type/api';
 
 interface IProps {
-  navigation: any;
-  isNew: boolean;
+  comments: Array<IFeedComments>;
+  userComment: IFeedCreateComment;
+  onChangeDescription: (e: string) => void;
+  finishComments: () => void;
 }
 
-export default ({navigation, member}: IProps) => {
+export default ({comments, onChangeDescription, userComment, finishComments}: IProps) => {
+  const {
+    loginUser: {image},
+  }: any = useContext(UserContext);
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {member.map((item, idx) => (
-              <MemberWrapper key={idx}>
+            {comments.map((comment) => (
+              <MemberWrapper key={comment.id}>
                 <ProfileImageWrapper onPress={() => {}}>
-                  <ProfileImage source={item.image} />
-                </ProfileImageWrapper>
-                <MemberTextWrapper>
-                  <MemberNameBtn>
-                    <MemberText>{item.name}</MemberText>
-                  </MemberNameBtn>
-                  <CommentText multiline={true}>{item.comment}</CommentText>
-                </MemberTextWrapper>
-
-                <DotMoreBtn>
-                  <DotMoreImage
-                    source={require('../../../../assets/dotMore.png')}
+                  <ProfileImage
+                    source={{
+                      uri: `${BASE_URL}/${comment.userImage ? comment.userImage : 'public/user/no_profile.png'}`,
+                    }}
                   />
-                </DotMoreBtn>
+                  <MemberTextWrapper>
+                    <MemberNameBtn>
+                      <MemberText>{comment.userName}</MemberText>
+                    </MemberNameBtn>
+                    <CommentText multiline={true}>{comment.description}</CommentText>
+                  </MemberTextWrapper>
+                </ProfileImageWrapper>
+
+                {comment.isLoginUserWrote ? (
+                  <DotMoreBtn onPress={() => {}}>
+                    <DotMoreImage source={require('../../../../assets/dotMore.png')} />
+                  </DotMoreBtn>
+                ) : (
+                  <></>
+                )}
               </MemberWrapper>
             ))}
           </Card>
         </ScrollWrapper>
+        <CommentWrapper>
+          <WriteCommentUserProfile
+            source={{
+              uri: `${BASE_URL}/${image ? image : 'public/user/no_profile.png'}`,
+            }}
+          />
+          <WriteComment
+            placeholder="코멘트를 달아보세요"
+            value={userComment.description}
+            onChangeText={onChangeDescription}
+          />
+          <WriteCommentButton onPress={finishComments}>
+            <WriteCommentButtonText>전송</WriteCommentButtonText>
+          </WriteCommentButton>
+        </CommentWrapper>
       </ScrollContainer>
     </Container>
   );
@@ -40,6 +70,40 @@ export default ({navigation, member}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const CommentWrapper = styled.View`
+  width: 100%;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const WriteCommentUserProfile = styled.Image`
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+`;
+
+const WriteComment = styled.TextInput`
+  width: 60%;
+  background-color: ${INACTIVE_BUTTON};
+  padding: 5px 10px;
+  border-radius: 5px;
+`;
+
+const WriteCommentButton = styled.TouchableOpacity`
+  background-color: ${ACTIVE_BUTTON};
+  padding: 10px 25px;
+  border-radius: 5px;
+`;
+
+const WriteCommentButtonText = styled.Text`
+  color: #ffffff;
+  font-weight: bold;
 `;
 
 const ScrollContainer = styled.View`
@@ -59,9 +123,8 @@ const Card = styled.View`
 
 const MemberWrapper = styled.View`
   display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   padding: 10px 20px;
   border-bottom-width: 1px;
@@ -70,24 +133,22 @@ const MemberWrapper = styled.View`
 
 const ProfileImageWrapper = styled.TouchableOpacity`
   display: flex;
+  flex-direction: row;
+  align-items: center;
   height: 100%;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-right: 10px;
 `;
 
 const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
+  margin-right: 10px;
 `;
 
 const MemberTextWrapper = styled.View`
   display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 69%;
+  align-items: center;
+  width: 65%;
   height: 100%;
   margin-right: 5px;
 `;
@@ -111,7 +172,6 @@ const CommentText = styled.TextInput`
 
 const DotMoreBtn = styled.TouchableOpacity`
   display: flex;
-  width: 10%;
   align-items: center;
   justify-content: center;
 `;
