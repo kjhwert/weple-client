@@ -41,3 +41,16 @@ export interface IFeedCreate {
   musicId: number;
   coordinates: string;
 }
+
+export interface IFeedIndex {
+  id?: number;
+  hasNextPage?: boolean;
+  page: number;
+  sort: 'createdAt' | 'likeCount' | string;
+  order: 'DESC' | 'ASC' | string;
+}
+
+export interface IFeedCreateComment {
+  feedId: number;
+  description: string;
+}

@@ -49,14 +49,11 @@ export const UserContextProvider = ({children}: IProps) => {
     }
 
     const loginData = await userApi.login(loginState);
-    console.log('loginContext:', loginData);
 
     if (loginData.statusCode !== 201) {
-      console.log('로그인 실패');
       showAlertFrame(loginData.message);
       return false;
     }
-    console.log('로그인 성공');
     setLoginUserData(loginData);
 
     setLoginState({...loginState, email: '', password: ''});
@@ -70,17 +67,13 @@ export const UserContextProvider = ({children}: IProps) => {
       email: Email,
       socialUid: Uid,
     };
-    console.log('socialRequest:', socialRequest);
 
     const socialLoginData = await userApi.socialLogin(socialRequest);
-    console.log('socialLoginData:', socialLoginData);
 
     if (socialLoginData.statusCode !== 201) {
-      console.log('소셜로그인 실패');
       showAlertFrame(socialLoginData.message);
       return false;
     }
-    console.log('소셜 로그인 성공');
     setSocialLoginUserData(socialLoginData);
 
     setLoading(false);
@@ -102,12 +95,10 @@ export const UserContextProvider = ({children}: IProps) => {
     setLoading(true);
     const autoLoginData = await getAccess_token();
     if (autoLoginData) {
-      console.log('자동 로그인 성공');
       setLoginUser(autoLoginData);
       setLoading(false);
       return true;
     } else {
-      console.log('자동 로그인 실패');
       setLoading(false);
       return false;
     }
@@ -165,17 +156,12 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const join = async () => {
-    console.log('joinMembership request', createUser);
-
     const joinData = await userApi.create(createUser);
-    console.log('joinMembership response', joinData);
 
     if (joinData.statusCode !== 201) {
-      console.log('회원가입 실패');
       showAlertFrame(joinData.message);
       return false;
     }
-    console.log('회원가입 성공');
     await setLoginUserData(createUser);
     return true;
   };
@@ -215,9 +201,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   useEffect(() => {
-    setIsLoginBtnActive(
-      loginState.email.length > 0 && loginState.password.length > 0,
-    );
+    setIsLoginBtnActive(loginState.email.length > 0 && loginState.password.length > 0);
   }, [loginState]);
 
   return (

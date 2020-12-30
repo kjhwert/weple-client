@@ -1,42 +1,57 @@
-import React from 'react';
-import CommentMemberPresenter from './FriendCommentPresenter';
-
-const member = [
-  {
-    id: 0,
-    image: require('../../../../assets/profile_2.png'),
-    name: 'Jamin',
-    comment: 'bicycles very nice..!!',
-    isClick: true,
-  },
-  {
-    id: 1,
-    image: require('../../../../assets/profile_1.png'),
-    name: 'GilDong',
-    comment: 'Thank you so much!',
-    isClick: true,
-  },
-  {
-    id: 2,
-    image: require('../../../../assets/profile_2.png'),
-    name: 'Benjamin',
-    comment: 'bicycles very nice..!!',
-    isClick: true,
-  },
-  {
-    id: 3,
-    image: require('../../../../assets/follower_2.png'),
-    name: 'Jamin',
-    comment:
-      'bicycles very nice..!! bicycles very nice..!! bicycles very nice..!!',
-    isClick: false,
-  },
-];
+import React, {useEffect, useState} from 'react';
+import FriendCommentPresenter from './FriendCommentPresenter';
+import Loading from '../../../../components/Loading';
+import {feedApi} from '../../../../module/api';
+import {IFeedComments} from '../../../../module/type/feed';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <CommentMemberPresenter navigation={navigation} member={member} />;
+export default ({navigation, route}: IProps) => {
+  const [loading, setLoading] = useState(false);
+  const [comments, setComments] = useState<Array<IFeedComments>>([]);
+  const [userComment, setUserComment] = useState({
+    feedId: 0,
+    description: '',
+  });
+  const getComments = async () => {
+    const id = route?.params?.id;
+    if (!id) {
+      navigation.goBack();
+    }
+    setUserComment({...userComment, feedId: id});
+    const {data, statusCode} = await feedApi.showComments(id);
+    if (statusCode === 200) {
+      setComments(data);
+    }
+  };
+
+  const onChangeDescription = (e: string) => {
+    setUserComment({...userComment, description: e});
+  };
+
+  const finishComments = async () => {
+    const {statusCode} = await feedApi.createComment(userComment);
+    if (statusCode === 201) {
+      setUserComment({...userComment, description: ''});
+      await getComments();
+    }
+  };
+
+  useEffect(() => {
+    getComments();
+  }, []);
+
+  return loading ? (
+    <Loading />
+  ) : (
+    <FriendCommentPresenter
+      comments={comments}
+      userComment={userComment}
+      onChangeDescription={onChangeDescription}
+      finishComments={finishComments}
+    />
+  );
 };
