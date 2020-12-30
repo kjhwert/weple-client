@@ -21,6 +21,13 @@ export default ({navigation}: IProps) => {
     usable: false,
   });
 
+  const clearAlertFrame = () => {
+    setAlertFrame({
+      ...alertFrame,
+      showAlert: false,
+    });
+  };
+
   const userNickChange = (e) => {
     const value = e.nativeEvent.text;
     setUserNick({
@@ -31,15 +38,8 @@ export default ({navigation}: IProps) => {
     setIsActive(false);
   };
 
-  const clearAlertFrame = () => {
-    setAlertFrame({
-      ...alertFrame,
-      showAlert: false,
-    });
-  };
-
   const hasNickName = async () => {
-    if (userNick.data.length <= 0) {
+    if (userNick.data.length <= 0 || userNick.data.indexOf(' ') === 0) {
       setAlertFrame({showAlert: true, usable: false});
       return;
     }

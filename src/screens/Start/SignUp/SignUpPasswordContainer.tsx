@@ -48,10 +48,7 @@ export default ({navigation}: IProps) => {
   };
 
   const userPasswordValidation = () => {
-    if (
-      userPassword.password1.length <= 0 ||
-      userPassword.password2.length <= 0
-    ) {
+    if (userPassword.password1.length <= 0 || userPassword.password2.length <= 0) {
       setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
       return false;
     }
@@ -69,7 +66,10 @@ export default ({navigation}: IProps) => {
 
   useEffect(() => {
     setIsActive(
-      userPassword.password1.length > 0 && userPassword.password2.length > 0,
+      userPassword.password1.indexOf(' ') !== 0 &&
+        userPassword.password2.indexOf(' ') !== 0 &&
+        userPassword.password1.length > 0 &&
+        userPassword.password2.length > 0,
     );
   }, [userPassword]);
 

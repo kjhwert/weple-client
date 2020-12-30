@@ -19,9 +19,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 }}>
                 <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
-                <RecruitTogetherMoreImage
-                  source={require('../../assets/more.png')}
-                />
+                <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
@@ -32,9 +30,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 }}>
                 <RecruitImage source={require('../../assets/photo_4.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage
-                    source={require('../../assets/active_cycle.png')}
-                  />
+                  <RecordImage source={require('../../assets/active_cycle.png')} />
                   <RecordText>21.7 KM</RecordText>
                 </RecordWrapper>
               </RecruitImageWrapper>
@@ -75,9 +71,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
               <RecruitTogetherBtn onPress={() => {}}>
                 <RecruitTogetherText>내 주변 개설 함께</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
-                <RecruitTogetherMoreImage
-                  source={require('../../assets/more.png')}
-                />
+                <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
@@ -244,7 +238,7 @@ const RecruitAddress = styled.Text`
   width: 100%;
   font-size: 12px;
   color: #777;
-  padding: 5px 0 10px 0;
+  padding: 5px 0;
 `;
 
 const EntryFee = styled.Text`
@@ -252,7 +246,7 @@ const EntryFee = styled.Text`
   font-size: 11px;
   color: #000;
   font-weight: bold;
-  padding: 5px 0;
+  padding-bottom: 5px;
 `;
 
 const Deadline = styled.Text`
@@ -278,11 +272,11 @@ const RecruitBtn = styled.TouchableOpacity`
   border-radius: 5px;
   background-color: #fff;
   border-width: 1px;
-  border-color: #b5b5b5;
+  border-color: #007bf1;
 `;
 
 const RecruitBtnText = styled.Text`
-  color: #6f6f6f;
+  color: #007bf1;
   font-size: 15px;
   font-weight: bold;
 `;

@@ -1,36 +1,42 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SetEventPresenter from './SetEventPresenter';
+import {serviceApi} from '../../../../../module/api';
 
-const eventData = [
-  {
-    id: 0,
-    image: require('../../../../../assets/event_1.jpg'),
-    title: '이벤트를 진행합니다.',
-    content: '이벤트에 대한 설명입니다. 이벤트에대한 설명입니다.',
-    date: '2020-11-19 ~ 2020-12-30',
-    isOpen: true,
-  },
-  {
-    id: 1,
-    image: require('../../../../../assets/event_1.jpg'),
-    title: '이벤트가 종료되었습니다.',
-    content: '이벤트에 대한 설명입니다. 이벤트에대한 설명입니다.',
-    date: '2020-11-19 ~ 2020-12-30',
-    isOpen: false,
-  },
-  {
-    id: 2,
-    image: require('../../../../../assets/event_1.jpg'),
-    title: '이벤트가 종료되었습니다.',
-    content: '이벤트에 대한 설명입니다. 이벤트에대한 설명입니다.',
-    date: '2020-11-19 ~ 2020-12-30',
-    isOpen: false,
-  },
-];
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  return <SetEventPresenter navigation={navigation} eventData={eventData} />;
+  const [eventList, setEventList] = useState([]);
+
+  const [pagingInfo, setPagingInfo] = useState({
+    page: 1,
+    hasNextPage: true,
+  });
+
+  const getEventList = async (page) => {
+    const {data, statusCode, paging} = await serviceApi.eventList(page);
+    console.log('paging:', paging);
+
+    if (statusCode !== 200) {
+      console.log('eventList error');
+    } else {
+      setEventList(eventList.concat(data));
+      setPagingInfo(paging);
+    }
+  };
+  console.log('eventList:', eventList);
+
+  useEffect(() => {
+    getEventList(1);
+  }, []);
+
+  return (
+    <SetEventPresenter
+      navigation={navigation}
+      eventList={eventList}
+      pagingInfo={pagingInfo}
+      getEventList={getEventList}
+    />
+  );
 };

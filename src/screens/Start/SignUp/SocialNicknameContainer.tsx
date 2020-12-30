@@ -38,9 +38,8 @@ export default ({navigation}: IProps) => {
     });
   };
 
-  // console.log('createUser', createUser);
   const hasNickName = async () => {
-    if (userNick.data.length <= 0) {
+    if (userNick.data.length <= 0 || userNick.data.indexOf(' ') === 0) {
       setAlertFrame({showAlert: true, usable: false});
       return;
     }

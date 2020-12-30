@@ -45,20 +45,27 @@ export const utilitiesApi = {
 
 export const userApi = {
   login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) =>
-    apiRequest(api.post('/social-login', socialLogin)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
-  hasEmail: (email: string) =>
-    apiRequest(api.get(`/user/hasEmail?email=${email}`)),
-  hasNickName: (nickName: string) =>
-    apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
-  passwordForget: (passwordForget: IUserApiPwForget) =>
-    apiRequest(api.post('/user/password-forget', passwordForget)),
-  passwordChange: (passwordChange: IUserApiPwChange) =>
-    apiRequest(api.post('/user/password-change', passwordChange)),
+  hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
+  hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
+  passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post('/user/password-forget', passwordForget)),
+  passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
-  putProfile: (putProfile: IUserApiProfile) =>
-    apiRequest(api.put('/user/', putProfile)),
+  putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
+  userImage: (file) =>
+    apiRequest(
+      api.post('/user/image', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+    ),
+};
+
+export const serviceApi = {
+  eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
+  event: (id: string) => apiRequest(api.get('/event/' + id)),
 };
 
 export const feedApi = {

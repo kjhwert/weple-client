@@ -5,14 +5,7 @@ interface IColorChangeProps {
   borderColor: string;
 }
 
-export const InputBox = ({
-  title = '',
-  placeholder = '',
-  name = '',
-  onChange = {},
-  activeFlag = 0,
-  value = '',
-}) => {
+export const InputBox = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';
   else if (activeFlag < 0) borderColor = '#FF0000';
@@ -50,8 +43,49 @@ const InputBoxData = styled.TextInput`
   padding: 5px 10px;
   margin-bottom: 20px;
   border-bottom-width: 1px;
-  border-color: ${(props: IColorChangeProps) =>
-    props.borderColor ? props.borderColor : '#acacac'};
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+export const PwChangeInput = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <PwChangeInputWrapper>
+      <PwChangeInputTitle>{title}</PwChangeInputTitle>
+      <PwChangeInputData
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        borderColor={borderColor}
+        value={value}
+      />
+    </PwChangeInputWrapper>
+  );
+};
+
+const PwChangeInputWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const PwChangeInputTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const PwChangeInputData = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
   font-size: 15px;
   color: #6f6f6f;
 `;
@@ -99,8 +133,7 @@ const DuplicateInputBoxTitle = styled.Text`
 const DuplicateInputBoxData = styled.TextInput`
   padding: 5px 10px;
   border-bottom-width: 1px;
-  border-color: ${(props: IColorChangeProps) =>
-    props.borderColor ? props.borderColor : '#acacac'};
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
   font-size: 15px;
   color: #6f6f6f;
 `;

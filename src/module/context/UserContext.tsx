@@ -1,5 +1,4 @@
 import React, {createContext, ReactNode, useState, useEffect} from 'react';
-import {IUser} from '../../module/type/user';
 import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -181,6 +180,29 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   ////////////////////////////////////////////////////////////////
+  // PROFILE CONTEXT
+  const getUserId = async () => {
+    const user = await AsyncStorage.getItem('@user');
+    if (user) {
+      const {id} = JSON.parse(user);
+      console.log(id);
+      return id;
+    }
+  };
+
+  const changeProfileImage = (imageData) => {
+    setLoginUser({
+      ...loginUser,
+      image: imageData,
+    });
+    const changeData = {
+      ...loginUser,
+      image: imageData,
+    };
+    setAsyncStorage('@user', JSON.stringify(changeData));
+  };
+
+  ////////////////////////////////////////////////////////////////
   // COMMON CONTEXT
   const [alertFrame, setAlertFrame] = useState({
     showAlert: false,
@@ -203,21 +225,19 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
+  // user정보 저장
   const setAsyncStorage = (name, data) => {
-    AsyncStorage.setItem(name, data, () => {
-      console.log('user정보 저장완료');
-    });
+    AsyncStorage.setItem(name, data, () => {});
   };
 
   const getAccess_token = async () => {
     const result = await AsyncStorage.getItem('@user');
+    console.log('getItemUser:', result);
     return JSON.parse(result);
   };
 
   useEffect(() => {
-    setIsLoginBtnActive(
-      loginState.email.length > 0 && loginState.password.length > 0,
-    );
+    setIsLoginBtnActive(loginState.email.length > 0 && loginState.password.length > 0);
   }, [loginState]);
 
   return (
@@ -238,6 +258,8 @@ export const UserContextProvider = ({children}: IProps) => {
         emailUserData,
         snsUserData,
         join,
+        getUserId,
+        changeProfileImage,
         alertFrame,
         clearAlertFrame,
         getAccess_token,

@@ -1,10 +1,10 @@
 import React from 'react';
-import ClausePresenter from './ClausePresenter';
+import TermsPresenter from './TermsPresenter';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  return <ClausePresenter navigation={navigation} />;
+  return <TermsPresenter navigation={navigation} />;
 };

@@ -16,16 +16,17 @@ import ProfileSettingContainer from '../screens/Profile/profileSetUp/ProfileSett
 import SetNoticeContainer from '../screens/Profile/profileSetUp/customer/setNotice/SetNoticeContainer';
 import SetNoticeDetailContainer from '../screens/Profile/profileSetUp/customer/setNotice/SetNoticeDetailContainer';
 import SetEventContainer from '../screens/Profile/profileSetUp/customer/setEvent/SetEventContainer';
+import SetEventDetailContainer from '../screens/Profile/profileSetUp/customer/setEvent/SetEventDetailContainer';
 import SetAskContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAskContainer';
 import SetAskWriteContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAskWriteContainer';
 import SetAskDetailContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAskDetailContainer';
 import SetAnswerDetailContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAnswerDetailContainer';
 import SetFaqContainer from '../screens/Profile/profileSetUp/customer/setFAQ/SetFaqContainer';
-import ClauseContainer from '../screens/Profile/profileSetUp/customer/clause/ClauseContainer';
-import ServiceDetailContainer from '../screens/Profile/profileSetUp/customer/clause/ServiceDetailContainer';
-import SubscriptionDetailContainer from '../screens/Profile/profileSetUp/customer/clause/SubscriptionDetailContainer';
-import PrivacyDetailContainer from '../screens/Profile/profileSetUp/customer/clause/PrivacyDetailContainer';
-import AgreementDetailContainer from '../screens/Profile/profileSetUp/customer/clause/AgreementDetailContainer';
+import TermsContainer from '../screens/Profile/profileSetUp/customer/setTerms/TermsContainer';
+import ServiceDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/ServiceDetailContainer';
+import SubscriptionDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/SubscriptionDetailContainer';
+import PrivacyDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/PrivacyDetailContainer';
+import AgreementDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/AgreementDetailContainer';
 import AboutAppContainer from '../screens/Profile/profileSetUp/customer/aboutApp/AboutAppContainer';
 import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfile/SetProfileContainer';
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
@@ -54,9 +55,7 @@ export default () => {
         options={({route, navigation}) => ({
           headerTitle: '프로필',
           headerLeft: () => <View />,
-          headerRight: () => (
-            <ProfileSetupBtn navigation={navigation} route={route} />
-          ),
+          headerRight: () => <ProfileSetupBtn navigation={navigation} route={route} />,
         })}
         name="profileActiveMain"
         component={ProfileActiveContainer}
@@ -65,9 +64,7 @@ export default () => {
         options={({route, navigation}) => ({
           headerTitle: '프로필',
           headerLeft: () => <View />,
-          headerRight: () => (
-            <ProfileSetupBtn navigation={navigation} route={route} />
-          ),
+          headerRight: () => <ProfileSetupBtn navigation={navigation} route={route} />,
         })}
         name="profileActiveJoin"
         component={ProfileActiveJoinContainer}
@@ -94,17 +91,8 @@ export default () => {
         name="ProfileActiveStatistic"
         component={ProfileActiveStatisticContainer}
       />
-      <Stack.Screen
-        options={{
-          headerTitle: '포인트 내역',
-        }}
-        name="followerMember"
-        component={FollowerMemberContainer}
-      />
-      <Stack.Screen
-        name="followingMember"
-        component={FollowingMemberContainer}
-      />
+      <Stack.Screen name="followerMember" component={FollowerMemberContainer} />
+      <Stack.Screen name="followingMember" component={FollowingMemberContainer} />
       <Stack.Screen
         options={{
           headerTitle: '좋아하는 사람들',
@@ -142,10 +130,17 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '이벤트 모두보기',
+          headerTitle: '이벤트',
         }}
         name="setEvent"
         component={SetEventContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '이벤트',
+        }}
+        name="setEventDetail"
+        component={SetEventDetailContainer}
       />
       <Stack.Screen
         options={{
@@ -180,8 +175,8 @@ export default () => {
         options={{
           headerTitle: '약관 및 개인정보 보호정책',
         }}
-        name="setClause"
-        component={ClauseContainer}
+        name="setTerms"
+        component={TermsContainer}
       />
       <Stack.Screen
         options={{
