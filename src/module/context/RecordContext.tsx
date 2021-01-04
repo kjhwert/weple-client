@@ -8,7 +8,7 @@ import {
   ISetActivityCategory,
   ISqliteCallBack,
 } from '../type/recordContext';
-import {DURATION_TIME, getDistanceBetweenTwoGPS, getDistanceWithSpeedAndTime, MINUTE} from '../common';
+import {DURATION_TIME, getDistanceBetweenTwoGPS, MINUTE} from '../common';
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
@@ -17,7 +17,6 @@ import AlertContext from './AlertContext';
 import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
-import SaveLoading from '../../components/SaveLoading';
 import {captureRef} from 'react-native-view-shot';
 import {PERMISSIONS, request} from 'react-native-permissions';
 
@@ -366,14 +365,14 @@ export const RecordContextProvider = ({children}: IProps) => {
     const {distance, map, music, coordinates: records} = mapboxRecord;
     const coordinates = JSON.stringify(records);
     const feedRecords = {
-      activityId: activity.id,
       startDate: `${startDate}`,
       endDate: `${endDate}`,
       duration,
       calorie,
       distance,
-      mapId: map.id,
-      musicId: music.id,
+      map: map.id,
+      music: music.id,
+      activity: activity.id,
       coordinates,
       thumbnail,
     };
