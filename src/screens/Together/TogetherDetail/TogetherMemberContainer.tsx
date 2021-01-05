@@ -6,19 +6,22 @@ const member = [
     id: 0,
     image: require('../../../assets/profile_1.png'),
     name: 'GilDong',
-    isFollow: true,
+    bestImage: require('../../../assets/active_cycle.png'),
+    bestText: '69.5',
   },
   {
     id: 1,
     image: require('../../../assets/profile_2.png'),
     name: 'Benjamin',
-    isFollow: true,
+    bestImage: require('../../../assets/active_cycle.png'),
+    bestText: '69.5',
   },
   {
     id: 2,
     image: require('../../../assets/follower_2.png'),
     name: 'Jamin',
-    isFollow: false,
+    bestImage: require('../../../assets/active_cycle.png'),
+    bestText: '69.5',
   },
 ];
 

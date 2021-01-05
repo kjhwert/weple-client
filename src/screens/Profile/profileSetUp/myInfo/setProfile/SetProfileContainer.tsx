@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {getUserId, changeProfileImage}: any = useContext(UserContext);
+  const {getUserId, changeProfileImage, changeProfileData}: any = useContext(UserContext);
   const {setAlertVisible}: any = useContext(AlertContext);
   const clearAlert = () => {
     setAlertVisible();
@@ -40,13 +40,12 @@ export default ({navigation}: IProps) => {
 
   const getProfileInfo = async () => {
     const id = await getUserId();
-    const profileInfoData = await userApi.getProfile(id);
+    const {data} = await userApi.getProfile(id);
     setProfileData({
       ...profileData,
-      nickName: profileInfoData.data.user.nickName,
-      description: profileInfoData.data.user.description,
+      nickName: data.user.nickName ? data.user.nickName : '',
+      description: data.user.description ? data.user.description : '',
     });
-    console.log('getProfileInfo:', profileInfoData);
   };
 
   const hasNickName = async () => {
@@ -101,11 +100,9 @@ export default ({navigation}: IProps) => {
       nickName: profileData.nickName,
       description: profileData.description,
     };
-    console.log('profileInfoData', requestData);
 
     const {message, statusCode} = await userApi.putProfile(requestData);
     if (statusCode !== 201) {
-      console.log('변경 실패');
       return setAlertVisible(
         <CheckAlert
           check={{
@@ -119,7 +116,7 @@ export default ({navigation}: IProps) => {
         />,
       );
     } else {
-      console.log('변경 완료');
+      changeProfileData(profileData.nickName, profileData.description);
       return setAlertVisible(
         <CheckAlert
           check={{
@@ -138,13 +135,12 @@ export default ({navigation}: IProps) => {
 
   const showPicker = () => {
     const options = {storageOptions: {skipBackup: true, path: 'image'}};
-
     ImagePicker.launchImageLibrary(options, async ({uri, type, fileName, didCancel, error}) => {
       if (didCancel) {
-        console.log('사용자가 취소하였습니다.');
+        // console.log('사용자가 취소하였습니다.');
         return;
       } else if (error) {
-        console.log('ImagePicker Error:', error);
+        // console.log('ImagePicker Error:', error);
         return;
       }
       const imgFormData = new FormData();
@@ -155,11 +151,8 @@ export default ({navigation}: IProps) => {
       });
       // 이미지 업로드
       const {data, statusCode} = await userApi.userImage(imgFormData);
-      console.log('data:', data);
       if (statusCode !== 201) {
-        console.log('이미지 변경 실패');
       } else {
-        console.log('이미지 변경 성공');
         changeProfileImage(data.image);
       }
     });

@@ -1,29 +1,39 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SetNoticePresenter from './SetNoticePresenter';
-
-const noticeData = [
-  {
-    id: 0,
-    title: '공지사항입니다.',
-    date: '2019.02.01 10:10',
-  },
-  {
-    id: 1,
-    title: '공지사항입니다. 공지사항입니다.',
-    date: '2019.02.01 10:10',
-    isNew: true,
-  },
-  {
-    id: 2,
-    title: '공지사항입니다. 공지사항입니다. 공지사항입니다.',
-    date: '2019.02.01 10:10',
-  },
-];
+import {serviceApi} from '../../../../../module/api';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  return <SetNoticePresenter navigation={navigation} noticeData={noticeData} />;
+  const [noticeList, setNoticeList] = useState([]);
+
+  const [pagingInfo, setPagingInfo] = useState({
+    page: 1,
+    hasNextPage: true,
+  });
+
+  const getNoticeList = async (page) => {
+    const {data, statusCode, paging} = await serviceApi.noticeList(page);
+
+    if (statusCode !== 200) {
+    } else {
+      setNoticeList(noticeList.concat(data));
+      setPagingInfo(paging);
+    }
+  };
+
+  useEffect(() => {
+    getNoticeList(1);
+  }, []);
+
+  return (
+    <SetNoticePresenter
+      navigation={navigation}
+      noticeList={noticeList}
+      pagingInfo={pagingInfo}
+      getNoticeList={getNoticeList}
+    />
+  );
 };

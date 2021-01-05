@@ -12,10 +12,7 @@ export default ({navigation}: IProps) => {
 
   const handleFacebookButtonPress = async () => {
     try {
-      const result = await LoginManager.logInWithPermissions([
-        'public_profile',
-        'email',
-      ]);
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
 
       if (result.isCancelled) {
         // throw 'User cancelled the login process';
@@ -29,13 +26,11 @@ export default ({navigation}: IProps) => {
         navigation.navigate('createAccount');
         return;
       }
-      const facebookCredential = auth.FacebookAuthProvider.credential(
-        data.accessToken,
-      );
+      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
 
       const {user} = await auth().signInWithCredential(facebookCredential);
       snsUserData(user.email, user.displayName, user.displayName, user.uid);
-      console.log('facebook userData:', user);
+      // console.log('facebook userData:', user);
 
       navigation.navigate('socialNickname');
     } catch (error) {

@@ -9,10 +9,6 @@ interface IProps {
   getEventList: Function;
 }
 
-interface IColorChangeProps {
-  isOpen: boolean;
-}
-
 export default ({navigation, eventList, pagingInfo, getEventList}: IProps) => {
   return (
     <Container>
@@ -28,7 +24,7 @@ export default ({navigation, eventList, pagingInfo, getEventList}: IProps) => {
                   <EventImage source={{uri: BASE_URL + '/' + 'public/event/event1.jpg'}} />
                 </EventImageWrapper>
                 <EventTextWrapper>
-                  <EventOpenWrapper isOpen={item.eventStatus}>
+                  <EventOpenWrapper backgroundColor={item.eventStatus}>
                     <EventOpenText>{item.eventStatus ? '진행중' : '진행종료'}</EventOpenText>
                   </EventOpenWrapper>
                   <EventTitleBtn
@@ -118,7 +114,7 @@ const EventOpenWrapper = styled.View`
   width: 40%;
   border-radius: 5px;
   padding: 4px;
-  background-color: ${(props: IColorChangeProps) => (props.isOpen ? '#007bf1' : '#b3b3b3')};
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#007bf1' : '#b3b3b3')};
 `;
 
 const EventOpenText = styled.Text`

@@ -13,7 +13,9 @@ export interface IUserApiCreate {
   nickName: string;
   email: string;
   password: string;
-  activityCategories: [];
+  isSocialLogin: boolean;
+  socialUid: string;
+  activityCategories: number[];
 }
 
 export interface IUserApiPwForget {
@@ -28,6 +30,11 @@ export interface IUserApiPwChange {
 export interface IUserApiProfile {
   nickName: string;
   description: string;
+}
+
+export interface IServiceApiInquiry {
+  requestTitle: string;
+  requestDescription: string;
 }
 
 export interface IFeedCreate {

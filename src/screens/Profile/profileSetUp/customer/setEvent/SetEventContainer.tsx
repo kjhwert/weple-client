@@ -16,16 +16,13 @@ export default ({navigation}: IProps) => {
 
   const getEventList = async (page) => {
     const {data, statusCode, paging} = await serviceApi.eventList(page);
-    console.log('paging:', paging);
 
     if (statusCode !== 200) {
-      console.log('eventList error');
     } else {
       setEventList(eventList.concat(data));
       setPagingInfo(paging);
     }
   };
-  console.log('eventList:', eventList);
 
   useEffect(() => {
     getEventList(1);

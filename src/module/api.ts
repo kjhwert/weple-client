@@ -64,8 +64,12 @@ export const userApi = {
 };
 
 export const serviceApi = {
+  noticeList: (page: string) => apiRequest(api.get('/notice?page=' + page)),
+  notice: (id: string) => apiRequest(api.get('/notice/' + id)),
   eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
   event: (id: string) => apiRequest(api.get('/event/' + id)),
+  faq: () => apiRequest(api.get('/faq')),
+  terms: () => apiRequest(api.get('/terms')),
 };
 
 export const feedApi = {

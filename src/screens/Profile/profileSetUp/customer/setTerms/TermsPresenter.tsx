@@ -3,60 +3,30 @@ import styled from 'styled-components/native';
 
 interface IProps {
   navigation: any;
+  termsList: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, termsList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <SetUpWrapper>
-              <SetBtnWrapper>
+            {termsList.map((item, idx) => (
+              <SetUpWrapper key={idx}>
                 <SetBtn
                   onPress={() => {
-                    navigation.navigate('serviceDetaile');
+                    navigation.navigate('termsDetaile', {
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
+                    });
                   }}>
-                  <SetUpListText>서비스 약관</SetUpListText>
-                  <MoreImage
-                    source={require('../../../../../assets/set_more.png')}
-                  />
+                  <SetUpListText>{item.title}</SetUpListText>
+                  <MoreImage source={require('../../../../../assets/set_more.png')} />
                 </SetBtn>
-              </SetBtnWrapper>
-              <SetBtnWrapper>
-                <SetBtn
-                  onPress={() => {
-                    navigation.navigate('agreementDetaile');
-                  }}>
-                  <SetUpListText>이용약관</SetUpListText>
-                  <MoreImage
-                    source={require('../../../../../assets/set_more.png')}
-                  />
-                </SetBtn>
-              </SetBtnWrapper>
-              <SetBtnWrapper>
-                <SetBtn
-                  onPress={() => {
-                    navigation.navigate('subscriptionDetaile');
-                  }}>
-                  <SetUpListText>구독약관</SetUpListText>
-                  <MoreImage
-                    source={require('../../../../../assets/set_more.png')}
-                  />
-                </SetBtn>
-              </SetBtnWrapper>
-              <SetBtnWrapper>
-                <SetBtn
-                  onPress={() => {
-                    navigation.navigate('privacyDetaile');
-                  }}>
-                  <SetUpListText>개인정보 보호정책</SetUpListText>
-                  <MoreImage
-                    source={require('../../../../../assets/set_more.png')}
-                  />
-                </SetBtn>
-              </SetBtnWrapper>
-            </SetUpWrapper>
+              </SetUpWrapper>
+            ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -87,15 +57,18 @@ const SetUpWrapper = styled.View`
   flex-flow: row wrap;
   align-items: flex-start;
   width: 100%;
-`;
-
-const SetBtnWrapper = styled.View`
-  display: flex;
-  width: 100%;
   padding: 20px;
   border-bottom-width: 1px;
   border-color: #eeeeee;
 `;
+
+// const SetBtnWrapper = styled.View`
+//   display: flex;
+//   width: 100%;
+//   padding: 20px;
+//   border-bottom-width: 1px;
+//   border-color: #eeeeee;
+// `;
 
 const SetBtn = styled.TouchableOpacity`
   width: 100%;

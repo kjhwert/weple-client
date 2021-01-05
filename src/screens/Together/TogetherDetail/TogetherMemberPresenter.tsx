@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 
 interface IProps {
   navigation: any;
-  isFollow: boolean;
 }
 
 export default ({navigation, member}: IProps) => {
@@ -15,14 +14,20 @@ export default ({navigation, member}: IProps) => {
             {member.map((item, idx) => (
               <MemberWrapper key={idx}>
                 <ProfileImage source={item.image} />
-                <MemberTextWrapper>
-                  <MemberText>{item.name}</MemberText>
-                  <FollowBtn isFollow={item.isFollow}>
-                    <FollowBtnText isFollow={item.isFollow}>
-                      {item.isFollow ? '팔로우' : '팔로우 중'}
-                    </FollowBtnText>
-                  </FollowBtn>
-                </MemberTextWrapper>
+                <MemberRecordWrapper>
+                  <MemberNameBtn onPress={() => {}}>
+                    <MemberText>{item.name}</MemberText>
+                  </MemberNameBtn>
+                  <BestRecordWrap>
+                    <BestRecordText>{item.bestText}</BestRecordText>
+                  </BestRecordWrap>
+                  <BestRecordWrap>
+                    <BestRecordText>{item.bestText}</BestRecordText>
+                  </BestRecordWrap>
+                  <BestRecordWrap>
+                    <BestRecordText>{item.bestText}</BestRecordText>
+                  </BestRecordWrap>
+                </MemberRecordWrapper>
               </MemberWrapper>
             ))}
           </Card>
@@ -68,12 +73,21 @@ const ProfileImage = styled.Image`
   margin-right: 20px;
 `;
 
-const MemberTextWrapper = styled.View`
+const MemberRecordWrapper = styled.View`
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 80%;
+  margin-top: 10px;
+`;
+
+const MemberNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 const MemberText = styled.Text`
@@ -82,20 +96,18 @@ const MemberText = styled.Text`
   margin-bottom: 5px;
 `;
 
-const FollowBtn = styled.TouchableOpacity`
-  width: 26%;
-  padding: 7px;
+const BestRecordWrap = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 20%;
+  padding: 5px;
   align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
-  border-width: 1px;
-  border-color: #007bf1;
+  margin-left: 5px;
 `;
 
-const FollowBtnText = styled.Text`
-  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
-  font-size: 12px;
-  font-weight: bold;
+const BestRecordText = styled.Text`
+  font-size: 14px;
+  color: #6d6d6d;
   text-align: center;
+  width: 100%;
 `;

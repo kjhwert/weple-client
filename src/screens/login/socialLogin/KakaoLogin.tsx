@@ -39,13 +39,7 @@ export default ({navigation}: IProps) => {
       .then((result) => {
         setToken(result.accessToken);
 
-        console.log(KAKAO_AUTH_TYPES.Talk);
-        console.log('kakao result:', result);
-
-        logCallback(
-          `Login Finished:${JSON.stringify(result)}`,
-          setLoginLoading(false),
-        );
+        logCallback(`Login Finished:${JSON.stringify(result)}`, setLoginLoading(false));
         getProfile();
       })
 
@@ -54,10 +48,7 @@ export default ({navigation}: IProps) => {
           logCallback(`Login Cancelled:${err.message}`, setLoginLoading(false));
           navigation.goBack();
         } else {
-          logCallback(
-            `Login Failed:${err.code} ${err.message}`,
-            setLoginLoading(false),
-          );
+          logCallback(`Login Failed:${err.code} ${err.message}`, setLoginLoading(false));
           navigation.navigate('login');
         }
       });
@@ -73,10 +64,7 @@ export default ({navigation}: IProps) => {
         logCallback(`Logout Finished:${result}`, setLogoutLoading(false));
       })
       .catch((err) => {
-        logCallback(
-          `Logout Failed:${err.code} ${err.message}`,
-          setLogoutLoading(false),
-        );
+        logCallback(`Logout Failed:${err.code} ${err.message}`, setLogoutLoading(false));
       });
   };
 
@@ -93,20 +81,12 @@ export default ({navigation}: IProps) => {
           return;
         }
 
-        logCallback(
-          `Get Profile Finished:${JSON.stringify(result)}`,
-          setProfileLoading(false),
-        );
+        logCallback(`Get Profile Finished:${JSON.stringify(result)}`, setProfileLoading(false));
 
-        socialLogin(result.email, result.id)
-          ? navigation.navigate('bottomTab')
-          : navigation.navigate('login');
+        socialLogin(result.email, result.id) ? navigation.navigate('bottomTab') : navigation.navigate('login');
       })
       .catch((err) => {
-        logCallback(
-          `Get Profile Failed:${err.code} ${err.message}`,
-          setProfileLoading(false),
-        );
+        logCallback(`Get Profile Failed:${err.code} ${err.message}`, setProfileLoading(false));
         navigation.navigate('login');
       });
   };
@@ -121,10 +101,7 @@ export default ({navigation}: IProps) => {
         logCallback(`Unlink Finished:${result}`, setUnlinkLoading(false));
       })
       .catch((err) => {
-        logCallback(
-          `Unlink Failed:${err.code} ${err.message}`,
-          setUnlinkLoading(false),
-        );
+        logCallback(`Unlink Failed:${err.code} ${err.message}`, setUnlinkLoading(false));
       });
   };
 

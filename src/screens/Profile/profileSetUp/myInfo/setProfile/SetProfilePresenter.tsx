@@ -4,7 +4,6 @@ import ContainerCard from '../../../../../components/ContainerCard';
 import {DuplicateInputBox} from '../../../../../components/CommonInput';
 import {StartNextBtn} from '../../../../../components/CommonBtn';
 import UserContext from '../../../../../module/context/UserContext';
-import {BASE_URL} from '../../../../../module/common';
 
 interface IProps {
   navigation: any;
@@ -25,7 +24,7 @@ export default ({
   hasNickName,
   showPicker,
 }: IProps) => {
-  const {loginUser}: any = useContext(UserContext);
+  const {getProfileUri}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -33,7 +32,7 @@ export default ({
         <ScrollWrapper>
           <ContainerCard>
             <ProfileTopWrapper>
-              <ProfileMainImage source={{uri: BASE_URL + '/' + loginUser.image}} />
+              <ProfileMainImage source={getProfileUri()} />
               <EditBtnWrapper
                 onPress={() => {
                   showPicker();

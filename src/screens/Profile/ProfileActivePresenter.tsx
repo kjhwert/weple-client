@@ -16,7 +16,7 @@ interface IColorChangeProps {
 }
 
 export default ({navigation, showAlert, alertFrame, menuList, radioBoxSortData}: IProps) => {
-  const {loginUser}: any = useContext(UserContext);
+  const {loginUser, getProfileUri}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -50,7 +50,7 @@ export default ({navigation, showAlert, alertFrame, menuList, radioBoxSortData}:
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage source={{uri: BASE_URL + '/' + loginUser.image}} />
+                  <ProfileMainImage source={getProfileUri()} />
                   <EditCard
                     onPress={() => {
                       navigation.navigate('setProfile');
@@ -59,7 +59,7 @@ export default ({navigation, showAlert, alertFrame, menuList, radioBoxSortData}:
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>{loginUser.name}</ProfileNickName>
+                <ProfileNickName>{loginUser.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
@@ -87,9 +87,7 @@ export default ({navigation, showAlert, alertFrame, menuList, radioBoxSortData}:
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
 
-                <ActiveIntroduceText>
-                  {"Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."}
-                </ActiveIntroduceText>
+                <ActiveIntroduceText>{loginUser.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn

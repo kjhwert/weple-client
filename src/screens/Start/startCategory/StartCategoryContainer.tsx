@@ -32,7 +32,6 @@ export default ({navigation}: IProps) => {
     const {data, statusCode} = await categoryApi.activities();
 
     if (statusCode !== 200) {
-      console.log('category error');
     } else {
       setActivities(data);
       setLoading(false);
@@ -44,10 +43,7 @@ export default ({navigation}: IProps) => {
       item.id === catId
         ? {
             ...item,
-            categoryActivity: categoriesActivityClick(
-              selectId,
-              item.categoryActivity,
-            ),
+            categoryActivity: categoriesActivityClick(selectId, item.categoryActivity),
           }
         : item,
     );
@@ -63,19 +59,13 @@ export default ({navigation}: IProps) => {
 
   const checkSelect = () => {
     setIsActive(false);
-    activities.map((item) =>
-      item.categoryActivity.map((subItem) =>
-        subItem.isSelect ? setIsActive(true) : {},
-      ),
-    );
+    activities.map((item) => item.categoryActivity.map((subItem) => (subItem.isSelect ? setIsActive(true) : {})));
   };
 
   const getSelectedActivity = () => {
     const selectActivities = [];
     activities.map((item) =>
-      item.categoryActivity.map((subItem) =>
-        subItem.isSelect ? selectActivities.push(subItem.id) : null,
-      ),
+      item.categoryActivity.map((subItem) => (subItem.isSelect ? selectActivities.push(subItem.id) : null)),
     );
     return selectActivities;
   };

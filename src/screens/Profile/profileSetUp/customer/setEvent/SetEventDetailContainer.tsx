@@ -18,16 +18,14 @@ export default ({navigation, route}: IProps) => {
   });
 
   const getEventDetail = async () => {
-    const id = route.params.id;
+    const id = route.params?.id;
     const {data, statusCode} = await serviceApi.event(id);
 
     if (statusCode !== 200) {
-      console.log('eventDetail error');
     } else {
       setEventDetail(data);
     }
   };
-  console.log('eventDetail:', eventDetail);
 
   useEffect(() => {
     getEventDetail();

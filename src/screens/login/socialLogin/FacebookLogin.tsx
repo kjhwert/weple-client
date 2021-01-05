@@ -12,10 +12,7 @@ export default ({navigation}: IProps) => {
 
   const handleFacebookButtonPress = async () => {
     try {
-      const result = await LoginManager.logInWithPermissions([
-        'public_profile',
-        'email',
-      ]);
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
 
       if (result.isCancelled) {
         // throw 'User cancelled the login process';
@@ -29,17 +26,12 @@ export default ({navigation}: IProps) => {
         navigation.navigate('login');
         return;
       }
-      const facebookCredential = auth.FacebookAuthProvider.credential(
-        data.accessToken,
-      );
+      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
 
       // user정보 get
       const {user} = await auth().signInWithCredential(facebookCredential);
-      console.log('facebook userData:', user);
 
-      (await socialLogin(user.email, user.uid))
-        ? navigation.navigate('bottomTab')
-        : navigation.navigate('login');
+      (await socialLogin(user.email, user.uid)) ? navigation.navigate('bottomTab') : navigation.navigate('login');
     } catch (error) {
       console.error(error);
       navigation.navigate('login');

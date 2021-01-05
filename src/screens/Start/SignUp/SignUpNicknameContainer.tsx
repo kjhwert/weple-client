@@ -46,12 +46,10 @@ export default ({navigation}: IProps) => {
 
     const data = await userApi.hasNickName(userNick.data);
     if (data.statusCode === 200) {
-      console.log('닉네임 사용가능');
       setAlertFrame({showAlert: true, usable: true});
       setIsActive(true);
       return;
     } else {
-      console.log('닉네임 중복');
       setAlertFrame({showAlert: true, usable: false});
       setIsActive(false);
       return;

@@ -23,10 +23,7 @@ import SetAskDetailContainer from '../screens/Profile/profileSetUp/customer/setA
 import SetAnswerDetailContainer from '../screens/Profile/profileSetUp/customer/setAsk/SetAnswerDetailContainer';
 import SetFaqContainer from '../screens/Profile/profileSetUp/customer/setFAQ/SetFaqContainer';
 import TermsContainer from '../screens/Profile/profileSetUp/customer/setTerms/TermsContainer';
-import ServiceDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/ServiceDetailContainer';
-import SubscriptionDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/SubscriptionDetailContainer';
-import PrivacyDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/PrivacyDetailContainer';
-import AgreementDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/AgreementDetailContainer';
+import TermsDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/TermsDetailContainer';
 import AboutAppContainer from '../screens/Profile/profileSetUp/customer/aboutApp/AboutAppContainer';
 import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfile/SetProfileContainer';
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
@@ -182,29 +179,8 @@ export default () => {
         options={{
           headerTitle: '서비스 약관',
         }}
-        name="serviceDetaile"
-        component={ServiceDetailContainer}
-      />
-      <Stack.Screen
-        options={{
-          headerTitle: '구독약관',
-        }}
-        name="subscriptionDetaile"
-        component={SubscriptionDetailContainer}
-      />
-      <Stack.Screen
-        options={{
-          headerTitle: '개인정보 보호정책',
-        }}
-        name="privacyDetaile"
-        component={PrivacyDetailContainer}
-      />
-      <Stack.Screen
-        options={{
-          headerTitle: '이용약관',
-        }}
-        name="agreementDetaile"
-        component={AgreementDetailContainer}
+        name="termsDetaile"
+        component={TermsDetailContainer}
       />
       <Stack.Screen
         options={{

@@ -3,11 +3,10 @@ import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../../module/common';
 
 interface IProps {
-  navigation: any;
   eventDetail: any;
 }
 
-export default ({navigation, eventDetail}: IProps) => {
+export default ({eventDetail}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
