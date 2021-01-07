@@ -8,7 +8,7 @@ export default ({navigation}) => {
     <Container>
       <ContainerCard>
         <PlaceWrapper>
-          <PlaceTitle>함께할 날짜, 시간을 선택해주세요. [필수]</PlaceTitle>
+          <PlaceTitle>모임 날짜, 시간을 선택해주세요. [필수]</PlaceTitle>
           <PlaceInput placeholder="날짜와 시간을 선택해주세요." />
           <PlaceTitle>시작할 위치를 입력해주세요. [필수]</PlaceTitle>
           <PlaceInput placeholder="예) 서울역 3번출구 앞" />
@@ -16,9 +16,7 @@ export default ({navigation}) => {
           <PlaceInput placeholder="숫자를 입력해주세요." />
           <PlaceTitle>참가비를 입력해주세요. [선택]</PlaceTitle>
           <PlaceInput placeholder="원단위로 입력해주세요." />
-          <PlaceInfoText>
-            참가비는 만나서 각자 사용할 예상 금액입니다.
-          </PlaceInfoText>
+          <PlaceInfoText>참가비는 만나서 각자 사용할 예상 금액입니다.</PlaceInfoText>
         </PlaceWrapper>
       </ContainerCard>
       <NextBtn nextPage={'togetherPostmethod'} navigation={navigation}>

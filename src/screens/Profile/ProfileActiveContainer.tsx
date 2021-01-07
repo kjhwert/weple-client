@@ -3,7 +3,7 @@ import ProfilePresenter from './ProfileActivePresenter';
 
 const menuList = [
   {id: 0, name: '나의 활동', isClick: true},
-  {id: 1, name: '내가 참여중인 함께', isClick: false},
+  {id: 1, name: '내가 참여중인 모임', isClick: false},
 ];
 
 interface IProps {
@@ -23,16 +23,8 @@ export default ({navigation}: IProps) => {
       value: 'distance',
     },
     {
-      label: '참가자 많은 순',
-      value: 'participant',
-    },
-    {
       label: '최신 등록 순',
       value: 'registration',
-    },
-    {
-      label: '모집마감 임박 순',
-      value: 'deadline',
     },
   ];
 

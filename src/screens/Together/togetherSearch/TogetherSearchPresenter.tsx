@@ -11,14 +11,20 @@ export default ({navigation, openClub}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
-            <ActiveSelectTitleWrapper>
-              <ProfileTitleBtn onPress={() => {}}>
-                <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
-              </ProfileTitleBtn>
-              <SortBtn>
-                <SortImage source={require('../../../assets/sort_icon.png')} />
-              </SortBtn>
-            </ActiveSelectTitleWrapper>
+            <Wrapper>
+              <ActiveSelectTitleWrapper>
+                <CategoryTogetherBtn onPress={() => {}}>
+                  <CategoryTogetherImage source={require('../../../assets/icon_category.png')} />
+                  <CategoryTogetherText>카테고리</CategoryTogetherText>
+                </CategoryTogetherBtn>
+                <LocationBtn
+                  onPress={() => {
+                    navigation.navigate('togetherMain');
+                  }}>
+                  <LocationImage source={require('../../../assets/icon_location.png')} />
+                </LocationBtn>
+              </ActiveSelectTitleWrapper>
+            </Wrapper>
 
             {openClub.map((item, idx) => (
               <RecruitWrapper key={idx}>
@@ -70,9 +76,10 @@ const ContainerCard = styled.View`
   align-items: center;
 `;
 
-const Line = styled.View`
+const Wrapper = styled.View`
+  display: flex;
   width: 100%;
-  padding: 5px;
+  padding: 10px 20px;
   background-color: #f3f3f3;
 `;
 
@@ -80,33 +87,43 @@ const ActiveSelectTitleWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
-  background-color: #f3f3f3;
-  padding: 20px;
 `;
 
-const ProfileTitleBtn = styled.TouchableOpacity`
-  width: 85%;
+const CategoryTogetherBtn = styled.TouchableOpacity`
+  width: 85px;
   flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-color: #e7e7e7;
+  background-color: #ffffff;
+  padding: 6px 0;
 `;
 
-const ProfileActiveTitle = styled.Text`
-  font-size: 15px;
-  color: #333;
-  text-align: left;
-  margin-right: 5px;
+const CategoryTogetherImage = styled.Image`
+  width: 15px;
+  height: 15px;
 `;
 
-const SortBtn = styled.TouchableOpacity`
-  width: 15%;
+const CategoryTogetherText = styled.Text`
+  font-size: 12px;
+  color: #666666;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 10px;
+`;
+
+const LocationBtn = styled.TouchableOpacity`
+  width: 10%;
   flex-flow: row wrap;
   justify-content: flex-end;
 `;
 
-const SortImage = styled.Image`
-  width: 23px;
-  height: 18px;
+const LocationImage = styled.Image`
+  width: 20px;
+  height: 20px;
 `;
 
 const RecruitWrapper = styled.View`
@@ -182,7 +199,7 @@ const RecruitAddress = styled.Text`
   width: 100%;
   font-size: 12px;
   color: #777;
-  padding: 5px 0 10px 0;
+  padding: 5px 0;
 `;
 
 const EntryFee = styled.Text`
@@ -190,7 +207,7 @@ const EntryFee = styled.Text`
   font-size: 11px;
   color: #000;
   font-weight: bold;
-  padding: 5px 0;
+  padding-bottom: 5px;
 `;
 
 const Deadline = styled.Text`

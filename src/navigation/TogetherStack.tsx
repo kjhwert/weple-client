@@ -12,13 +12,13 @@ import TogetherPostMethodContainer from '../screens/Together/togetherPost/Togeth
 import TogetherPostContainer from '../screens/Together/togetherPost/TogetherPostContainer';
 import BackBtn from '../components/BackBtn';
 import TogetherAlarmContainer from '../screens/Together/togetherAlarm/TogetherAlarmContainer';
-import TogetherOpenContainer from '../screens/Together/togetherOpen/TogetherOpenContainer';
 import Search from '../components/Search';
 import TogetherContainer from '../screens/Together/TogetherContainer';
 import TogetherDeleteContainer from '../screens/Together/TogetherDetail/TogetherDeleteContainer';
 import TogetherPostActivityContainer from '../screens/Together/togetherPost/TogetherPostActivityContainer';
 import TogetherModifyContainer from '../screens/Together/TogetherDetail/TogetherModifyContainer';
 import TogetherDetailContainer from '../screens/Together/TogetherDetail/TogetherDetailContainer';
+import TogetherDetailListContainer from '../screens/Together/TogetherDetail/TogetherDetailListContainer';
 
 const Stack = createStackNavigator();
 
@@ -34,14 +34,12 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => (
-          <Notification navigation={navigation} route={route} />
-        ),
+        headerRight: () => <Notification navigation={navigation} route={route} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
         options={({navigation, route}) => ({
-          headerTitle: '함께',
+          headerTitle: '모임',
           headerLeft: () => <Search navigation={navigation} route={route} />,
           cardStyle: {backgroundColor: '#f4f5fa'},
         })}
@@ -50,7 +48,7 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 검색결과',
+          headerTitle: '모임 검색결과',
         }}
         name="togetherSearch"
         component={TogetherSearchContainer}
@@ -64,42 +62,42 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께',
+          headerTitle: '모임',
         }}
-        name="togetherOpen"
-        component={TogetherOpenContainer}
+        name="togetherDetailList"
+        component={TogetherDetailListContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기',
+          headerTitle: '모임',
         }}
         name="togetherDetail"
         component={TogetherDetailContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기',
+          headerTitle: '모임',
         }}
         name="togetherParticipate"
         component={TogetherParticipateContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기',
+          headerTitle: '모임',
         }}
         name="togetherModify"
         component={TogetherModifyContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기',
+          headerTitle: '모임',
         }}
         name="togetherDelete"
         component={TogetherDeleteContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기 참가인원',
+          headerTitle: '모임하기 참가인원',
         }}
         name="togetherMember"
         component={TogetherMemberContainer}
@@ -113,42 +111,42 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 개설하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPostSubject"
         component={TogetherPostSubjectContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 개설하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPostIntroduce"
         component={TogetherPostIntroduceContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 개설하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPostPlace"
         component={TogetherPostPlaceContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 개설하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPostmethod"
         component={TogetherPostMethodContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께 개설하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPostActivity"
         component={TogetherPostActivityContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '함께하기',
+          headerTitle: '모임 개설하기',
         }}
         name="togetherPost"
         component={TogetherPostContainer}

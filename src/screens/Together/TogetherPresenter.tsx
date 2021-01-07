@@ -1,66 +1,108 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL} from '../../module/common';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
+  userList: any;
+  togetherPaging: any;
+  setLocationPaging: () => void;
+  setFollowerPaging: () => void;
+  setEndSoonPaging: () => void;
 }
 
-export default ({navigation, menuList, openClub}: IProps) => {
+export default ({
+  navigation,
+  userList,
+  togetherPaging,
+  setLocationPaging,
+  setFollowerPaging,
+  setEndSoonPaging,
+  openClub,
+}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <ContainerCard>
+          <Card>
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn
                 onPress={() => {
-                  navigation.navigate('togetherOpen');
+                  navigation.navigate('togetherDetailList');
                 }}>
-                <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
-                <RecruitTogetherNumber>8</RecruitTogetherNumber>
+                <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
+                <RecruitTogetherNumber>{userList.togetherCount}</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
-            <RecruitWrapper>
-              <RecruitImageWrapper
-                onPress={() => {
-                  navigation.navigate('togetherModify');
-                }}>
-                <RecruitImage source={require('../../assets/photo_4.jpeg')} />
-                <RecordWrapper>
-                  <RecordImage source={require('../../assets/active_cycle.png')} />
-                  <RecordText>21.7 KM</RecordText>
-                </RecordWrapper>
-              </RecruitImageWrapper>
-              <RecruitTextWrapper>
-                <RecruitTitleBtn
-                  onPress={() => {
-                    navigation.navigate('togetherModify');
-                  }}>
-                  <RecruitTitle>강변북로 라이딩</RecruitTitle>
-                </RecruitTitleBtn>
-                <RecruitAddress>서울특별시 마포구 공덕동 118-1</RecruitAddress>
-                <EntryFee>참가비 10,000원</EntryFee>
-                <Deadline>모집마감 18시간 전</Deadline>
-              </RecruitTextWrapper>
-            </RecruitWrapper>
-            <RecruitBtnWrapper>
-              <RecruitBtn
-                onPress={() => {
-                  navigation.navigate('togetherPostSubject');
-                }}>
-                <RecruitBtnText>함께 개설하기</RecruitBtnText>
-              </RecruitBtn>
-            </RecruitBtnWrapper>
-            <Line></Line>
+            {userList?.togetherCount === 0 ? (
+              <Wrapper>
+                <TogetherOpenWrapper>
+                  <OpenBtnWrapper
+                    onPress={() => {
+                      navigation.navigate('togetherPostSubject');
+                    }}>
+                    <OpenBtnImage source={require('../../assets/icon_plus.png')} />
+                  </OpenBtnWrapper>
+                  <TogetherOpenText>모임을 만들어주세요</TogetherOpenText>
+                </TogetherOpenWrapper>
+              </Wrapper>
+            ) : (
+              <>
+                {userList.togethers.map((item, idx) => (
+                  <RecruitWrapper key={idx}>
+                    <RecruitImageWrapper
+                      onPress={() => {
+                        navigation.navigate('togetherModify');
+                      }}>
+                      <RecruitImage source={require('../../assets/photo_4.jpeg')} />
+                      <RecordWrapper>
+                        <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${item.activity.image}`}} />
+                        <RecordText>21.7 KM</RecordText>
+                      </RecordWrapper>
+                    </RecruitImageWrapper>
+                    <RecruitTextWrapper>
+                      <RecruitTitleBtn
+                        onPress={() => {
+                          navigation.navigate('togetherModify');
+                        }}>
+                        <RecruitTitle>{item.title}</RecruitTitle>
+                      </RecruitTitleBtn>
+                      <RecruitAddress>{item.togetherPlace}</RecruitAddress>
+                      <EntryFee>{item.togetherPrice}원</EntryFee>
+                      <Deadline>{item.limitDate}</Deadline>
+                    </RecruitTextWrapper>
+                  </RecruitWrapper>
+                ))}
 
+                <RecruitBtnWrapper>
+                  <RecruitBtn
+                    onPress={() => {
+                      navigation.navigate('togetherPostSubject');
+                    }}>
+                    <RecruitBtnText>모임 개설하기</RecruitBtnText>
+                  </RecruitBtn>
+                </RecruitBtnWrapper>
+              </>
+            )}
+
+            <Line></Line>
             <MenuBarWrapper>
-              {menuList.map((item, idx) => (
-                <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn onPress={() => {}}>
-                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
+              {['내 주변', '팔로워', '모집임박'].map((name, idx) => (
+                <MenuWrapper key={idx} focused={togetherPaging.id === idx}>
+                  <MenuBtn
+                    onPress={() => {
+                      switch (idx) {
+                        case 0:
+                          return setLocationPaging();
+                        case 1:
+                          return setFollowerPaging();
+                        case 2:
+                          return setEndSoonPaging();
+                      }
+                    }}>
+                    <MenuText focused={togetherPaging.id === idx}>{name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -68,11 +110,12 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <Line></Line>
 
             <RecruitTogetherWrapper>
-              <RecruitTogetherBtn onPress={() => {}}>
-                <RecruitTogetherText>내 주변 개설 함께</RecruitTogetherText>
-                <RecruitTogetherNumber>8</RecruitTogetherNumber>
-                <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
-              </RecruitTogetherBtn>
+              <RecruitTogetherWrap>
+                <RecruitTogetherText>내 주변 개설 모임</RecruitTogetherText>
+              </RecruitTogetherWrap>
+              <LocationBtn onPress={() => {}}>
+                <LocationImage source={require('../../assets/icon_location.png')} />
+              </LocationBtn>
             </RecruitTogetherWrapper>
 
             {openClub.map((item, idx) => (
@@ -100,7 +143,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                 </RecruitTextWrapper>
               </RecruitWrapper>
             ))}
-          </ContainerCard>
+          </Card>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -118,7 +161,7 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const ContainerCard = styled.View`
+const Card = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
@@ -133,12 +176,16 @@ const Line = styled.View`
 
 const RecruitTogetherWrapper = styled.View`
   display: flex;
+  flex-flow: row;
   width: 100%;
   padding: 10px 20px;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-color: #eee;
 `;
 
 const RecruitTogetherBtn = styled.TouchableOpacity`
-  width: 100%;
+  width: 70%;
   flex-flow: row wrap;
   padding: 5px 0;
   align-items: center;
@@ -153,6 +200,50 @@ const RecruitTogetherText = styled.Text`
   margin-right: 5px;
 `;
 
+const RecruitTogetherWrap = styled.View`
+  width: 70%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const Wrapper = styled.View`
+  display: flex;
+  width: 100%;
+  padding: 20px;
+`;
+
+const TogetherOpenWrapper = styled.View`
+  display: flex;
+  width: 100%;
+  height: 180px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: #fcfcfd;
+  border-width: 1px;
+  border-color: #d2d2d2;
+`;
+
+const OpenBtnWrapper = styled.TouchableOpacity`
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const OpenBtnImage = styled.Image`
+  width: 50px;
+  height: 50px;
+`;
+
+const TogetherOpenText = styled.Text`
+  color: #b4b4b4;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 20px;
+`;
+
 const RecruitTogetherNumber = styled.Text`
   color: #007bf1;
   font-weight: bold;
@@ -165,6 +256,18 @@ const RecruitTogetherMoreImage = styled.Image`
   height: 10px;
 `;
 
+const LocationBtn = styled.TouchableOpacity`
+  width: 30%;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const LocationImage = styled.Image`
+  width: 20px;
+  height: 20px;
+`;
+
 const RecruitWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
@@ -172,7 +275,7 @@ const RecruitWrapper = styled.View`
   justify-content: flex-start;
   width: 100%;
   padding: 10px 20px;
-  border-top-width: 1px;
+  border-bottom-width: 1px;
   border-color: #eee;
 `;
 
@@ -294,7 +397,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
+  border-color: ${({focused}: {focused: boolean}) => (focused ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -304,8 +407,8 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#3a3636')};
+  font-size: 16px;
+  color: ${({focused}: {focused: boolean}) => (focused ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;

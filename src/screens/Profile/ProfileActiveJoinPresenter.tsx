@@ -1,58 +1,21 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import AlertWrapper from '../../components/AlertWrapper';
-import RadioButtonRN from 'radio-buttons-react-native';
 
 interface IProps {
   navigation: any;
   isClick: boolean;
-  showAlert: boolean;
-  alertFrame: Function;
 }
 
-export default ({
-  navigation,
-  showAlert,
-  alertFrame,
-  radioBoxSortData,
-  menuList,
-  openClub,
-}: IProps) => {
+export default ({navigation, menuList, openClub}: IProps) => {
   return (
     <Container>
-      {showAlert && (
-        <AlertWrapper>
-          <AlertTextWrapper>
-            <AlertTitleText>정렬</AlertTitleText>
-            <RadioButtonRN
-              box={false}
-              circleSize={8}
-              activeColor={'#187fe2'}
-              textStyle={{
-                fontSize: 13,
-                color: '#919191',
-                padding: 3,
-              }}
-              data={radioBoxSortData}
-            />
-          </AlertTextWrapper>
-          <ConfirmButton
-            onPress={() => {
-              alertFrame(false);
-            }}>
-            <ConfirmButtonText>적용</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage
-                    source={require('../../assets/profile_1.png')}
-                  />
+                  <ProfileMainImage source={require('../../assets/profile_1.png')} />
                   <EditCard
                     onPress={() => {
                       navigation.navigate('setProfile');
@@ -98,9 +61,7 @@ export default ({
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  {
-                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
-                  }
+                  {"Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."}
                 </ActiveIntroduceText>
                 <PayBtnWrapper>
                   <PaymentBtn
@@ -141,17 +102,12 @@ export default ({
             <ProfileActiveTitleWrapper>
               <ProfileTitleBtn onPress={() => {}}>
                 <ProfileActiveTitle>
-                  <BoldText>GilDong</BoldText>님이 참여중인 함께
+                  <BoldText>GilDong</BoldText>님이 참여중인 모임
                 </ProfileActiveTitle>
                 <ProfileActiveNumber>8</ProfileActiveNumber>
               </ProfileTitleBtn>
-              <SortBtn
-                onPress={() => {
-                  alertFrame(true);
-                }}>
-                <SortImage source={require('../../assets/sort_icon.png')} />
-              </SortBtn>
             </ProfileActiveTitleWrapper>
+
             {openClub.map((item, idx) => (
               <RecruitWrapper key={idx}>
                 <RecruitImageWrapper onPress={() => {}}>
@@ -178,38 +134,6 @@ export default ({
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const AlertTextWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  padding: 20px 10px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 13px;
-  color: #121212;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 5px;
-  padding: 5px 0;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 10px;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
 `;
 
 const ScrollContainer = styled.View`
@@ -461,17 +385,6 @@ const ProfileActiveNumber = styled.Text`
   font-size: 15px;
 `;
 
-const SortBtn = styled.TouchableOpacity`
-  width: 15%;
-  flex-flow: row wrap;
-  justify-content: flex-end;
-`;
-
-const SortImage = styled.Image`
-  width: 23px;
-  height: 18px;
-`;
-
 const RecruitWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
@@ -542,7 +455,7 @@ const RecruitAddress = styled.Text`
   width: 100%;
   font-size: 12px;
   color: #777;
-  padding: 5px 0 10px 0;
+  padding: 5px 0;
 `;
 
 const EntryFee = styled.Text`
@@ -550,7 +463,7 @@ const EntryFee = styled.Text`
   font-size: 11px;
   color: #000;
   font-weight: bold;
-  padding: 5px 0;
+  padding-bottom: 5px;
 `;
 
 const Deadline = styled.Text`

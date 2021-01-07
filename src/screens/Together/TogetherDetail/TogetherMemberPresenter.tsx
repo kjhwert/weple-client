@@ -13,20 +13,35 @@ export default ({navigation, member}: IProps) => {
           <Card>
             {member.map((item, idx) => (
               <MemberWrapper key={idx}>
-                <ProfileImage source={item.image} />
+                <ProfileImageWrap>
+                  <ProfileImage source={item.image} />
+                </ProfileImageWrap>
                 <MemberRecordWrapper>
                   <MemberNameBtn onPress={() => {}}>
-                    <MemberText>{item.name}</MemberText>
+                    <MemberName>{item.name}</MemberName>
                   </MemberNameBtn>
-                  <BestRecordWrap>
-                    <BestRecordText>{item.bestText}</BestRecordText>
-                  </BestRecordWrap>
-                  <BestRecordWrap>
-                    <BestRecordText>{item.bestText}</BestRecordText>
-                  </BestRecordWrap>
-                  <BestRecordWrap>
-                    <BestRecordText>{item.bestText}</BestRecordText>
-                  </BestRecordWrap>
+                  <RecordWrapper>
+                    <BestRecordWrap>
+                      <ImageColor1>
+                        <BestImage source={item.bestOneImage} />
+                      </ImageColor1>
+                      <BestRecordText>{item.bestOneText} km</BestRecordText>
+                    </BestRecordWrap>
+
+                    <BestRecordWrap>
+                      <ImageColor2>
+                        <BestImage source={item.bestTwoImage} />
+                      </ImageColor2>
+                      <BestRecordText>{item.bestTwoText} km</BestRecordText>
+                    </BestRecordWrap>
+
+                    <BestRecordWrap>
+                      <ImageColor3>
+                        <BestImage source={item.bestThreeImage} />
+                      </ImageColor3>
+                      <BestRecordText>{item.bestThreeText} km</BestRecordText>
+                    </BestRecordWrap>
+                  </RecordWrapper>
                 </MemberRecordWrapper>
               </MemberWrapper>
             ))}
@@ -53,7 +68,6 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
-  background-color: #fff;
 `;
 
 const MemberWrapper = styled.View`
@@ -66,48 +80,89 @@ const MemberWrapper = styled.View`
   border-color: #e0e0e0;
 `;
 
+const ProfileImageWrap = styled.View`
+  width: 20%;
+  align-items: flex-start;
+`;
+
 const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  margin-right: 20px;
 `;
 
 const MemberRecordWrapper = styled.View`
+  width: 80%;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
-  width: 80%;
-  margin-top: 10px;
 `;
 
 const MemberNameBtn = styled.TouchableOpacity`
   width: 100%;
-  flex-flow: row wrap;
+  flex-flow: row;
   padding: 5px 0;
-  align-items: center;
-  justify-content: flex-start;
 `;
 
-const MemberText = styled.Text`
+const MemberName = styled.Text`
   font-size: 13px;
   color: #333;
-  margin-bottom: 5px;
+`;
+
+const RecordWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
 `;
 
 const BestRecordWrap = styled.View`
   display: flex;
   flex-flow: row;
-  width: 20%;
-  padding: 5px;
+  width: 33%;
   align-items: center;
-  margin-left: 5px;
+`;
+
+const ImageColor1 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #007bf1;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImageColor2 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #8784ff;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImageColor3 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #00bbc7;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BestImage = styled.Image`
+  width: 15px;
+  height: 13px;
 `;
 
 const BestRecordText = styled.Text`
-  font-size: 14px;
+  font-size: 10px;
   color: #6d6d6d;
-  text-align: center;
-  width: 100%;
+  text-align: left;
+  width: 68%;
+  margin-left: 5px;
 `;

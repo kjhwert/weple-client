@@ -8,15 +8,14 @@ const slideData = [
     key: '1',
     title: '개인정보에 대해서 (필수)',
     text:
-      '개인정보는 땀나의 주요 관심사 중 하나입니다.\n만약 개인정보가 당신에게 중요하다면\n개인정보 정책 조건에 동의하기 전에\n땀나가 어떻게 당신의 데이터를 보호하는지 확인하실\n수 있습니다.',
+      '개인정보는 위플(weple)의 주요 관심사 중 하나입니다.\n만약 개인정보가 당신에게 중요하다면\n개인정보 정책 조건에 동의하기 전에\n위플이 어떻게 당신의 데이터를 보호하는지 확인하실\n수 있습니다.',
     number: '01',
     image: require('../../../assets/personal_shield.png'),
   },
   {
     key: '2',
     title: '개인 동영상 등등 (필수)',
-    text:
-      '당신의 모험을 땀나게 하기 위하여, 경로 및\n사진과 같은 귀하의 개인 데이터를 처리 해야\n합니다.',
+    text: '당신의 모험을 땀나게 하기 위하여, 경로 및\n사진과 같은 귀하의 개인 데이터를 처리 해야\n합니다.',
     number: '02',
     image: require('../../../assets/personal_camera.png'),
   },
@@ -83,7 +82,5 @@ export default ({navigation}: IProps) => {
     confirmPermission();
   }, []);
 
-  return (
-    <PersonalDataPresenter navigation={navigation} slideData={slideData} />
-  );
+  return <PersonalDataPresenter navigation={navigation} slideData={slideData} />;
 };

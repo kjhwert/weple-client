@@ -26,6 +26,7 @@ import TermsContainer from '../screens/Profile/profileSetUp/customer/setTerms/Te
 import TermsDetailContainer from '../screens/Profile/profileSetUp/customer/setTerms/TermsDetailContainer';
 import AboutAppContainer from '../screens/Profile/profileSetUp/customer/aboutApp/AboutAppContainer';
 import SetProfileContainer from '../screens/Profile/profileSetUp/myInfo/setProfile/SetProfileContainer';
+import SetCategoryContainer from '../screens/Profile/profileSetUp/myInfo/setCategory/SetCategoryContainer';
 import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPassword/SetPasswordContainer';
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
 import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/AlarmSetContainer';
@@ -195,6 +196,13 @@ export default () => {
         }}
         name="setProfile"
         component={SetProfileContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '관심 카테고리 수정',
+        }}
+        name="setCategory"
+        component={SetCategoryContainer}
       />
       <Stack.Screen
         options={{

@@ -185,7 +185,7 @@ export const UserContextProvider = ({children}: IProps) => {
       return false;
     } else {
       if (createUser.isSocialLogin) {
-        return await socialLogin(createUser.email, createUser.socialUid);
+        return await socialLogin(requestCreate.email, requestCreate.socialUid);
       } else {
         return await paramLogin(requestCreate.email, requestCreate.password);
       }
@@ -225,7 +225,7 @@ export const UserContextProvider = ({children}: IProps) => {
     if (loginUser.image) {
       return {uri: BASE_URL + '/' + loginUser.image};
     } else {
-      return require('../../assets/plus_icon.png');
+      return require('../../assets/icon_plus.png');
     }
   };
 

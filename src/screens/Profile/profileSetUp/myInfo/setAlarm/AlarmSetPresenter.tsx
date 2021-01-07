@@ -15,19 +15,10 @@ export default ({navigation}: IProps) => {
   return (
     <Container>
       <Card>
-        <SetBtnWrapper>
-          <SetBtn onPress={() => {}}>
-            <SetUpListText>시스템 설정 변경</SetUpListText>
-            <MoreImage source={require('../../../../../assets/set_more.png')} />
-          </SetBtn>
-        </SetBtnWrapper>
-
         <AlarmSetWrapper>
           <AlarmSetTextWrapper>
             <AlarmSetTitle>PUSH 알림</AlarmSetTitle>
-            <AlarmSetContent>
-              {'팔로워 활동, 소셜, 업데이트 등에 대한 알림을 받으세요.'}
-            </AlarmSetContent>
+            <AlarmSetContent>{'팔로워 활동, 소셜, 업데이트 등에 대한 알림을 받으세요.'}</AlarmSetContent>
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
@@ -41,9 +32,7 @@ export default ({navigation}: IProps) => {
         <AlarmSetWrapper>
           <AlarmSetTextWrapper>
             <AlarmSetTitle>E-mail</AlarmSetTitle>
-            <AlarmSetContent>
-              {'팔로워 활동, 소셜, 업데이트 등에 대한 이메일을 받으세요.'}
-            </AlarmSetContent>
+            <AlarmSetContent>{'팔로워 활동, 소셜, 업데이트 등에 대한 이메일을 받으세요.'}</AlarmSetContent>
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
@@ -68,33 +57,6 @@ const Card = styled.View`
   display: flex;
   align-items: center;
   background-color: #fff;
-`;
-
-const SetBtnWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  padding: 20px;
-  border-bottom-width: 1px;
-  border-color: #eeeeee;
-`;
-
-const SetBtn = styled.TouchableOpacity`
-  width: 100%;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SetUpListText = styled.Text`
-  font-size: 13px;
-  text-align: left;
-  color: #7f7f7f;
-  width: 85%;
-`;
-
-const MoreImage = styled.Image`
-  width: 13px;
-  height: 13px;
 `;
 
 const AlarmSetWrapper = styled.View`

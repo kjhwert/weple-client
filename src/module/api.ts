@@ -44,8 +44,8 @@ export const utilitiesApi = {
 };
 
 export const userApi = {
-  login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
+  login: (login: IUserApiLogin) => apiRequest(api.post('/user/login', login)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/user/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
   hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
   hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
@@ -61,6 +61,9 @@ export const userApi = {
         },
       }),
     ),
+  getCategory: () => apiRequest(api.get('/user/categories')),
+  putCategory: () => apiRequest(api.put('/user/categories')),
+  dropOut: () => apiRequest(api.delete('/user')),
 };
 
 export const serviceApi = {
@@ -70,6 +73,10 @@ export const serviceApi = {
   event: (id: string) => apiRequest(api.get('/event/' + id)),
   faq: () => apiRequest(api.get('/faq')),
   terms: () => apiRequest(api.get('/terms')),
+};
+
+export const togetherApi = {
+  userOpenList: () => apiRequest(api.get('/together/user')),
 };
 
 export const feedApi = {

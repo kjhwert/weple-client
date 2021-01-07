@@ -13,7 +13,7 @@ export default ({navigation, content}) => {
           <Card>
             <JoinWrapper>
               <JoinInfoWrapper>
-                <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                <JoinTitle>모임하는 강변북로 라이딩</JoinTitle>
                 <JoinTextWrapper>
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContent>12명</JoinInfoContent>
@@ -35,11 +35,11 @@ export default ({navigation, content}) => {
               ))}
             </JoinWrapper>
           </Card>
+          <NextBtn nextPage={'togetherModify'} navigation={navigation}>
+            {`완료`}
+          </NextBtn>
         </ScrollWrapper>
       </ScrollContainer>
-      <NextBtn nextPage={'togetherModify'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
     </Container>
   );
 };

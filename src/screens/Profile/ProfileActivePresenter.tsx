@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import AlertWrapper from '../../components/AlertWrapper';
 import RadioButtonRN from 'radio-buttons-react-native';
 import UserContext from '../../module/context/UserContext';
-import {BASE_URL} from '../../module/common';
 
 interface IProps {
   navigation: any;

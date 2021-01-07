@@ -1,13 +1,7 @@
 import React from 'react';
-import TogetherOpenPresenter from './TogetherOpenPresenter';
+import TogetherDetailListPresenter from './TogetherDetailListPresenter';
 
-const menuList = [
-  {id: 0, name: '내 주변', isClick: true},
-  {id: 1, name: '팔로워', isClick: false},
-  {id: 2, name: '모집임박', isClick: false},
-];
-
-const aroundData = [
+const openClub = [
   {
     id: 0,
     image: require('../../../assets/photo_2.jpeg'),
@@ -19,7 +13,7 @@ const aroundData = [
     endTime: 18,
   },
   {
-    id: 0,
+    id: 1,
     image: require('../../../assets/photo_2.jpeg'),
     iconImage: require('../../../assets/active_cycle.png'),
     distance: 18.8,
@@ -29,7 +23,27 @@ const aroundData = [
     endTime: 18,
   },
   {
-    id: 0,
+    id: 2,
+    image: require('../../../assets/photo_2.jpeg'),
+    iconImage: require('../../../assets/active_cycle.png'),
+    distance: 30.5,
+    title: '남한강 라이딩',
+    address: '서울특별시 마포구 공덕동 118-1',
+    pay: '10,000',
+    endTime: 18,
+  },
+  {
+    id: 3,
+    image: require('../../../assets/photo_2.jpeg'),
+    iconImage: require('../../../assets/active_cycle.png'),
+    distance: 18.8,
+    title: '북한강 라이딩',
+    address: '서울특별시 마포구 공덕동 118-1',
+    pay: '10,000',
+    endTime: 18,
+  },
+  {
+    id: 4,
     image: require('../../../assets/photo_2.jpeg'),
     iconImage: require('../../../assets/active_cycle.png'),
     distance: 30.5,
@@ -45,11 +59,5 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return (
-    <TogetherOpenPresenter
-      navigation={navigation}
-      menuList={menuList}
-      aroundData={aroundData}
-    />
-  );
+  return <TogetherDetailListPresenter navigation={navigation} openClub={openClub} />;
 };
