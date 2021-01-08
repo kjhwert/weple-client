@@ -155,6 +155,7 @@ const MoreBtnWrapper = styled.View`
   flex-flow: row;
   width: 100%;
   padding: 20px 0;
+  margin: 10px 0;
   flex: 1;
 `;
 

@@ -1,42 +1,45 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../../../components/NextBtn';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
+  inquiryList: any;
 }
 
-export default ({navigation, askList}: IProps) => {
+export default ({navigation, inquiryList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {askList.map((item, idx) => (
+            {inquiryList.map((item, idx) => (
               <AskWrapper key={idx}>
                 <AskTextWrapper>
                   <AskTextBtn
                     onPress={() => {
-                      navigation.navigate('setAnswerDetail');
+                      item.requestStatus
+                        ? navigation.navigate('setAnswerDetail', {data: item})
+                        : navigation.navigate('setAskDetail', {data: item});
                     }}>
-                    <AskText>{item.title}</AskText>
+                    <AskText>{item.requestTitle}</AskText>
                   </AskTextBtn>
-                  <AskDateText>{item.date}</AskDateText>
+                  <AskDateText>{item.requestDate}</AskDateText>
                 </AskTextWrapper>
 
-                <FollowBtn isClick={item.isClick}>
-                  <FollowBtnText isClick={item.isClick}>
-                    {item.isClick ? '답변완료' : '미답변'}
-                  </FollowBtnText>
+                <FollowBtn backgroundColor={item.requestStatus}>
+                  <FollowBtnText>{item.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
                 </FollowBtn>
               </AskWrapper>
             ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
-      <NextBtn nextPage={'setAskWrite'} navigation={navigation}>
-        {`문의하기`}
+
+      <NextBtn
+        onPress={() => {
+          navigation.navigate('setAskWrite');
+        }}>
+        <NextText>문의하기</NextText>
       </NextBtn>
     </Container>
   );
@@ -109,8 +112,7 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${(props: IProps) =>
-    props.isClick ? '#00bbc7' : '#bcbcbc'};
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#00bbc7' : '#bcbcbc')};
 `;
 
 const FollowBtnText = styled.Text`
@@ -118,4 +120,21 @@ const FollowBtnText = styled.Text`
   font-size: 12px;
   font-weight: bold;
   text-align: center;
+`;
+
+const NextBtn = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bf1;
+  position: absolute;
+  bottom: 0;
+`;
+
+const NextText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

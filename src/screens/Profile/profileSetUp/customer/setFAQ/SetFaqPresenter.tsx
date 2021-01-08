@@ -14,7 +14,7 @@ export default ({faqList}: IProps) => {
             {faqList.map((item, idx) => (
               <FaqWrapper key={idx}>
                 <FaqBtnWrapper>
-                  <FaqBtn onPress={() => {}}>
+                  <FaqBtn>
                     <FaqTitleText>{item.request}</FaqTitleText>
                   </FaqBtn>
                   <FaqAnswerText>{item.response}</FaqAnswerText>
@@ -62,7 +62,7 @@ const FaqBtnWrapper = styled.View`
   width: 100%;
 `;
 
-const FaqBtn = styled.TouchableOpacity`
+const FaqBtn = styled.View`
   width: 100%;
   padding: 5px 0;
   align-items: flex-start;

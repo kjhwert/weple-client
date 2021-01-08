@@ -155,7 +155,7 @@ export default ({navigation, logOutAlert, logOutAlertFrame, dropOutAlert}: IProp
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    // dropOutAlert();
+                    dropOutAlert();
                   }}>
                   <SetUpListText>회원탈퇴</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />

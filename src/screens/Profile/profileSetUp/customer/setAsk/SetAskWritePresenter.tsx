@@ -8,9 +8,11 @@ var AskType = [['싸이클링', '달리기', '걷기', '등산']];
 
 interface IProps {
   navigation: any;
+  onChangeAskData: Function;
+  askDataRegister: Function;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, onChangeAskData, askDataRegister}: IProps) => {
   const [showAlert, setShowAlert] = useState(false);
 
   return (
@@ -18,14 +20,12 @@ export default ({navigation}: IProps) => {
       {showAlert && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../../../assets/alertCheck_icon.png')}
-            />
+            <AlertImage source={require('../../../../../assets/alertCheck_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{'문의가 접수되었습니다.'}</AlertTitleText>
           <ConfirmButton
             onPress={() => {
-              navigation.navigate('setAsk');
+              navigation.navigate('setAsk', {refresh: true});
             }}>
             <ConfirmButtonText>확인</ConfirmButtonText>
           </ConfirmButton>
@@ -50,17 +50,27 @@ export default ({navigation}: IProps) => {
           data={AskType}></DropdownMenu> */}
 
         <AskWriteWrapper>
-          <AskTitleInput placeholder="문의 제목을 입력해주세요." />
+          <AskTitleInput
+            placeholder="문의 제목을 입력해주세요."
+            name="requestTitle"
+            onChange={onChangeAskData}
+            maxLength={100}
+          />
           <AskInput
             placeholder="산업안전보건법에 따라 고객응대근로자 보호조치가 시행 중이며, 모든
             문의 내용은 기록으로 남습니다."
             multiline={true}
+            textAlignVertical={'top'}
+            name="requestDescription"
+            onChange={onChangeAskData}
           />
         </AskWriteWrapper>
       </ContainerCard>
+
       <NextBtn
         onPress={() => {
           setShowAlert(true);
+          askDataRegister();
         }}>
         <NextText>문의하기</NextText>
       </NextBtn>
@@ -130,17 +140,20 @@ const AskTitleInput = styled.TextInput`
   border-width: 1px;
   border-color: #bcbcbc;
   font-size: 13px;
-  color: #d0d0d0;
+  color: #555555;
   margin-bottom: 10px;
 `;
 
 const AskInput = styled.TextInput`
   width: 100%;
-  padding: 5px 10px;
+  height: 350px;
+  max-height: 350px;
+  padding: 10px;
+  margin-bottom: 100px;
   border-width: 1px;
   border-color: #bcbcbc;
   font-size: 13px;
-  color: #cecece;
+  color: #787878;
 `;
 
 const NextBtn = styled.TouchableOpacity`

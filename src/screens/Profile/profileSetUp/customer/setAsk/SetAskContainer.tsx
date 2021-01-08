@@ -1,37 +1,41 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SetAskPresenter from './SetAskPresenter';
-
-const askList = [
-  {
-    id: 0,
-    title: '문의 제목입니다.',
-    date: '2020.12.20 10:10',
-    isClick: true,
-  },
-  {
-    id: 1,
-    title: '문의 제목입니다.',
-    date: '2020.12.20 10:10',
-    isClick: true,
-  },
-  {
-    id: 2,
-    title: '문의 제목입니다.',
-    date: '2020.12.20 10:10',
-    isClick: true,
-  },
-  {
-    id: 3,
-    title: '문의 제목입니다.',
-    date: '2020.12.20 10:10',
-    isClick: false,
-  },
-];
+import {serviceApi} from '../../../../../module/api';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <SetAskPresenter navigation={navigation} askList={askList} />;
+export default ({navigation, route}: IProps) => {
+  const [inquiryList, setInquiryList] = useState([
+    {
+      id: 0,
+      requestTitle: '',
+      requestDescription: '',
+      requestDate: '',
+      requestStatus: false,
+      responseDescription: null,
+      responseDate: null,
+    },
+  ]);
+
+  const initInquiry = async () => {
+    const {data, statusCode} = await serviceApi.getInquiry();
+    if (statusCode !== 200) {
+      console.log('Inquiry error');
+    } else {
+      setInquiryList(data);
+    }
+  };
+
+  useEffect(() => {
+    initInquiry();
+  }, []);
+
+  useEffect(() => {
+    if (route.params?.refresh) initInquiry();
+  }, [route.params?.refresh]);
+
+  return <SetAskPresenter navigation={navigation} inquiryList={inquiryList} />;
 };

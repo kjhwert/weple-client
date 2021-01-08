@@ -154,7 +154,13 @@ export default () => {
         name="setAskWrite"
         component={SetAskWriteContainer}
       />
-      <Stack.Screen name="setAskDetail" component={SetAskDetailContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '1:1 문의 확인',
+        }}
+        name="setAskDetail"
+        component={SetAskDetailContainer}
+      />
       <Stack.Screen
         options={{
           headerTitle: '1:1 문의 확인',

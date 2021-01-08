@@ -65,6 +65,7 @@ export default ({
               <IntroduceInput
                 multiline={true}
                 maxLength={100}
+                textAlignVertical={'top'}
                 name="description"
                 value={profileData.description}
                 onChange={onChangeProfile}
@@ -173,6 +174,7 @@ const IntroduceTitle = styled.Text`
 
 const IntroduceInput = styled.TextInput`
   width: 100%;
+  height: 100px;
   max-height: 100px;
   padding: 10px;
   margin-bottom: 100px;

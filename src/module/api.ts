@@ -8,6 +8,7 @@ import {
   IUserApiPwForget,
   IUserApiPwChange,
   IUserApiProfile,
+  IServiceApiInquiry,
   IFeedCreate,
 } from './type/api';
 
@@ -71,6 +72,8 @@ export const serviceApi = {
   notice: (id: string) => apiRequest(api.get('/notice/' + id)),
   eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
   event: (id: string) => apiRequest(api.get('/event/' + id)),
+  getInquiry: () => apiRequest(api.get('/inquiry')),
+  setInquiry: (ask: IServiceApiInquiry) => apiRequest(api.post('/inquiry', ask)),
   faq: () => apiRequest(api.get('/faq')),
   terms: () => apiRequest(api.get('/terms')),
 };
