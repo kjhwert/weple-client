@@ -1,6 +1,6 @@
 import {IGps} from './type/common';
 
-export const BASE_URL = 'http://192.168.0.37:3001';
+export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
 export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
 export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
 export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
