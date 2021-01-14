@@ -62,12 +62,10 @@ export default ({navigation}: IProps) => {
 
     const data = await userApi.hasEmail(userEmail.data);
     if (data.statusCode === 200) {
-      console.log('이메일 사용가능');
       setAlertFrame({showAlert: true, usable: true});
       setIsActive(true);
       return;
     } else {
-      console.log('이메일 중복');
       setAlertFrame({showAlert: true, usable: false});
       setIsActive(false);
       return;

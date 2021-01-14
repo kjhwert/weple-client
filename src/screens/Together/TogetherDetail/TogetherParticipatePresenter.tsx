@@ -16,7 +16,7 @@ export default ({navigation, content}: IProps) => {
           <Card>
             <JoinWrapper>
               <JoinInfoWrapper>
-                <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                <JoinTitle>강변북로 라이딩</JoinTitle>
                 <JoinTextWrapper>
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
@@ -24,9 +24,7 @@ export default ({navigation, content}: IProps) => {
                       navigation.navigate('togetherMember');
                     }}>
                     <JoinInfoNumber>12명</JoinInfoNumber>
-                    <JoinInfoMoreImage
-                      source={require('../../../assets/more.png')}
-                    />
+                    <JoinInfoMoreImage source={require('../../../assets/more.png')} />
                   </JoinInfoContentBtn>
 
                   <JoinInfoTitle>참가비</JoinInfoTitle>
@@ -48,9 +46,7 @@ export default ({navigation, content}: IProps) => {
               ))}
 
               <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
+                <ProfileImage source={require('../../../assets/profile_2.png')} />
                 <FollowTextWrapper>
                   <FollowName>Benjamin</FollowName>
                   <CommentText>bicycles very nice..!!</CommentText>

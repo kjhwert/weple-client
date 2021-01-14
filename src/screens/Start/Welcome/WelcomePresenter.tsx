@@ -16,9 +16,7 @@ export default ({navigation, joinMembership}: IProps) => {
       {alertFrame.showAlert && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertWarn_icon.png')}
-            />
+            <AlertImage source={require('../../../assets/alertWarn_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{alertFrame.message}</AlertTitleText>
           <AlertContentText>{'회원가입 페이지로 이동합니다.'}</AlertContentText>
@@ -34,11 +32,9 @@ export default ({navigation, joinMembership}: IProps) => {
 
       <ContainerCard>
         <AlarmWrapper>
-          <AlarmTitle>{'환영합니다!\n땀나 Member의 특별한 혜택'}</AlarmTitle>
+          <AlarmTitle>{'환영합니다!\n위플 Member의 특별한 혜택'}</AlarmTitle>
           <AlarmContent>
-            {
-              '더욱 멋진 당신의 어드벤처 영상을 만들어보세요.\n- 다양한 맵 선택기능\n- 음악 추가 기능'
-            }
+            {'더욱 멋진 당신의 어드벤처 영상을 만들어보세요.\n- 다양한 맵 선택기능\n- 음악 추가 기능'}
           </AlarmContent>
         </AlarmWrapper>
         <MemberBtnWrapper>

@@ -40,12 +40,9 @@ export default ({navigation}: IProps) => {
         setToken(result.accessToken);
 
         console.log(KAKAO_AUTH_TYPES.Talk);
-        console.log('kakao result:', result);
+        // console.log('kakao result:', result);
 
-        logCallback(
-          `Login Finished:${JSON.stringify(result)}`,
-          setLoginLoading(false),
-        );
+        logCallback(`Login Finished:${JSON.stringify(result)}`, setLoginLoading(false));
         getProfile();
       })
 
@@ -54,10 +51,7 @@ export default ({navigation}: IProps) => {
           logCallback(`Login Cancelled:${err.message}`, setLoginLoading(false));
           navigation.navigate('createAccount');
         } else {
-          logCallback(
-            `Login Failed:${err.code} ${err.message}`,
-            setLoginLoading(false),
-          );
+          logCallback(`Login Failed:${err.code} ${err.message}`, setLoginLoading(false));
           navigation.navigate('createAccount');
         }
       });
@@ -73,10 +67,7 @@ export default ({navigation}: IProps) => {
         logCallback(`Logout Finished:${result}`, setLogoutLoading(false));
       })
       .catch((err) => {
-        logCallback(
-          `Logout Failed:${err.code} ${err.message}`,
-          setLogoutLoading(false),
-        );
+        logCallback(`Logout Failed:${err.code} ${err.message}`, setLogoutLoading(false));
       });
   };
 
@@ -94,17 +85,11 @@ export default ({navigation}: IProps) => {
         }
         snsUserData(result.email, result.nickname, result.nickname, result.id);
 
-        logCallback(
-          `Get Profile Finished:${JSON.stringify(result)}`,
-          setProfileLoading(false),
-        );
+        logCallback(`Get Profile Finished:${JSON.stringify(result)}`, setProfileLoading(false));
         navigation.navigate('socialNickname');
       })
       .catch((err) => {
-        logCallback(
-          `Get Profile Failed:${err.code} ${err.message}`,
-          setProfileLoading(false),
-        );
+        logCallback(`Get Profile Failed:${err.code} ${err.message}`, setProfileLoading(false));
         navigation.navigate('createAccount');
       });
   };
@@ -119,10 +104,7 @@ export default ({navigation}: IProps) => {
         logCallback(`Unlink Finished:${result}`, setUnlinkLoading(false));
       })
       .catch((err) => {
-        logCallback(
-          `Unlink Failed:${err.code} ${err.message}`,
-          setUnlinkLoading(false),
-        );
+        logCallback(`Unlink Failed:${err.code} ${err.message}`, setUnlinkLoading(false));
       });
   };
 

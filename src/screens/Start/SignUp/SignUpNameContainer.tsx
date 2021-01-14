@@ -29,7 +29,7 @@ export default ({navigation}: IProps) => {
   };
 
   useEffect(() => {
-    setIsActive(userName.data.length > 0);
+    setIsActive(userName.data.length > 0 && userName.data.indexOf(' ') !== 0);
   }, [userName]);
 
   useEffect(() => {

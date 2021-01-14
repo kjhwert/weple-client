@@ -1,27 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import AlertWrapper from '../../components/AlertWrapper';
 import RadioButtonRN from 'radio-buttons-react-native';
+import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
   showAlert: boolean;
   alertFrame: Function;
-  loginUser: any;
 }
 
 interface IColorChangeProps {
   isClick: boolean;
 }
 
-export default ({
-  navigation,
-  showAlert,
-  alertFrame,
-  menuList,
-  radioBoxSortData,
-  loginUser,
-}: IProps) => {
+export default ({navigation, showAlert, alertFrame, menuList, radioBoxSortData}: IProps) => {
+  const {loginUser, getProfileUri}: any = useContext(UserContext);
+
   return (
     <Container>
       {showAlert && (
@@ -54,9 +49,7 @@ export default ({
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage
-                    source={require('../../assets/profile_1.png')}
-                  />
+                  <ProfileMainImage source={getProfileUri()} />
                   <EditCard
                     onPress={() => {
                       navigation.navigate('setProfile');
@@ -65,7 +58,7 @@ export default ({
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>{loginUser.name}</ProfileNickName>
+                <ProfileNickName>{loginUser.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
@@ -93,11 +86,7 @@ export default ({
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
 
-                <ActiveIntroduceText>
-                  {
-                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
-                  }
-                </ActiveIntroduceText>
+                <ActiveIntroduceText>{loginUser.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn
@@ -170,26 +159,20 @@ export default ({
                 }}>
                 <PostImage source={require('../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage
-                    source={require('../../assets/active_cycle.png')}
-                  />
+                  <RecordImage source={require('../../assets/active_cycle.png')} />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
               <IconWrapper>
                 <IconImageWrapper>
                   <IconBtn>
-                    <IconImage
-                      source={require('../../assets/icon_heart.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_heart.png')} />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
                       navigation.navigate('commentMember');
                     }}>
-                    <IconImage
-                      source={require('../../assets/icon_comment.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_comment.png')} />
                   </IconBtn>
                 </IconImageWrapper>
                 <AlarmBtn
@@ -455,8 +438,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IColorChangeProps) =>
-    props.isClick ? '#007bf1' : '#fff'};
+  border-color: ${(props: IColorChangeProps) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`

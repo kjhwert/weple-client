@@ -8,6 +8,7 @@ import {
   IUserApiPwForget,
   IUserApiPwChange,
   IUserApiProfile,
+  IServiceApiInquiry,
   IFeedCreate,
   IFeedIndex,
   IFeedCreateComment,
@@ -48,7 +49,7 @@ export const utilitiesApi = {
 
 export const userApi = {
   login: (login: IUserApiLogin) => apiRequest(api.post('/user/login', login)),
-  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
+  socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/user/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
   hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
   hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
@@ -56,8 +57,34 @@ export const userApi = {
   passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
   putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
+  userImage: (file) =>
+    apiRequest(
+      api.post('/user/image', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+    ),
+  getCategory: () => apiRequest(api.get('/user/categories')),
+  putCategory: () => apiRequest(api.put('/user/categories')),
+  dropOut: () => apiRequest(api.delete('/user')),
   follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
   unFollow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/unFollow`)),
+};
+
+export const serviceApi = {
+  noticeList: (page: string) => apiRequest(api.get('/notice?page=' + page)),
+  notice: (id: string) => apiRequest(api.get('/notice/' + id)),
+  eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
+  event: (id: string) => apiRequest(api.get('/event/' + id)),
+  getInquiry: () => apiRequest(api.get('/inquiry')),
+  setInquiry: (ask: IServiceApiInquiry) => apiRequest(api.post('/inquiry', ask)),
+  faq: () => apiRequest(api.get('/faq')),
+  terms: () => apiRequest(api.get('/terms')),
+};
+
+export const togetherApi = {
+  userOpenList: () => apiRequest(api.get('/together/user')),
 };
 
 export const feedApi = {

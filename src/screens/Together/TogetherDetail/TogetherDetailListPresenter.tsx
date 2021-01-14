@@ -1,57 +1,24 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 interface IProps {
   navigation: any;
-  isClick: boolean;
 }
 
-export default ({navigation, menuList, aroundData}: IProps) => {
+export default ({navigation, openClub}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <ContainerCard>
+          <Card>
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn>
-                <RecruitTogetherText>내가 개설한 함께</RecruitTogetherText>
-              </RecruitTogetherBtn>
-
-              <TogetherOpenWrapper>
-                <OpenBtnWrapper
-                  onPress={() => {
-                    navigation.navigate('togetherPostSubject');
-                  }}>
-                  <OpenBtnImage
-                    source={require('../../../assets/plus_icon.png')}
-                  />
-                </OpenBtnWrapper>
-                <TogetherOpenText>함께하기를 만들어주세요</TogetherOpenText>
-              </TogetherOpenWrapper>
-            </RecruitTogetherWrapper>
-
-            <Line></Line>
-            <MenuBarWrapper>
-              {menuList.map((item, idx) => (
-                <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
-                  </MenuBtn>
-                </MenuWrapper>
-              ))}
-            </MenuBarWrapper>
-            <Line></Line>
-
-            <RecruitTogetherWrapper>
-              <RecruitTogetherBtn>
-                <RecruitTogetherText>내 주변 개설 함께</RecruitTogetherText>
+                <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
                 <RecruitTogetherNumber>8</RecruitTogetherNumber>
-                <RecruitTogetherMoreImage
-                  source={require('../../../assets/more.png')}
-                />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
-            {aroundData.map((item, idx) => (
+            {openClub.map((item, idx) => (
               <RecruitWrapper key={idx}>
                 <RecruitImageWrapper
                   onPress={() => {
@@ -76,7 +43,7 @@ export default ({navigation, menuList, aroundData}: IProps) => {
                 </RecruitTextWrapper>
               </RecruitWrapper>
             ))}
-          </ContainerCard>
+          </Card>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -94,27 +61,25 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const ContainerCard = styled.View`
+const Card = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
 `;
 
-const Line = styled.View`
-  width: 100%;
-  padding: 5px;
-  background-color: #f3f3f3;
-`;
-
 const RecruitTogetherWrapper = styled.View`
   display: flex;
+  flex-flow: row;
   width: 100%;
   padding: 10px 20px;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-color: #eee;
 `;
 
-const RecruitTogetherBtn = styled.TouchableOpacity`
-  width: 100%;
+const RecruitTogetherBtn = styled.View`
+  width: 70%;
   flex-flow: row wrap;
   padding: 5px 0;
   align-items: center;
@@ -136,11 +101,6 @@ const RecruitTogetherNumber = styled.Text`
   margin-right: 3px;
 `;
 
-const RecruitTogetherMoreImage = styled.Image`
-  width: 6px;
-  height: 10px;
-`;
-
 const RecruitWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
@@ -148,7 +108,6 @@ const RecruitWrapper = styled.View`
   justify-content: flex-start;
   width: 100%;
   padding: 10px 20px;
-  border-top-width: 1px;
   border-bottom-width: 1px;
   border-color: #eee;
 `;
@@ -193,38 +152,6 @@ const RecordImage = styled.Image`
   justify-content: center;
 `;
 
-const TogetherOpenWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  height: 170px;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  margin: 10px 0;
-  border-radius: 5px;
-  background-color: #fcfcfd;
-  border-width: 1px;
-  border-color: #d2d2d2;
-`;
-
-const OpenBtnWrapper = styled.TouchableOpacity`
-  width: 40%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const OpenBtnImage = styled.Image`
-  width: 50px;
-  height: 50px;
-`;
-
-const TogetherOpenText = styled.Text`
-  color: #b4b4b4;
-  font-size: 12px;
-  font-weight: bold;
-  padding-top: 20px;
-`;
-
 const RecruitTextWrapper = styled.View`
   display: flex;
   flex-flow: column;
@@ -247,7 +174,7 @@ const RecruitAddress = styled.Text`
   width: 100%;
   font-size: 12px;
   color: #777;
-  padding: 5px 0 10px 0;
+  padding: 5px 0;
 `;
 
 const EntryFee = styled.Text`
@@ -255,7 +182,7 @@ const EntryFee = styled.Text`
   font-size: 11px;
   color: #000;
   font-weight: bold;
-  padding: 5px 0;
+  padding-bottom: 5px;
 `;
 
 const Deadline = styled.Text`
@@ -263,35 +190,4 @@ const Deadline = styled.Text`
   font-size: 10px;
   color: #007bf1;
   font-weight: bold;
-  padding: 5px 0;
-`;
-
-const MenuBarWrapper = styled.View`
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-`;
-
-const MenuWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom-width: 3px;
-  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
-`;
-
-const MenuBtn = styled.TouchableOpacity`
-  width: 100%;
-  flex-flow: row wrap;
-  padding: 5px 0;
-`;
-
-const MenuText = styled.Text`
-  font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
-  font-weight: bold;
-  text-align: center;
-  padding: 10px;
 `;

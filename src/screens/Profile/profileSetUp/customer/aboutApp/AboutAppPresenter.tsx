@@ -15,11 +15,7 @@ export default ({navigation}: IProps) => {
               <NoticeTextWrapper>
                 <NoticeTitle>이 앱에 대해서</NoticeTitle>
               </NoticeTextWrapper>
-              <NoticeContent>
-                땀나 앱에 대한 설명입니다. 땀나 앱에 대한 설명입니다.땀나 앱에
-                대한 설명입니다.땀나 앱에 대한 설명입니다.땀나 앱에 대한
-                설명입니다.
-              </NoticeContent>
+              <NoticeContent>위플 앱에 대한 설명입니다.</NoticeContent>
             </NoticeWrapper>
           </ContainerCard>
         </ScrollWrapper>

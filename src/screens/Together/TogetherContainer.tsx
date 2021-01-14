@@ -1,11 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import TogetherPresenter from './TogetherPresenter';
-
-const menuList = [
-  {id: 0, name: '내 주변', isClick: true},
-  {id: 1, name: '팔로워', isClick: false},
-  {id: 2, name: '모집임박', isClick: false},
-];
+import {togetherApi} from '../../module/api';
 
 const openClub = [
   {
@@ -45,10 +40,59 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
+  const [userList, setUserList] = useState({
+    togetherCount: 0,
+    togethers: [],
+  });
+
+  const [togetherPaging, setTogetherPaging] = useState({
+    id: 0,
+    hasNextPage: true,
+    page: 1,
+  });
+
+  const setLocationPaging = async () => {
+    const locationPaging = {id: 0, page: 1};
+    setTogetherPaging(locationPaging);
+    await getTogether(locationPaging);
+  };
+
+  const setFollowerPaging = async () => {
+    const followerPaging = {id: 1, page: 1};
+    setTogetherPaging(followerPaging);
+    await getTogether(followerPaging);
+  };
+
+  const setEndSoonPaging = async () => {
+    const endSoonPaging = {id: 2, page: 1};
+    setTogetherPaging(endSoonPaging);
+    await getTogether(endSoonPaging);
+  };
+
+  // 내가 개설한 모임 api 조회
+  const getTogether = async () => {
+    const {data, statusCode} = await togetherApi.userOpenList();
+    console.log('togetherData:', data);
+
+    if (statusCode !== 200) {
+      console.log('together error');
+    } else {
+      setUserList(data);
+    }
+  };
+
+  useEffect(() => {
+    getTogether();
+  }, []);
+
   return (
     <TogetherPresenter
       navigation={navigation}
-      menuList={menuList}
+      userList={userList}
+      togetherPaging={togetherPaging}
+      setLocationPaging={setLocationPaging}
+      setFollowerPaging={setFollowerPaging}
+      setEndSoonPaging={setEndSoonPaging}
       openClub={openClub}
     />
   );

@@ -2,25 +2,13 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import NextBtn from '../../../components/NextBtn';
-import RadioButtonRN from 'radio-buttons-react-native';
 
-export default ({navigation, radioBoxData}) => {
+export default ({navigation}) => {
   return (
     <Container>
       <ContainerCard>
         <SubjectWrapper>
           <SubjectText>어떤 주제와 관련 있나요?</SubjectText>
-          <RadioButtonRN
-            box={false}
-            circleSize={8}
-            activeColor={'#187fe2'}
-            textStyle={{
-              fontSize: 15,
-              color: '#919191',
-              padding: 3,
-            }}
-            data={radioBoxData}
-          />
         </SubjectWrapper>
       </ContainerCard>
       <NextBtn nextPage={'togetherPostIntroduce'} navigation={navigation}>

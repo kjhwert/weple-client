@@ -18,14 +18,12 @@ export default ({navigation, content}: IProps) => {
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                  <JoinTitle>강변북로 라이딩</JoinTitle>
                   <ShareBtn
                     onPress={() => {
                       navigation.navigate('togetherShare');
                     }}>
-                    <ShareImage
-                      source={require('../../../assets/icon_share.png')}
-                    />
+                    <ShareImage source={require('../../../assets/icon_share.png')} />
                   </ShareBtn>
                 </JoinTitleWrapper>
                 <JoinTextWrapper>
@@ -35,9 +33,7 @@ export default ({navigation, content}: IProps) => {
                       navigation.navigate('togetherMember');
                     }}>
                     <JoinInfoNumber>12명</JoinInfoNumber>
-                    <JoinInfoMoreImage
-                      source={require('../../../assets/more.png')}
-                    />
+                    <JoinInfoMoreImage source={require('../../../assets/more.png')} />
                   </JoinInfoContentBtn>
                   <JoinInfoTitle>참가비</JoinInfoTitle>
                   <JoinInfoContent>10,000원</JoinInfoContent>
@@ -58,9 +54,7 @@ export default ({navigation, content}: IProps) => {
               ))}
 
               <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
+                <ProfileImage source={require('../../../assets/profile_2.png')} />
                 <FollowTextWrapper>
                   <FollowNameBtn onPress={() => {}}>
                     <FollowName>Benjamin</FollowName>

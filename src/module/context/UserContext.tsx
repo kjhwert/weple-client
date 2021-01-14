@@ -1,8 +1,7 @@
-import React, {createContext, ReactNode, useState, useEffect, useContext} from 'react';
-import {IUser} from '../../module/type/user';
+import React, {createContext, ReactNode, useState, useEffect} from 'react';
 import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import FeedContext from './FeedContext';
+import {BASE_URL} from '../../module/common';
 
 const UserContext = createContext({});
 
@@ -27,74 +26,87 @@ export const UserContextProvider = ({children}: IProps) => {
     description: '',
   });
 
-  const [loginState, setLoginState] = useState({
-    email: '',
-    password: '',
-  });
-
   const onChangeLogin = (e) => {
     const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
     const value = e.nativeEvent.text;
-    setLoginState({
-      ...loginState,
+    setLoginUser({
+      ...loginUser,
       [name]: value,
     });
   };
 
   const login = async () => {
     setLoading(true);
-
-    if (loginState.email.length <= 0 || loginState.password.length <= 0) {
+    if (loginUser.email.length <= 0 || loginUser.password.length <= 0) {
       showAlertFrame('이메일 또는 비밀번호를');
       return false;
     }
 
-    const loginData = await userApi.login(loginState);
+    const requstLogin = {
+      email: loginUser.email,
+      password: loginUser.password,
+    };
+    const responseLogin = await userApi.login(requstLogin);
+    if (responseLogin.statusCode !== 201) {
+      showAlertFrame(responseLogin.message);
+      return false;
+    } else {
+      setLoginUserData(responseLogin);
+      setLoading(false);
+      return true;
+    }
+  };
 
-    if (loginData.statusCode !== 201) {
-      showAlertFrame(loginData.message);
+  const paramLogin = async (email: string, password: string) => {
+    setLoading(true);
+    if (email.length <= 0 || password.length <= 0) {
+      showAlertFrame('이메일 또는 비밀번호를');
       return false;
     }
-    setLoginUserData(loginData);
 
-    setLoginState({...loginState, email: '', password: ''});
-    setLoading(false);
-    return true;
+    const requstLogin = {
+      email: email,
+      password: password,
+    };
+    const responseLogin = await userApi.login(requstLogin);
+    if (responseLogin.statusCode !== 201) {
+      showAlertFrame(responseLogin.message);
+      return false;
+    } else {
+      setLoginUserData(responseLogin);
+      setLoading(false);
+      return true;
+    }
   };
 
   const socialLogin = async (Email: string, Uid: string) => {
     setLoading(true);
-    const socialRequest = {
+    const requestSocial = {
       email: Email,
       socialUid: Uid,
     };
 
-    const socialLoginData = await userApi.socialLogin(socialRequest);
+    const responseSocial = await userApi.socialLogin(requestSocial);
 
-    if (socialLoginData.statusCode !== 201) {
-      showAlertFrame(socialLoginData.message);
+    if (responseSocial.statusCode !== 201) {
+      showAlertFrame(responseSocial.message);
       return false;
+    } else {
+      setLoginUserData(responseSocial);
+      setLoading(false);
+      return true;
     }
-    setSocialLoginUserData(socialLoginData);
-
-    setLoading(false);
-    return true;
   };
 
   // 자동로그인을 위한 userData
   const setLoginUserData = (loginData: any) => {
-    setLoginUser(loginData);
-    setAsyncStorage('@user', JSON.stringify(loginData));
-  };
-
-  const setSocialLoginUserData = (socialLoginData: any) => {
-    setLoginUser(socialLoginData);
-    setAsyncStorage('@user', JSON.stringify(socialLoginData));
+    setLoginUser(Object.assign(loginUser, loginData));
+    setAsyncStorage('@user', JSON.stringify(Object.assign(loginUser, loginData)));
   };
 
   const autoLogin = async () => {
     setLoading(true);
-    const autoLoginData = await getAccess_token();
+    const autoLoginData = await getAsyncStorage();
     if (autoLoginData) {
       setLoginUser(autoLoginData);
       setLoading(false);
@@ -106,7 +118,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const userLogout = async () => {
-    await AsyncStorage.removeItem('@user');
+    await delAsyncStorage('@user');
     setLoginUser({
       access_token: '',
       id: 0,
@@ -138,7 +150,7 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  const emailUserData = (emailData, isSocial) => {
+  const emailUserData = (emailData: string, isSocial: boolean) => {
     setCreateUser({
       ...createUser,
       email: emailData,
@@ -146,7 +158,7 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  const snsUserData = (emailData, nickNameData, nameData, UidData) => {
+  const snsUserData = (emailData: string, nickNameData: string, nameData: string, UidData: string) => {
     setCreateUser({
       ...createUser,
       email: emailData,
@@ -157,14 +169,64 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const join = async () => {
-    const joinData = await userApi.create(createUser);
+    const requestCreate = {
+      email: createUser.email,
+      password: createUser.password,
+      nickName: createUser.nickName,
+      name: createUser.name,
+      socialUid: createUser.socialUid,
+      isSocialLogin: createUser.isSocialLogin,
+      activityCategories: createUser.activityCategories,
+    };
 
-    if (joinData.statusCode !== 201) {
-      showAlertFrame(joinData.message);
+    const responseCreat = await userApi.create(requestCreate);
+    if (responseCreat.statusCode !== 201) {
+      showAlertFrame(responseCreat.message);
       return false;
+    } else {
+      if (createUser.isSocialLogin) {
+        return await socialLogin(requestCreate.email, requestCreate.socialUid);
+      } else {
+        return await paramLogin(requestCreate.email, requestCreate.password);
+      }
     }
-    await setLoginUserData(createUser);
-    return true;
+  };
+
+  ////////////////////////////////////////////////////////////////
+  // PROFILE CONTEXT
+  const getUserId = async () => {
+    const user = await AsyncStorage.getItem('@user');
+    if (user) {
+      const {id} = JSON.parse(user);
+      return id;
+    }
+  };
+
+  const changeProfileImage = (imageData) => {
+    const changeData = {
+      ...loginUser,
+      image: imageData,
+    };
+    setLoginUser(changeData);
+    setAsyncStorage('@user', JSON.stringify(changeData));
+  };
+
+  const changeProfileData = (nickName: string, description: string) => {
+    const changeData = {
+      ...loginUser,
+      nickName: nickName,
+      description: description,
+    };
+    setLoginUser(changeData);
+    setAsyncStorage('@user', JSON.stringify(changeData));
+  };
+
+  const getProfileUri = () => {
+    if (loginUser.image) {
+      return {uri: BASE_URL + '/' + loginUser.image};
+    } else {
+      return require('../../assets/icon_plus.png');
+    }
   };
 
   ////////////////////////////////////////////////////////////////
@@ -190,15 +252,19 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  const setAsyncStorage = (name, data) => {
-    AsyncStorage.setItem(name, data, () => {
-      console.log('user정보 저장완료');
-    });
+  // user정보 저장
+  const setAsyncStorage = async (name: string, data: any) => {
+    await AsyncStorage.setItem(name, data, () => {});
   };
 
-  const getAccess_token = async () => {
+  const getAsyncStorage = async () => {
     const result = await AsyncStorage.getItem('@user');
+    // console.log('getAsyncStorage:', result);
     return JSON.parse(result);
+  };
+
+  const delAsyncStorage = async (name: string) => {
+    await AsyncStorage.removeItem(name);
   };
 
   const userFollow = async (userId: number) => {
@@ -206,8 +272,8 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   useEffect(() => {
-    setIsLoginBtnActive(loginState.email.length > 0 && loginState.password.length > 0);
-  }, [loginState]);
+    setIsLoginBtnActive(loginUser.email?.length > 0 && loginUser.password?.length > 0);
+  }, [loginUser]);
 
   return (
     <UserContext.Provider
@@ -219,7 +285,6 @@ export const UserContextProvider = ({children}: IProps) => {
         login,
         socialLogin,
         setLoginUserData,
-        setSocialLoginUserData,
         autoLogin,
         userLogout,
         createUser,
@@ -227,9 +292,12 @@ export const UserContextProvider = ({children}: IProps) => {
         emailUserData,
         snsUserData,
         join,
+        getUserId,
+        changeProfileImage,
+        changeProfileData,
+        getProfileUri,
         alertFrame,
         clearAlertFrame,
-        getAccess_token,
         userFollow,
       }}>
       {children}

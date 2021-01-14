@@ -14,14 +14,10 @@ export default ({navigation, showAlert, alertFrame, content}: IProps) => {
       {showAlert && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertWarn_icon.png')}
-            />
+            <AlertImage source={require('../../../assets/alertWarn_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{'정말 삭제하시겠습니까?'}</AlertTitleText>
-          <AlertContentText>
-            {'삭제된 데이터는 되돌릴 수 없습니다.'}
-          </AlertContentText>
+          <AlertContentText>{'삭제된 데이터는 되돌릴 수 없습니다.'}</AlertContentText>
           <AlertBtnWrapper>
             <ConfirmButton
               onPress={() => {
@@ -47,14 +43,12 @@ export default ({navigation, showAlert, alertFrame, content}: IProps) => {
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                  <JoinTitle>강변북로 라이딩</JoinTitle>
                   <ShareBtn
                     onPress={() => {
                       navigation.navigate('togetherShare');
                     }}>
-                    <ShareImage
-                      source={require('../../../assets/icon_share.png')}
-                    />
+                    <ShareImage source={require('../../../assets/icon_share.png')} />
                   </ShareBtn>
                 </JoinTitleWrapper>
                 <JoinTextWrapper>
@@ -66,9 +60,7 @@ export default ({navigation, showAlert, alertFrame, content}: IProps) => {
                       navigation.navigate('togetherMember');
                     }}>
                     <JoinInfoNumber>12명</JoinInfoNumber>
-                    <JoinInfoMoreImage
-                      source={require('../../../assets/more.png')}
-                    />
+                    <JoinInfoMoreImage source={require('../../../assets/more.png')} />
                   </JoinInfoContentBtn>
                   <JoinInfoTitle>참가비</JoinInfoTitle>
                   <JoinInfoContent>10,000원</JoinInfoContent>

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "615602388074-91ulkele1e16kvt2turfhf1d1gk4ihr7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttamna",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "615602388074-uod12neekqb0k08g17ahl6e4duoorgml.apps.googleusercontent.com",
           "client_type": 3
         }

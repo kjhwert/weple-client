@@ -21,7 +21,7 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
               {menuList.map((item, idx) => (
                 <MenuWrapper key={idx} isClick={item.isClick}>
                   <MenuBtn onPress={() => {}}>
-                    <MenuText>{item.name}</MenuText>
+                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -36,12 +36,14 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                     <ActivityKind>{item.kind}</ActivityKind>
                     <ActivityDistance>{item.distance}KM</ActivityDistance>
                   </ActivityTextWrapper>
-                  <ActivityAddress>{item.address}</ActivityAddress>
+                  <AddressWrap>
+                    <ActivityAddress>{item.address}</ActivityAddress>
+                  </AddressWrap>
                   <CheckBox
                     style={{
                       position: 'absolute',
                       right: 8,
-                      bottom: 120,
+                      bottom: 135,
                       tintColors: 'red',
                     }}
                     boxType={'circle'}
@@ -52,7 +54,6 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                   />
                 </ActivityImageWrapper>
               ))}
-              <ActivityImageWrapper></ActivityImageWrapper>
             </ActivityWrapper>
             <NextBtn
               onPress={() => {
@@ -95,8 +96,8 @@ const ActivityTitle = styled.Text`
   display: flex;
   width: 100%;
   flex-direction: row;
-  padding: 20px;
-  font-size: 13px;
+  padding: 10px 20px;
+  font-size: 12px;
   color: #6f6f6f;
   font-weight: bold;
   text-align: left;
@@ -105,30 +106,33 @@ const ActivityTitle = styled.Text`
 const ActivityWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
-  align-items: flex-start;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  padding: 10px 0px;
+  padding: 10px 20px;
 `;
 
 const ActivityImageWrapper = styled.TouchableOpacity`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
   border-width: 1px;
   border-top-width: 0px;
   border-color: #e9e9e9;
   border-radius: 5px;
-  width: 45%;
+  width: 48%;
   margin-bottom: 20px;
+  shadow-opacity: 0.3;
+  shadow-radius: 5px;
+  shadow-color: grey;
+  shadow-offset: 0px 0px;
 `;
 
 const ActivityImage = styled.Image`
   width: 100%;
   height: 120px;
   flex-flow: row wrap;
+  justify-content: flex-start;
   border-radius: 5px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -138,39 +142,46 @@ const ActivityTextWrapper = styled.View`
   display: flex;
   flex-flow: row;
   width: 100%;
+  height: 20px;
   align-items: center;
   justify-content: center;
-  margin: 10px;
+  margin: 10px 0;
 `;
 
 const ActivityKind = styled.Text`
-  width: 40%;
-  height: 18px;
+  width: 42%;
+  height: 100%;
+  padding: 3px 0;
   font-size: 9px;
   color: #fff;
-  font-weight: bold;
   text-align: center;
   background-color: #919191;
-  padding: 2px;
 `;
 
 const ActivityDistance = styled.Text`
-  width: 40%;
-  height: 18px;
+  width: 42%;
+  height: 100%;
+  padding: 3px 0;
   font-size: 9px;
   color: #fff;
-  font-weight: bold;
   text-align: center;
   background-color: #000;
-  padding: 2px;
+`;
+
+const AddressWrap = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  height: 40px;
+  justify-content: flex-start;
+  padding: 3px 5px;
+  margin-bottom: 20px;
 `;
 
 const ActivityAddress = styled.Text`
-  width: 100%;
   font-size: 11px;
   color: #656565;
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: left;
 `;
 
 const MenuBarWrapper = styled.View`
