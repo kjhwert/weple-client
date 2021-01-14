@@ -37,6 +37,25 @@ export interface IServiceApiInquiry {
   requestDescription: string;
 }
 
+export interface IUserApiCategory {
+  categories: number[];
+}
+
+export interface ITogetherApiOpneRoom {
+  title: string;
+  description: string;
+  recommend: string;
+  notice: string;
+  togetherDate: string;
+  limitDate: string;
+  togetherPlace: string;
+  maxMember: number;
+  togetherPrice: number;
+  isPublic: boolean;
+  feed: number;
+  activity: number;
+}
+
 export interface IFeedCreate {
   activityId: number;
   startDate: string;

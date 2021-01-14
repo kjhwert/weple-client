@@ -14,19 +14,13 @@ export default ({eventDetail}: IProps) => {
           <ContainerCard>
             <EventWrapper>
               <EventTextWrapper>
-                <EventTitle>
-                  이벤트를 진행합니다.
-                  {/* {eventDetail.title} */}
-                </EventTitle>
-                <EventContent>
-                  이벤트에 대한 설명입니다.
-                  {/* {eventDetail.description} */}
-                </EventContent>
+                <EventTitle>{eventDetail.title}</EventTitle>
+                <EventContent>{eventDetail.description}</EventContent>
                 <EventDate>{eventDetail.createdAt}</EventDate>
               </EventTextWrapper>
             </EventWrapper>
             <EventImageWrapper>
-              <EventImage source={{uri: BASE_URL + '/' + 'public/event/event1.jpg'}} />
+              <EventImage source={{uri: BASE_URL + '/' + eventDetail.image}} />
             </EventImageWrapper>
           </ContainerCard>
         </ScrollWrapper>

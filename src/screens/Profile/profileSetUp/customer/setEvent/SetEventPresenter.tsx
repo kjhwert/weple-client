@@ -21,11 +21,11 @@ export default ({navigation, eventList, pagingInfo, getEventList}: IProps) => {
                   onPress={() => {
                     navigation.navigate('setEventDetail', {id: item.id});
                   }}>
-                  <EventImage source={{uri: BASE_URL + '/' + 'public/event/event1.jpg'}} />
+                  <EventImage source={{uri: BASE_URL + '/' + item.image}} />
                 </EventImageWrapper>
                 <EventTextWrapper>
-                  <EventOpenWrapper backgroundColor={item.eventStatus}>
-                    <EventOpenText>{item.eventStatus ? '진행중' : '진행종료'}</EventOpenText>
+                  <EventOpenWrapper backgroundColor={item.isOnGoing}>
+                    <EventOpenText>{item.isOnGoing ? '진행중' : '진행종료'}</EventOpenText>
                   </EventOpenWrapper>
                   <EventTitleBtn
                     onPress={() => {

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import CheckBox from '@react-native-community/checkbox';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
@@ -43,7 +44,7 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                     style={{
                       position: 'absolute',
                       right: 8,
-                      bottom: 135,
+                      bottom: 180,
                       tintColors: 'red',
                     }}
                     boxType={'circle'}
@@ -55,15 +56,11 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                 </ActivityImageWrapper>
               ))}
             </ActivityWrapper>
-            <NextBtn
-              onPress={() => {
-                navigation.navigate('togetherPost');
-              }}>
-              <NextText>다음</NextText>
-            </NextBtn>
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
+
+      <StartNextBtn StartNextPage={'togetherPost'} text={'다음'} navigation={navigation} isActive={true} />
     </Container>
   );
 };
@@ -80,7 +77,6 @@ const ScrollContainer = styled.View`
 const ScrollWrapper = styled.ScrollView``;
 
 const Card = styled.View`
-  flex: 1;
   width: 100%;
   height: 100%;
   display: flex;
@@ -110,6 +106,7 @@ const ActivityWrapper = styled.View`
   justify-content: space-between;
   width: 100%;
   padding: 10px 20px;
+  margin-bottom: 80px;
 `;
 
 const ActivityImageWrapper = styled.TouchableOpacity`
@@ -154,6 +151,7 @@ const ActivityKind = styled.Text`
   padding: 3px 0;
   font-size: 9px;
   color: #fff;
+  font-weight: bold;
   text-align: center;
   background-color: #919191;
 `;
@@ -164,6 +162,7 @@ const ActivityDistance = styled.Text`
   padding: 3px 0;
   font-size: 9px;
   color: #fff;
+  font-weight: bold;
   text-align: center;
   background-color: #000;
 `;
@@ -212,20 +211,4 @@ const MenuText = styled.Text`
   font-weight: bold;
   text-align: center;
   padding: 10px;
-`;
-
-const NextBtn = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  justify-content: center;
-  background-color: #b2b2b2;
-  margin-top: 50px;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
 `;

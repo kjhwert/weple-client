@@ -10,7 +10,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  console.log(isEnabled);
 
   return (
     <Container>
@@ -21,9 +20,7 @@ export default ({navigation}: IProps) => {
               <PersonalTextWrapper>
                 <PersonalTitle>비공개 계정</PersonalTitle>
                 <PersonalContent>
-                  {
-                    '비공개 상태에서는 승인된 팔로워만 당신의 활동을 볼 수 있어요. 기존의 팔로워에겐 영향이 없습니다.'
-                  }
+                  {'비공개 상태에서는 승인된 팔로워만 당신의 활동을 볼 수 있어요. 기존의 팔로워에겐 영향이 없습니다.'}
                 </PersonalContent>
               </PersonalTextWrapper>
               <Switch

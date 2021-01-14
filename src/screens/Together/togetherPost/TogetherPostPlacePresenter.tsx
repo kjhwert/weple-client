@@ -1,27 +1,55 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {InputBox} from '../../../components/CommonInput';
+import {StartNextBtn} from '../../../components/CommonBtn';
+import TogetherContext from '../../../module/context/TogetherContext';
 
-export default ({navigation}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation}: IProps) => {
+  const {createRoom, onChangeRoom}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ContainerCard>
         <PlaceWrapper>
-          <PlaceTitle>모임 날짜, 시간을 선택해주세요. [필수]</PlaceTitle>
-          <PlaceInput placeholder="날짜와 시간을 선택해주세요." />
+          <InputBox
+            title={'모임 날짜, 시간을 선택해주세요. [필수]'}
+            placeholder="날짜와 시간을 선택해주세요."
+            name="meetingDate"
+          />
+
           <PlaceTitle>시작할 위치를 입력해주세요. [필수]</PlaceTitle>
-          <PlaceInput placeholder="예) 서울역 3번출구 앞" />
+          <PlaceInput
+            placeholder="예&#41; 서울역 3번출구 앞"
+            name="togetherPlace"
+            value={createRoom.togetherPlace}
+            onChange={onChangeRoom}
+          />
+
           <PlaceTitle>최대 인원을 입력해주세요. [필수]</PlaceTitle>
-          <PlaceInput placeholder="숫자를 입력해주세요." />
+          <PlaceInput
+            placeholder="숫자를 입력해주세요."
+            name="maxMember"
+            value={createRoom.maxMember}
+            onChange={onChangeRoom}
+          />
+
           <PlaceTitle>참가비를 입력해주세요. [선택]</PlaceTitle>
-          <PlaceInput placeholder="원단위로 입력해주세요." />
+          <PlaceInput
+            placeholder="원단위로 입력해주세요."
+            name="togetherPrice"
+            value={createRoom.togetherPrice}
+            onChange={onChangeRoom}
+          />
           <PlaceInfoText>참가비는 만나서 각자 사용할 예상 금액입니다.</PlaceInfoText>
         </PlaceWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'togetherPostmethod'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+
+      <StartNextBtn StartNextPage={'togetherPostmethod'} text={'다음'} navigation={navigation} isActive={true} />
     </Container>
   );
 };
@@ -50,7 +78,7 @@ const PlaceInput = styled.TextInput`
   margin-bottom: 20px;
   border-bottom-width: 1px;
   border-color: #acacac;
-  font-size: 12px;
+  font-size: 15px;
   color: #6f6f6f;
 `;
 
@@ -59,4 +87,6 @@ const PlaceInfoText = styled.Text`
   color: #69b6ff;
   font-weight: bold;
   text-align: left;
+  bottom: 10px;
+  padding: 0 5px;
 `;

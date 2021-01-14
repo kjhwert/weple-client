@@ -1,8 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../components/NextBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
-export default ({navigation, content}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation, content}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -35,9 +39,8 @@ export default ({navigation, content}) => {
               ))}
             </JoinWrapper>
           </Card>
-          <NextBtn nextPage={'togetherModify'} navigation={navigation}>
-            {`완료`}
-          </NextBtn>
+
+          <StartNextBtn StartNextPage={'togetherMain'} text={'완료'} navigation={navigation} isActive={true} />
         </ScrollWrapper>
       </ScrollContainer>
     </Container>

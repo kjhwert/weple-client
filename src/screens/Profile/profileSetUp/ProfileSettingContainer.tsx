@@ -68,10 +68,7 @@ export default ({navigation}: IProps) => {
           clearAlert();
         }}
         confirmed={async () => {
-          const {message, statusCode} = await userApi.dropOut();
-          console.log('dropOut message:', message);
-          console.log('dropOut statusCode:', statusCode);
-
+          const {statusCode} = await userApi.dropOut();
           if (statusCode !== 201) {
             dropOutFailAlert();
           } else {

@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 import RadioButtonRN from 'radio-buttons-react-native';
 
-export default ({navigation, radioBoxData}) => {
+interface IProps {
+  navigation: any;
+}
+
+export default ({navigation, radioBoxData}: IProps) => {
   return (
     <Container>
       <ContainerCard>
@@ -21,18 +25,11 @@ export default ({navigation, radioBoxData}) => {
             }}
             data={radioBoxData}
           />
-          <MethodInfoText>
-            비공개 모집시 초대를 통해서만 모집할 수 있습니다.
-          </MethodInfoText>
+          <MethodInfoText>비공개 모집시 초대를 통해서만 모집할 수 있습니다.</MethodInfoText>
         </MethodWrapper>
-        <MethodTagWrapper>
-          <MethodTagTitle>태그를 입력하세요.</MethodTagTitle>
-          <MethodTagInput />
-        </MethodTagWrapper>
       </ContainerCard>
-      <NextBtn nextPage={'togetherPostActivity'} navigation={navigation}>
-        {`다음`}
-      </NextBtn>
+
+      <StartNextBtn text={'다음'} StartNextPage={'togetherPostActivity'} navigation={navigation} isActive={true} />
     </Container>
   );
 };
@@ -58,31 +55,5 @@ const MethodInfoText = styled.Text`
   color: #69b6ff;
   font-weight: bold;
   text-align: left;
-  padding: 10px;
-`;
-
-const MethodTagWrapper = styled.View`
-  display: flex;
-  width: 100%;
-`;
-
-const MethodTagTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-  padding: 20px 0 5px 0;
-`;
-
-const MethodTagInput = styled.TextInput`
-  width: 100%;
-  height: 20%;
-  padding: 5px 10px;
-  margin-bottom: 20px;
-  border-width: 1px;
-  border-color: #b5b5b5;
-  border-radius: 5px;
-  font-size: 10px;
-  color: #6f6f6f;
+  padding: 10px 20px;
 `;

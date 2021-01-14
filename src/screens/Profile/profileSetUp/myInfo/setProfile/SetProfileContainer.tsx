@@ -137,7 +137,7 @@ export default ({navigation}: IProps) => {
     const options = {storageOptions: {skipBackup: true, path: 'image'}};
     ImagePicker.launchImageLibrary(options, async ({uri, type, fileName, didCancel, error}) => {
       if (didCancel) {
-        // console.log('사용자가 취소하였습니다.');
+        // console.log('Cancelled');
         return;
       } else if (error) {
         // console.log('ImagePicker Error:', error);

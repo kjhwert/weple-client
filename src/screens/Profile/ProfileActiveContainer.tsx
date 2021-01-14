@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import ProfilePresenter from './ProfileActivePresenter';
+import AlertContext from '../../module/context/AlertContext';
+import SortAlert from '../../components/SortAlert';
 
 const menuList = [
   {id: 0, name: '나의 활동', isClick: true},
@@ -11,30 +13,32 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const [showAlert, setShowAlert] = useState(false);
-
-  const alertFrame = (showFlag) => {
-    setShowAlert(showFlag);
+  const {setAlertVisible}: any = useContext(AlertContext);
+  const clearAlert = () => {
+    setAlertVisible();
   };
 
-  const radioBoxSortData = [
+  const sortDataType = [
     {
       label: '거리 가까운 순',
       value: 'distance',
     },
     {
       label: '최신 등록 순',
-      value: 'registration',
+      value: 'createdAt',
     },
   ];
 
-  return (
-    <ProfilePresenter
-      navigation={navigation}
-      showAlert={showAlert}
-      alertFrame={alertFrame}
-      menuList={menuList}
-      radioBoxSortData={radioBoxSortData}
-    />
-  );
+  const sortAlert = () => {
+    return setAlertVisible(
+      <SortAlert
+        sortType={sortDataType}
+        checked={() => {
+          clearAlert();
+        }}
+      />,
+    );
+  };
+
+  return <ProfilePresenter navigation={navigation} menuList={menuList} sortAlert={sortAlert} />;
 };
