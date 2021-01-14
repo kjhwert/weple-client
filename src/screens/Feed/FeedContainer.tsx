@@ -1,9 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import FeedPresenter from './FeedPresenter';
 import {feedApi, utilitiesApi} from '../../module/api';
 import Loading from '../../components/Loading';
 import {IFeedIndex} from '../../module/type/api';
 import {IFeed} from '../../module/type/feed';
+import FeedContext from '../../module/context/FeedContext';
+import AlertContext from '../../module/context/AlertContext';
+import CheckAlert from '../../components/CheckAlert';
+import UserContext from '../../module/context/UserContext';
 
 const newFollower = [
   {
@@ -53,93 +57,51 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
+  const {setAlertVisible}: any = useContext(AlertContext);
+  const {userFollow}: any = useContext(UserContext);
+  const {getIndex, indexPaging}: any = useContext(FeedContext);
   const [eventLoading, setEventLoading] = useState(false);
-  const [feedLoading, setFeedLoading] = useState(false);
   const [events, setEvents] = useState([]);
-  const [feeds, setFeeds] = useState([]);
-  const [eventPaging, setEventPaging] = useState({
-    page: 1,
-  });
-  const [feedPaging, setFeedPaging] = useState<IFeedIndex>({
-    id: 0,
-    hasNextPage: true,
-    page: 1,
-    sort: 'createdAt',
-    order: 'DESC',
-  });
 
-  const setHomePaging = async () => {
-    const homePaging = {id: 0, page: 1, sort: 'createdAt', order: 'DESC'};
-    setFeedPaging(homePaging);
-    await getFeeds(homePaging);
-  };
-
-  const setPopularPaging = async () => {
-    const popularPaging = {id: 1, page: 1, sort: 'likeCount', order: 'DESC'};
-    setFeedPaging(popularPaging);
-    await getFeeds(popularPaging);
-  };
-
-  const setRecommendPaging = async () => {
-    const recommendPaging = {id: 2, page: 1, sort: 'createdAt', order: 'DESC'};
-    setFeedPaging(recommendPaging);
-    await getFeeds(recommendPaging);
-  };
-
-  const feedLike = async (feed: IFeed) => {
-    const {id, isUserLiked} = feed;
-    if (isUserLiked) {
-      await feedApi.feedDisLike(id);
-    } else {
-      await feedApi.feedLike(id);
+  const userFollowAndReload = async (userId: number) => {
+    const {statusCode, message} = await userFollow(userId);
+    if (statusCode !== 201) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '팔로우에 실패했습니다.',
+            description: message,
+          }}
+        />,
+      );
     }
 
-    await getFeeds(feedPaging);
-  };
-
-  const onLoadFeedPaging = async () => {
-    const {id, hasNextPage: isAllowedPaging, page, ...rest} = feedPaging;
-    if (!isAllowedPaging) {
-      return;
-    }
-    const newPage = page + 1;
-    const {
-      data,
-      statusCode,
-      paging: {hasNextPage},
-    } = await feedApi.index({...rest, page: newPage});
-    if (statusCode === 200) {
-      const pagingFeeds = feeds.concat(data);
-      setFeedPaging({...feedPaging, page: newPage, hasNextPage});
-      setFeeds(pagingFeeds);
-    }
-  };
-
-  const getFeeds = async (paging: IFeedIndex) => {
-    const {id, hasNextPage: trash, ...rest} = paging;
-    const {
-      data,
-      statusCode,
-      paging: {hasNextPage},
-    } = await feedApi.index(rest);
-    if (statusCode === 200) {
-      setFeedPaging({...feedPaging, hasNextPage});
-      setFeeds(data);
-    }
+    await getIndex(indexPaging.tab);
   };
 
   const getEvents = async () => {
     setEventLoading(true);
-    const {data, statusCode} = await utilitiesApi.events(eventPaging);
-    if (statusCode === 200) {
-      setEvents(data);
+    const {data, statusCode, message} = await utilitiesApi.events({page: 1});
+    if (statusCode !== 200) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '데이터를 가져오는데 실패했습니다.',
+            description: message,
+          }}
+        />,
+      );
     }
+    const events = data.filter((event: any) => event.isOnGoing === true);
+    setEvents(events);
     setEventLoading(false);
   };
 
   useEffect(() => {
     getEvents();
-    getFeeds(feedPaging);
+    getIndex('홈');
   }, []);
 
   return eventLoading ? (
@@ -149,14 +111,7 @@ export default ({navigation}: IProps) => {
       navigation={navigation}
       newFollower={newFollower}
       events={events}
-      feeds={feeds}
-      setHomePaging={setHomePaging}
-      setPopularPaging={setPopularPaging}
-      setRecommendPaging={setRecommendPaging}
-      feedLoading={feedLoading}
-      feedLike={feedLike}
-      feedPaging={feedPaging}
-      onLoadFeedPaging={onLoadFeedPaging}
+      userFollowAndReload={userFollowAndReload}
     />
   );
 };

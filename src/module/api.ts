@@ -11,6 +11,7 @@ import {
   IFeedCreate,
   IFeedIndex,
   IFeedCreateComment,
+  IUtilityApiEvents,
 } from './type/api';
 
 const api = axios.create({
@@ -31,7 +32,6 @@ const apiRequest = async (request: Object) => {
     const {data}: any = await request;
     return data;
   } catch (e) {
-    console.log(e);
     return {statusCode: 500, message: e.message};
   }
 };
@@ -43,11 +43,11 @@ export const categoryApi = {
 export const utilitiesApi = {
   maps: () => apiRequest(api.get('/map-group')),
   musics: () => apiRequest(api.get('/music-group')),
-  events: ({page}) => apiRequest(api.get(`/event?page=${page}`)),
+  events: ({page}: IUtilityApiEvents) => apiRequest(api.get(`/event?page=${page}`)),
 };
 
 export const userApi = {
-  login: (login: IUserApiLogin) => apiRequest(api.post('/login', login)),
+  login: (login: IUserApiLogin) => apiRequest(api.post('/user/login', login)),
   socialLogin: (socialLogin: IUserApiSnsLogin) => apiRequest(api.post('/social-login', socialLogin)),
   create: (user: IUserApiCreate) => apiRequest(api.post('/user', user)),
   hasEmail: (email: string) => apiRequest(api.get(`/user/hasEmail?email=${email}`)),
@@ -56,6 +56,8 @@ export const userApi = {
   passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
   putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
+  follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
+  unFollow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/unFollow`)),
 };
 
 export const feedApi = {

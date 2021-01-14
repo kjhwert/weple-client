@@ -22,7 +22,7 @@ export interface IFeed {
   likeCount: string;
   commentCount: string;
   isUserLiked: boolean;
-  isFollowed: boolean;
+  isUserFollowed: boolean;
   activityName: string;
   activityColor: string;
   activityImage: string;

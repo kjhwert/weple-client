@@ -1,8 +1,9 @@
 import {IGps} from './type/common';
 
-export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
+export const BASE_URL = 'http://192.168.0.37:3001';
 export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
 export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
+export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
 
 export const ACTIVE_BUTTON = '#007bf1';
 export const ACTIVE_TEXT = '#007bf1';
@@ -71,6 +72,25 @@ export const secondsToHms = (seconds: number) => {
   const second = Math.floor((seconds % 3600) % 60);
 
   return {hour, minute, second};
+};
+
+export const secondsToTimeFormat = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor((seconds % 3600) % 60);
+
+  let hour = '00';
+  let minute = '00';
+  let second = '00';
+
+  if (h !== 0 && h >= 10) hour = `${h}`;
+  if (h !== 0 && h < 10) hour = `0${h}`;
+  if (m !== 0 && m >= 10) minute = `${m}`;
+  if (m !== 0 && m < 10) minute = `0${m}`;
+  if (s !== 0 && s >= 10) second = `${s}`;
+  if (s !== 0 && s < 10) second = `0${s}`;
+
+  return [hour, minute, second].join(':');
 };
 
 export const showDateToAmPmHourMinute = (date: Date) => {

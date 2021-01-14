@@ -1,7 +1,8 @@
-import React, {createContext, ReactNode, useState, useEffect} from 'react';
+import React, {createContext, ReactNode, useState, useEffect, useContext} from 'react';
 import {IUser} from '../../module/type/user';
 import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import FeedContext from './FeedContext';
 
 const UserContext = createContext({});
 
@@ -200,6 +201,10 @@ export const UserContextProvider = ({children}: IProps) => {
     return JSON.parse(result);
   };
 
+  const userFollow = async (userId: number) => {
+    return await userApi.follow(userId);
+  };
+
   useEffect(() => {
     setIsLoginBtnActive(loginState.email.length > 0 && loginState.password.length > 0);
   }, [loginState]);
@@ -225,6 +230,7 @@ export const UserContextProvider = ({children}: IProps) => {
         alertFrame,
         clearAlertFrame,
         getAccess_token,
+        userFollow,
       }}>
       {children}
     </UserContext.Provider>

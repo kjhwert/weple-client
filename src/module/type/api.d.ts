@@ -30,20 +30,25 @@ export interface IUserApiProfile {
   description: string;
 }
 
+export interface IUtilityApiEvents {
+  page: number;
+}
+
 export interface IFeedCreate {
-  activityId: number;
+  activity: number;
   startDate: string;
   endDate: string;
   duration: number;
   calorie: number;
   distance: number;
-  mapId: number;
-  musicId: number;
+  map: number;
+  music: number;
   coordinates: string;
+  address: string;
 }
 
 export interface IFeedIndex {
-  id?: number;
+  tab?: string;
   hasNextPage?: boolean;
   page: number;
   sort: 'createdAt' | 'likeCount' | string;

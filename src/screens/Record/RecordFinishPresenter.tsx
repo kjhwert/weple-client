@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordContext from '../../module/context/RecordContext';
 import RecordUnits from '../../components/RecordUnits';
-import {MAPBOX_STYLE, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
+import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import {Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
@@ -29,7 +29,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
               <WebView
                 ref={(ref) => (webViewRef.current = ref)}
                 source={{
-                  uri: 'http://ttamna-api.hlabpartner.com/public/map/test.html',
+                  uri: `${BASE_URL}/public/map/test.html`,
                 }}
                 injectedJavaScript={webViewJavaScriptCode({
                   coordinates: mapboxRecord.coordinates,
@@ -98,7 +98,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
               <MapboxGL.MapView
                 ref={thumbnailRef}
                 style={{width: '100%', height: 200}}
-                styleURL={MAPBOX_STYLE}
+                styleURL={mapboxRecord.map.style}
                 localizeLabels={true}
                 zoomEnabled={false}
                 scrollEnabled={false}
