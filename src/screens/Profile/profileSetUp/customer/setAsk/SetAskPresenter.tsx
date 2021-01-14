@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {StartNextBtn} from '../../../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
@@ -35,12 +36,7 @@ export default ({navigation, inquiryList}: IProps) => {
         </ScrollWrapper>
       </ScrollContainer>
 
-      <NextBtn
-        onPress={() => {
-          navigation.navigate('setAskWrite');
-        }}>
-        <NextText>문의하기</NextText>
-      </NextBtn>
+      <StartNextBtn StartNextPage={'setAskWrite'} text={'문의하기'} navigation={navigation} isActive={true} />
     </Container>
   );
 };
@@ -62,6 +58,7 @@ const Card = styled.View`
   display: flex;
   align-items: center;
   background-color: #fff;
+  margin-bottom: 80px;
 `;
 
 const AskWrapper = styled.View`
@@ -87,13 +84,14 @@ const AskTextWrapper = styled.View`
 
 const AskTextBtn = styled.TouchableOpacity`
   width: 100%;
+  flex-flow: row;
   padding: 5px 0;
   align-items: flex-start;
   justify-content: flex-start;
 `;
 
 const AskText = styled.Text`
-  width: 100%;
+  width: 70%;
   font-size: 13px;
   font-weight: bold;
   color: #333;
@@ -120,21 +118,4 @@ const FollowBtnText = styled.Text`
   font-size: 12px;
   font-weight: bold;
   text-align: center;
-`;
-
-const NextBtn = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  padding: 15px;
-  align-items: center;
-  justify-content: center;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const NextText = styled.Text`
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
 `;

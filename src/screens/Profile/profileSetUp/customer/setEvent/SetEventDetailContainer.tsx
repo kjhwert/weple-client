@@ -13,8 +13,8 @@ export default ({navigation, route}: IProps) => {
     title: '',
     description: '',
     createdAt: '',
-    img: '',
-    eventStatus: true,
+    image: '',
+    isOnGoing: true,
   });
 
   const getEventDetail = async () => {

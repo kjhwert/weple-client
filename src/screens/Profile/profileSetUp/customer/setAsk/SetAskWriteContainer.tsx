@@ -1,15 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import SetAskWritePresenter from './SetAskWritePresenter';
 import {serviceApi} from '../../../../../module/api';
+import AlertContext from '../../../../../module/context/AlertContext';
+import CheckAlert from '../../../../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {setAlertVisible}: any = useContext(AlertContext);
+  const clearAlert = () => {
+    setAlertVisible();
+  };
+
+  const [isActive, setIsActive] = useState(false);
   const [askData, setAskData] = useState({
     requestTitle: '',
     requestDescription: '',
+    requestType: '01',
   });
 
   const onChangeAskData = (e) => {
@@ -21,6 +30,13 @@ export default ({navigation}: IProps) => {
     });
   };
 
+  const onCheckType = (type) => {
+    setAskData({
+      ...askData,
+      requestType: type,
+    });
+  };
+
   const askDataRegister = async () => {
     const askDataRequest = {
       requestTitle: askData.requestTitle,
@@ -28,10 +44,33 @@ export default ({navigation}: IProps) => {
     };
 
     const {message} = await serviceApi.setInquiry(askDataRequest);
-    console.log('문의 등록: ', message);
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'check',
+          title: message,
+          description: '',
+        }}
+        checked={() => {
+          clearAlert();
+          navigation.navigate('setAsk', {refresh: true});
+        }}
+      />,
+    );
   };
 
+  useEffect(() => {
+    setIsActive(askData.requestTitle.trim().length > 0 && askData.requestDescription.trim().length > 0);
+  }, [askData]);
+
   return (
-    <SetAskWritePresenter navigation={navigation} onChangeAskData={onChangeAskData} askDataRegister={askDataRegister} />
+    <SetAskWritePresenter
+      navigation={navigation}
+      askData={askData}
+      onChangeAskData={onChangeAskData}
+      onCheckType={onCheckType}
+      askDataRegister={askDataRegister}
+      isActive={isActive}
+    />
   );
 };

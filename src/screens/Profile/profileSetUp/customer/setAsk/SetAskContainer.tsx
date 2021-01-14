@@ -23,7 +23,6 @@ export default ({navigation, route}: IProps) => {
   const initInquiry = async () => {
     const {data, statusCode} = await serviceApi.getInquiry();
     if (statusCode !== 200) {
-      console.log('Inquiry error');
     } else {
       setInquiryList(data);
     }

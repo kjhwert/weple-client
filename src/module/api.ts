@@ -9,6 +9,8 @@ import {
   IUserApiPwChange,
   IUserApiProfile,
   IServiceApiInquiry,
+  IUserApiCategory,
+  ITogetherApiOpneRoom,
   IFeedCreate,
   IFeedIndex,
   IFeedCreateComment,
@@ -66,7 +68,7 @@ export const userApi = {
       }),
     ),
   getCategory: () => apiRequest(api.get('/user/categories')),
-  putCategory: () => apiRequest(api.put('/user/categories')),
+  putCategory: (category: IUserApiCategory) => apiRequest(api.put('/user/categories', category)),
   dropOut: () => apiRequest(api.delete('/user')),
   follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
   unFollow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/unFollow`)),
@@ -85,6 +87,11 @@ export const serviceApi = {
 
 export const togetherApi = {
   userOpenList: () => apiRequest(api.get('/together/user')),
+  userOpenRoom: (room: ITogetherApiOpneRoom) => apiRequest(api.post('/together', room)),
+  locationList: (latitude: string, longitude: string, page: string) =>
+    apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),
+  followerList: (page: number) => apiRequest(api.get('/together/follower?page=' + page)),
+  endSoonList: (page: number) => apiRequest(api.get('/together/end-soon?page=' + page)),
 };
 
 export const feedApi = {

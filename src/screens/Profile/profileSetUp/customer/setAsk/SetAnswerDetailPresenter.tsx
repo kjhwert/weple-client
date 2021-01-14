@@ -26,14 +26,8 @@ export default ({inquryAnswerDetail}: IProps) => {
 
         <AnswerDetailWrapper>
           <AskDetailTextWrapper>
-            <AskDetailTitle>
-              {/* {inquryAnswerDetail.responseTitle} */}
-              문의에 대한 답변입니다.
-            </AskDetailTitle>
-            <AskDetailDate>
-              {/* {inquryAnswerDetail.responseDate} */}
-              2021-03-01 00:00:00
-            </AskDetailDate>
+            <AskDetailTitle>문의에 대한 답변입니다.</AskDetailTitle>
+            <AskDetailDate>{inquryAnswerDetail.responseDate}</AskDetailDate>
           </AskDetailTextWrapper>
         </AnswerDetailWrapper>
         <AskWrapper>

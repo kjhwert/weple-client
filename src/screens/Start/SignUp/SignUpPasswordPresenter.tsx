@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import {InputPasswordBox} from '../../../components/CommonInput';
 import {StartNextBtn} from '../../../components/CommonBtn';
-import AlertWrapper from '../../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
@@ -13,8 +12,6 @@ interface IProps {
   userPasswordValidation: Function;
   createUserPassword: Function;
   isActive: boolean;
-  alertFrame: Function;
-  clearAlertFrame: Function;
 }
 
 export default ({
@@ -25,30 +22,9 @@ export default ({
   userPasswordValidation,
   isActive,
   createUserPassword,
-  alertFrame,
-  clearAlertFrame,
 }: IProps) => {
   return (
     <Container>
-      {alertFrame.showAlert && !alertFrame.usable && (
-        <AlertWrapper>
-          <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertWarn_icon.png')}
-            />
-          </AlertImageWrapper>
-          <AlertTitleText>
-            {'입력하신 비밀번호와 다릅니다.\n다시 입력해주세요.'}
-          </AlertTitleText>
-          <ConfirmButton
-            onPress={() => {
-              clearAlertFrame();
-            }}>
-            <ConfirmButtonText>확인</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
-
       <ContainerCard>
         <InputPasswordBox
           title={'비밀번호'}
@@ -77,42 +53,4 @@ export default ({
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const AlertImageWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 30px;
-`;
-
-const AlertImage = styled.Image`
-  width: 70px;
-  height: 70px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 14px;
-  color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 10px;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
 `;

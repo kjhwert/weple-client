@@ -59,7 +59,7 @@ export default ({
                       <RecruitImage source={require('../../assets/photo_4.jpeg')} />
                       <RecordWrapper>
                         <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${item.activity.image}`}} />
-                        <RecordText>21.7 KM</RecordText>
+                        <RecordText>11.7 KM</RecordText>
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
@@ -312,8 +312,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 22px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

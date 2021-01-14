@@ -48,6 +48,49 @@ const InputBoxData = styled.TextInput`
   color: #6f6f6f;
 `;
 
+export const TextBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <InputBoxWrapper>
+      <TextBoxTitle>{title}</TextBoxTitle>
+      <TextBoxData
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        borderColor={borderColor}
+        multiline={true}
+        textAlignVertical={'top'}
+      />
+    </InputBoxWrapper>
+  );
+};
+
+const TextBoxTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const TextBoxData = styled.TextInput`
+  width: 100%;
+  height: 150px;
+  max-height: 150px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  border-radius: 5px;
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
 export const PwChangeInput = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';

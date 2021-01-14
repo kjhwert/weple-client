@@ -65,6 +65,27 @@ export default ({navigation}: IProps) => {
       );
     }
 
+    // 공백 체크
+    if (/\s/g.test(userPassword.newPassword1)) {
+      setUserPassword({
+        ...userPassword,
+        activeFlag2: -1,
+        activeFlag3: -1,
+      });
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '패스워드 변경실패',
+            description: '비밀번호는 빈칸없이 입력해주세요.',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+    }
+
     const passwordRequest = {
       oldPassword: userPassword.oldPassword,
       newPassword: userPassword.newPassword1,

@@ -105,7 +105,7 @@ const KakaoIconBtn = styled.TouchableOpacity`
   border-width: 1px;
   border-radius: 5px;
   margin-bottom: 10px;
-  background-color: #1b1c1d;
+  background-color: #151517;
 `;
 
 const KakaoIconText = styled.Text`
@@ -126,7 +126,7 @@ const FaceBookIconBtn = styled.TouchableOpacity`
   border-width: 1px;
   border-radius: 5px;
   margin-bottom: 10px;
-  background-color: #1b1c1d;
+  background-color: #151517;
 `;
 
 const FaceBookIconText = styled.Text`
@@ -144,9 +144,10 @@ const InstagramIconBtn = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  border-width: 1px;
   border-radius: 5px;
   margin-bottom: 10px;
-  background-color: #1b1c1d;
+  background-color: #151517;
 `;
 
 const InstagramIconText = styled.Text`
