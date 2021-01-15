@@ -13,7 +13,7 @@ export interface IShowFeed {
   endDate: Date;
   calorie: number;
   thumbnail: string;
-  userName: string;
+  userNickName: string;
   userImage: string;
   likeCount: number;
   commentCount: number;
@@ -24,6 +24,10 @@ export interface IShowFeed {
   activityName: string;
   activityColor: string;
   activityImage: string;
+  mapId: number;
+  mapStyle: string;
+  musicId: number;
+  musicUrl: string;
   images: Array<IFeedImage>;
 }
 

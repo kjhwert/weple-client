@@ -51,7 +51,7 @@ export default () => {
       <Stack.Screen
         name="activeDetail"
         options={{
-          headerTitle: `${show?.userNickName}님의 활동`,
+          headerTitle: `${show ? show.userNickName : ''}님의 활동`,
         }}
         component={ActiveDetailContainer}
       />

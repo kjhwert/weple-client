@@ -3,19 +3,15 @@ import {IMapboxRecordMap} from '../type/recordContext';
 import {MAPBOX_TOKEN} from '../common';
 
 interface IWebViewJavaScriptCode {
-  coordinates: Array<Array<number>>;
+  coordinates: string;
   music: IMusics;
   map: IMapboxRecordMap;
 }
 
-export const webViewJavaScriptCode = ({
-  coordinates,
-  music,
-  map,
-}: IWebViewJavaScriptCode) => {
+export const webViewJavaScriptCode = ({coordinates, music, map}: IWebViewJavaScriptCode) => {
   return `
     (function () {
-          var coordinates = ${JSON.stringify(coordinates)};
+          var coordinates = ${coordinates};
           var audioSource = '${music?.url}';
           var mapStyle = '${map.style}';
       

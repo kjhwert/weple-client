@@ -1,8 +1,10 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import styled from 'styled-components/native';
 import {IShowFeed} from '../../module/type/feedContext';
 import {BASE_URL, secondsToTimeFormat, showDateToAmPmHourMinute, timeForToday} from '../../module/common';
 import UserContext from '../../module/context/UserContext';
+import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
+import WebView from 'react-native-webview';
 
 interface IProps {
   navigation: any;
@@ -11,6 +13,7 @@ interface IProps {
 
 export default ({navigation, feed}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
+  const webViewRef = useRef<any>(null);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
@@ -22,10 +25,17 @@ export default ({navigation, feed}: IProps) => {
         <ScrollWrapper>
           <Card>
             <MapPlayWrapper>
-              <MapPlayImage source={require('../../assets/map_1.png')} />
-              <PlayBtn onPress={() => {}}>
-                <PlayImage source={require('../../assets/play_icon.png')} />
-              </PlayBtn>
+              <WebView
+                ref={(ref) => (webViewRef.current = ref)}
+                source={{
+                  uri: `${BASE_URL}/public/map/test.html`,
+                }}
+                injectedJavaScript={webViewJavaScriptCode({
+                  coordinates: feed.coordinates,
+                  map: {id: feed.mapId, style: feed.mapStyle},
+                  music: {id: feed.musicId, url: feed.musicUrl},
+                })}
+              />
             </MapPlayWrapper>
 
             <ProfileTopWrapper>
@@ -36,7 +46,7 @@ export default ({navigation, feed}: IProps) => {
                   />
                   <ProfileTextWrapper>
                     <ProfileNameBtn onPress={() => {}}>
-                      <ProfileName>{feed.userName}</ProfileName>
+                      <ProfileName>{feed.userNickName}</ProfileName>
                     </ProfileNameBtn>
                     <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                   </ProfileTextWrapper>
@@ -126,7 +136,7 @@ export default ({navigation, feed}: IProps) => {
               </ActiveDetailTitleWrapper>
 
               <ActiveDetailImageWrapper>
-                <ActiveDetailMapImage source={require('../../assets/map_2.png')} />
+                <ActiveDetailMapImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} />
               </ActiveDetailImageWrapper>
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
@@ -164,7 +174,7 @@ export default ({navigation, feed}: IProps) => {
                   </ActiveFinishMark>
                 </ActiveMarkFinishWrapper>
                 <ActiveDetailFinishTitle>
-                  {showDateToAmPmHourMinute(new Date(feed.endDate))} 에 끝맞쳤습니다.
+                  {showDateToAmPmHourMinute(new Date(feed.endDate))} 에 끝마쳤습니다.
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
@@ -219,27 +229,8 @@ const Card = styled.View`
 `;
 
 const MapPlayWrapper = styled.View`
-  display: flex;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MapPlayImage = styled.Image`
-  width: 100%;
-  height: 150px;
-`;
-
-const PlayBtn = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap;
-  position: absolute;
-`;
-
-const PlayImage = styled.Image`
-  width: 35px;
-  height: 35px;
+  height: 200px;
 `;
 
 const ProfileTopWrapper = styled.View`
@@ -563,13 +554,6 @@ const DetailTextWrapper = styled.View`
   display: flex;
   flex-flow: column;
   width: 80%;
-`;
-
-const ActiveDetailText = styled.Text`
-  font-size: 12px;
-  font-weight: bold;
-  color: #353434;
-  margin-top: 10px;
 `;
 
 const ActiveDetailTimeText = styled.Text`

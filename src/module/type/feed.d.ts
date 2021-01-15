@@ -16,7 +16,7 @@ export interface IFeed {
   commentUserName: string;
   commentUserImage: string;
   userId: number;
-  userName: string;
+  userNickName: string;
   userImage: string;
   feedImage: string;
   likeCount: string;

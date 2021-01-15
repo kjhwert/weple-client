@@ -82,6 +82,6 @@ export interface IFeedIndex {
 }
 
 export interface IFeedCreateComment {
-  feedId: number;
+  feed: number;
   description: string;
 }

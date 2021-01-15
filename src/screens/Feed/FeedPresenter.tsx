@@ -107,7 +107,7 @@ export default ({navigation, newFollower, events, userFollowAndReload}: IProps) 
                         onPress={() => {
                           navigation.navigate('profileActiveMain');
                         }}>
-                        <ProfileName>{feed.userName}</ProfileName>
+                        <ProfileName>{feed.userNickName}</ProfileName>
                       </ProfileNameBtn>
                       <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                     </ProfileTextWrapper>

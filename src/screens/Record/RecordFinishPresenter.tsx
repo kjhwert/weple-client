@@ -32,7 +32,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   uri: `${BASE_URL}/public/map/test.html`,
                 }}
                 injectedJavaScript={webViewJavaScriptCode({
-                  coordinates: mapboxRecord.coordinates,
+                  coordinates: JSON.stringify(mapboxRecord.coordinates),
                   map: mapboxRecord.map,
                   music: mapboxRecord.music,
                 })}
