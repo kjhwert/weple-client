@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+// import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
 }
 
-export default ({navigation, content}: IProps) => {
+export default ({navigation, userDetail, content}: IProps) => {
+  // const {getTogetherThumbnail, getTogetherActivityImage}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ScrollContainer>
@@ -17,7 +20,7 @@ export default ({navigation, content}: IProps) => {
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <JoinTitle>강변북로 라이딩</JoinTitle>
+                  <JoinTitle>{userDetail.title}</JoinTitle>
                   <ShareBtn
                     onPress={() => {
                       navigation.navigate('togetherShare');

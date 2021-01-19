@@ -48,7 +48,6 @@ export default ({navigation, activities, categoriesClick, isActive, createUserCa
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
-
       <StartNextBtn
         StartNextPage={'togetherPostIntroduce'}
         text={'다음'}
@@ -74,6 +73,7 @@ const ScrollWrapper = styled.ScrollView``;
 const SubjectWrapper = styled.View`
   display: flex;
   width: 100%;
+  margin-bottom: 50px;
 `;
 
 const SubjectText = styled.Text`

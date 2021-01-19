@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import AlertWrapper from '../../../components/AlertWrapper';
+import {TextBox} from '../../../components/CommonInput';
 
 interface IProps {
   navigation: any;
@@ -43,13 +44,9 @@ export default ({navigation, showAlert, alertFrame, content}: IProps) => {
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <JoinTitle>강변북로 라이딩</JoinTitle>
-                  <ShareBtn
-                    onPress={() => {
-                      navigation.navigate('togetherShare');
-                    }}>
-                    <ShareImage source={require('../../../assets/icon_share.png')} />
-                  </ShareBtn>
+                  <JoinTitleInput multiline={true} autoFocus={true}>
+                    강변북로 라이딩
+                  </JoinTitleInput>
                 </JoinTitleWrapper>
                 <JoinTextWrapper>
                   <JoinInfoTitle>최대 참여인원</JoinInfoTitle>
@@ -73,25 +70,33 @@ export default ({navigation, showAlert, alertFrame, content}: IProps) => {
                 </JoinTextWrapper>
               </JoinInfoWrapper>
 
-              {content.map((item, idx) => (
+              {/* {content.map((item, idx) => (
                 <JoinContentWrapper key={idx}>
                   <JoinContentTitle>{item.title}</JoinContentTitle>
-                  <JoinContent>{item.content}</JoinContent>
+                  <JoinContentInput>{item.content}</JoinContentInput>
                 </JoinContentWrapper>
-              ))}
+              ))} */}
 
-              <JoinButton
-                onPress={() => {
-                  navigation.navigate('togetherModify');
-                }}>
-                <ButtonText>수정하기</ButtonText>
-              </JoinButton>
-              <DeleteButton
-                onPress={() => {
-                  alertFrame(true);
-                }}>
-                <ButtonText>삭제하기</ButtonText>
-              </DeleteButton>
+              <ModifyContentWrapper>
+                <TextBox title={'모임하기 설명'} name="description" />
+                <TextBox title={'이런 분들꼐 추천합니다.'} name="recommend" />
+                <TextBox title={'공지사항'} name="notice" />
+              </ModifyContentWrapper>
+
+              <ButtonWrap>
+                <ModifyButton
+                  onPress={() => {
+                    navigation.navigate('togetherModify');
+                  }}>
+                  <ButtonText>수정하기</ButtonText>
+                </ModifyButton>
+                <DeleteButton
+                  onPress={() => {
+                    alertFrame(true);
+                  }}>
+                  <ButtonText>삭제하기</ButtonText>
+                </DeleteButton>
+              </ButtonWrap>
             </JoinWrapper>
           </Card>
         </ScrollWrapper>
@@ -232,24 +237,14 @@ const JoinTitleWrapper = styled.View`
   width: 100%;
 `;
 
-const JoinTitle = styled.Text`
-  width: 85%;
+const JoinTitleInput = styled.TextInput`
+  width: 100%;
   font-size: 15px;
   font-weight: bold;
   color: #222;
-  padding: 10px 0;
-`;
-
-const ShareBtn = styled.TouchableOpacity`
-  width: 15%;
-  flex-flow: row wrap;
-  align-items: flex-end;
-  justify-content: flex-end;
-`;
-
-const ShareImage = styled.Image`
-  width: 23px;
-  height: 23px;
+  padding: 5px;
+  border-width: 1px;
+  border-color: #b5b5b5;
 `;
 
 const JoinInfoTitle = styled.Text`
@@ -296,39 +291,51 @@ const JoinInfoMoreImage = styled.Image`
   height: 12px;
 `;
 
-const JoinContentWrapper = styled.View`
+const ModifyContentWrapper = styled.View`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #dcdcdc;
   padding: 20px 0;
 `;
 
-const JoinContentTitle = styled.Text`
+const ModifyTitle = styled.Text`
   width: 100%;
   font-size: 15px;
   font-weight: bold;
   color: #2e2e2e;
   padding: 5px 0;
+  margin-bottom: 5px;
 `;
 
-const JoinContent = styled.Text`
+const ModifyContentInput = styled.TextInput`
   width: 100%;
+  height: 100px;
+  max-height: 100px;
   font-size: 12px;
   color: #878787;
-  padding: 5px 0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-width: 1px;
+  border-color: #b5b5b5;
 `;
 
-const JoinButton = styled.TouchableOpacity`
+const ButtonWrap = styled.View`
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ModifyButton = styled.TouchableOpacity`
   display: flex;
   width: 100%;
   align-items: center;
   padding: 15px;
-  margin-top: 20px;
-  background-color: #b2b2b2;
+  margin-bottom: 10px;
+  background-color: #007bf1;
 `;
 
 const DeleteButton = styled.TouchableOpacity`

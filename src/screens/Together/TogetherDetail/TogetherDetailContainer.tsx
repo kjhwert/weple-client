@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import TogetherDetailPresenter from './TogetherDetailPresenter';
+import {togetherApi} from '../../../module/api';
 
 const content = [
   {
@@ -23,5 +24,24 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  return <TogetherDetailPresenter navigation={navigation} content={content} />;
+  const [userDetail, setUserDetail] = useState({
+    togetherCount: 0,
+    togethers: [],
+  });
+
+  // const getTogethertDetail = async () => {
+  //   const id = route.params?.id;
+  //   const {data, statusCode} = await togetherApi.userOpenList(id);
+
+  //   if (statusCode !== 200) {
+  //   } else {
+  //     setUserDetail(data);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getTogethertDetail();
+  // }, []);
+
+  return <TogetherDetailPresenter navigation={navigation} userDetail={userDetail} content={content} />;
 };

@@ -12,16 +12,11 @@ interface IProps {
   onCheckType: Function;
   askDataRegister: Function;
   isActive: any;
+  typeData: any;
 }
 
-export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegister, isActive}: IProps) => {
+export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegister, isActive, typeData}: IProps) => {
   const pickerRef = useRef();
-  const typeData = [
-    {label: '회원정보', value: '01'},
-    {label: '환불/멤버십', value: '02'},
-    {label: '이용문의', value: '03'},
-    {label: '기타', value: '04'},
-  ];
 
   return (
     <Container>
@@ -34,9 +29,7 @@ export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegis
           titleStyle={{color: '#000000', fontSize: 16}}
           itemStyle={{color: '#000000'}}
           selectedColor="#FC0"
-          confirmButtonEnabledTextStyle={{
-            color: '#007bf1',
-          }}
+          confirmButtonEnabledTextStyle={{color: '#007bf1'}}
           cancelButtonTextStyle={{color: '#FE2E2E', fontWeight: 'normal'}}
           confirmButton={'선택'}
           cancelButton={'취소'}
@@ -53,7 +46,6 @@ export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegis
           </Text>
           <Image source={require('../../../../../assets/icon_selected.png')} style={styles.moreIconImage} />
         </TouchableOpacity>
-
         <AskWriteWrapper>
           <AskTitleInput
             placeholder="문의 제목을 입력해주세요."

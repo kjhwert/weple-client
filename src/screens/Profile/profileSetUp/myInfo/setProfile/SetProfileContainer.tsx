@@ -18,11 +18,14 @@ export default ({navigation}: IProps) => {
     setAlertVisible();
   };
 
+  const [activeFlag, setActiveFlag] = useState({
+    nickNameFlag: 0,
+    descriptionFlag: 0,
+  });
   const [isActive, setIsActive] = useState(true);
   const [profileData, setProfileData] = useState({
     nickName: '',
     description: '',
-    activeFlag: 0,
   });
 
   const onChangeProfile = (e) => {
@@ -31,7 +34,6 @@ export default ({navigation}: IProps) => {
     setProfileData({
       ...profileData,
       [name]: value,
-      activeFlag: profileData.nickName.length,
     });
     if (name === 'nickName') {
       setIsActive(false);
@@ -126,7 +128,7 @@ export default ({navigation}: IProps) => {
           }}
           checked={() => {
             clearAlert();
-            navigation.navigate('profileActiveMain');
+            navigation.navigate('profileActiveMain', {refresh: true});
           }}
         />,
       );
@@ -162,12 +164,21 @@ export default ({navigation}: IProps) => {
     getProfileInfo();
   }, []);
 
+  useEffect(() => {
+    setActiveFlag({
+      ...activeFlag,
+      nickNameFlag: profileData.nickName.length,
+      descriptionFlag: profileData.description.length,
+    });
+  }, [profileData]);
+
   return (
     <SetProfilePresenter
       navigation={navigation}
       profileData={profileData}
       onChangeProfile={onChangeProfile}
       profileInfoChange={profileInfoChange}
+      activeFlag={activeFlag}
       isActive={isActive}
       hasNickName={hasNickName}
       showPicker={showPicker}

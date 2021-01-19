@@ -2,44 +2,12 @@ import React, {useState, useEffect} from 'react';
 import TogetherPresenter from './TogetherPresenter';
 import {togetherApi} from '../../module/api';
 
-const openClub = [
-  {
-    id: 0,
-    image: require('../../assets/photo_2.jpeg'),
-    iconImage: require('../../assets/active_cycle.png'),
-    distance: 21.7,
-    title: '강변북로 라이딩',
-    address: '서울특별시 마포구 공덕동 118-1',
-    pay: '10,000',
-    endTime: 18,
-  },
-  {
-    id: 1,
-    image: require('../../assets/photo_2.jpeg'),
-    iconImage: require('../../assets/active_cycle.png'),
-    distance: 18.8,
-    title: '북한강 라이딩',
-    address: '서울특별시 마포구 공덕동 118-1',
-    pay: '10,000',
-    endTime: 18,
-  },
-  {
-    id: 2,
-    image: require('../../assets/photo_2.jpeg'),
-    iconImage: require('../../assets/active_cycle.png'),
-    distance: 30.5,
-    title: '남한강 라이딩',
-    address: '서울특별시 마포구 공덕동 118-1',
-    pay: '10,000',
-    endTime: 18,
-  },
-];
-
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, route}: IProps) => {
   const [userList, setUserList] = useState({
     togetherCount: 0,
     togethers: [],
@@ -51,22 +19,41 @@ export default ({navigation}: IProps) => {
     page: 1,
   });
 
+  const [togetherMenu, setTogetherMenu] = useState([
+    {
+      id: 0,
+      image: '',
+      iconImage: '',
+      distance: 0,
+      title: '',
+      address: '',
+      pay: '',
+      endTime: 0,
+    },
+  ]);
+
+  const [isMapView, setIsMapView] = useState(false);
+
+  const turnMapView = () => {
+    setIsMapView(!isMapView);
+  };
+
   const setLocationPaging = async () => {
     const locationPaging = {id: 0, page: 1};
     setTogetherPaging(locationPaging);
-    await getTogether(locationPaging);
+    await getLocation(locationPaging);
   };
 
   const setFollowerPaging = async () => {
     const followerPaging = {id: 1, page: 1};
     setTogetherPaging(followerPaging);
-    await getTogether(followerPaging);
+    await getFollower(followerPaging);
   };
 
   const setEndSoonPaging = async () => {
     const endSoonPaging = {id: 2, page: 1};
     setTogetherPaging(endSoonPaging);
-    await getTogether(endSoonPaging);
+    await getEndSoon(endSoonPaging);
   };
 
   // 내가 개설한 모임 api 조회
@@ -75,25 +62,52 @@ export default ({navigation}: IProps) => {
     console.log('togetherData:', data);
 
     if (statusCode !== 200) {
-      console.log('together error');
     } else {
       setUserList(data);
     }
   };
 
+  const getLocation = async (locationPaging) => {
+    const {data} = await togetherApi.locationList('37.5466226', '126.9498512', locationPaging.page);
+    console.log('위치data:', data);
+    setTogetherMenu(data);
+  };
+
+  const getFollower = async (followerPaging) => {
+    const {data} = await togetherApi.followerList(followerPaging.page);
+    console.log('팔로워data:', data);
+    setTogetherMenu(data);
+  };
+
+  const getEndSoon = async (endSoonPaging) => {
+    const {data} = await togetherApi.endSoonList(endSoonPaging.page);
+    console.log('모집임박data:', data);
+    setTogetherMenu(data);
+  };
+
   useEffect(() => {
     getTogether();
+    setLocationPaging();
   }, []);
+
+  useEffect(() => {
+    if (route.params?.refresh) {
+      getTogether();
+      setLocationPaging();
+    }
+  }, [route.params?.refresh]);
 
   return (
     <TogetherPresenter
       navigation={navigation}
       userList={userList}
       togetherPaging={togetherPaging}
+      togetherMenu={togetherMenu}
       setLocationPaging={setLocationPaging}
       setFollowerPaging={setFollowerPaging}
       setEndSoonPaging={setEndSoonPaging}
-      openClub={openClub}
+      isMapView={isMapView}
+      turnMapView={turnMapView}
     />
   );
 };

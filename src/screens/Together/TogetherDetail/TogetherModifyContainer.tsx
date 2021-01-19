@@ -1,28 +1,46 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import TogetherModifyPresenter from './TogetherModifyPresenter';
-
-const content = [
-  {
-    id: 0,
-    title: '모임하기 설명',
-    content: '이 모임에 대한 소개입니다.',
-  },
-  {
-    id: 1,
-    title: '이런 분들께 추천합니다.',
-    content: '이런 분들께 추천하는 내용입니다. 이런 분들께 추천하는 내용입니다.',
-  },
-  {
-    id: 2,
-    title: '공지사항',
-    content: '공지사항 내용입니다.',
-  },
-];
+import {togetherApi} from '../../../module/api';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <TogetherModifyPresenter navigation={navigation} content={content} />;
+export default ({navigation, route}: IProps) => {
+  const [listDetail, setListDetail] = useState({
+    userCount: 0,
+    together: {
+      id: 0,
+      title: '',
+      description: '',
+      togetherPrice: 0,
+      togetherPlace: '',
+      togetherDate: '',
+      recommend: '',
+      notice: '',
+      address: '',
+      commentNickName: null,
+      commentImage: null,
+      commentDescription: null,
+    },
+    commentCount: 0,
+  });
+
+  const getListDetail = async () => {
+    const id = route.params?.id;
+    const {data, statusCode} = await togetherApi.userOpenDetail(id);
+    // console.log('togetListDetail:', data);
+
+    if (statusCode !== 200) {
+    } else {
+      setListDetail(data);
+    }
+  };
+
+  useEffect(() => {
+    getListDetail();
+  }, []);
+
+  return <TogetherModifyPresenter navigation={navigation} listDetail={listDetail} />;
 };

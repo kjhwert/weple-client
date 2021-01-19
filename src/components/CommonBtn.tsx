@@ -72,8 +72,7 @@ const ActiveButton = styled.TouchableOpacity`
   width: 100%;
   padding: 15px;
   align-items: center;
-  background-color: ${(props: IProps) =>
-    props.isActive ? '#007bf1' : '#b2b2b2'};
+  background-color: ${(props: IProps) => (props.isActive ? '#007bf1' : '#b2b2b2')};
 `;
 
 const ActiveButtonText = styled.Text`

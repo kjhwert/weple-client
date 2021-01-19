@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
-import {InputBox, PwChangeInput} from '../../../../../components/CommonInput';
+import {PwChangeInput2, PwChangeInput} from '../../../../../components/CommonInput';
 import {StartNextBtn} from '../../../../../components/CommonBtn';
 
 interface IProps {
@@ -27,7 +27,7 @@ export default ({
     <Container>
       <ContainerCard>
         <SignUpWrapper>
-          <InputBox
+          <PwChangeInput2
             title={'기존 비밀번호'}
             placeholder="기존 비밀번호를 입력하세요."
             onChange={oldPasswordChange}

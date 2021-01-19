@@ -13,6 +13,10 @@ export const UserContextProvider = ({children}: IProps) => {
   ////////////////////////////////////////////////////////////////
   // LOGIN CONTEXT
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoginActive, setIsLoginActive] = useState({
+    emailFlag: false,
+    passwordFlag: false,
+  });
   const [isLoginBtnActive, setIsLoginBtnActive] = useState(false);
 
   const [loginUser, setLoginUser] = useState({
@@ -225,7 +229,7 @@ export const UserContextProvider = ({children}: IProps) => {
     if (loginUser.image) {
       return {uri: BASE_URL + '/' + loginUser.image};
     } else {
-      return require('../../assets/icon_plus.png');
+      return require('../../assets/bottomTab_profile.png');
     }
   };
 
@@ -268,6 +272,10 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   useEffect(() => {
+    setIsLoginActive({emailFlag: loginUser.email?.length > 0, passwordFlag: loginUser.password?.length > 0});
+  }, [loginUser]);
+
+  useEffect(() => {
     setIsLoginBtnActive(loginUser.email?.length > 0 && loginUser.password?.length > 0);
   }, [loginUser]);
 
@@ -275,6 +283,7 @@ export const UserContextProvider = ({children}: IProps) => {
     <UserContext.Provider
       value={{
         loading,
+        isLoginActive,
         isLoginBtnActive,
         loginUser,
         onChangeLogin,

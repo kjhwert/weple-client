@@ -27,7 +27,6 @@ export default ({navigation, logOutAlert, logOutAlertFrame, dropOutAlert}: IProp
               onPress={() => {
                 userLogout();
                 logOutAlertFrame(false);
-
                 navigation.dispatch(
                   CommonActions.reset({
                     index: 1,
@@ -96,7 +95,6 @@ export default ({navigation, logOutAlert, logOutAlertFrame, dropOutAlert}: IProp
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
               </SetBtnWrapper>
-
               <SetUpTitleText>고객센터</SetUpTitleText>
               <SetBtnWrapper>
                 <SetBtn
@@ -198,14 +196,6 @@ const AlertImage = styled.Image`
 const AlertTitleText = styled.Text`
   font-size: 14px;
   color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const AlertContentText = styled.Text`
-  font-size: 12px;
-  color: #878787;
   font-weight: bold;
   text-align: center;
   padding-bottom: 10px;

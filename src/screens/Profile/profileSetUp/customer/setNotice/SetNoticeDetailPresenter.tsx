@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {getDate} from '../../../../../components/CommonTime';
 
 interface IProps {
   noticeDetail: any;
@@ -14,7 +15,7 @@ export default ({noticeDetail}: IProps) => {
             <NoticeWrapper>
               <NoticeTextWrapper>
                 <NoticeTitle>{noticeDetail.title}</NoticeTitle>
-                <NoticeDate>{noticeDetail.createdAt}</NoticeDate>
+                <NoticeDate>{getDate(noticeDetail.createdAt)}</NoticeDate>
               </NoticeTextWrapper>
               <NoticeContent>{noticeDetail.description}</NoticeContent>
             </NoticeWrapper>

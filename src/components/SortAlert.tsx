@@ -24,7 +24,7 @@ export default ({sortType, checked}: IProps) => {
         <RadioButtonRN
           box={false}
           circleSize={9}
-          activeColor={'#187fe2'}
+          activeColor={'#007bf1'}
           textStyle={{
             fontSize: 14,
             color: '#919191',

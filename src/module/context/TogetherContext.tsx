@@ -1,4 +1,5 @@
 import React, {createContext, ReactNode, useState} from 'react';
+import {BASE_URL} from '../../module/common';
 
 const TogetherContext = createContext({});
 
@@ -7,6 +8,22 @@ interface IProps {
 }
 
 export const TogetherContextProvider = ({children}: IProps) => {
+  const getTogetherThumbnail = (Img) => {
+    if (Img) {
+      return {uri: BASE_URL + '/' + Img};
+    } else {
+      return require('../../assets/photo_4.jpeg');
+    }
+  };
+
+  const getTogetherActivityImage = (Img) => {
+    if (Img) {
+      return {uri: BASE_URL + '/' + Img};
+    } else {
+      return require('../../assets/active_skate.png');
+    }
+  };
+
   ////////////////////////////////////////////////////////////////
   // USER CREATE ROOM CONTEXT
   const [createRoom, setCreateRoom] = useState({
@@ -20,7 +37,7 @@ export const TogetherContextProvider = ({children}: IProps) => {
     maxMember: '',
     togetherPrice: '',
     isPublic: true,
-    feed: 70,
+    feed: 0,
     activity: 0,
   });
   console.log('createRoom', createRoom);
@@ -41,8 +58,25 @@ export const TogetherContextProvider = ({children}: IProps) => {
     });
   };
 
+  const pickTogetherDate = (date) => {
+    setCreateRoom({
+      ...createRoom,
+      togetherDate: date,
+    });
+  };
+
   return (
-    <TogetherContext.Provider value={{createRoom, createRoomData, onChangeRoom}}>{children}</TogetherContext.Provider>
+    <TogetherContext.Provider
+      value={{
+        getTogetherThumbnail,
+        getTogetherActivityImage,
+        createRoom,
+        createRoomData,
+        onChangeRoom,
+        pickTogetherDate,
+      }}>
+      {children}
+    </TogetherContext.Provider>
   );
 };
 

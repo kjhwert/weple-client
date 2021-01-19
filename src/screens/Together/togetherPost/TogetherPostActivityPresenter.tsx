@@ -45,13 +45,13 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                       position: 'absolute',
                       right: 8,
                       bottom: 180,
-                      tintColors: 'red',
                     }}
                     boxType={'circle'}
                     disabled={false}
                     value={false}
                     // onValueChange={(newValue) => setToggleCheckBox(newValue)}
                     onValueChange={setToggleCheckBox}
+                    tintColors={{true: 'red'}}
                   />
                 </ActivityImageWrapper>
               ))}
@@ -92,7 +92,7 @@ const ActivityTitle = styled.Text`
   display: flex;
   width: 100%;
   flex-direction: row;
-  padding: 10px 20px;
+  padding: 20px;
   font-size: 12px;
   color: #6f6f6f;
   font-weight: bold;
@@ -109,7 +109,7 @@ const ActivityWrapper = styled.View`
   margin-bottom: 80px;
 `;
 
-const ActivityImageWrapper = styled.TouchableOpacity`
+const ActivityImageWrapper = styled.View`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import {togetherDate} from '../../../module/common';
+import TogetherContext from '../../../module/context/TogetherContext';
+import {getComma} from '../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
+  userList: any;
 }
 
-export default ({navigation, openClub}: IProps) => {
+export default ({navigation, userList}: IProps) => {
+  const {getTogetherThumbnail, getTogetherActivityImage}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ScrollContainer>
@@ -14,32 +20,32 @@ export default ({navigation, openClub}: IProps) => {
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn>
                 <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
-                <RecruitTogetherNumber>8</RecruitTogetherNumber>
+                <RecruitTogetherNumber>{userList.togetherCount}</RecruitTogetherNumber>
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
 
-            {openClub.map((item, idx) => (
+            {userList.togethers.map((item, idx) => (
               <RecruitWrapper key={idx}>
                 <RecruitImageWrapper
                   onPress={() => {
-                    navigation.navigate('togetherDetail');
+                    navigation.navigate('togetherModify', {id: item.id});
                   }}>
-                  <RecruitImage source={item.image} />
+                  <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
                   <RecordWrapper>
-                    <RecordImage source={item.iconImage} />
+                    <RecordImage source={getTogetherActivityImage(item.activity.image)} />
                     <RecordText>{item.distance}KM</RecordText>
                   </RecordWrapper>
                 </RecruitImageWrapper>
                 <RecruitTextWrapper>
                   <RecruitTitleBtn
                     onPress={() => {
-                      navigation.navigate('togetherDetail');
+                      navigation.navigate('togetherModify');
                     }}>
                     <RecruitTitle>{item.title}</RecruitTitle>
                   </RecruitTitleBtn>
-                  <RecruitAddress>{item.address}</RecruitAddress>
-                  <EntryFee>참가비 {item.pay}원</EntryFee>
-                  <Deadline>모집마감 {item.endTime}시간 전</Deadline>
+                  <RecruitAddress>{item.togetherPlace}</RecruitAddress>
+                  <EntryFee>참가비 {getComma(item.togetherPrice)}원</EntryFee>
+                  <Deadline>{togetherDate(item.limitDate)}</Deadline>
                 </RecruitTextWrapper>
               </RecruitWrapper>
             ))}

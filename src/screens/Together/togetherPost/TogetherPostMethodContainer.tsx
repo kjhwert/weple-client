@@ -17,10 +17,5 @@ export default ({navigation}: IProps) => {
     },
   ];
 
-  return (
-    <TogetherPostMethodPresenter
-      navigation={navigation}
-      radioBoxData={radioBoxData}
-    />
-  );
+  return <TogetherPostMethodPresenter navigation={navigation} radioBoxData={radioBoxData} />;
 };

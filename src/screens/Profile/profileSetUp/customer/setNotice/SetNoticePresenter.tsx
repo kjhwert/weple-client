@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {getDate} from '../../../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
@@ -23,12 +24,11 @@ export default ({navigation, noticeList, pagingInfo, getNoticeList}: IProps) => 
                     }}>
                     <NoticeTitleText>{item.title}</NoticeTitleText>
                   </NoticeBtn>
-                  <NoticeDateText>{item.createdAt}</NoticeDateText>
+                  <NoticeDateText>{getDate(item.createdAt)}</NoticeDateText>
                 </NoticeBtnWrapper>
               </NoticeWrapper>
             ))}
           </Card>
-
           {pagingInfo.hasNextPage && (
             <MoreBtnWrapper>
               <MoreButton

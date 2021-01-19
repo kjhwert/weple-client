@@ -82,6 +82,7 @@ export const serviceApi = {
 
 export const togetherApi = {
   userOpenList: () => apiRequest(api.get('/together/user')),
+  userOpenDetail: (id: string) => apiRequest(api.get('/together/' + id)),
   userOpenRoom: (room: ITogetherApiOpneRoom) => apiRequest(api.post('/together', room)),
   locationList: (latitude: string, longitude: string, page: string) =>
     apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),

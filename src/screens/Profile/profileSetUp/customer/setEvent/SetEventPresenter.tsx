@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../../module/common';
+import {getDate} from '../../../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
@@ -34,12 +35,11 @@ export default ({navigation, eventList, pagingInfo, getEventList}: IProps) => {
                     <EventTitle>{item.title}</EventTitle>
                   </EventTitleBtn>
                   <EventContent>{item.description}</EventContent>
-                  <EventDate>{item.createdAt}</EventDate>
+                  <EventDate>{getDate(item.createdAt)}</EventDate>
                 </EventTextWrapper>
               </EventWrapper>
             ))}
           </Card>
-
           {pagingInfo.hasNextPage && (
             <MoreBtnWrapper>
               <MoreButton

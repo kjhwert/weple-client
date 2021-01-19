@@ -7,9 +7,13 @@ import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
+  activeFlag: any;
+  isActive: boolean;
+  titleValidation: Function;
+  blankValidation: Function;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, activeFlag, isActive, titleValidation, blankValidation}: IProps) => {
   const {createRoom, onChangeRoom}: any = useContext(TogetherContext);
 
   return (
@@ -24,6 +28,7 @@ export default ({navigation}: IProps) => {
                 name="title"
                 value={createRoom.title}
                 onChange={onChangeRoom}
+                activeFlag={activeFlag.titleFlag}
               />
               <TextBox
                 title={'소개'}
@@ -31,6 +36,7 @@ export default ({navigation}: IProps) => {
                 name="description"
                 value={createRoom.description}
                 onChange={onChangeRoom}
+                activeFlag={activeFlag.descriptionFlag}
               />
               <TextBox
                 title={'이런분들께 추천해요'}
@@ -38,6 +44,7 @@ export default ({navigation}: IProps) => {
                 name="recommend"
                 value={createRoom.recommend}
                 onChange={onChangeRoom}
+                activeFlag={activeFlag.recommendFlag}
               />
               <TextBox
                 title={'공지사항'}
@@ -45,12 +52,21 @@ export default ({navigation}: IProps) => {
                 name="notice"
                 value={createRoom.notice}
                 onChange={onChangeRoom}
+                activeFlag={activeFlag.noticeFlag}
               />
             </IntroduceWrapper>
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
-      <StartNextBtn text={'다음'} StartNextPage={'togetherPostPlace'} navigation={navigation} isActive={true} />
+      <StartNextBtn
+        text={'다음'}
+        StartNextPage={'togetherPostPlace'}
+        navigation={navigation}
+        isActive={isActive}
+        validation={() => {
+          return titleValidation() && blankValidation();
+        }}
+      />
     </Container>
   );
 };
@@ -69,5 +85,5 @@ const ScrollWrapper = styled.ScrollView``;
 const IntroduceWrapper = styled.View`
   display: flex;
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 `;
