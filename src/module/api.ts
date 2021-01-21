@@ -16,6 +16,7 @@ import {
   IFeedCreateComment,
   IUtilityApiEvents,
 } from './type/api';
+import {IFeedComments} from './type/feed';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -70,6 +71,7 @@ export const userApi = {
   getCategory: () => apiRequest(api.get('/user/categories')),
   putCategory: (category: IUserApiCategory) => apiRequest(api.put('/user/categories', category)),
   dropOut: () => apiRequest(api.delete('/user')),
+  getNewFollowers: () => apiRequest(api.get('/user/follow')),
   follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
   unFollow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/unFollow`)),
 };
@@ -121,10 +123,14 @@ export const feedApi = {
     }
   },
   index: ({page, sort, order}: IFeedIndex) => apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}`)),
+  locationIndex: (page: number, lat: number, lon: number) =>
+    apiRequest(api.get(`/feed/location?lat=${lat}&lon=${lon}&page=${page}`)),
   show: (feedId: number) => apiRequest(api.get(`/feed/${feedId}`)),
-  showComments: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/comments`)),
+  showComments: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/comment`)),
   showLikeUsers: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/like`)),
   feedLike: (feedId: number) => apiRequest(api.post(`/feed/like`, {feedId})),
   feedDisLike: (feedId: number) => apiRequest(api.post(`/feed/dis-like`, {feedId})),
   createComment: (data: IFeedCreateComment) => apiRequest(api.post(`/feed/comment`, data)),
+  updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
+  destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
 };

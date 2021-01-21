@@ -4,29 +4,43 @@ import LinearGradient from 'react-native-linear-gradient';
 import {IEvent, IFeed} from '../../module/type/feed';
 import Swiper from 'react-native-swiper';
 import {BASE_URL, timeForToday} from '../../module/common';
-import {StyleSheet} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet} from 'react-native';
 import UserContext from '../../module/context/UserContext';
 import FeedContext from '../../module/context/FeedContext';
+import {IUserFollower} from '../../module/type/user';
 
 interface IProps {
   navigation: any;
-  newFollower: any;
   events: Array<IEvent>;
   userFollowAndReload: (userId: number) => void;
+  newFollowers: {
+    newFollowCount: number;
+    followers: Array<IUserFollower>;
+  };
 }
 
-export default ({navigation, newFollower, events, userFollowAndReload}: IProps) => {
+export default ({navigation, events, userFollowAndReload, newFollowers}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
-  const {index, getIndex, indexPaging, feedLike}: any = useContext(FeedContext);
+  const {index, getIndex, indexPaging, getMoreIndex, feedLike}: any = useContext(FeedContext);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
   };
 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+  };
+
+  const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (isCloseToBottom(nativeEvent)) {
+      await getMoreIndex();
+    }
+  };
+
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper>
+        <ScrollWrapper onScroll={onScroll}>
           <Card>
             <NewFollowerWrapper>
               <NewFollowerBtn
@@ -34,13 +48,17 @@ export default ({navigation, newFollower, events, userFollowAndReload}: IProps) 
                   navigation.navigate('friendFollower');
                 }}>
                 <NewFollowerText>새로운 팔로워</NewFollowerText>
-                <NewFollowerNumber>8</NewFollowerNumber>
+                <NewFollowerNumber>{newFollowers.newFollowCount}</NewFollowerNumber>
                 <NewFollowerMoreImage source={require('../../assets/more.png')} />
               </NewFollowerBtn>
 
               <FollowerWrapper horizontal={true} showsHorizontalScrollIndicator={false}>
-                {newFollower.map((item, idx) => (
-                  <FollowerImageWrapper key={idx}>
+                {newFollowers.followers.map(({id, image, nickName}) => (
+                  <FollowerImageWrapper
+                    key={id}
+                    onPress={() => {
+                      navigation.navigate('profileActiveMain', {id});
+                    }}>
                     <LinearGradient
                       colors={['#61d7ff', '#79a6fa', '#3065f4']}
                       start={{x: 0, y: 1}}
@@ -52,14 +70,11 @@ export default ({navigation, newFollower, events, userFollowAndReload}: IProps) 
                         justifyContent: 'center',
                         borderRadius: 50,
                       }}>
-                      <FollowerImage source={item.followerImage} />
+                      <FollowerImage source={{uri: `${BASE_URL}/${image ? image : 'public/user/no_profile.png'}`}} />
                     </LinearGradient>
 
-                    <NewFollowNameBtn
-                      onPress={() => {
-                        navigation.navigate('friendActive');
-                      }}>
-                      <FollowerName>{item.name}</FollowerName>
+                    <NewFollowNameBtn>
+                      <FollowerName>{nickName}</FollowerName>
                     </NewFollowNameBtn>
                   </FollowerImageWrapper>
                 ))}
@@ -98,15 +113,15 @@ export default ({navigation, newFollower, events, userFollowAndReload}: IProps) 
             {index.map((feed: IFeed) => (
               <PostWrapper key={feed.id}>
                 <ProfileWrapper>
-                  <ProfileInfoWrapper>
+                  <ProfileInfoWrapper
+                    onPress={() => {
+                      navigation.navigate('profileActiveMain', {id: feed.userId});
+                    }}>
                     <ProfileImage
                       source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
                     />
                     <ProfileTextWrapper>
-                      <ProfileNameBtn
-                        onPress={() => {
-                          navigation.navigate('profileActiveMain');
-                        }}>
+                      <ProfileNameBtn>
                         <ProfileName>{feed.userNickName}</ProfileName>
                       </ProfileNameBtn>
                       <PostTime>{timeForToday(feed.createdAt)}</PostTime>
@@ -114,10 +129,13 @@ export default ({navigation, newFollower, events, userFollowAndReload}: IProps) 
                   </ProfileInfoWrapper>
                   {!isLoginUserFeed(feed.userId) && (
                     <FollowBtn
+                      isFollow={feed.isUserFollowed}
                       onPress={() => {
                         userFollowAndReload(feed.userId);
                       }}>
-                      <FollowBtnText>{feed.isUserFollowed ? '언팔로우' : '팔로우'}</FollowBtnText>
+                      <FollowBtnText isFollow={feed.isUserFollowed}>
+                        {feed.isUserFollowed ? '언팔로우' : '팔로우'}
+                      </FollowBtnText>
                     </FollowBtn>
                   )}
                 </ProfileWrapper>
@@ -261,7 +279,7 @@ const FollowerWrapper = styled.ScrollView`
   padding: 10px 0px 0 5px;
 `;
 
-const FollowerImageWrapper = styled.View`
+const FollowerImageWrapper = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,8 +287,8 @@ const FollowerImageWrapper = styled.View`
 `;
 
 const FollowerImage = styled.Image`
-  width: 53px;
-  height: 53px;
+  width: 55px;
+  height: 55px;
   border-radius: 50px;
 `;
 
@@ -342,7 +360,7 @@ const ProfileWrapper = styled.View`
   width: 100%;
 `;
 
-const ProfileInfoWrapper = styled.View`
+const ProfileInfoWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   width: 60%;
@@ -388,11 +406,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;
-  background-color: #007bf1;
+  border-width: 1px;
+  border-color: #007bf1;
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
 `;

@@ -1,18 +1,36 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {IFeedComments} from '../../../../module/type/feed';
-import {ACTIVE_BUTTON, BASE_URL, INACTIVE_BUTTON} from '../../../../module/common';
+import {ACTIVE_BUTTON, ACTIVE_TEXT, BASE_URL, INACTIVE_BUTTON} from '../../../../module/common';
 import UserContext from '../../../../module/context/UserContext';
 import {IFeedCreateComment} from '../../../../module/type/api';
+import {Text} from 'react-native';
 
 interface IProps {
   comments: Array<IFeedComments>;
   userComment: IFeedCreateComment;
   onChangeDescription: (e: string) => void;
   finishComments: () => void;
+  setModifyAlertVisible: (comment: IFeedComments) => void;
+  commentStatus: {
+    id: number;
+    isModifiable: boolean;
+    description: string;
+  };
+  onUpdateDescription: (text: string) => void;
+  updateComment: () => void;
 }
 
-export default ({comments, onChangeDescription, userComment, finishComments}: IProps) => {
+export default ({
+  comments,
+  onChangeDescription,
+  userComment,
+  finishComments,
+  setModifyAlertVisible,
+  commentStatus,
+  onUpdateDescription,
+  updateComment,
+}: IProps) => {
   const {
     loginUser: {image},
   }: any = useContext(UserContext);
@@ -33,14 +51,36 @@ export default ({comments, onChangeDescription, userComment, finishComments}: IP
                     <MemberNameBtn>
                       <MemberText>{comment.userName}</MemberText>
                     </MemberNameBtn>
-                    <CommentText multiline={true}>{comment.description}</CommentText>
+                    {commentStatus.isModifiable && commentStatus.id === comment.id ? (
+                      <CommentText
+                        value={commentStatus.description}
+                        modifiable={true}
+                        onChangeText={onUpdateDescription}
+                      />
+                    ) : (
+                      <CommentText editable={false} multiline={true} modifiable={false}>
+                        {comment.description}
+                      </CommentText>
+                    )}
                   </MemberTextWrapper>
                 </ProfileImageWrapper>
 
                 {comment.isLoginUserWrote ? (
-                  <DotMoreBtn onPress={() => {}}>
-                    <DotMoreImage source={require('../../../../assets/dotMore.png')} />
-                  </DotMoreBtn>
+                  commentStatus.isModifiable && commentStatus.id === comment.id ? (
+                    <DotMoreBtn
+                      onPress={() => {
+                        updateComment();
+                      }}>
+                      <Text>수정</Text>
+                    </DotMoreBtn>
+                  ) : (
+                    <DotMoreBtn
+                      onPress={() => {
+                        setModifyAlertVisible(comment);
+                      }}>
+                      <DotMoreImage source={require('../../../../assets/dotMore.png')} />
+                    </DotMoreBtn>
+                  )
                 ) : (
                   <></>
                 )}
@@ -168,6 +208,8 @@ const CommentText = styled.TextInput`
   width: 100%;
   font-size: 13px;
   color: #333;
+  border-width: ${({modifiable}: {modifiable: boolean}) => (modifiable ? '1px' : '0px')};
+  border-color: ${ACTIVE_TEXT};
 `;
 
 const DotMoreBtn = styled.TouchableOpacity`

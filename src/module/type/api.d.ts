@@ -79,6 +79,8 @@ export interface IFeedIndex {
   page: number;
   sort: 'createdAt' | 'likeCount' | string;
   order: 'DESC' | 'ASC' | string;
+  lat?: number;
+  lon?: number;
 }
 
 export interface IFeedCreateComment {

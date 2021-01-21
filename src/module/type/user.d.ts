@@ -10,3 +10,9 @@ export interface IUser {
     userCategory?: Array<number>;
   };
 }
+
+export interface IUserFollower {
+  id: number;
+  nickName: string;
+  image: string;
+}
