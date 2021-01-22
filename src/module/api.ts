@@ -71,9 +71,11 @@ export const userApi = {
   getCategory: () => apiRequest(api.get('/user/categories')),
   putCategory: (category: IUserApiCategory) => apiRequest(api.put('/user/categories', category)),
   dropOut: () => apiRequest(api.delete('/user')),
+  getFollowCount: () => apiRequest(api.get('/user/follow/count')),
   getNewFollowers: () => apiRequest(api.get('/user/follow')),
+  getUserFollowing: () => apiRequest(api.get('/user/follow/following')),
+  getUserFollower: () => apiRequest(api.get('/user/follow/follower')),
   follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
-  unFollow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/unFollow`)),
 };
 
 export const serviceApi = {

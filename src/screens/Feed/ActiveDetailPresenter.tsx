@@ -53,7 +53,7 @@ export default ({navigation, feed}: IProps) => {
                 </ProfileInfoWrapper>
                 {!isLoginUserFeed(feed.userId) && (
                   <FollowBtn onPress={() => {}}>
-                    <FollowBtnText>{feed.isUserFollowed ? '언팔로우' : '팔로우'}</FollowBtnText>
+                    <FollowBtnText>{feed.isUserFollowed ? '팔로우' : '팔로잉'}</FollowBtnText>
                   </FollowBtn>
                 )}
               </ProfileWrapper>

@@ -134,7 +134,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
                         userFollowAndReload(feed.userId);
                       }}>
                       <FollowBtnText isFollow={feed.isUserFollowed}>
-                        {feed.isUserFollowed ? '언팔로우' : '팔로우'}
+                        {feed.isUserFollowed ? '팔로우' : '팔로잉'}
                       </FollowBtnText>
                     </FollowBtn>
                   )}

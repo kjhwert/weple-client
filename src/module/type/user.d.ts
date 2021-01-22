@@ -16,3 +16,10 @@ export interface IUserFollower {
   nickName: string;
   image: string;
 }
+
+export interface IUserFollow {
+  id: number;
+  userNickName: string;
+  userImage: string;
+  isUserFollowed: string;
+}

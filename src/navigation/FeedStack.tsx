@@ -99,7 +99,13 @@ export default () => {
         name="friendComment"
         component={FriendCommentContainer}
       />
-      <Stack.Screen name="friendFollower" component={FriendFollowerContainer} />
+      <Stack.Screen
+        name="friendFollower"
+        options={{
+          headerTitle: '팔로우',
+        }}
+        component={FriendFollowerContainer}
+      />
       <Stack.Screen name="friendFollowing" component={FriendFollowingContainer} />
       <Stack.Screen
         options={{

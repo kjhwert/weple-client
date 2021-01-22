@@ -1,7 +1,6 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../module/common';
-import UserContext from '../../../../module/context/UserContext';
 
 interface IProps {
   users: Array<{id: number; userId: number; userNickName: string; userImage: string; isUserFollowed: string}>;
@@ -26,7 +25,7 @@ export default ({users, userFollowAction}: IProps) => {
                         userFollowAction(user.userId);
                       }}>
                       <FollowBtnText isFollow={Number(user.isUserFollowed)}>
-                        {user.isUserFollowed === '1' ? '언팔로우' : '팔로우'}
+                        {user.isUserFollowed === '1' ? '팔로우' : '팔로잉'}
                       </FollowBtnText>
                     </FollowBtn>
                   )}
