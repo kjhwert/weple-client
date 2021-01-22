@@ -20,35 +20,60 @@ export default ({navigation, userList}: IProps) => {
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn>
                 <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
-                <RecruitTogetherNumber>{userList.togetherCount}</RecruitTogetherNumber>
+                <RecruitTogetherNumber>{userList.length}</RecruitTogetherNumber>
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
-
-            {userList.togethers.map((item, idx) => (
-              <RecruitWrapper key={idx}>
-                <RecruitImageWrapper
-                  onPress={() => {
-                    navigation.navigate('togetherModify', {id: item.id});
-                  }}>
-                  <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
-                  <RecordWrapper>
-                    <RecordImage source={getTogetherActivityImage(item.activity.image)} />
-                    <RecordText>{item.distance}KM</RecordText>
-                  </RecordWrapper>
-                </RecruitImageWrapper>
-                <RecruitTextWrapper>
-                  <RecruitTitleBtn
+            {userList.map((item, idx) =>
+              item.isOnProcess === '0' ? (
+                <RecruitWrapperBlur key={idx}>
+                  <RecruitImageWrapper
                     onPress={() => {
-                      navigation.navigate('togetherModify');
+                      navigation.navigate('togetherMyDetail', {id: item.id});
                     }}>
-                    <RecruitTitle>{item.title}</RecruitTitle>
-                  </RecruitTitleBtn>
-                  <RecruitAddress>{item.togetherPlace}</RecruitAddress>
-                  <EntryFee>참가비 {getComma(item.togetherPrice)}원</EntryFee>
-                  <Deadline>{togetherDate(item.limitDate)}</Deadline>
-                </RecruitTextWrapper>
-              </RecruitWrapper>
-            ))}
+                    <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
+                    <RecordWrapper>
+                      <RecordImage source={getTogetherActivityImage(item.activityImage)} />
+                      <RecordText>{item.distance}KM</RecordText>
+                    </RecordWrapper>
+                  </RecruitImageWrapper>
+                  <RecruitTextWrapper>
+                    <RecruitTitleBtn
+                      onPress={() => {
+                        navigation.navigate('togetherMyDetail', {id: item.id});
+                      }}>
+                      <RecruitTitle>{item.title}</RecruitTitle>
+                    </RecruitTitleBtn>
+                    <RecruitAddress>{item.togetherPlace}</RecruitAddress>
+                    <EntryFee>참가비 {getComma(item.togetherPrice)}원</EntryFee>
+                    <Deadline>{togetherDate(item.limitDate)}</Deadline>
+                  </RecruitTextWrapper>
+                </RecruitWrapperBlur>
+              ) : (
+                <RecruitWrapper key={idx}>
+                  <RecruitImageWrapper
+                    onPress={() => {
+                      navigation.navigate('togetherMyDetail', {id: item.id});
+                    }}>
+                    <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
+                    <RecordWrapper>
+                      <RecordImage source={getTogetherActivityImage(item.activityImage)} />
+                      <RecordText>{item.distance}KM</RecordText>
+                    </RecordWrapper>
+                  </RecruitImageWrapper>
+                  <RecruitTextWrapper>
+                    <RecruitTitleBtn
+                      onPress={() => {
+                        navigation.navigate('togetherMyDetail', {id: item.id});
+                      }}>
+                      <RecruitTitle>{item.title}</RecruitTitle>
+                    </RecruitTitleBtn>
+                    <RecruitAddress>{item.togetherPlace}</RecruitAddress>
+                    <EntryFee>참가비 {getComma(item.togetherPrice)}원</EntryFee>
+                    <Deadline>{togetherDate(item.limitDate)}</Deadline>
+                  </RecruitTextWrapper>
+                </RecruitWrapper>
+              ),
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -196,4 +221,17 @@ const Deadline = styled.Text`
   font-size: 10px;
   color: #007bf1;
   font-weight: bold;
+`;
+
+const RecruitWrapperBlur = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 20px;
+  border-bottom-width: 1px;
+  border-color: #eee;
+  opacity: 0.5;
+  /* background-color: rgba(0, 0, 0, 0.1); */
 `;

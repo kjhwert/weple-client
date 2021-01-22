@@ -30,7 +30,6 @@ export default ({navigation, listDetail}: IProps) => {
                     <ShareImage source={require('../../../assets/icon_share.png')} />
                   </ShareBtn>
                 </JoinTitleWrapper>
-
                 <JoinTextWrapper>
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
@@ -68,7 +67,9 @@ export default ({navigation, listDetail}: IProps) => {
               <FollowWrapper>
                 <ProfileImage source={require('../../../assets/profile_2.png')} />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
                   <AllCommentBtn
                     onPress={() => {
@@ -78,14 +79,19 @@ export default ({navigation, listDetail}: IProps) => {
                   </AllCommentBtn>
                 </FollowTextWrapper>
               </FollowWrapper>
-              <CancelBtnWrapper>
-                <CancelButton
-                  onPress={() => {
-                    navigation.navigate('togetherMain');
-                  }}>
-                  <CancelText>나가기</CancelText>
-                </CancelButton>
-              </CancelBtnWrapper>
+
+              {getTotalTime(new Date()) > getTotalTime(listDetail.together.togetherDate) ? (
+                <></>
+              ) : (
+                <ModifyBtnWrapper>
+                  <ModifyButton
+                    onPress={() => {
+                      navigation.navigate('togetherModify', {id: listDetail.together.id});
+                    }}>
+                    <ModifyText>수정하기</ModifyText>
+                  </ModifyButton>
+                </ModifyBtnWrapper>
+              )}
             </JoinWrapper>
           </Card>
         </ScrollWrapper>
@@ -134,6 +140,11 @@ const JoinWrapper = styled.View`
   padding: 20px;
   border-width: 1px;
   border-color: #e2e2e2;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+  shadow-color: grey;
+  shadow-offset: 0px 0px;
+  elevation: 0.5;
 `;
 
 const JoinInfoWrapper = styled.View`
@@ -144,15 +155,6 @@ const JoinInfoWrapper = styled.View`
   width: 100%;
   border-bottom-width: 1px;
   border-color: #dcdcdc;
-`;
-
-const JoinTextWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 10px 0 20px 0;
 `;
 
 const JoinTitleWrapper = styled.View`
@@ -197,6 +199,14 @@ const JoinInfoContent = styled.Text`
   color: #333333;
   padding: 5px 0;
   text-align: right;
+`;
+const JoinTextWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 0 20px 0;
 `;
 
 const JoinInfoContentBtn = styled.TouchableOpacity`
@@ -274,6 +284,14 @@ const FollowTextWrapper = styled.View`
   width: 75%;
 `;
 
+const FollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const FollowName = styled.Text`
   font-size: 15px;
   font-weight: 500;
@@ -299,23 +317,23 @@ const AllCommentText = styled.Text`
   color: #7c7c7c;
 `;
 
-const CancelBtnWrapper = styled.View`
+const ModifyBtnWrapper = styled.View`
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
 `;
 
-const CancelButton = styled.TouchableOpacity`
+const ModifyButton = styled.TouchableOpacity`
   display: flex;
   width: 100%;
   align-items: center;
   padding: 15px;
   margin-top: 20px;
-  background-color: #00bbc7;
+  background-color: #007bf1;
 `;
 
-const CancelText = styled.Text`
+const ModifyText = styled.Text`
   color: #fff;
   font-size: 15px;
   font-weight: bold;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {View} from 'react-native';
 
 interface IColorChangeProps {
   borderColor: string;
@@ -107,14 +108,16 @@ export const InputBtnBox = ({
   return (
     <InputBtnWrap onPress={onPress}>
       <InputBtnTitle>{title}</InputBtnTitle>
-      <InputBtnData
-        name={name}
-        placeholder={placeholder}
-        onChange={onChange}
-        borderColor={borderColor}
-        autoFocus={true}
-        value={value}
-      />
+      <View pointerEvents="none">
+        <InputBtnData
+          name={name}
+          placeholder={placeholder}
+          onChange={onChange}
+          borderColor={borderColor}
+          autoFocus={true}
+          value={value}
+        />
+      </View>
     </InputBtnWrap>
   );
 };
@@ -139,6 +142,37 @@ const InputBtnData = styled.TextInput`
   border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
   font-size: 15px;
   color: #6f6f6f;
+`;
+
+export const TextTitleBox = ({placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <InputBoxWrapper>
+      <InputDataBox
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        borderColor={borderColor}
+        autoFocus={true}
+        multiline={true}
+        value={value}
+      />
+    </InputBoxWrapper>
+  );
+};
+
+const InputDataBox = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
 `;
 
 export const TextBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
@@ -229,6 +263,64 @@ const TextLimitData = styled.TextInput`
   border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#b5b5b5')};
   font-size: 14px;
   color: #6f6f6f;
+`;
+
+export const TextTagBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <TextTagWrapper>
+      <TextTagTitle>{title}</TextTagTitle>
+      <TextTagData
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        borderColor={borderColor}
+        multiline={true}
+        textAlignVertical={'top'}
+      />
+      {/* <TextTags ></TextTags> */}
+    </TextTagWrapper>
+  );
+};
+
+const TextTagWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const TextTagTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 20px 0 5px 0;
+`;
+
+const TextTagData = styled.TextInput`
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  padding: 10px;
+  margin-bottom: 100px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#b5b5b5')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+const TextTags = styled.Text`
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #007bf1;
+  width: 5%;
+  max-width: 100%;
+  padding: 5px;
 `;
 
 export const PwChangeInput = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {

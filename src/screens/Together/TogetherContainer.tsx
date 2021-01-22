@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import TogetherPresenter from './TogetherPresenter';
 import {togetherApi} from '../../module/api';
+import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
@@ -8,6 +9,8 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
+  const {getUserId}: any = useContext(UserContext);
+
   const [userList, setUserList] = useState({
     togetherCount: 0,
     togethers: [],
@@ -56,11 +59,9 @@ export default ({navigation, route}: IProps) => {
     await getEndSoon(endSoonPaging);
   };
 
-  // 내가 개설한 모임 api 조회
   const getTogether = async () => {
-    const {data, statusCode} = await togetherApi.userOpenList();
-    console.log('togetherData:', data);
-
+    const id = await getUserId();
+    const {data, statusCode} = await togetherApi.userOpenList(id);
     if (statusCode !== 200) {
     } else {
       setUserList(data);
@@ -69,19 +70,16 @@ export default ({navigation, route}: IProps) => {
 
   const getLocation = async (locationPaging) => {
     const {data} = await togetherApi.locationList('37.5466226', '126.9498512', locationPaging.page);
-    console.log('위치data:', data);
     setTogetherMenu(data);
   };
 
   const getFollower = async (followerPaging) => {
     const {data} = await togetherApi.followerList(followerPaging.page);
-    console.log('팔로워data:', data);
     setTogetherMenu(data);
   };
 
   const getEndSoon = async (endSoonPaging) => {
     const {data} = await togetherApi.endSoonList(endSoonPaging.page);
-    console.log('모집임박data:', data);
     setTogetherMenu(data);
   };
 

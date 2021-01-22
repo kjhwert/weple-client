@@ -21,7 +21,6 @@ export default ({navigation}: IProps) => {
     maxMemberFlag: 0,
     togetherPriceFlag: 0,
   });
-
   const [isActive, setIsActive] = useState(false);
 
   // DateTimePicker

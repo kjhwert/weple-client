@@ -62,7 +62,7 @@ export default ({
                 mode="datetime"
                 locale="ko"
                 display="spinner"
-                date={createRoom.togetherDate} //initial date from state
+                date={createRoom.togetherDate}
               />
               <InputBox2
                 title={'시작할 위치를 입력해주세요. [필수]'}

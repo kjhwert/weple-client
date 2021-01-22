@@ -21,7 +21,6 @@ export default ({navigation}: IProps) => {
     recommendFlag: 0,
     noticeFlag: 0,
   });
-
   const [isActive, setIsActive] = useState(false);
 
   const titleValidation = () => {

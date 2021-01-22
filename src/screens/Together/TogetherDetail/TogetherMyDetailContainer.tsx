@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import TogetherDetailPresenter from './TogetherDetailPresenter';
+import TogetherMyDetailPresenter from './TogetherMyDetailPresenter';
 import {togetherApi} from '../../../module/api';
 
 interface IProps {
@@ -13,10 +13,10 @@ export default ({navigation, route}: IProps) => {
     together: {
       id: 0,
       title: '',
-      Place: '',
-      price: '',
-      limitDate: '',
       description: '',
+      togetherPrice: 0,
+      togetherPlace: '',
+      togetherDate: '',
       recommend: '',
       notice: '',
       address: '',
@@ -28,7 +28,7 @@ export default ({navigation, route}: IProps) => {
     commentCount: 0,
   });
 
-  const getTogethertDetail = async () => {
+  const getListDetail = async () => {
     const id = route.params?.id;
     const {data, statusCode} = await togetherApi.userOpenDetail(id);
     if (statusCode !== 200) {
@@ -38,8 +38,12 @@ export default ({navigation, route}: IProps) => {
   };
 
   useEffect(() => {
-    getTogethertDetail();
+    getListDetail();
   }, []);
 
-  return <TogetherDetailPresenter navigation={navigation} listDetail={listDetail} />;
+  useEffect(() => {
+    if (route.params?.refresh) getListDetail();
+  }, [route.params?.refresh]);
+
+  return <TogetherMyDetailPresenter navigation={navigation} listDetail={listDetail} />;
 };

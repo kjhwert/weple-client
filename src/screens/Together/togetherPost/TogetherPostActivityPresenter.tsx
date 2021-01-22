@@ -1,15 +1,33 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import CheckBox from '@react-native-community/checkbox';
 import {StartNextBtn} from '../../../components/CommonBtn';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
+  feedActiveList: any;
+  toggleCheckBox: any;
+  setToggleCheckBox: any;
+  isActive: boolean;
+  setFeedId: Function;
+  togetherPaging: any;
+  setMyfeedPaging: () => void;
+  setLikefeedPaging: () => void;
 }
 
-export default ({navigation, menuList, ActivityData}: IProps) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+export default ({
+  navigation,
+  feedActiveList,
+  toggleCheckBox,
+  setToggleCheckBox,
+  isActive,
+  setFeedId,
+  togetherPaging,
+  setMyfeedPaging,
+  setLikefeedPaging,
+}: IProps) => {
+  const {getTogetherThumbnail}: any = useContext(TogetherContext);
 
   return (
     <Container>
@@ -19,22 +37,29 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
             <ActivityTitle>활동을 선택해주세요.</ActivityTitle>
             <Line></Line>
             <MenuBarWrapper>
-              {menuList.map((item, idx) => (
-                <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn onPress={() => {}}>
-                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
+              {['내 활동', '인기 활동'].map((name, idx) => (
+                <MenuWrapper key={idx} focused={togetherPaging.id === idx}>
+                  <MenuBtn
+                    onPress={() => {
+                      switch (idx) {
+                        case 0:
+                          return setMyfeedPaging();
+                        case 1:
+                          return setLikefeedPaging();
+                      }
+                    }}>
+                    <MenuText focused={togetherPaging.id === idx}>{name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
             </MenuBarWrapper>
             <Line></Line>
-
             <ActivityWrapper>
-              {ActivityData.map((item, idx) => (
+              {feedActiveList.map((item, idx) => (
                 <ActivityImageWrapper key={idx}>
-                  <ActivityImage source={item.image} />
+                  <ActivityImage source={getTogetherThumbnail(item.thumbnail)} />
                   <ActivityTextWrapper>
-                    <ActivityKind>{item.kind}</ActivityKind>
+                    <ActivityKind backgroundColor={item.activityColor}>{item.activityName}</ActivityKind>
                     <ActivityDistance>{item.distance}KM</ActivityDistance>
                   </ActivityTextWrapper>
                   <AddressWrap>
@@ -48,10 +73,11 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
                     }}
                     boxType={'circle'}
                     disabled={false}
-                    value={false}
-                    // onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                    onValueChange={setToggleCheckBox}
-                    tintColors={{true: 'red'}}
+                    value={item.id === toggleCheckBox}
+                    onValueChange={(e) => {
+                      setToggleCheckBox(e ? item.id : '');
+                    }}
+                    tintColors={{true: '#007bf1', false: '#c1c1c1'}}
                   />
                 </ActivityImageWrapper>
               ))}
@@ -59,8 +85,13 @@ export default ({navigation, menuList, ActivityData}: IProps) => {
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
-
-      <StartNextBtn StartNextPage={'togetherPost'} text={'다음'} navigation={navigation} isActive={true} />
+      <StartNextBtn
+        StartNextPage={'togetherPost'}
+        text={'다음'}
+        navigation={navigation}
+        isActive={isActive}
+        callBack={setFeedId}
+      />
     </Container>
   );
 };
@@ -153,7 +184,8 @@ const ActivityKind = styled.Text`
   color: #fff;
   font-weight: bold;
   text-align: center;
-  background-color: #919191;
+  background-color: ${({backgroundColor}: {backgroundColor: string}) =>
+    backgroundColor ? backgroundColor : '#b3b3b3'};
 `;
 
 const ActivityDistance = styled.Text`
@@ -196,7 +228,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
+  border-color: ${({focused}: {focused: boolean}) => (focused ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -206,8 +238,8 @@ const MenuBtn = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
-  font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#3a3636')};
+  font-size: 16px;
+  color: ${({focused}: {focused: boolean}) => (focused ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;

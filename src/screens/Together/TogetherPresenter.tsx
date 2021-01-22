@@ -37,7 +37,7 @@ export default ({
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn
                 onPress={() => {
-                  navigation.navigate('togetherDetailList');
+                  navigation.navigate('togetherMyTotalList');
                 }}>
                 <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
                 <RecruitTogetherNumber>{userList.togetherCount}</RecruitTogetherNumber>
@@ -62,18 +62,18 @@ export default ({
                   <RecruitWrapper key={idx}>
                     <RecruitImageWrapper
                       onPress={() => {
-                        navigation.navigate('togetherModify', {id: item.id});
+                        navigation.navigate('togetherMyDetail', {id: item.id});
                       }}>
-                      <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
+                      <RecruitImage source={getTogetherThumbnail(item.feed.thumbnail)} />
                       <RecordWrapper backgroundColor={item.activity.color}>
                         <RecordImage source={getTogetherActivityImage(item.activity.image)} />
-                        <RecordText>{item.distance}KM</RecordText>
+                        <RecordText>{item.feed.distance}KM</RecordText>
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
                       <RecruitTitleBtn
                         onPress={() => {
-                          navigation.navigate('togetherModify');
+                          navigation.navigate('togetherMyDetail', {id: item.id});
                         }}>
                         <RecruitTitle>{item.title}</RecruitTitle>
                       </RecruitTitleBtn>
@@ -134,11 +134,11 @@ export default ({
               </MapImageWrap>
             ) : (
               <>
-                {togetherMenu.map((item, idx) => (
+                {togetherMenu?.map((item, idx) => (
                   <RecruitWrapper key={idx}>
                     <RecruitImageWrapper
                       onPress={() => {
-                        navigation.navigate('togetherDetail');
+                        navigation.navigate('togetherDetail', {id: item.id});
                       }}>
                       <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
                       <RecordWrapper backgroundColor={item.activityColor}>
@@ -149,12 +149,12 @@ export default ({
                     <RecruitTextWrapper>
                       <RecruitTitleBtn
                         onPress={() => {
-                          navigation.navigate('togetherDetail');
+                          navigation.navigate('togetherDetail', {id: item.id});
                         }}>
                         <RecruitTitle>{item.title}</RecruitTitle>
                       </RecruitTitleBtn>
-                      <RecruitAddress>{item.togetherPlace}</RecruitAddress>
-                      <EntryFee>참가비 {item.togetherPrice}원</EntryFee>
+                      <RecruitAddress>{item.place}</RecruitAddress>
+                      <EntryFee>참가비 {getComma(item.price)}원</EntryFee>
                       <Deadline>{togetherDate(item.limitDate)}</Deadline>
                     </RecruitTextWrapper>
                   </RecruitWrapper>

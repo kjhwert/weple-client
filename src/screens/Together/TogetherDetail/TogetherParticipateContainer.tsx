@@ -1,28 +1,45 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ParticipatePresenter from './TogetherParticipatePresenter';
-
-const content = [
-  {
-    id: 0,
-    title: '모임하기 설명',
-    content: '이 모임에 대한 소개입니다.',
-  },
-  {
-    id: 1,
-    title: '이런 분들께 추천합니다.',
-    content: '이런 분들께 추천하는 내용입니다. 이런 분들께 추천하는 내용입니다.',
-  },
-  {
-    id: 2,
-    title: '공지사항',
-    content: '공지사항 내용입니다.',
-  },
-];
+import {togetherApi} from '../../../module/api';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <ParticipatePresenter navigation={navigation} content={content} />;
+export default ({navigation, route}: IProps) => {
+  const [listDetail, setListDetail] = useState({
+    userCount: 0,
+    together: {
+      id: 0,
+      title: '',
+      Place: '',
+      price: '',
+      limitDate: '',
+      description: '',
+      recommend: '',
+      notice: '',
+      address: '',
+      thumbnail: '',
+      commentNickName: null,
+      commentImage: null,
+      commentDescription: null,
+    },
+    commentCount: 0,
+  });
+
+  const getTogethertDetail = async () => {
+    const id = route.params?.id;
+    const {data, statusCode} = await togetherApi.userOpenDetail(id);
+    if (statusCode !== 200) {
+    } else {
+      setListDetail(data);
+    }
+  };
+
+  useEffect(() => {
+    getTogethertDetail();
+  }, []);
+
+  return <ParticipatePresenter navigation={navigation} listDetail={listDetail} />;
 };

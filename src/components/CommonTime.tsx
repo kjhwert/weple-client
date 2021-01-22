@@ -36,6 +36,12 @@ export const getTotalTime = (date: Date) => {
   return getDate(date) + ' ' + getTime(date);
 };
 
-export const getComma = (num: number) => {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const getComma = (num: any) => {
+  if (typeof num === 'string') {
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  } else if (typeof num === 'number') {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  } else {
+    return num;
+  }
 };
