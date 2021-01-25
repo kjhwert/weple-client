@@ -41,6 +41,13 @@ export interface IUserApiCategory {
   categories: number[];
 }
 
+export interface ITogetherApiModify {
+  title: string;
+  description: string;
+  recommend: string;
+  notice: string;
+}
+
 export interface ITogetherApiOpneRoom {
   title: string;
   description: string;
@@ -54,6 +61,18 @@ export interface ITogetherApiOpneRoom {
   isPublic: boolean;
   feed: number;
   activity: number;
+}
+
+export interface ITogetherCreateComment {
+  description: string;
+}
+
+export interface ITogetherIndex {
+  id?: number;
+  hasNextPage?: boolean;
+  page: number;
+  sort: 'createdAt' | 'likeCount' | string;
+  order: 'DESC' | 'ASC' | string;
 }
 
 export interface IUtilityApiEvents {

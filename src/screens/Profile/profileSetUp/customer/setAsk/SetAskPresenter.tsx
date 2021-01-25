@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {StartNextBtn} from '../../../../../components/CommonBtn';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
@@ -24,9 +25,8 @@ export default ({navigation, inquiryList}: IProps) => {
                     }}>
                     <AskText>{item.requestTitle}</AskText>
                   </AskTextBtn>
-                  <AskDateText>{item.requestDate}</AskDateText>
+                  <AskDateText>{getTotalTime(item.requestDate)}</AskDateText>
                 </AskTextWrapper>
-
                 <FollowBtn backgroundColor={item.requestStatus}>
                   <FollowBtnText>{item.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
                 </FollowBtn>
@@ -35,7 +35,6 @@ export default ({navigation, inquiryList}: IProps) => {
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
-
       <StartNextBtn StartNextPage={'setAskWrite'} text={'문의하기'} navigation={navigation} isActive={true} />
     </Container>
   );

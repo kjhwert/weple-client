@@ -82,6 +82,29 @@ export const showDateToAmPmHourMinute = (date: Date) => {
   return `${head} ${hour}:${minuteDisplay}`;
 };
 
+export const togetherDate = (value: string) => {
+  const today = new Date();
+  const timeValue = new Date(value);
+
+  const betweenTime = Math.floor((timeValue.getTime() - today.getTime()) / 1000 / 60);
+  if (betweenTime < 1) return '모집마감';
+  if (betweenTime < 60) {
+    return `${betweenTime}분 후 마감`;
+  }
+
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  if (betweenTimeHour < 24) {
+    return `모집마감 ${betweenTimeHour}시간전`;
+  }
+
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+  if (betweenTimeDay < 365) {
+    return `모집마감 ${betweenTimeDay}일전`;
+  }
+
+  return `모집마감 ${Math.floor(betweenTimeDay / 365)}년전`;
+};
+
 export const timeForToday = (value: string) => {
   const today = new Date();
   const timeValue = new Date(value);

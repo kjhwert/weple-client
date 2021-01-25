@@ -10,7 +10,10 @@ import {
   IUserApiProfile,
   IServiceApiInquiry,
   IUserApiCategory,
+  ITogetherApiModify,
   ITogetherApiOpneRoom,
+  ITogetherCreateComment,
+  ITogetherIndex,
   IFeedCreate,
   IFeedIndex,
   IFeedCreateComment,
@@ -36,6 +39,7 @@ const apiRequest = async (request: Object) => {
     const {data}: any = await request;
     return data;
   } catch (e) {
+    console.log(e);
     return {statusCode: 500, message: e.message};
   }
 };
@@ -60,7 +64,7 @@ export const userApi = {
   passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
   getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
   putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
-  userImage: (file) =>
+  userImage: (file: string) =>
     apiRequest(
       api.post('/user/image', file, {
         headers: {
@@ -90,12 +94,22 @@ export const serviceApi = {
 };
 
 export const togetherApi = {
-  userOpenList: () => apiRequest(api.get('/together/user')),
+  userOpenList: (id: number) => apiRequest(api.get('/together/user/' + id)),
+  userOpenTotalList: (id: number, page: number) => apiRequest(api.get('/together/user/' + id + '?page=' + page)),
+  userOpenDetail: (id: number) => apiRequest(api.get('/together/' + id)),
+  putTogetherDetail: (id: number, modify: ITogetherApiModify) => apiRequest(api.put('/together/' + id, modify)),
+  deleteTogetherDetail: (id: number) => apiRequest(api.delete('/together/' + id)),
+  togetherMember: (id: number) => apiRequest(api.get('/together/' + id + '/user')),
   userOpenRoom: (room: ITogetherApiOpneRoom) => apiRequest(api.post('/together', room)),
   locationList: (latitude: string, longitude: string, page: string) =>
     apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),
   followerList: (page: number) => apiRequest(api.get('/together/follower?page=' + page)),
   endSoonList: (page: number) => apiRequest(api.get('/together/end-soon?page=' + page)),
+  getComment: (togetherId: number) => apiRequest(api.get('/together/' + togetherId + '/comment/')),
+  createComment: (togetherId: number, data: ITogetherCreateComment) =>
+    apiRequest(api.post('/together/' + togetherId + '/comment/', data)),
+  putComment: (commentId: number) => apiRequest(api.put('/together/comment/' + commentId)),
+  deleteComment: (commentId: number) => apiRequest(api.delete('/together/comment/' + commentId)),
 };
 
 export const feedApi = {
@@ -135,4 +149,9 @@ export const feedApi = {
   createComment: (data: IFeedCreateComment) => apiRequest(api.post(`/feed/comment`, data)),
   updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
+
+  // together 모임개설
+  getMyfeed: (id: string, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page + '&userId=' + id)),
+  getLikefeed: (page: number, sort: string, order: string) =>
+    apiRequest(api.get('/feed?page=' + page + '&sort=' + sort + '&order=' + order)),
 };

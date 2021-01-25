@@ -14,11 +14,12 @@ import BackBtn from '../components/BackBtn';
 import TogetherAlarmContainer from '../screens/Together/togetherAlarm/TogetherAlarmContainer';
 import Search from '../components/Search';
 import TogetherContainer from '../screens/Together/TogetherContainer';
-import TogetherDeleteContainer from '../screens/Together/TogetherDetail/TogetherDeleteContainer';
-import TogetherPostActivityContainer from '../screens/Together/togetherPost/TogetherPostActivityContainer';
 import TogetherModifyContainer from '../screens/Together/TogetherDetail/TogetherModifyContainer';
+import TogetherCommentContainer from '../screens/Together/TogetherDetail/TogetherCommentContainer';
+import TogetherPostActivityContainer from '../screens/Together/togetherPost/TogetherPostActivityContainer';
+import TogetherMyDetailContainer from '../screens/Together/TogetherDetail/TogetherMyDetailContainer';
 import TogetherDetailContainer from '../screens/Together/TogetherDetail/TogetherDetailContainer';
-import TogetherDetailListContainer from '../screens/Together/TogetherDetail/TogetherDetailListContainer';
+import TogetherMyTotalListContainer from '../screens/Together/TogetherDetail/TogetherMyTotalListContainer';
 
 const Stack = createStackNavigator();
 
@@ -33,7 +34,7 @@ export default () => {
           fontSize: 16,
           fontWeight: 'bold',
         },
-        headerLeft: () => <BackBtn navigation={navigation} />,
+        headerLeft: () => <BackBtn navigation={navigation} route={route} />,
         headerRight: () => <Notification navigation={navigation} route={route} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
@@ -64,8 +65,8 @@ export default () => {
         options={{
           headerTitle: '모임',
         }}
-        name="togetherDetailList"
-        component={TogetherDetailListContainer}
+        name="togetherMyTotalList"
+        component={TogetherMyTotalListContainer}
       />
       <Stack.Screen
         options={{
@@ -85,19 +86,26 @@ export default () => {
         options={{
           headerTitle: '모임',
         }}
-        name="togetherModify"
-        component={TogetherModifyContainer}
+        name="togetherMyDetail"
+        component={TogetherMyDetailContainer}
       />
       <Stack.Screen
         options={{
           headerTitle: '모임',
         }}
-        name="togetherDelete"
-        component={TogetherDeleteContainer}
+        name="togetherModify"
+        component={TogetherModifyContainer}
       />
       <Stack.Screen
         options={{
-          headerTitle: '모임하기 참가인원',
+          headerTitle: '댓글',
+        }}
+        name="togetherComment"
+        component={TogetherCommentContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '모임 참가인원',
         }}
         name="togetherMember"
         component={TogetherMemberContainer}

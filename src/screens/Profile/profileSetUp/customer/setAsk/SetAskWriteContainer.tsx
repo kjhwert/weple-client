@@ -14,6 +14,13 @@ export default ({navigation}: IProps) => {
     setAlertVisible();
   };
 
+  const typeData = [
+    {label: '회원정보', value: '01'},
+    {label: '환불/멤버십', value: '02'},
+    {label: '이용문의', value: '03'},
+    {label: '기타', value: '04'},
+  ];
+
   const [isActive, setIsActive] = useState(false);
   const [askData, setAskData] = useState({
     requestTitle: '',
@@ -41,6 +48,7 @@ export default ({navigation}: IProps) => {
     const askDataRequest = {
       requestTitle: askData.requestTitle,
       requestDescription: askData.requestDescription,
+      requestType: askData.requestType,
     };
 
     const {message} = await serviceApi.setInquiry(askDataRequest);
@@ -71,6 +79,7 @@ export default ({navigation}: IProps) => {
       onCheckType={onCheckType}
       askDataRegister={askDataRegister}
       isActive={isActive}
+      typeData={typeData}
     />
   );
 };

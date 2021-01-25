@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../../module/common';
+import {getDate} from '../../../../../components/CommonTime';
+import {IEventDetail} from '../../../../../module/type/common';
 
 interface IProps {
-  eventDetail: any;
+  eventDetail: IEventDetail;
 }
 
 export default ({eventDetail}: IProps) => {
@@ -16,7 +18,7 @@ export default ({eventDetail}: IProps) => {
               <EventTextWrapper>
                 <EventTitle>{eventDetail.title}</EventTitle>
                 <EventContent>{eventDetail.description}</EventContent>
-                <EventDate>{eventDetail.createdAt}</EventDate>
+                <EventDate>{getDate(eventDetail.createdAt)}</EventDate>
               </EventTextWrapper>
             </EventWrapper>
             <EventImageWrapper>

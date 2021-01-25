@@ -1,46 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import MemberPresenter from './TogetherMemberPresenter';
-
-const member = [
-  {
-    id: 0,
-    image: require('../../../assets/profile_1.png'),
-    name: 'GilDong',
-    bestOneImage: require('../../../assets/active_cycle.png'),
-    bestOneText: '69.5',
-    bestTwoImage: require('../../../assets/active_hiking.png'),
-    bestTwoText: '1819.5',
-    bestThreeImage: require('../../../assets/active_skate.png'),
-    bestThreeText: '18319.5',
-  },
-  {
-    id: 1,
-    image: require('../../../assets/profile_2.png'),
-    name: 'Benjamin',
-    bestOneImage: require('../../../assets/active_fishing.png'),
-    bestOneText: '69.5',
-    bestTwoImage: require('../../../assets/active_cycle.png'),
-    bestTwoText: '1819.5',
-    bestThreeImage: require('../../../assets/active_hiking.png'),
-    bestThreeText: '18319.5',
-  },
-  {
-    id: 2,
-    image: require('../../../assets/follower_2.png'),
-    name: 'Jamin',
-    bestOneImage: require('../../../assets/active_hiking.png'),
-    bestOneText: '69.5',
-    bestTwoImage: require('../../../assets/active_cycle.png'),
-    bestTwoText: '1819.5',
-    bestThreeImage: require('../../../assets/active_skate.png'),
-    bestThreeText: '18319.5',
-  },
-];
+import {togetherApi} from '../../../module/api';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <MemberPresenter navigation={navigation} member={member} />;
+export default ({navigation, route}: IProps) => {
+  const [togetherMemberData, setTogetherMemberData] = useState([
+    {
+      togetherId: 0,
+      userId: 0,
+      userImage: '',
+      userNickName: '',
+      toId: null,
+      isUserFollowed: '',
+    },
+  ]);
+
+  const getTogetherMember = async () => {
+    const id = route.params?.togertherId;
+    const {data, statusCode} = await togetherApi.togetherMember(id);
+    if (statusCode !== 200) {
+    } else {
+      setTogetherMemberData(data);
+    }
+  };
+
+  useEffect(() => {
+    getTogetherMember();
+  }, []);
+
+  return <MemberPresenter navigation={navigation} togetherMemberData={togetherMemberData} />;
 };

@@ -4,7 +4,7 @@ import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
-
+  profileData: any;
   sortAlert: Function;
 }
 
@@ -12,8 +12,8 @@ interface IColorChangeProps {
   isClick: boolean;
 }
 
-export default ({navigation, menuList, sortAlert}: IProps) => {
-  const {loginUser, getProfileUri}: any = useContext(UserContext);
+export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
+  const {getProfileUri}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -32,11 +32,11 @@ export default ({navigation, menuList, sortAlert}: IProps) => {
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>{loginUser.nickName}</ProfileNickName>
+                <ProfileNickName>{profileData.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
-                      <ActiveNumber>846</ActiveNumber>
+                      <ActiveNumber>{profileData.feedCount}</ActiveNumber>
                     </ActiveBtn>
                     <ActiveText>활동들</ActiveText>
                   </ActiveBtnWrapper>
@@ -45,7 +45,7 @@ export default ({navigation, menuList, sortAlert}: IProps) => {
                       onPress={() => {
                         navigation.navigate('followerMember');
                       }}>
-                      <FollowerNumber>1,226</FollowerNumber>
+                      <FollowerNumber>{profileData.userFollower}</FollowerNumber>
                     </ActiveBtn>
                     <ActiveText>팔로워</ActiveText>
                   </ActiveBtnWrapper>
@@ -54,13 +54,12 @@ export default ({navigation, menuList, sortAlert}: IProps) => {
                       onPress={() => {
                         navigation.navigate('followingMember');
                       }}>
-                      <FollowingNumber>987</FollowingNumber>
+                      <FollowingNumber>{profileData.userFollow}</FollowingNumber>
                     </ActiveBtn>
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
-
-                <ActiveIntroduceText>{loginUser.description}</ActiveIntroduceText>
+                <ActiveIntroduceText>{profileData.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn

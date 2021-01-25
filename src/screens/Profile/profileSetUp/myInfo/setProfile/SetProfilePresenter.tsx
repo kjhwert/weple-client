@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
-import {DuplicateInputBox} from '../../../../../components/CommonInput';
+import {DuplicateInputBox, TextLimitBox} from '../../../../../components/CommonInput';
 import {StartNextBtn} from '../../../../../components/CommonBtn';
 import UserContext from '../../../../../module/context/UserContext';
 
@@ -10,6 +10,7 @@ interface IProps {
   profileData: any;
   onChangeProfile: Function;
   profileInfoChange: Function;
+  activeFlag: any;
   isActive: boolean;
   hasNickName: Function;
   showPicker: Function;
@@ -20,6 +21,7 @@ export default ({
   profileData,
   onChangeProfile,
   profileInfoChange,
+  activeFlag,
   isActive,
   hasNickName,
   showPicker,
@@ -42,7 +44,6 @@ export default ({
                 </EditBtn>
               </EditBtnWrapper>
             </ProfileTopWrapper>
-
             <SignUpWrapper>
               <DuplicateInputBox
                 title={'닉네임'}
@@ -50,7 +51,7 @@ export default ({
                 name="nickName"
                 value={profileData.nickName}
                 onChange={onChangeProfile}
-                activeFlag={profileData.activeFlag}
+                activeFlag={activeFlag.nickNameFlag}
               />
               <DuplicateBtn
                 onPress={() => {
@@ -59,16 +60,13 @@ export default ({
                 <DuplicateText>중복확인</DuplicateText>
               </DuplicateBtn>
             </SignUpWrapper>
-
             <IntroduceWrapper>
-              <IntroduceTitle>간략하게 자신을 소개해주세요 (최대 100자)</IntroduceTitle>
-              <IntroduceInput
-                multiline={true}
-                maxLength={100}
-                textAlignVertical={'top'}
+              <TextLimitBox
+                title={'간략하게 자신을 소개해주세요 (최대 100자)'}
                 name="description"
                 value={profileData.description}
                 onChange={onChangeProfile}
+                activeFlag={activeFlag.descriptionFlag}
               />
             </IntroduceWrapper>
           </ContainerCard>
@@ -162,25 +160,4 @@ const IntroduceWrapper = styled.View`
   display: flex;
   width: 100%;
   margin-top: 20px;
-`;
-
-const IntroduceTitle = styled.Text`
-  font-size: 12px;
-  color: #6f6f6f;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const IntroduceInput = styled.TextInput`
-  width: 100%;
-  height: 100px;
-  max-height: 100px;
-  padding: 10px;
-  margin-bottom: 100px;
-  border-width: 1px;
-  border-color: #b5b5b5;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #6f6f6f;
 `;

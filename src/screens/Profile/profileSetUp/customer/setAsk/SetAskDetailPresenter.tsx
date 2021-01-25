@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
   inquryAskDetail: any;
@@ -15,14 +16,12 @@ export default ({inquryAskDetail}: IProps) => {
             <AskDetailWrapper>
               <AskDetailTextWrapper>
                 <AskDetailTitle>{inquryAskDetail.requestTitle}</AskDetailTitle>
-                <AskDetailDate>{inquryAskDetail.requestDate}</AskDetailDate>
+                <AskDetailDate>{getTotalTime(inquryAskDetail.requestDate)}</AskDetailDate>
               </AskDetailTextWrapper>
-
               <FollowBtn backgroundColor={inquryAskDetail.requestStatus}>
                 <FollowBtnText>{inquryAskDetail.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
               </FollowBtn>
             </AskDetailWrapper>
-
             <AskWrapper vertical={true}>
               <AskText>{inquryAskDetail.requestDescription}</AskText>
             </AskWrapper>

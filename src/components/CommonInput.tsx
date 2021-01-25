@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {View} from 'react-native';
 
 interface IColorChangeProps {
   borderColor: string;
 }
 
-export const InputBox = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {
+export const InputBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';
   else if (activeFlag < 0) borderColor = '#FF0000';
@@ -48,6 +49,132 @@ const InputBoxData = styled.TextInput`
   color: #6f6f6f;
 `;
 
+export const InputBox2 = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <InputBoxWrap>
+      <InputBoxTitleData>{title}</InputBoxTitleData>
+      <InputBoxDescriptionData
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        borderColor={borderColor}
+        value={value}
+      />
+    </InputBoxWrap>
+  );
+};
+
+const InputBoxWrap = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const InputBoxTitleData = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const InputBoxDescriptionData = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+export const InputBtnBox = ({
+  onPress,
+  title = '',
+  placeholder = '',
+  name = '',
+  onChange = () => {},
+  activeFlag = 0,
+  value,
+}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <InputBtnWrap onPress={onPress}>
+      <InputBtnTitle>{title}</InputBtnTitle>
+      <View pointerEvents="none">
+        <InputBtnData
+          name={name}
+          placeholder={placeholder}
+          onChange={onChange}
+          borderColor={borderColor}
+          autoFocus={true}
+          value={value}
+        />
+      </View>
+    </InputBtnWrap>
+  );
+};
+
+const InputBtnWrap = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+`;
+
+const InputBtnTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const InputBtnData = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+export const TextTitleBox = ({placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <InputBoxWrapper>
+      <InputDataBox
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        borderColor={borderColor}
+        autoFocus={true}
+        multiline={true}
+        value={value}
+      />
+    </InputBoxWrapper>
+  );
+};
+
+const InputDataBox = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+`;
+
 export const TextBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
   let borderColor = '';
   if (activeFlag > 0) borderColor = '#007bf1';
@@ -86,9 +213,114 @@ const TextBoxData = styled.TextInput`
   margin-bottom: 20px;
   border-width: 1px;
   border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
-  border-radius: 5px;
   font-size: 15px;
   color: #6f6f6f;
+`;
+
+export const TextLimitBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <TextLimitWrapper>
+      <TextLimitTitle>{title}</TextLimitTitle>
+      <TextLimitData
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        borderColor={borderColor}
+        multiline={true}
+        maxLength={100}
+        textAlignVertical={'top'}
+      />
+    </TextLimitWrapper>
+  );
+};
+
+const TextLimitWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const TextLimitTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const TextLimitData = styled.TextInput`
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  padding: 10px;
+  margin-bottom: 100px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#b5b5b5')};
+  font-size: 14px;
+  color: #6f6f6f;
+`;
+
+export const TextTagBox = ({title = '', placeholder = '', name = '', onChange = () => {}, activeFlag = 0, value}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <TextTagWrapper>
+      <TextTagTitle>{title}</TextTagTitle>
+      <TextTagData
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        borderColor={borderColor}
+        multiline={true}
+        textAlignVertical={'top'}
+      />
+      {/* <TextTags ></TextTags> */}
+    </TextTagWrapper>
+  );
+};
+
+const TextTagWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const TextTagTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 20px 0 5px 0;
+`;
+
+const TextTagData = styled.TextInput`
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  padding: 10px;
+  margin-bottom: 100px;
+  border-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#b5b5b5')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+const TextTags = styled.Text`
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #007bf1;
+  width: 5%;
+  max-width: 100%;
+  padding: 5px;
 `;
 
 export const PwChangeInput = ({title = '', placeholder = '', name = '', onChange = {}, activeFlag = 0, value = ''}) => {
@@ -125,6 +357,56 @@ const PwChangeInputTitle = styled.Text`
 `;
 
 const PwChangeInputData = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: ${(props: IColorChangeProps) => (props.borderColor ? props.borderColor : '#acacac')};
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+export const PwChangeInput2 = ({
+  title = '',
+  placeholder = '',
+  name = '',
+  onChange = {},
+  activeFlag = 0,
+  value = '',
+}) => {
+  let borderColor = '';
+  if (activeFlag > 0) borderColor = '#007bf1';
+  else if (activeFlag < 0) borderColor = '#FF0000';
+  else borderColor = '#acacac';
+
+  return (
+    <PasswordChangeWrapper>
+      <PasswordChangeTitle>{title}</PasswordChangeTitle>
+      <PasswordChangeData
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        borderColor={borderColor}
+        secureTextEntry={true}
+        value={value}
+      />
+    </PasswordChangeWrapper>
+  );
+};
+
+const PasswordChangeWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const PasswordChangeTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const PasswordChangeData = styled.TextInput`
   padding: 5px 10px;
   margin-bottom: 20px;
   border-bottom-width: 1px;

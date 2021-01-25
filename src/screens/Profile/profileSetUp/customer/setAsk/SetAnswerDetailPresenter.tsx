@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
   inquryAnswerDetail: any;
@@ -13,21 +14,21 @@ export default ({inquryAnswerDetail}: IProps) => {
         <AskDetailWrapper>
           <AskDetailTextWrapper>
             <AskDetailTitle>{inquryAnswerDetail.requestTitle}</AskDetailTitle>
-            <AskDetailDate>{inquryAnswerDetail.requestDate}</AskDetailDate>
+            <AskDetailDate>{getTotalTime(inquryAnswerDetail.requestDate)}</AskDetailDate>
           </AskDetailTextWrapper>
           <FollowBtn backgroundColor={inquryAnswerDetail.requestStatus}>
             <FollowBtnText>{inquryAnswerDetail.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
           </FollowBtn>
         </AskDetailWrapper>
-
         <AskWrapper vertical={true}>
           <AskText>{inquryAnswerDetail.requestDescription}</AskText>
         </AskWrapper>
-
         <AnswerDetailWrapper>
           <AskDetailTextWrapper>
             <AskDetailTitle>문의에 대한 답변입니다.</AskDetailTitle>
-            <AskDetailDate>{inquryAnswerDetail.responseDate}</AskDetailDate>
+            <AskDetailDate>
+              {inquryAnswerDetail.responseDate == null ? '' : getTotalTime(inquryAnswerDetail.responseDate)}
+            </AskDetailDate>
           </AskDetailTextWrapper>
         </AnswerDetailWrapper>
         <AskWrapper>

@@ -1,28 +1,280 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import TogetherModifyPresenter from './TogetherModifyPresenter';
-
-const content = [
-  {
-    id: 0,
-    title: '모임하기 설명',
-    content: '이 모임에 대한 소개입니다.',
-  },
-  {
-    id: 1,
-    title: '이런 분들께 추천합니다.',
-    content: '이런 분들께 추천하는 내용입니다. 이런 분들께 추천하는 내용입니다.',
-  },
-  {
-    id: 2,
-    title: '공지사항',
-    content: '공지사항 내용입니다.',
-  },
-];
+import {togetherApi} from '../../../module/api';
+import AlertContext from '../../../module/context/AlertContext';
+import CheckAlert from '../../../components/CheckAlert';
+import ConfirmAlert from '../../../components/ConfirmAlert';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  return <TogetherModifyPresenter navigation={navigation} content={content} />;
+export default ({navigation, route}: IProps) => {
+  const {setAlertVisible}: any = useContext(AlertContext);
+  const clearAlert = () => {
+    setAlertVisible();
+  };
+
+  const [activeFlag, setActiveFlag] = useState({
+    titleFlag: 0,
+    descriptionFlag: 0,
+    recommendFlag: 0,
+    noticeFlag: 0,
+  });
+  const [isActive, setIsActive] = useState(false);
+
+  const [listCountDetail, setListCountDetail] = useState({
+    userCount: 0,
+    commentCount: 0,
+  });
+
+  const [listDetail, setListDetail] = useState({
+    id: 0,
+    title: '',
+    Place: '',
+    price: '',
+    limitDate: '',
+    description: '',
+    recommend: '',
+    notice: '',
+    address: '',
+    thumbnail: '',
+    commentNickName: null,
+    commentImage: null,
+    commentDescription: null,
+  });
+
+  const getListDetail = async () => {
+    const id = route.params?.id;
+    const {
+      data: {together, userCount, commentCount},
+      statusCode,
+      message,
+    } = await togetherApi.userOpenDetail(id);
+    if (statusCode !== 200) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '데이터 조회에 실패했습니다.',
+            description: message,
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+    }
+    setListDetail(together);
+    setListCountDetail({
+      userCount,
+      commentCount,
+    });
+  };
+
+  const onChangeTogether = (e) => {
+    const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
+    const value = e.nativeEvent.text;
+    setListDetail({
+      ...listDetail,
+      [name]: value,
+    });
+  };
+
+  const modifyTogetherData = async () => {
+    const modifyData = {
+      title: listDetail.title,
+      description: listDetail.description,
+      recommend: listDetail.recommend,
+      notice: listDetail.notice,
+    };
+    const {statusCode, message} = await togetherApi.putTogetherDetail(listDetail.id, modifyData);
+    if (statusCode !== 201) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '수정 실패',
+            description: '다시 입력해주세요.',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+    } else {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'check',
+            title: message,
+            description: '',
+          }}
+          checked={() => {
+            clearAlert();
+            navigation.navigate('togetherMyDetail', {refresh: true});
+          }}
+        />,
+      );
+    }
+  };
+
+  const deleteOkAlert = async () => {
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'check',
+          title: '모임 삭제가 완료되었습니다.',
+          description: '',
+        }}
+        checked={() => {
+          clearAlert();
+          navigation.navigate('togetherMain', {refresh: true});
+        }}
+      />,
+    );
+  };
+
+  const deleteFailAlert = async () => {
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'warning',
+          title: '모임 삭제가 실패되었습니다.',
+          description: '다시 시도해주세요.',
+        }}
+        checked={() => {
+          clearAlert();
+        }}
+      />,
+    );
+  };
+
+  const deleteTogetherData = async () => {
+    setAlertVisible(
+      <ConfirmAlert
+        confirm={{
+          type: 'delete',
+          title: '모임을 삭제하시겠습니까?',
+          description: '삭제된 데이터는 되돌릴 수 없습니다.',
+          confirmedText: '삭제',
+          canceledText: '취소',
+        }}
+        canceled={() => {
+          clearAlert();
+        }}
+        confirmed={async () => {
+          const {statusCode} = await togetherApi.deleteTogetherDetail(listDetail.id);
+          if (statusCode !== 201) {
+            deleteFailAlert();
+          } else {
+            deleteOkAlert();
+          }
+        }}
+      />,
+    );
+  };
+
+  const blankValidation = () => {
+    if (listDetail.title.indexOf(' ') === 0) {
+      setActiveFlag({...activeFlag, titleFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '제목은 빈칸으로 시작할 수 없습니다.',
+            description: '',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+      return false;
+    } else if (listDetail.description.indexOf(' ') === 0) {
+      setActiveFlag({...activeFlag, descriptionFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '소개는 빈칸으로 시작할 수 없습니다.',
+            description: '',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+      return false;
+    } else if (listDetail.recommend.indexOf(' ') === 0) {
+      setActiveFlag({...activeFlag, recommendFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '추천은 빈칸으로 시작할 수 없습니다.',
+            description: '',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+      return false;
+    } else if (listDetail.notice.indexOf(' ') === 0) {
+      setActiveFlag({...activeFlag, noticeFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '공지사항은',
+            description: '빈칸으로 시작할 수 없습니다.',
+          }}
+          checked={() => {
+            clearAlert();
+          }}
+        />,
+      );
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    getListDetail();
+  }, []);
+
+  useEffect(() => {
+    setActiveFlag({
+      ...activeFlag,
+      titleFlag: listDetail.title.length,
+      descriptionFlag: listDetail.description.length,
+      recommendFlag: listDetail.recommend.length,
+      noticeFlag: listDetail.notice.length,
+    });
+  }, [listDetail]);
+
+  useEffect(() => {
+    setIsActive(
+      listDetail.title.length > 0 &&
+        listDetail.description.length > 0 &&
+        listDetail.recommend.length > 0 &&
+        listDetail.notice.length > 0,
+    );
+  }, [listDetail]);
+
+  return (
+    <TogetherModifyPresenter
+      navigation={navigation}
+      listDetail={listDetail}
+      listCountDetail={listCountDetail}
+      onChangeTogether={onChangeTogether}
+      modifyTogetherData={modifyTogetherData}
+      deleteTogetherData={deleteTogetherData}
+      activeFlag={activeFlag}
+      isActive={isActive}
+      blankValidation={blankValidation}
+    />
+  );
 };

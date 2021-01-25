@@ -1,50 +1,59 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
-  navigation: any;
+  togetherMemberData: any;
 }
 
-export default ({navigation, member}: IProps) => {
+export default ({togetherMemberData}: IProps) => {
+  const {getTogetherProfile}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {member.map((item, idx) => (
-              <MemberWrapper key={idx}>
-                <ProfileImageWrap>
-                  <ProfileImage source={item.image} />
-                </ProfileImageWrap>
-                <MemberRecordWrapper>
-                  <MemberNameBtn onPress={() => {}}>
-                    <MemberName>{item.name}</MemberName>
-                  </MemberNameBtn>
-                  <RecordWrapper>
-                    <BestRecordWrap>
-                      <ImageColor1>
-                        <BestImage source={item.bestOneImage} />
-                      </ImageColor1>
-                      <BestRecordText>{item.bestOneText} km</BestRecordText>
-                    </BestRecordWrap>
-
-                    <BestRecordWrap>
-                      <ImageColor2>
-                        <BestImage source={item.bestTwoImage} />
-                      </ImageColor2>
-                      <BestRecordText>{item.bestTwoText} km</BestRecordText>
-                    </BestRecordWrap>
-
-                    <BestRecordWrap>
-                      <ImageColor3>
-                        <BestImage source={item.bestThreeImage} />
-                      </ImageColor3>
-                      <BestRecordText>{item.bestThreeText} km</BestRecordText>
-                    </BestRecordWrap>
-                  </RecordWrapper>
-                </MemberRecordWrapper>
-              </MemberWrapper>
-            ))}
+            {togetherMemberData.length > 0 ? (
+              <>
+                {togetherMemberData.map((item, idx) => (
+                  <MemberWrapper key={idx}>
+                    <ProfileImageWrap>
+                      <ProfileImage source={getTogetherProfile(item.userImage)} />
+                    </ProfileImageWrap>
+                    <MemberRecordWrapper>
+                      <MemberNameBtn onPress={() => {}}>
+                        <MemberName>{item.userNickName}</MemberName>
+                      </MemberNameBtn>
+                      <RecordWrapper>
+                        <BestRecordWrap>
+                          <ImageColor1>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor1>
+                          <BestRecordText>500 km</BestRecordText>
+                        </BestRecordWrap>
+                        <BestRecordWrap>
+                          <ImageColor2>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor2>
+                          <BestRecordText>300 km</BestRecordText>
+                        </BestRecordWrap>
+                        <BestRecordWrap>
+                          <ImageColor3>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor3>
+                          <BestRecordText>100 km</BestRecordText>
+                        </BestRecordWrap>
+                      </RecordWrapper>
+                    </MemberRecordWrapper>
+                  </MemberWrapper>
+                ))}
+              </>
+            ) : (
+              <MemberInfoWrap>
+                <MemberInfoText>현재 참여인원이 없습니다.</MemberInfoText>
+              </MemberInfoWrap>
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -58,7 +67,7 @@ const Container = styled.View`
 
 const ScrollContainer = styled.View`
   height: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
 `;
 
 const ScrollWrapper = styled.ScrollView``;
@@ -107,7 +116,7 @@ const MemberNameBtn = styled.TouchableOpacity`
 
 const MemberName = styled.Text`
   font-size: 13px;
-  color: #333;
+  color: #333333;
 `;
 
 const RecordWrapper = styled.View`
@@ -165,4 +174,19 @@ const BestRecordText = styled.Text`
   text-align: left;
   width: 68%;
   margin-left: 5px;
+`;
+
+const MemberInfoWrap = styled.View`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const MemberInfoText = styled.Text`
+  font-size: 15px;
+  color: #333333;
+  font-weight: bold;
 `;
