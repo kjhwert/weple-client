@@ -19,8 +19,8 @@ export interface IFeed {
   userNickName: string;
   userImage: string;
   feedImage: string;
-  likeCount: string;
-  commentCount: string;
+  likeCount: number;
+  commentCount: number;
   isUserLiked: boolean;
   isUserFollowed: boolean;
   activityName: string;

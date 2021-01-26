@@ -18,6 +18,7 @@ import {
   IFeedIndex,
   IFeedCreateComment,
   IUtilityApiEvents,
+  IFeedPagination,
 } from './type/api';
 import {IFeedComments} from './type/feed';
 
@@ -138,9 +139,11 @@ export const feedApi = {
       return {statusCode: 500, message: e.message};
     }
   },
-  index: ({page, sort, order}: IFeedIndex) => apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}`)),
-  locationIndex: (page: number, lat: number, lon: number) =>
-    apiRequest(api.get(`/feed/location?lat=${lat}&lon=${lon}&page=${page}`)),
+  index: ({page, sort, order, nickName}: IFeedPagination) =>
+    apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=${nickName}`)),
+  locationIndex: ({page, lat, lon, nickName}: IFeedPagination) =>
+    /** reverse latitude, longitude */
+    apiRequest(api.get(`/feed/location?lat=${lon}&lon=${lat}&page=${page}&nickName=${nickName}`)),
   show: (feedId: number) => apiRequest(api.get(`/feed/${feedId}`)),
   showComments: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/comment`)),
   showLikeUsers: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/like`)),

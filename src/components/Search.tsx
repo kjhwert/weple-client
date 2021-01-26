@@ -1,18 +1,30 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import FeedContext from '../module/context/FeedContext';
 
-export default ({navigation, route}) => {
+interface IProps {
+  navigation: any;
+  route: any;
+}
+
+export default ({navigation, route}: IProps) => {
+  const {changeSearchVisible}: any = useContext(FeedContext);
+
+  const navigate = () => {
+    const {name} = route;
+    if (name === 'feedMain') {
+      return changeSearchVisible();
+    }
+
+    if (name === 'togetherMain') {
+      return navigation.navigate('togetherSearch');
+    }
+  };
+
   return (
     <Container
       onPress={() => {
-        const {name} = route;
-        if (name === 'feedMain') {
-          return navigation.navigate('feedSearch');
-        }
-
-        if (name === 'togetherMain') {
-          return navigation.navigate('togetherSearch');
-        }
+        navigate();
       }}>
       <SearchImage source={require('../assets/header_search.png')} />
     </Container>

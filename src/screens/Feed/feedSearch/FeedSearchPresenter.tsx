@@ -1,162 +1,135 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL, timeForToday} from '../../../module/common';
+import UserContext from '../../../module/context/UserContext';
+import {IFeed} from '../../../module/type/feed';
+import {IFeedPagination} from '../../../module/type/api';
+import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 
 interface IProps {
   navigation: any;
+  index: Array<IFeed>;
+  userFollowAndReload: (userId: number) => void;
+  feedLikedAndReload: (feed: IFeed) => void;
+  setSortAlertVisible: () => void;
+  getMoreIndex: () => void;
 }
 
-export default ({navigation}: IProps) => {
+export default ({
+  navigation,
+  index,
+  userFollowAndReload,
+  feedLikedAndReload,
+  setSortAlertVisible,
+  getMoreIndex,
+}: IProps) => {
+  const {loginUser}: any = useContext(UserContext);
+
+  const isLoginUserFeed = (id: number) => {
+    return loginUser.id === id;
+  };
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+  };
+
+  const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (isCloseToBottom(nativeEvent)) {
+      getMoreIndex();
+    }
+  };
+
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper>
+        <ScrollWrapper onScroll={onScroll}>
           <ContainerCard>
             <ActiveSelectTitleWrapper>
-              <ProfileTitleBtn onPress={() => {}}>
-                <ProfileActiveTitle>Select DropDown</ProfileActiveTitle>
-              </ProfileTitleBtn>
-              <SortBtn>
+              <SortBtn onPress={setSortAlertVisible}>
                 <SortImage source={require('../../../assets/sort_icon.png')} />
               </SortBtn>
             </ActiveSelectTitleWrapper>
 
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
-                <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
-                    <ProfileName>GilDong Hong</ProfileName>
-                  </ProfileNameBtn>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
-                <RecordWrapper>
-                  <RecordImage
-                    source={require('../../../assets/active_cycle.png')}
-                  />
-                  <RecordText>21.7 킬로미터</RecordText>
-                </RecordWrapper>
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/icon_heart.png')}
-                    />
-                  </IconBtn>
-                  <IconBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <IconImage
-                      source={require('../../../assets/icon_comment.png')}
-                    />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmBtn
+            {index.map((feed) => (
+              <PostWrapper key={feed.id}>
+                <ProfileWrapper>
+                  <ProfileImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} />
+                  <ProfileTextWrapper>
+                    <ProfileNameBtn onPress={() => {}}>
+                      <ProfileName>{feed.userNickName}</ProfileName>
+                    </ProfileNameBtn>
+                    <PostTime>{timeForToday(feed.createdAt)}</PostTime>
+                  </ProfileTextWrapper>
+                  {!isLoginUserFeed(feed.userId) && (
+                    <FollowBtn
+                      isFollow={feed.isUserFollowed}
+                      onPress={() => {
+                        userFollowAndReload(feed.userId);
+                      }}>
+                      <FollowBtnText isFollow={feed.isUserFollowed}>
+                        {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
+                      </FollowBtnText>
+                    </FollowBtn>
+                  )}
+                </ProfileWrapper>
+                <PostImageWrapper
                   onPress={() => {
-                    navigation.navigate('friendLike');
+                    navigation.navigate('activeDetail', {id: feed.id});
                   }}>
-                  <AlarmText>806명이 좋아합니다.</AlarmText>
-                </AlarmBtn>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
-                <FollowTextWrapper>
-                  <FollowNameBtn
+                  <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
+                  <RecordWrapper color={feed.activityColor}>
+                    <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
+                    <RecordText>{feed.distance} 킬로미터</RecordText>
+                  </RecordWrapper>
+                </PostImageWrapper>
+                <IconWrapper>
+                  <IconImageWrapper>
+                    <IconBtn onPress={() => feedLikedAndReload(feed)}>
+                      <IconImage
+                        source={
+                          feed.isUserLiked
+                            ? require('../../../assets/icon_heartRed.png')
+                            : require('../../../assets/icon_heart.png')
+                        }
+                      />
+                    </IconBtn>
+                    <IconBtn
+                      onPress={() => {
+                        navigation.navigate('friendComment', {id: feed.id});
+                      }}>
+                      <IconImage source={require('../../../assets/icon_comment.png')} />
+                    </IconBtn>
+                  </IconImageWrapper>
+                  <AlarmBtn
                     onPress={() => {
-                      navigation.navigate('friendActive');
+                      navigation.navigate('friendLike');
                     }}>
-                    <FollowName>Benjamin</FollowName>
-                  </FollowNameBtn>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
-            <Line></Line>
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_1.png')}
-                />
-                <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
-                    <ProfileName>GilDong Hong</ProfileName>
-                  </ProfileNameBtn>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper>
-                <PostImage source={require('../../../assets/photo_1.jpeg')} />
-                <RecordWrapper>
-                  <RecordImage
-                    source={require('../../../assets/active_cycle.png')}
-                  />
-                  <RecordText>21.7 킬로미터</RecordText>
-                </RecordWrapper>
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage
-                      source={require('../../../assets/icon_heart.png')}
-                    />
-                  </IconBtn>
-                  <IconBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <IconImage
-                      source={require('../../../assets/icon_comment.png')}
-                    />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmBtn
-                  onPress={() => {
-                    navigation.navigate('friendLike');
-                  }}>
-                  <AlarmText>806명이 좋아합니다.</AlarmText>
-                </AlarmBtn>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
-                <FollowTextWrapper>
-                  <FollowNameBtn
-                    onPress={() => {
-                      navigation.navigate('friendActive');
-                    }}>
-                    <FollowName>Benjamin</FollowName>
-                  </FollowNameBtn>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn
-                    onPress={() => {
-                      navigation.navigate('friendComment');
-                    }}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
+                    <AlarmText>{feed.likeCount}명이 좋아합니다.</AlarmText>
+                  </AlarmBtn>
+                </IconWrapper>
+                {feed.commentCount > 0 && (
+                  <FollowWrapper>
+                    <ProfileImage source={{uri: `${BASE_URL}/${feed.commentUserImage}`}} />
+                    <FollowTextWrapper>
+                      <FollowNameBtn
+                        onPress={() => {
+                          navigation.navigate('friendActive');
+                        }}>
+                        <FollowName>{feed.commentUserName}</FollowName>
+                      </FollowNameBtn>
+                      <CommentText>{feed.commentDescription}</CommentText>
+                      <AllCommentBtn
+                        onPress={() => {
+                          navigation.navigate('friendComment');
+                        }}>
+                        <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
+                      </AllCommentBtn>
+                    </FollowTextWrapper>
+                  </FollowWrapper>
+                )}
+              </PostWrapper>
+              // <Line />
+            ))}
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
@@ -192,7 +165,7 @@ const ActiveSelectTitleWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   width: 100%;
   border-bottom-width: 2px;
   border-color: #f3f3f3;
@@ -279,13 +252,15 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;
-  background-color: #007bf1;
+  border-width: 1px;
+  border-color: #007bf1;
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
   font-size: 12px;
   font-weight: bold;
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
 `;
 
 const PostImageWrapper = styled.TouchableOpacity`
@@ -305,7 +280,7 @@ const RecordWrapper = styled.View`
   width: 40%;
   align-items: center;
   justify-content: center;
-  background-color: #007bf1;
+  background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
   position: absolute;
   margin-top: 20px;
   padding: 5px;
@@ -319,8 +294,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 22px;
-  height: 13px;
+  width: 18px;
+  height: 18px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

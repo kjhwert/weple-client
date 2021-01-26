@@ -69,7 +69,7 @@ export default ({navigation}: IProps) => {
 
     const newState = followers.map((user) => {
       if (user.id === userId) {
-        user.isUserFollowed = user.isUserFollowed === '1' ? '0' : '1';
+        user.isUserFollowed = user.isUserFollowed === '1' ? '1' : '0';
       }
 
       return user;

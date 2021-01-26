@@ -22,18 +22,24 @@ export const FeedContextProvider = ({children}: IProps) => {
     page: 1,
     sort: 'createdAt',
     order: 'DESC',
+    nickName: '',
     lat: 0,
     lon: 0,
   });
   const [show, setShow] = useState<IShowFeed | null>(null);
   const [showLoading, setShowLoading] = useState(true);
+  const [searchVisible, setSearchVisible] = useState(false);
+
+  const changeSearchVisible = () => {
+    setSearchVisible(!searchVisible);
+  };
 
   const getIndex = async (tab: string) => {
     if (tab === '추천') {
       return locationIndex();
     }
-    const {page, sort, order}: IFeedIndex = await getIndexPaging(tab);
-    const {statusCode, message, data, paging} = await feedApi.index({page, sort, order});
+    const {page, sort, order, nickName}: IFeedIndex = await getIndexPaging(tab);
+    const {statusCode, message, data, paging} = await feedApi.index({page, sort, order, nickName});
     if (statusCode !== 200) {
       return setAlertVisible(
         <CheckAlert
@@ -61,6 +67,7 @@ export const FeedContextProvider = ({children}: IProps) => {
       page: newIndexPaging.page,
       sort: newIndexPaging.sort,
       order: newIndexPaging.order,
+      nickName: newIndexPaging.nickName,
     });
     if (statusCode !== 200) {
       return setAlertVisible(
@@ -80,7 +87,7 @@ export const FeedContextProvider = ({children}: IProps) => {
 
   const locationIndex = async () => {
     const {latitude: lat, longitude: lon}: any = await getLatestLocation();
-    const {statusCode, message, data, paging} = await feedApi.locationIndex(1, lon, lat);
+    const {statusCode, message, data, paging} = await feedApi.locationIndex({page: 1, lon, lat});
     if (statusCode !== 200) {
       return setAlertVisible(
         <CheckAlert
@@ -95,8 +102,6 @@ export const FeedContextProvider = ({children}: IProps) => {
     setIndex(data);
     setIndexPaging({...indexPaging, tab: '추천', ...paging, lat, lon});
   };
-
-  console.log(indexPaging);
 
   const getMoreLocationIndex = async () => {
     // const array = index.map((feed) => feed.id);
@@ -128,9 +133,9 @@ export const FeedContextProvider = ({children}: IProps) => {
   const getIndexPaging = (tab: string) => {
     switch (tab) {
       case '홈':
-        return {tab: '홈', page: 1, sort: 'createdAt', order: 'DESC'};
+        return {tab: '홈', page: 1, sort: 'createdAt', order: 'DESC', nickName: ''};
       case '인기':
-        return {tab: '인기', page: 1, sort: 'likeCount', order: 'DESC'};
+        return {tab: '인기', page: 1, sort: 'likeCount', order: 'DESC', nickName: ''};
       case '추천':
         return {tab: '추천', page: 1, sort: 'createdAt', order: 'DESC'};
     }
@@ -145,6 +150,14 @@ export const FeedContextProvider = ({children}: IProps) => {
     }
 
     await getIndex(indexPaging.tab);
+  };
+
+  const feedLiked = async (feed: IFeed) => {
+    const {id, isUserLiked} = feed;
+    if (isUserLiked) {
+      return await feedApi.feedDisLike(id);
+    }
+    return await feedApi.feedLike(id);
   };
 
   const getShow = async (feedId: number) => {
@@ -175,7 +188,20 @@ export const FeedContextProvider = ({children}: IProps) => {
   useEffect(() => {}, [index, indexPaging, show, showLoading]);
 
   return (
-    <FeedContext.Provider value={{index, getIndex, feedLike, indexPaging, show, showLoading, getShow, getMoreIndex}}>
+    <FeedContext.Provider
+      value={{
+        index,
+        getIndex,
+        feedLike,
+        indexPaging,
+        show,
+        showLoading,
+        getShow,
+        getMoreIndex,
+        searchVisible,
+        changeSearchVisible,
+        feedLiked,
+      }}>
       {children}
     </FeedContext.Provider>
   );

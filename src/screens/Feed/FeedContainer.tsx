@@ -41,37 +41,29 @@ export default ({navigation}: IProps) => {
 
   const getFollowers = async () => {
     const {statusCode, message, data} = await userApi.getNewFollowers();
-    if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
+    if (statusCode !== 200) return serverAccessFail(message);
     setNewFollowers(data);
   };
 
   const getEvents = async () => {
     setEventLoading(true);
     const {data, statusCode, message} = await utilitiesApi.events({page: 1});
-    if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
+    if (statusCode !== 200) return serverAccessFail(message);
     const events = data.filter((event: any) => event.isOnGoing === true);
     setEvents(events);
     setEventLoading(false);
+  };
+
+  const serverAccessFail = (message: string) => {
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'warning',
+          title: '데이터 조회에 실패했습니다.',
+          description: message,
+        }}
+      />,
+    );
   };
 
   useEffect(() => {

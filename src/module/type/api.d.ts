@@ -98,8 +98,19 @@ export interface IFeedIndex {
   page: number;
   sort: 'createdAt' | 'likeCount' | string;
   order: 'DESC' | 'ASC' | string;
+  nickName: string;
   lat?: number;
   lon?: number;
+}
+
+export interface IFeedPagination {
+  page: number;
+  sort?: 'createdAt' | 'likeCount' | 'location';
+  order?: 'DESC' | 'ASC';
+  nickName?: string;
+  lat?: number;
+  lon?: number;
+  hasNextPage?: boolean;
 }
 
 export interface IFeedCreateComment {

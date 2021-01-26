@@ -1,5 +1,6 @@
-import React, {createContext, ReactNode, useCallback, useState} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import styled from 'styled-components/native';
+import CheckAlert from '../../components/CheckAlert';
 
 const AlertContext = createContext({});
 
@@ -11,6 +12,18 @@ export const AlertContextProvider = ({children}: IProps) => {
   const [visible, setVisible] = useState(false);
   const [component, setComponent] = useState<ReactNode>(null);
 
+  const setWarningAlertVisible = (title: string, description: string) => {
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'warning',
+          title,
+          description,
+        }}
+      />,
+    );
+  };
+
   const setAlertVisible = (component: ReactNode) => {
     setComponent(component);
     setVisible(true);
@@ -21,7 +34,7 @@ export const AlertContextProvider = ({children}: IProps) => {
   };
 
   return (
-    <AlertContext.Provider value={{setAlertVisible, setAlertInvisible}}>
+    <AlertContext.Provider value={{setAlertVisible, setAlertInvisible, setWarningAlertVisible}}>
       {children}
       {visible && (
         <Container>

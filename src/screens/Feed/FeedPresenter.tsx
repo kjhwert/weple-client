@@ -8,6 +8,7 @@ import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet} from 'react-native'
 import UserContext from '../../module/context/UserContext';
 import FeedContext from '../../module/context/FeedContext';
 import {IUserFollower} from '../../module/type/user';
+import SearchComponent from '../../components/SearchComponent';
 
 interface IProps {
   navigation: any;
@@ -21,7 +22,7 @@ interface IProps {
 
 export default ({navigation, events, userFollowAndReload, newFollowers}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
-  const {index, getIndex, indexPaging, getMoreIndex, feedLike}: any = useContext(FeedContext);
+  const {index, getIndex, indexPaging, getMoreIndex, feedLike, searchVisible}: any = useContext(FeedContext);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
@@ -39,6 +40,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
 
   return (
     <Container>
+      {searchVisible && <SearchComponent navigation={navigation} />}
       <ScrollContainer>
         <ScrollWrapper onScroll={onScroll}>
           <Card>
@@ -134,7 +136,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
                         userFollowAndReload(feed.userId);
                       }}>
                       <FollowBtnText isFollow={feed.isUserFollowed}>
-                        {feed.isUserFollowed ? '팔로우' : '팔로잉'}
+                        {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
                       </FollowBtnText>
                     </FollowBtn>
                   )}
@@ -175,7 +177,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
                     <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
                   </AlarmBtn>
                 </IconWrapper>
-                {feed.commentUserName && (
+                {Number(feed.commentCount) > 0 && (
                   <FollowWrapper>
                     <ProfileImage
                       source={{
