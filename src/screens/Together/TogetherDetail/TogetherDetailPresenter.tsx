@@ -6,10 +6,12 @@ import TogetherContext from '../../../module/context/TogetherContext';
 interface IProps {
   navigation: any;
   listDetail: any;
+  togetherInto: Function;
+  togetherOutOf: Function;
 }
 
-export default ({navigation, listDetail}: IProps) => {
-  const {getTogetherThumbnail}: any = useContext(TogetherContext);
+export default ({navigation, listDetail, togetherInto, togetherOutOf}: IProps) => {
+  const {getTogetherThumbnail, getTogetherProfile}: any = useContext(TogetherContext);
 
   return (
     <Container>
@@ -63,30 +65,40 @@ export default ({navigation, listDetail}: IProps) => {
                   <JoinContent>{listDetail.together.notice}</JoinContent>
                 </ContentWrap>
               </JoinContentWrapper>
-
               <FollowWrapper>
-                <ProfileImage source={require('../../../assets/profile_2.png')} />
+                <ProfileImage source={getTogetherProfile(listDetail.together.commentImage)} />
                 <FollowTextWrapper>
                   <FollowNameBtn onPress={() => {}}>
-                    <FollowName>Benjamin</FollowName>
+                    <FollowName>{listDetail.together.commentNickName}</FollowName>
                   </FollowNameBtn>
-                  <CommentText>bicycles very nice..!!</CommentText>
+                  <CommentText>{listDetail.together.commentDescription}</CommentText>
                   <AllCommentBtn
                     onPress={() => {
                       navigation.navigate('togetherComment', {id: listDetail.together.id});
                     }}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
+                    <AllCommentText>{listDetail.commentCount}개의 댓글 모두 보기</AllCommentText>
                   </AllCommentBtn>
                 </FollowTextWrapper>
               </FollowWrapper>
-              <JoinBtnWrapper>
-                <JoinButton
-                  onPress={() => {
-                    navigation.navigate('togetherParticipate', {id: listDetail.together.id});
-                  }}>
-                  <JoinText>모임하기</JoinText>
-                </JoinButton>
-              </JoinBtnWrapper>
+              {listDetail.together.isUserJoined === '0' ? (
+                <JoinBtnWrapper>
+                  <JoinButton
+                    onPress={() => {
+                      togetherInto();
+                    }}>
+                    <JoinText>모임 참여하기</JoinText>
+                  </JoinButton>
+                </JoinBtnWrapper>
+              ) : (
+                <CancelBtnWrapper>
+                  <CancelButton
+                    onPress={() => {
+                      togetherOutOf();
+                    }}>
+                    <CancelText>모임 나가기</CancelText>
+                  </CancelButton>
+                </CancelBtnWrapper>
+              )}
             </JoinWrapper>
           </ContainerCard>
         </ScrollWrapper>
@@ -325,6 +337,29 @@ const JoinButton = styled.TouchableOpacity`
 `;
 
 const JoinText = styled.Text`
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const CancelBtnWrapper = styled.View`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: #00bbc7;
+`;
+
+const CancelText = styled.Text`
   color: #fff;
   font-size: 15px;
   font-weight: bold;

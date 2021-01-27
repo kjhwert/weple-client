@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import {TextTagBox} from '../../../components/CommonInput';
 import {StartNextBtn} from '../../../components/CommonBtn';
 import RadioButtonRN from 'radio-buttons-react-native';
 import TogetherContext from '../../../module/context/TogetherContext';
@@ -12,12 +11,8 @@ interface IProps {
   radioBoxData: any;
 }
 
-export default ({navigation, radioBoxData, activeFlag}: IProps) => {
-  const {createRoom, pickTogetherPublic, tagData, onChangeTag}: any = useContext(TogetherContext);
-
-  //////////////////////////
-
-  //////////////////////////
+export default ({navigation, radioBoxData}: IProps) => {
+  const {createRoom, pickTogetherPublic}: any = useContext(TogetherContext);
 
   return (
     <Container>
@@ -43,18 +38,9 @@ export default ({navigation, radioBoxData, activeFlag}: IProps) => {
           <MethodInfoText>비공개 모집시 초대를 통해서만 모집할 수 있습니다.</MethodInfoText>
         </MethodWrapper>
 
-        {/*  */}
-        <></>
-        {/*  */}
-
         <MethodTagWrapper>
-          <TextTagBox
-            title={'태그를 입력하세요.'}
-            name="togetherTags"
-            value={tagData}
-            onChange={onChangeTag}
-            activeFlag={activeFlag.togetherTagsFlag}
-          />
+          <MethodTagTitle>태그를 입력하세요.</MethodTagTitle>
+          <MethodTagInput multiline={true} textAlignVertical={'top'} />
         </MethodTagWrapper>
       </ContainerCard>
       <StartNextBtn text={'다음'} StartNextPage={'togetherPostActivity'} navigation={navigation} isActive={true} />
@@ -89,4 +75,25 @@ const MethodInfoText = styled.Text`
 const MethodTagWrapper = styled.View`
   display: flex;
   width: 100%;
+`;
+
+const MethodTagTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 20px 0 5px 0;
+`;
+
+const MethodTagInput = styled.TextInput`
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-width: 1px;
+  border-color: #b5b5b5;
+  font-size: 15px;
+  color: #6f6f6f;
 `;

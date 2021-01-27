@@ -10,9 +10,6 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
   const {createUser, createUserData}: any = useContext(UserContext);
 
   const [isActive, setIsActive] = useState(false);
@@ -55,9 +52,7 @@ export default ({navigation}: IProps) => {
             title: '입력하신 비밀번호가 다릅니다.',
             description: '다시 입력해주세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -71,9 +66,7 @@ export default ({navigation}: IProps) => {
             title: '비밀번호는 빈칸없이 입력해주세요.',
             description: '다시 입력해주세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }

@@ -7,7 +7,6 @@ if (!KakaoLogins) {
 }
 
 const logCallback = (log, callback) => {
-  console.log(log);
   callback;
 };
 
@@ -27,14 +26,11 @@ export default ({navigation}: IProps) => {
 
   const [loginLoading, setLoginLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
-  const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
   const [profile, setProfile] = useState(PROFILE_EMPTY);
 
   const kakaoLogin = () => {
     logCallback('Login Start', setLoginLoading(true));
-
     KakaoLogins.login([KAKAO_AUTH_TYPES.Talk, KAKAO_AUTH_TYPES.Account])
       .then((result) => {
         setToken(result.accessToken);
@@ -42,7 +38,6 @@ export default ({navigation}: IProps) => {
         logCallback(`Login Finished:${JSON.stringify(result)}`, setLoginLoading(false));
         getProfile();
       })
-
       .catch((err) => {
         if (err.code === 'E_CANCELLED_OPERATION') {
           logCallback(`Login Cancelled:${err.message}`, setLoginLoading(false));
@@ -54,35 +49,16 @@ export default ({navigation}: IProps) => {
       });
   };
 
-  const kakaoLogout = () => {
-    logCallback('Logout Start', setLogoutLoading(true));
-
-    KakaoLogins.logout()
-      .then((result) => {
-        setToken(TOKEN_EMPTY);
-        setProfile(PROFILE_EMPTY);
-        logCallback(`Logout Finished:${result}`, setLogoutLoading(false));
-      })
-      .catch((err) => {
-        logCallback(`Logout Failed:${err.code} ${err.message}`, setLogoutLoading(false));
-      });
-  };
-
   const getProfile = () => {
     logCallback('Get Profile Start', setProfileLoading(true));
-
     KakaoLogins.getProfile()
       .then((result) => {
         setProfile(result);
-
         if (result.email == null || result.email.length <= 0) {
-          // throw 'Cannot get User Email.';
           navigation.navigate('createAccount');
           return;
         }
-
         logCallback(`Get Profile Finished:${JSON.stringify(result)}`, setProfileLoading(false));
-
         socialLogin(result.email, result.id) ? navigation.navigate('bottomTab') : navigation.navigate('login');
       })
       .catch((err) => {
@@ -90,22 +66,6 @@ export default ({navigation}: IProps) => {
         navigation.navigate('login');
       });
   };
-
-  const unlinkKakao = () => {
-    logCallback('Unlink Start', setUnlinkLoading(true));
-
-    KakaoLogins.unlink()
-      .then((result) => {
-        setToken(TOKEN_EMPTY);
-        setProfile(PROFILE_EMPTY);
-        logCallback(`Unlink Finished:${result}`, setUnlinkLoading(false));
-      })
-      .catch((err) => {
-        logCallback(`Unlink Failed:${err.code} ${err.message}`, setUnlinkLoading(false));
-      });
-  };
-
-  const {id, email, profile_image_url: photo, nickname} = profile;
 
   useEffect(() => {
     kakaoLogin();

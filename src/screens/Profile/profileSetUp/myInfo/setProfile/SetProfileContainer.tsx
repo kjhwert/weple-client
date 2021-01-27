@@ -14,9 +14,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {getUserId, changeProfileImage, changeProfileData}: any = useContext(UserContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [activeFlag, setActiveFlag] = useState({
     nickNameFlag: 0,
@@ -59,9 +56,7 @@ export default ({navigation}: IProps) => {
             title: '사용하실 수 없는 닉네임입니다.',
             description: '다른 닉네임을 사용하세요!',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -75,9 +70,7 @@ export default ({navigation}: IProps) => {
             title: message,
             description: '계속 진행하세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     } else {
@@ -89,9 +82,7 @@ export default ({navigation}: IProps) => {
             title: message,
             description: '다른 닉네임을 사용하세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -112,9 +103,7 @@ export default ({navigation}: IProps) => {
             title: message,
             description: '다른 닉네임을 사용하세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     } else {
@@ -127,7 +116,6 @@ export default ({navigation}: IProps) => {
             description: '',
           }}
           checked={() => {
-            clearAlert();
             navigation.navigate('profileActiveMain', {refresh: true});
           }}
         />,
@@ -137,21 +125,13 @@ export default ({navigation}: IProps) => {
 
   const showPicker = () => {
     const options = {storageOptions: {skipBackup: true, path: 'image'}};
-    ImagePicker.launchImageLibrary(options, async ({uri, type, fileName, didCancel, error}) => {
-      if (didCancel) {
-        // console.log('Cancelled');
-        return;
-      } else if (error) {
-        // console.log('ImagePicker Error:', error);
-        return;
-      }
+    ImagePicker.launchImageLibrary(options, async ({uri, type, fileName}) => {
       const imgFormData = new FormData();
       imgFormData.append('image', {
         name: fileName ? fileName : 'profile.jpeg',
         type: type,
         uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
       });
-      // 이미지 업로드
       const {data, statusCode} = await userApi.userImage(imgFormData);
       if (statusCode !== 201) {
       } else {

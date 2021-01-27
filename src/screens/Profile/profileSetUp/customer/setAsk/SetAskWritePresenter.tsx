@@ -33,9 +33,6 @@ export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegis
           cancelButtonTextStyle={{color: '#FE2E2E', fontWeight: 'normal'}}
           confirmButton={'선택'}
           cancelButton={'취소'}
-          onCancel={() => {
-            // console.log('Cancelled');
-          }}
           onValueChange={(value) => {
             onCheckType(value);
           }}

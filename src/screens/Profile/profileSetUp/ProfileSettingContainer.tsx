@@ -13,9 +13,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
   const {userLogout}: any = useContext(UserContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [logOutAlert, setLogOutAlert] = useState(false);
 
@@ -32,7 +29,6 @@ export default ({navigation}: IProps) => {
           description: '',
         }}
         checked={() => {
-          clearAlert();
           navigation.navigate('login');
         }}
       />,
@@ -47,9 +43,7 @@ export default ({navigation}: IProps) => {
           title: '회원탈퇴가 실패되었습니다.',
           description: '다시 시도해주세요.',
         }}
-        checked={() => {
-          clearAlert();
-        }}
+        checked={() => {}}
       />,
     );
   };
@@ -64,9 +58,7 @@ export default ({navigation}: IProps) => {
           confirmedText: '삭제',
           canceledText: '취소',
         }}
-        canceled={() => {
-          clearAlert();
-        }}
+        canceled={() => {}}
         confirmed={async () => {
           const {statusCode} = await userApi.dropOut();
           if (statusCode !== 201) {

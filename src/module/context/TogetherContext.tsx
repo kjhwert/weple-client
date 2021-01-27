@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useState, useEffect} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import {BASE_URL} from '../../module/common';
 import {togetherApi} from '../../module/api';
 
@@ -33,8 +33,6 @@ export const TogetherContextProvider = ({children}: IProps) => {
     }
   };
 
-  ////////////////////////////////////////////////////////////////
-  // USER CREATE ROOM CONTEXT
   const [createRoom, setCreateRoom] = useState({
     title: '',
     description: '',
@@ -52,22 +50,6 @@ export const TogetherContextProvider = ({children}: IProps) => {
     address: '',
     activity: 0,
   });
-
-  const [tagData, setTagData] = useState('');
-
-  const arrayToString = (arrValue) => {
-    if (!arrValue) return '';
-    let ret = '';
-    arrValue.map((value: string) => {
-      ret += value + ' ';
-    });
-    return ret;
-  };
-
-  const StringToArray = (strValue) => {
-    //console.log(JSON.stringify(strValue.split(' ')));
-    return strValue.split(' ');
-  };
 
   const createRoomData = (name: string, selectedData: any) => {
     setCreateRoom({
@@ -92,17 +74,6 @@ export const TogetherContextProvider = ({children}: IProps) => {
       ...createRoom,
       [name]: value,
     });
-  };
-
-  const onChangeTag = (e) => {
-    const value = e.nativeEvent.text;
-    if (value.length === 1) {
-      setTagData('#' + value);
-    } else if (value.substr(-1) === ' ') {
-      setTagData(value + '#');
-    } else {
-      setTagData(value);
-    }
   };
 
   const pickTogetherDate = (date) => {
@@ -143,17 +114,6 @@ export const TogetherContextProvider = ({children}: IProps) => {
     }
   };
 
-  useEffect(() => {
-    setTagData(arrayToString(createRoom.togetherTags));
-  }, []);
-
-  useEffect(() => {
-    setCreateRoom({
-      ...createRoom,
-      togetherTags: StringToArray(tagData),
-    });
-  }, [tagData]);
-
   return (
     <TogetherContext.Provider
       value={{
@@ -164,8 +124,6 @@ export const TogetherContextProvider = ({children}: IProps) => {
         createRoomData,
         createRoomFeedData,
         onChangeRoom,
-        tagData,
-        onChangeTag,
         pickTogetherDate,
         pickTogetherPublic,
         togetherOpen,

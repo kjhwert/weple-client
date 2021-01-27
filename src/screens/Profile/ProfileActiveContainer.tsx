@@ -18,9 +18,6 @@ interface IProps {
 export default ({navigation, route}: IProps) => {
   const {getUserId}: any = useContext(UserContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [profileData, setProfileData] = useState({
     nickName: '',
@@ -57,14 +54,7 @@ export default ({navigation, route}: IProps) => {
   ];
 
   const sortAlert = () => {
-    return setAlertVisible(
-      <SortAlert
-        sortType={sortDataType}
-        checked={() => {
-          clearAlert();
-        }}
-      />,
-    );
+    return setAlertVisible(<SortAlert sortType={sortDataType} checked={() => {}} />);
   };
 
   useEffect(() => {

@@ -11,9 +11,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {createRoom}: any = useContext(TogetherContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [activeFlag, setActiveFlag] = useState({
     titleFlag: 0,
@@ -33,9 +30,7 @@ export default ({navigation}: IProps) => {
             title: '제목을 10자 이상 입력하세요.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
@@ -44,7 +39,7 @@ export default ({navigation}: IProps) => {
   };
 
   const blankValidation = () => {
-    if (createRoom.description.indexOf(' ') === 0) {
+    if (createRoom.description.trim().length <= 0) {
       setActiveFlag({...activeFlag, descriptionFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -53,13 +48,11 @@ export default ({navigation}: IProps) => {
             title: '소개는 빈칸으로 시작할 수 없습니다.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
-    } else if (createRoom.recommend.indexOf(' ') === 0) {
+    } else if (createRoom.recommend.trim().length <= 0) {
       setActiveFlag({...activeFlag, recommendFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -68,13 +61,11 @@ export default ({navigation}: IProps) => {
             title: '추천은 빈칸으로 시작할 수 없습니다.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
-    } else if (createRoom.notice.indexOf(' ') === 0) {
+    } else if (createRoom.notice.trim().length <= 0) {
       setActiveFlag({...activeFlag, noticeFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -83,9 +74,7 @@ export default ({navigation}: IProps) => {
             title: '공지사항은',
             description: '빈칸으로 시작할 수 없습니다.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;

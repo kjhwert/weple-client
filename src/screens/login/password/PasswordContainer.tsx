@@ -12,9 +12,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {createUser}: any = useContext(UserContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [isActive, setIsActive] = useState(false);
   const [userEmail, setUserEmail] = useState({
@@ -53,9 +50,7 @@ export default ({navigation}: IProps) => {
             title: message,
             description: '다시 입력하세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     } else {
@@ -68,7 +63,6 @@ export default ({navigation}: IProps) => {
             description: '로그인페이지로 이동합니다.',
           }}
           checked={() => {
-            clearAlert();
             navigation.navigate('login');
           }}
         />,

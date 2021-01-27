@@ -69,7 +69,7 @@ export default ({
                   onChange={onChangeTogether}
                   activeFlag={activeFlag.descriptionFlag}
                 />
-                <ModifyTitle>이런 분들꼐 추천합니다.</ModifyTitle>
+                <ModifyTitle>이런 분들께 추천합니다.</ModifyTitle>
                 <TextBox
                   name="recommend"
                   value={listDetail.recommend}

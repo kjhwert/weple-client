@@ -11,9 +11,6 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {createRoom, pickTogetherDate}: any = useContext(TogetherContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [activeFlag, setActiveFlag] = useState({
     togetherDateFlag: 0,
@@ -23,7 +20,6 @@ export default ({navigation}: IProps) => {
   });
   const [isActive, setIsActive] = useState(false);
 
-  // DateTimePicker
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -50,9 +46,7 @@ export default ({navigation}: IProps) => {
             title: '인원은 숫자로 입력하세요.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
@@ -73,9 +67,7 @@ export default ({navigation}: IProps) => {
             title: '참가비는 숫자로 입력하세요.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
@@ -84,7 +76,7 @@ export default ({navigation}: IProps) => {
   };
 
   const blankValidation = () => {
-    if (createRoom.togetherPlace.indexOf(' ') === 0) {
+    if (createRoom.togetherPlace.trim().length <= 0) {
       setActiveFlag({...activeFlag, togetherPlaceFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -93,9 +85,7 @@ export default ({navigation}: IProps) => {
             title: '시작할 위치는',
             description: '빈칸으로 시작할 수 없습니다.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;

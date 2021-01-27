@@ -14,7 +14,7 @@ interface IProps {
 
 export default ({comments, onChangeDescription, userComment, finishComments}: IProps) => {
   const {
-    loginUser: {image},
+    loginUser: {image, id},
   }: any = useContext(UserContext);
   return (
     <Container>
@@ -26,18 +26,18 @@ export default ({comments, onChangeDescription, userComment, finishComments}: IP
                 <ProfileImageWrapper onPress={() => {}}>
                   <ProfileImage
                     source={{
-                      uri: `${BASE_URL}/${comment.userImage ? comment.userImage : 'public/user/no_profile.png'}`,
+                      uri: `${BASE_URL}/${comment.user.image ? comment.user.image : 'public/user/no_profile.png'}`,
                     }}
                   />
                   <MemberTextWrapper>
                     <MemberNameBtn>
-                      <MemberText>{comment.userName}</MemberText>
+                      <MemberText>{comment.user.nickName}</MemberText>
                     </MemberNameBtn>
-                    <CommentText multiline={true}>{comment.description}</CommentText>
+                    <CommentText>{comment.description}</CommentText>
                   </MemberTextWrapper>
                 </ProfileImageWrapper>
 
-                {comment.isLoginUserWrote ? (
+                {comment.user.id === id ? (
                   <DotMoreBtn onPress={() => {}}>
                     <DotMoreImage source={require('../../../assets/dotMore.png')} />
                   </DotMoreBtn>
@@ -75,7 +75,6 @@ const Container = styled.View`
 const CommentWrapper = styled.View`
   width: 100%;
   padding: 10px;
-
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -164,7 +163,7 @@ const MemberText = styled.Text`
   padding-bottom: 5px;
 `;
 
-const CommentText = styled.TextInput`
+const CommentText = styled.Text`
   width: 100%;
   font-size: 13px;
   color: #333;
