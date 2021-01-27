@@ -105,9 +105,10 @@ export interface IFeedIndex {
 
 export interface IFeedPagination {
   page: number;
+  label?: string;
   sort?: 'createdAt' | 'likeCount' | 'location';
   order?: 'DESC' | 'ASC';
-  nickName?: string;
+  nickName: string;
   lat?: number;
   lon?: number;
   hasNextPage?: boolean;

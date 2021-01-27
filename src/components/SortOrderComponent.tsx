@@ -2,20 +2,22 @@ import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import RadioButtonRN from 'radio-buttons-react-native';
 import AlertContext from '../module/context/AlertContext';
+import {IFeedPagination} from '../module/type/api';
 
 interface IProps {
-  sort: Array<ISortOrder>;
+  sorts: Array<ISortOrder>;
   confirm: (sort: ISortOrder) => void;
+  initial: number;
 }
 
 export interface ISortOrder {
   label: string;
-  value: string;
+  value: 'createdAt' | 'likeCount' | 'location';
 }
 
-export default ({sort, confirm}: IProps) => {
+export default ({sorts, confirm, initial}: IProps) => {
   const {setAlertInvisible}: any = useContext(AlertContext);
-  const [state, setState] = useState(sort[0]);
+  const [state, setState] = useState(sorts[initial]);
 
   return (
     <Container>
@@ -29,8 +31,8 @@ export default ({sort, confirm}: IProps) => {
           color: '#919191',
           padding: 3,
         }}
-        initial={1}
-        data={sort}
+        initial={initial + 1}
+        data={sorts}
         selectedBtn={(e: ISortOrder) => setState(e)}
       />
       <CheckButton

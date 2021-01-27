@@ -24,6 +24,18 @@ export const AlertContextProvider = ({children}: IProps) => {
     );
   };
 
+  const setCheckAlertVisible = (title: string, description: string) => {
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'check',
+          title,
+          description,
+        }}
+      />,
+    );
+  };
+
   const setAlertVisible = (component: ReactNode) => {
     setComponent(component);
     setVisible(true);
@@ -34,7 +46,7 @@ export const AlertContextProvider = ({children}: IProps) => {
   };
 
   return (
-    <AlertContext.Provider value={{setAlertVisible, setAlertInvisible, setWarningAlertVisible}}>
+    <AlertContext.Provider value={{setAlertVisible, setAlertInvisible, setWarningAlertVisible, setCheckAlertVisible}}>
       {children}
       {visible && (
         <Container>

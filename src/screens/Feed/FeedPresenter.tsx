@@ -20,9 +20,23 @@ interface IProps {
   };
 }
 
-export default ({navigation, events, userFollowAndReload, newFollowers}: IProps) => {
+const sorts = [
+  {sort: 'createdAt', tab: '홈'},
+  {sort: 'likeCount', tab: '인기'},
+  {sort: 'location', tab: '추천'},
+];
+
+export default ({navigation, events, newFollowers}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
-  const {index, getIndex, indexPaging, getMoreIndex, feedLike, searchVisible}: any = useContext(FeedContext);
+  const {
+    index,
+    pagination,
+    userFollowAndReload,
+    feedLikedAndReload,
+    switchingSortIndex,
+    getMoreIndex,
+    searchVisible,
+  }: any = useContext(FeedContext);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
@@ -99,13 +113,13 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
             <Line></Line>
 
             <MenuBarWrapper>
-              {['홈', '인기', '추천'].map((name, idx) => (
-                <MenuWrapper key={idx} focused={indexPaging.tab === name}>
+              {sorts.map(({tab, sort}, idx) => (
+                <MenuWrapper key={idx} focused={pagination.sort === sort}>
                   <MenuBtn
                     onPress={() => {
-                      getIndex(name);
+                      switchingSortIndex(sort);
                     }}>
-                    <MenuText focused={indexPaging.tab === name}>{name}</MenuText>
+                    <MenuText focused={pagination.sort === sort}>{tab}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -154,7 +168,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
 
                 <IconWrapper>
                   <IconImageWrapper>
-                    <IconBtn onPress={() => feedLike(feed)}>
+                    <IconBtn onPress={() => feedLikedAndReload(feed)}>
                       <IconImage
                         source={
                           feed.isUserLiked
@@ -177,7 +191,7 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
                     <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
                   </AlarmBtn>
                 </IconWrapper>
-                {Number(feed.commentCount) > 0 && (
+                {feed.commentCount > 0 && (
                   <FollowWrapper>
                     <ProfileImage
                       source={{

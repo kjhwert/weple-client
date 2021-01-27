@@ -20,6 +20,7 @@ export default ({navigation, route}: IProps) => {
   const {userFollow}: any = useContext(UserContext);
   const [pagination, setPagination] = useState<IFeedPagination>({
     page: 1,
+    label: '최신 등록순',
     sort: 'createdAt',
     order: 'DESC',
     lat: 0,
@@ -64,15 +65,15 @@ export default ({navigation, route}: IProps) => {
 
   const getCreatedIndex = async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
-
+    const {lat, lon, page: unUsedPage, label, ...sortOrder} = pagination;
+    const sort = 'createdAt';
     const page = 1;
     const {
       statusCode,
       message,
       data,
       paging: {hasNextPage},
-    } = await feedApi.index({...sortOrder, page});
+    } = await feedApi.index({...sortOrder, sort, page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -81,7 +82,7 @@ export default ({navigation, route}: IProps) => {
     const indexData = data.map((feed: any) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
-    setPagination({...pagination, hasNextPage});
+    setPagination({...pagination, sort, label: '최신 등록순', hasNextPage});
     setIndex(indexData);
   };
 
@@ -131,12 +132,12 @@ export default ({navigation, route}: IProps) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
 
-    setPagination({...pagination, hasNextPage});
+    setPagination({...pagination, sort: 'createdAt', label: '거리 가까운순', hasNextPage});
     setIndex(indexData);
   };
 
   const getLocationMoreIndex = async (page: number) => {
-    const {hasNextPage: isLoadable} = pagination;
+    const {hasNextPage: isLoadable, nickName} = pagination;
     if (!isLoadable) {
       return;
     }
@@ -148,7 +149,57 @@ export default ({navigation, route}: IProps) => {
       message,
       data,
       paging: {hasNextPage},
-    } = await feedApi.locationIndex({page, lon, lat});
+    } = await feedApi.locationIndex({page, lon, lat, nickName});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+
+    setPagination({...pagination, page, hasNextPage});
+    setIndex(index.concat(indexData));
+  };
+
+  const getLikeCountIndex = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+
+    const page = 1;
+    const sort = 'likeCount';
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, sort, page});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+    setPagination({...pagination, sort, label: '인기순', hasNextPage});
+    setIndex(indexData);
+  };
+
+  const getLikeCountMoreIndex = async (page: number) => {
+    const {hasNextPage: isLoadable} = pagination;
+    if (!isLoadable) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -164,22 +215,29 @@ export default ({navigation, route}: IProps) => {
 
   const switchingSortIndex = ({value}: ISortOrder) => {
     if (value === 'createdAt') {
-      setPagination({...pagination, sort: value});
       return getCreatedIndex();
     }
 
     if (value === 'location') {
-      setPagination({...pagination, sort: value});
       return getLocationIndex();
+    }
+
+    if (value === 'likeCount') {
+      return getLikeCountIndex();
     }
   };
 
   const setSortAlertVisible = () => {
+    const {sort} = pagination;
     const sorts = [
       {label: '최신 등록순', value: 'createdAt'},
+      {label: '인기순', value: 'likeCount'},
       {label: '거리 가까운순', value: 'location'},
     ];
-    setAlertVisible(<SortOrderComponent confirm={switchingSortIndex} sort={sorts} />);
+    const initial = sorts.findIndex(({value}) => value === sort);
+    setAlertVisible(
+      <SortOrderComponent confirm={switchingSortIndex} initial={initial} sorts={sorts} pagination={pagination} />,
+    );
   };
 
   const getMoreIndex = () => {
@@ -190,6 +248,10 @@ export default ({navigation, route}: IProps) => {
 
     if (sort === 'location') {
       return getLocationMoreIndex(page + 1);
+    }
+
+    if (sort === 'likeCount') {
+      return getLikeCountMoreIndex(page + 1);
     }
   };
 

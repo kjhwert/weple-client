@@ -1,11 +1,11 @@
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import AlertContext from './AlertContext';
 import {feedApi} from '../api';
-import {IShowFeed} from '../type/feedContext';
-import CheckAlert from '../../components/CheckAlert';
-import {IFeedIndex} from '../type/api';
+import {IFeedPagination} from '../type/api';
 import {IFeed} from '../type/feed';
 import {getLatestLocation} from 'react-native-location';
+import UserContext from './UserContext';
+import {IShowFeed} from '../type/feedContext';
 
 const FeedContext = createContext({});
 
@@ -14,151 +14,21 @@ interface IProps {
 }
 
 export const FeedContextProvider = ({children}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
-  const [index, setIndex] = useState<Array<IShowFeed>>([]);
-  const [indexPaging, setIndexPaging] = useState<IFeedIndex>({
-    tab: '홈',
-    hasNextPage: true,
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
+  const {userFollow}: any = useContext(UserContext);
+  const [pagination, setPagination] = useState<IFeedPagination>({
     page: 1,
     sort: 'createdAt',
     order: 'DESC',
-    nickName: '',
     lat: 0,
     lon: 0,
+    nickName: '',
+    hasNextPage: false,
   });
+  const [index, setIndex] = useState<Array<IFeed>>([]);
+  const [searchVisible, setSearchVisible] = useState(false);
   const [show, setShow] = useState<IShowFeed | null>(null);
   const [showLoading, setShowLoading] = useState(true);
-  const [searchVisible, setSearchVisible] = useState(false);
-
-  const changeSearchVisible = () => {
-    setSearchVisible(!searchVisible);
-  };
-
-  const getIndex = async (tab: string) => {
-    if (tab === '추천') {
-      return locationIndex();
-    }
-    const {page, sort, order, nickName}: IFeedIndex = await getIndexPaging(tab);
-    const {statusCode, message, data, paging} = await feedApi.index({page, sort, order, nickName});
-    if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
-    setIndex(data);
-    setIndexPaging({...indexPaging, tab, page, sort, order, hasNextPage: paging.hasNextPage});
-  };
-
-  const getMoreIndex = async () => {
-    if (!indexPaging.hasNextPage) {
-      return;
-    }
-    if (indexPaging.tab === '추천') {
-      return getMoreLocationIndex();
-    }
-    const newIndexPaging = {...indexPaging, page: indexPaging.page + 1};
-    const {statusCode, message, data, paging} = await feedApi.index({
-      page: newIndexPaging.page,
-      sort: newIndexPaging.sort,
-      order: newIndexPaging.order,
-      nickName: newIndexPaging.nickName,
-    });
-    if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
-    const newIndex = index.concat(data);
-    setIndex(newIndex);
-    setIndexPaging({...newIndexPaging, hasNextPage: paging.hasNextPage});
-  };
-
-  const locationIndex = async () => {
-    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
-    const {statusCode, message, data, paging} = await feedApi.locationIndex({page: 1, lon, lat});
-    if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
-    setIndex(data);
-    setIndexPaging({...indexPaging, tab: '추천', ...paging, lat, lon});
-  };
-
-  const getMoreLocationIndex = async () => {
-    // const array = index.map((feed) => feed.id);
-    // const newIndexPaging = {...indexPaging, page: indexPaging.page + 1};
-    // console.log(newIndexPaging);
-    // const {statusCode, message, data, paging} = await feedApi.locationIndex(
-    //   newIndexPaging.page,
-    //   newIndexPaging.lon,
-    //   newIndexPaging.lat,
-    // );
-    //
-    // const newArray = data.map((feed) => feed.id);
-    // if (statusCode !== 200) {
-    //   return setAlertVisible(
-    //     <CheckAlert
-    //       check={{
-    //         type: 'warning',
-    //         title: '데이터를 가져오는데 실패했습니다.',
-    //         description: message,
-    //       }}
-    //     />,
-    //   );
-    // }
-    // const newIndex = index.concat(data);
-    // setIndex(newIndex);
-    // setIndexPaging({...newIndexPaging, hasNextPage: paging.hasNextPage});
-  };
-
-  const getIndexPaging = (tab: string) => {
-    switch (tab) {
-      case '홈':
-        return {tab: '홈', page: 1, sort: 'createdAt', order: 'DESC', nickName: ''};
-      case '인기':
-        return {tab: '인기', page: 1, sort: 'likeCount', order: 'DESC', nickName: ''};
-      case '추천':
-        return {tab: '추천', page: 1, sort: 'createdAt', order: 'DESC'};
-    }
-  };
-
-  const feedLike = async (feed: IFeed) => {
-    const {id, isUserLiked} = feed;
-    if (isUserLiked) {
-      await feedApi.feedDisLike(id);
-    } else {
-      await feedApi.feedLike(id);
-    }
-
-    await getIndex(indexPaging.tab);
-  };
-
-  const feedLiked = async (feed: IFeed) => {
-    const {id, isUserLiked} = feed;
-    if (isUserLiked) {
-      return await feedApi.feedDisLike(id);
-    }
-    return await feedApi.feedLike(id);
-  };
 
   const getShow = async (feedId: number) => {
     setShowLoading(true);
@@ -171,36 +41,257 @@ export const FeedContextProvider = ({children}: IProps) => {
       isUserFollowed: Number(data.isUserFollowed),
     };
     if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터를 가져오는데 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setShow(feed);
     setShowLoading(false);
   };
 
-  useEffect(() => {}, [index, indexPaging, show, showLoading]);
+  const changeSearchVisible = () => {
+    setSearchVisible(!searchVisible);
+  };
+
+  const feedLiked = async (feed: IFeed) => {
+    const {id, isUserLiked} = feed;
+    if (isUserLiked) {
+      return await feedApi.feedDisLike(id);
+    }
+    return await feedApi.feedLike(id);
+  };
+
+  const userFollowAndReload = async (userId: number) => {
+    const {statusCode, message} = await userFollow(userId);
+    if (statusCode !== 201) {
+      return setWarningAlertVisible('팔로잉에 실패했습니다.', message);
+    }
+    const newIndex = index.map((feed) => {
+      if (feed.userId === userId) {
+        feed.isUserFollowed = !feed.isUserFollowed;
+      }
+
+      return feed;
+    });
+    setIndex(newIndex);
+  };
+
+  const feedLikedAndReload = async (feed: IFeed) => {
+    const {statusCode, message} = await feedLiked(feed);
+    if (statusCode !== 201) {
+      return setWarningAlertVisible('좋아요에 실패했습니다.', message);
+    }
+
+    const changeLikeStatus = index.map((feedItem) => {
+      if (feed.id === feedItem.id) {
+        feedItem.isUserLiked = !feedItem.isUserLiked;
+        feedItem.likeCount = feedItem.isUserLiked ? feedItem.likeCount + 1 : feedItem.likeCount - 1;
+        return feedItem;
+      }
+
+      return feedItem;
+    });
+
+    const sortIndex = changeLikeStatus.sort((a, b) => b.likeCount - a.likeCount);
+    setIndex(sortIndex);
+  };
+
+  const getCreatedIndex = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+
+    const page = 1;
+    const sort = 'createdAt';
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, sort, page});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+    setPagination({...pagination, sort, hasNextPage});
+    setIndex(indexData);
+  };
+
+  const getCreatedMoreIndex = async (page: number) => {
+    const {hasNextPage: isLoadable} = pagination;
+    if (!isLoadable) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, page});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+
+    setPagination({...pagination, page, hasNextPage});
+    setIndex(index.concat(indexData));
+  };
+
+  const getLocationIndex = async () => {
+    const {nickName} = pagination;
+    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
+    const page = 1;
+
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.locationIndex({page, lon, lat, nickName});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+
+    setPagination({...pagination, sort: 'location', hasNextPage});
+    setIndex(indexData);
+  };
+
+  const getLocationMoreIndex = async (page: number) => {
+    const {hasNextPage: isLoadable, nickName} = pagination;
+    if (!isLoadable) {
+      return;
+    }
+
+    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.locationIndex({page, lon, lat, nickName});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+
+    setPagination({...pagination, page, hasNextPage});
+    setIndex(index.concat(indexData));
+  };
+
+  const getLikeCountIndex = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+
+    const page = 1;
+    const sort = 'likeCount';
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, sort, page});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+    setPagination({...pagination, sort, hasNextPage});
+    setIndex(indexData);
+  };
+
+  const getLikeCountMoreIndex = async (page: number) => {
+    const {hasNextPage: isLoadable} = pagination;
+    if (!isLoadable) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+    const {
+      statusCode,
+      message,
+      data,
+      paging: {hasNextPage},
+    } = await feedApi.index({...sortOrder, page});
+
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    const indexData = data.map((feed: any) => {
+      return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
+    });
+
+    setPagination({...pagination, page, hasNextPage});
+    setIndex(index.concat(indexData));
+  };
+
+  const switchingSortIndex = (sort: 'createdAt' | 'location' | 'likeCount') => {
+    if (sort === 'createdAt') {
+      return getCreatedIndex();
+    }
+
+    if (sort === 'location') {
+      return getLocationIndex();
+    }
+
+    if (sort === 'likeCount') {
+      return getLikeCountIndex();
+    }
+  };
+
+  const getMoreIndex = () => {
+    const {page, sort} = pagination;
+    if (sort === 'createdAt') {
+      return getCreatedMoreIndex(page + 1);
+    }
+
+    if (sort === 'location') {
+      return getLocationMoreIndex(page + 1);
+    }
+
+    if (sort === 'likeCount') {
+      return getLikeCountMoreIndex(page + 1);
+    }
+  };
+
+  useEffect(() => {}, [index, pagination]);
 
   return (
     <FeedContext.Provider
       value={{
         index,
-        getIndex,
-        feedLike,
-        indexPaging,
         show,
         showLoading,
         getShow,
+        pagination,
+        userFollowAndReload,
+        feedLikedAndReload,
+        getCreatedIndex,
+        getLocationIndex,
+        getLikeCountIndex,
+        switchingSortIndex,
         getMoreIndex,
-        searchVisible,
         changeSearchVisible,
-        feedLiked,
+        searchVisible,
       }}>
       {children}
     </FeedContext.Provider>
