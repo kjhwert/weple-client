@@ -86,13 +86,13 @@ export default ({navigation, events, userFollowAndReload, newFollowers}: IProps)
             <Line></Line>
 
             <Swiper style={styles.swiperWrapper} height={200} showsButtons={false} autoplay={true}>
-              {events.map(({id, img}) => (
+              {events.map(({id, image}) => (
                 <EventWrapper
                   key={id}
                   onPress={() => {
                     navigation.navigate('feedEventDetail');
                   }}>
-                  <EventImage source={{uri: `${BASE_URL}/${img}`}} style={{resizeMode: 'cover'}} />
+                  <EventImage source={{uri: `${BASE_URL}/${image}`}} style={{resizeMode: 'cover'}} />
                 </EventWrapper>
               ))}
             </Swiper>

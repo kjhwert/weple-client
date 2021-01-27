@@ -1,6 +1,6 @@
 export interface IEvent {
   id: number;
-  img: string;
+  image: string;
   title: string;
   description: string;
   createdAt: string;
