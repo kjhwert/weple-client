@@ -116,7 +116,8 @@ const MenuWrapper = styled.View`
 
 const MenuBtn = styled.TouchableOpacity`
   width: 100%;
-  flex-flow: row wrap;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   padding: 5px 0;
 `;

@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
 
   const [pagination, setPagination] = useState({
     tab: '팔로워',
@@ -37,34 +37,26 @@ export default ({navigation}: IProps) => {
 
   const getFollowers = async () => {
     const {statusCode, message, data} = await userApi.getUserFollower();
-    if (statusCode !== 200) return serverAccessFail(message);
+    if (statusCode !== 200) return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     setFollowers(data);
   };
 
   const getFollowings = async () => {
     const {statusCode, message, data} = await userApi.getUserFollowing();
-    if (statusCode !== 200) return serverAccessFail(message);
+    if (statusCode !== 200) return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     setFollowers(data);
   };
 
   const getFollowCount = async () => {
     const {statusCode, message, data} = await userApi.getFollowCount();
-    if (statusCode !== 200) return serverAccessFail(message);
+    if (statusCode !== 200) return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     setCounts(data);
   };
 
   const userFollow = async (userId: number) => {
     const {statusCode, message} = await userApi.follow(userId);
     if (statusCode !== 201) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '팔로우에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('팔로우에 실패했습니다.', message);
     }
 
     const newState = followers.map((user) => {
@@ -76,18 +68,6 @@ export default ({navigation}: IProps) => {
     });
     setFollowers(newState);
     await getFollowCount();
-  };
-
-  const serverAccessFail = (message: string) => {
-    return setAlertVisible(
-      <CheckAlert
-        check={{
-          type: 'warning',
-          title: '데이터 조회에 실패했습니다.',
-          description: message,
-        }}
-      />,
-    );
   };
 
   useEffect(() => {
