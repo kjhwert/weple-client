@@ -42,7 +42,7 @@ export default ({navigation}: IProps) => {
           onChangeText={onChangeSearchText}
         />
         <SearchBtn onPress={changeSearchVisible}>
-          <SearchImage source={require('../assets/header_search.png')} />
+          <SearchImage source={require('../assets/icon_close.png')} />
         </SearchBtn>
       </Wrapper>
     </Container>
@@ -79,6 +79,6 @@ const SearchInput = styled.TextInput`
 const SearchBtn = styled.TouchableOpacity``;
 
 const SearchImage = styled.Image`
-  width: 21px;
-  height: 21px;
+  width: 15px;
+  height: 15px;
 `;
