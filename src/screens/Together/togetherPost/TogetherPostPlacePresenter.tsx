@@ -15,9 +15,9 @@ interface IProps {
   togetherPriceValidation: Function;
   blankValidation: Function;
   isDatePickerVisible: boolean;
-  showDatePicker: Function;
-  hideDatePicker: Function;
-  handleConfirm: Function;
+  showDatePicker: () => void;
+  hideDatePicker: (date: Date) => void;
+  handleConfirm: (date: Date) => void;
 }
 
 export default ({
