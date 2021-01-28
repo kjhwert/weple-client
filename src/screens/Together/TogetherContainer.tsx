@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import TogetherPresenter from './TogetherPresenter';
 import {togetherApi} from '../../module/api';
 import UserContext from '../../module/context/UserContext';
+import {getLatestLocation} from 'react-native-location';
 
 interface IProps {
   navigation: any;
@@ -69,7 +70,8 @@ export default ({navigation, route}: IProps) => {
   };
 
   const getLocation = async (locationPaging) => {
-    const {data} = await togetherApi.locationList('37.5466226', '126.9498512', locationPaging.page);
+    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
+    const {data} = await togetherApi.locationList(lat, lon, locationPaging.page);
     setTogetherMenu(data);
   };
 
