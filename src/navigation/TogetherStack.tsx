@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import TogetherParticipateContainer from '../screens/Together/TogetherDetail/TogetherParticipateContainer';
 import TogetherShareContainer from '../screens/Together/TogetherDetail/TogetherShareContainer';
 import TogetherPostIntroduceContainer from '../screens/Together/togetherPost/TogetherPostIntroduceContainer';
 import TogetherSearchContainer from '../screens/Together/togetherSearch/TogetherSearchContainer';
@@ -74,13 +73,6 @@ export default () => {
         }}
         name="togetherDetail"
         component={TogetherDetailContainer}
-      />
-      <Stack.Screen
-        options={{
-          headerTitle: '모임',
-        }}
-        name="togetherParticipate"
-        component={TogetherParticipateContainer}
       />
       <Stack.Screen
         options={{

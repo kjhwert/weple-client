@@ -10,9 +10,6 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const typeData = [
     {label: '회원정보', value: '01'},
@@ -60,7 +57,6 @@ export default ({navigation}: IProps) => {
           description: '',
         }}
         checked={() => {
-          clearAlert();
           navigation.navigate('setAsk', {refresh: true});
         }}
       />,

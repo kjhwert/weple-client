@@ -13,7 +13,6 @@ import {
   ITogetherApiModify,
   ITogetherApiOpneRoom,
   ITogetherCreateComment,
-  ITogetherIndex,
   IFeedCreate,
   IFeedIndex,
   IFeedCreateComment,
@@ -109,8 +108,11 @@ export const togetherApi = {
   getComment: (togetherId: number) => apiRequest(api.get('/together/' + togetherId + '/comment/')),
   createComment: (togetherId: number, data: ITogetherCreateComment) =>
     apiRequest(api.post('/together/' + togetherId + '/comment/', data)),
-  putComment: (commentId: number) => apiRequest(api.put('/together/comment/' + commentId)),
+  putComment: (commentId: number, description: any) =>
+    apiRequest(api.put('/together/comment/' + commentId, description)),
   deleteComment: (commentId: number) => apiRequest(api.delete('/together/comment/' + commentId)),
+  togetherIn: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-in')),
+  togetherOut: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-out')),
 };
 
 export const feedApi = {
@@ -155,7 +157,6 @@ export const feedApi = {
   updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
 
-  // together 모임개설
   getMyfeed: (id: string, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page + '&userId=' + id)),
   getLikefeed: (page: number, sort: string, order: string) =>
     apiRequest(api.get('/feed?page=' + page + '&sort=' + sort + '&order=' + order)),

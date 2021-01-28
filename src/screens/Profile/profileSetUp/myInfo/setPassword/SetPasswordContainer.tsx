@@ -10,9 +10,7 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
+
   const [isActive, setIsActive] = useState(false);
   const [userPassword, setUserPassword] = useState({
     oldPassword: '',
@@ -38,9 +36,7 @@ export default ({navigation}: IProps) => {
             title: '패스워드 변경실패',
             description: '기존 비밀번호와 새 비밀번호가 같습니다.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -58,9 +54,7 @@ export default ({navigation}: IProps) => {
             title: '패스워드 변경실패',
             description: '신규 비밀번호가 일치하지 않습니다.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -79,9 +73,7 @@ export default ({navigation}: IProps) => {
             title: '패스워드 변경실패',
             description: '비밀번호는 빈칸없이 입력해주세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -100,9 +92,7 @@ export default ({navigation}: IProps) => {
             title: '패스워드 변경실패',
             description: message,
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     } else {
@@ -114,7 +104,6 @@ export default ({navigation}: IProps) => {
             description: message,
           }}
           checked={() => {
-            clearAlert();
             navigation.navigate('profileSetting');
           }}
         />,

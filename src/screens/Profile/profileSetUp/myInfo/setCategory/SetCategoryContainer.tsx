@@ -12,9 +12,6 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [isActive, setIsActive] = useState(false);
   const [activities, setActivities] = useState([
@@ -116,7 +113,6 @@ export default ({navigation}: IProps) => {
             description: '',
           }}
           checked={() => {
-            clearAlert();
             navigation.navigate('profileSetting');
           }}
         />,

@@ -62,14 +62,6 @@ const SetUpWrapper = styled.View`
   border-color: #eeeeee;
 `;
 
-// const SetBtnWrapper = styled.View`
-//   display: flex;
-//   width: 100%;
-//   padding: 20px;
-//   border-bottom-width: 1px;
-//   border-color: #eeeeee;
-// `;
-
 const SetBtn = styled.TouchableOpacity`
   width: 100%;
   flex-flow: row wrap;

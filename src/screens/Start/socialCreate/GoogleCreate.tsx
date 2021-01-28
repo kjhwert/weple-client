@@ -23,19 +23,13 @@ export default ({navigation}: IProps) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      // console.log('google user:', userInfo.user);
-
       snsUserData(userInfo.user.email, userInfo.user.name, userInfo.user.name, userInfo.user.id);
       navigation.navigate('socialNickname');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (f.e. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
       } else {
-        // some other error happened
       }
       navigation.navigate('createAccount');
     }

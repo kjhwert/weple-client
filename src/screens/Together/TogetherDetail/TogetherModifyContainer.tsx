@@ -12,9 +12,6 @@ interface IProps {
 
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-  const clearAlert = () => {
-    setAlertVisible();
-  };
 
   const [activeFlag, setActiveFlag] = useState({
     titleFlag: 0,
@@ -60,9 +57,7 @@ export default ({navigation, route}: IProps) => {
             title: '데이터 조회에 실패했습니다.',
             description: message,
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     }
@@ -95,12 +90,10 @@ export default ({navigation, route}: IProps) => {
         <CheckAlert
           check={{
             type: 'warning',
-            title: '수정 실패',
+            title: '수정이 실패되었습니다.',
             description: '다시 입력해주세요.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
     } else {
@@ -112,7 +105,6 @@ export default ({navigation, route}: IProps) => {
             description: '',
           }}
           checked={() => {
-            clearAlert();
             navigation.navigate('togetherMyDetail', {refresh: true});
           }}
         />,
@@ -129,7 +121,6 @@ export default ({navigation, route}: IProps) => {
           description: '',
         }}
         checked={() => {
-          clearAlert();
           navigation.navigate('togetherMain', {refresh: true});
         }}
       />,
@@ -144,9 +135,7 @@ export default ({navigation, route}: IProps) => {
           title: '모임 삭제가 실패되었습니다.',
           description: '다시 시도해주세요.',
         }}
-        checked={() => {
-          clearAlert();
-        }}
+        checked={() => {}}
       />,
     );
   };
@@ -161,9 +150,7 @@ export default ({navigation, route}: IProps) => {
           confirmedText: '삭제',
           canceledText: '취소',
         }}
-        canceled={() => {
-          clearAlert();
-        }}
+        canceled={() => {}}
         confirmed={async () => {
           const {statusCode} = await togetherApi.deleteTogetherDetail(listDetail.id);
           if (statusCode !== 201) {
@@ -177,7 +164,7 @@ export default ({navigation, route}: IProps) => {
   };
 
   const blankValidation = () => {
-    if (listDetail.title.indexOf(' ') === 0) {
+    if (listDetail.title.trim().length <= 0) {
       setActiveFlag({...activeFlag, titleFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -186,13 +173,11 @@ export default ({navigation, route}: IProps) => {
             title: '제목은 빈칸으로 시작할 수 없습니다.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
-    } else if (listDetail.description.indexOf(' ') === 0) {
+    } else if (listDetail.description.trim().length <= 0) {
       setActiveFlag({...activeFlag, descriptionFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -201,13 +186,11 @@ export default ({navigation, route}: IProps) => {
             title: '소개는 빈칸으로 시작할 수 없습니다.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
-    } else if (listDetail.recommend.indexOf(' ') === 0) {
+    } else if (listDetail.recommend.trim().length <= 0) {
       setActiveFlag({...activeFlag, recommendFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -216,13 +199,11 @@ export default ({navigation, route}: IProps) => {
             title: '추천은 빈칸으로 시작할 수 없습니다.',
             description: '',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;
-    } else if (listDetail.notice.indexOf(' ') === 0) {
+    } else if (listDetail.notice.trim().length <= 0) {
       setActiveFlag({...activeFlag, noticeFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -231,9 +212,7 @@ export default ({navigation, route}: IProps) => {
             title: '공지사항은',
             description: '빈칸으로 시작할 수 없습니다.',
           }}
-          checked={() => {
-            clearAlert();
-          }}
+          checked={() => {}}
         />,
       );
       return false;

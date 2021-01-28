@@ -10,8 +10,6 @@ interface IProps {
 }
 
 export const UserContextProvider = ({children}: IProps) => {
-  ////////////////////////////////////////////////////////////////
-  // LOGIN CONTEXT
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoginActive, setIsLoginActive] = useState({
     emailFlag: false,
@@ -102,7 +100,6 @@ export const UserContextProvider = ({children}: IProps) => {
     }
   };
 
-  // 자동로그인을 위한 userData
   const setLoginUserData = (loginData: any) => {
     setLoginUser(Object.assign(loginUser, loginData));
     setAsyncStorage('@user', JSON.stringify(Object.assign(loginUser, loginData)));
@@ -135,8 +132,6 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  ////////////////////////////////////////////////////////////////
-  // CREAT USER CONTEXT
   const [createUser, setCreateUser] = useState({
     email: '',
     password: '',
@@ -196,8 +191,6 @@ export const UserContextProvider = ({children}: IProps) => {
     }
   };
 
-  ////////////////////////////////////////////////////////////////
-  // PROFILE CONTEXT
   const getUserId = async () => {
     const user = await AsyncStorage.getItem('@user');
     if (user) {
@@ -233,8 +226,6 @@ export const UserContextProvider = ({children}: IProps) => {
     }
   };
 
-  ////////////////////////////////////////////////////////////////
-  // COMMON CONTEXT
   const [alertFrame, setAlertFrame] = useState({
     showAlert: false,
     message: '',
@@ -256,14 +247,12 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  // user정보 저장
   const setAsyncStorage = async (name: string, data: any) => {
     await AsyncStorage.setItem(name, data, () => {});
   };
 
   const getAsyncStorage = async () => {
     const result = await AsyncStorage.getItem('@user');
-    // console.log('getAsyncStorage:', result);
     return JSON.parse(result);
   };
 
