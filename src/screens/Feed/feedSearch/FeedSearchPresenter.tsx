@@ -42,7 +42,7 @@ export default ({
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper onScroll={onScroll}>
+        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <ContainerCard>
             <ActiveSelectTitleWrapper>
               <SortBtn onPress={setSortAlertVisible}>

@@ -119,10 +119,6 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getCreatedMoreIndex = async (page: number) => {
-    const {hasNextPage: isLoadable} = pagination;
-    if (!isLoadable) {
-      return;
-    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
     const {
@@ -169,11 +165,7 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getLocationMoreIndex = async (page: number) => {
-    const {hasNextPage: isLoadable, nickName} = pagination;
-    if (!isLoadable) {
-      return;
-    }
-
+    const {nickName} = pagination;
     const {latitude: lat, longitude: lon}: any = await getLatestLocation();
     const {
       statusCode,
@@ -219,10 +211,6 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getLikeCountMoreIndex = async (page: number) => {
-    const {hasNextPage: isLoadable} = pagination;
-    if (!isLoadable) {
-      return;
-    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
     const {
@@ -259,7 +247,10 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getMoreIndex = () => {
-    const {page, sort} = pagination;
+    const {page, sort, hasNextPage} = pagination;
+    if (!hasNextPage) {
+      return;
+    }
     if (sort === 'createdAt') {
       return getCreatedMoreIndex(page + 1);
     }

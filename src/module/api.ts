@@ -141,10 +141,8 @@ export const feedApi = {
       return {statusCode: 500, message: e.message};
     }
   },
-  index: ({page, sort, order, nickName}: IFeedPagination) => {
-    console.log(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=${nickName}`);
-    return apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=${nickName}`));
-  },
+  index: ({page, sort, order, nickName}: IFeedPagination) =>
+    apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=${nickName}`)),
   locationIndex: ({page, lat, lon, nickName}: IFeedPagination) =>
     /** reverse latitude, longitude */
     apiRequest(api.get(`/feed/location?lat=${lon}&lon=${lat}&page=${page}&nickName=${nickName}`)),

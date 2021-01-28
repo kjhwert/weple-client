@@ -56,7 +56,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
     <Container>
       {searchVisible && <SearchComponent navigation={navigation} />}
       <ScrollContainer>
-        <ScrollWrapper onScroll={onScroll}>
+        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <Card>
             <NewFollowerWrapper>
               <NewFollowerBtn
