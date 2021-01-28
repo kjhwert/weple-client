@@ -39,11 +39,7 @@ export default () => {
           },
           headerLeft: () => <BackBtn navigation={navigation} />,
         })}>
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="start"
-          component={StartContainer}
-        />
+        <Stack.Screen options={{headerShown: false}} name="start" component={StartContainer} />
         <Stack.Screen
           options={{
             headerTitle: '',
@@ -53,7 +49,7 @@ export default () => {
         />
         <Stack.Screen
           options={({route, navigation}) => ({
-            headerTitle: '땀나 로그인하기',
+            headerTitle: '위플 로그인하기',
             headerLeft: () => <BackBtn navigation={navigation} route={route} />,
           })}
           name="login"
@@ -143,17 +139,11 @@ export default () => {
           name="welcome"
           component={WelcomeContainer}
         />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="bottomTab"
-          component={BottomTab}
-        />
+        <Stack.Screen options={{headerShown: false}} name="bottomTab" component={BottomTab} />
         <Stack.Screen
           options={({route, navigation}) => ({
             headerTitle: '닉네임 설정하기',
-            headerLeft: () => (
-              <SocialBackBtn navigation={navigation} route={route} />
-            ),
+            headerLeft: () => <SocialBackBtn navigation={navigation} route={route} />,
           })}
           name="socialNickname"
           component={SocialNicknameContainer}

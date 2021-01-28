@@ -43,19 +43,30 @@ const SocialLoginText = styled.Text`
   text-align: center;
 `;
 
+interface IPropsStartBtn {
+  navigation?: Function;
+  StartNextPage?: String;
+  navigationRoute?: any;
+  text: string;
+  validation?: Function;
+  callBack?: Function;
+  isActive?: boolean;
+}
+
 export const StartNextBtn = ({
   navigation,
   StartNextPage,
-  text = '',
-  validation = null,
-  callBack = null,
-  isActive = false,
-}) => {
+  navigationRoute,
+  text,
+  validation,
+  callBack,
+  isActive,
+}: IPropsStartBtn) => {
   const moveToPage = () => {
     if (!isActive) return;
     if (validation && !validation()) return;
     if (callBack) callBack();
-    if (StartNextPage) navigation.navigate(StartNextPage);
+    if (StartNextPage) navigation.navigate(StartNextPage, navigationRoute);
   };
 
   return (
@@ -72,14 +83,53 @@ const ActiveButton = styled.TouchableOpacity`
   width: 100%;
   padding: 15px;
   align-items: center;
-  background-color: ${(props: IProps) =>
-    props.isActive ? '#007bf1' : '#b2b2b2'};
+  background-color: ${(props: IProps) => (props.isActive ? '#007bf1' : '#b2b2b2')};
 `;
 
 const ActiveButtonText = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
+`;
+
+export const ModifyBtn = ({
+  navigation,
+  StartNextPage,
+  navigationRoute,
+  text,
+  validation,
+  callBack,
+  isActive,
+}: IPropsStartBtn) => {
+  const moveToPage = () => {
+    if (!isActive) return;
+    if (validation && !validation()) return;
+    if (callBack) callBack();
+    if (StartNextPage) navigation.navigate(StartNextPage, navigationRoute);
+  };
+
+  return (
+    <ModifyActiveBtn onPress={moveToPage} isActive={isActive}>
+      <ModifyBtnText>{text}</ModifyBtnText>
+    </ModifyActiveBtn>
+  );
+};
+
+const ModifyActiveBtn = styled.TouchableOpacity`
+  display: flex;
+  position: absolute;
+  bottom: 55px;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  background-color: ${(props: IProps) => (props.isActive ? '#007bf1' : '#b2b2b2')};
+`;
+
+const ModifyBtnText = styled.Text`
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
 `;
 
 export const CategoryBtn = ({text = '', onPress = null, isSelect = false}) => {

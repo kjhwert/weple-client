@@ -3,6 +3,7 @@ import {IGps} from './type/common';
 export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
 export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
 export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
+export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
 
 export const ACTIVE_BUTTON = '#007bf1';
 export const ACTIVE_TEXT = '#007bf1';
@@ -20,26 +21,6 @@ export const getDistanceWithSpeedAndTime = (speed: number, time: number) => {
    * */
   return Math.floor(speed * (time / 3600) * 1000) / 1000;
 };
-
-// export const getDistanceBetweenTwoGPS = (gps: IGps) => {
-//   const lat1 = gps[0][0];
-//   const lng1 = gps[0][1];
-//   const lat2 = gps[1][0];
-//   const lng2 = gps[1][1];
-//
-//   function deg2rad(deg: number) {
-//     return deg * (Math.PI / 180);
-//   }
-//   const r = 6371; //지구의 반지름(km)
-//   const dLat = deg2rad(lat2 - lat1);
-//   const dLon = deg2rad(lng2 - lng1);
-//   const a =
-//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-//     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//   const d = r * c; // Distance in km
-//   return Math.round(d * 1000) / 10000;
-// };
 
 export const getDistanceBetweenTwoGPS = (gps: IGps) => {
   const lat1 = gps[0][0];
@@ -73,6 +54,25 @@ export const secondsToHms = (seconds: number) => {
   return {hour, minute, second};
 };
 
+export const secondsToTimeFormat = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor((seconds % 3600) % 60);
+
+  let hour = '00';
+  let minute = '00';
+  let second = '00';
+
+  if (h !== 0 && h >= 10) hour = `${h}`;
+  if (h !== 0 && h < 10) hour = `0${h}`;
+  if (m !== 0 && m >= 10) minute = `${m}`;
+  if (m !== 0 && m < 10) minute = `0${m}`;
+  if (s !== 0 && s >= 10) second = `${s}`;
+  if (s !== 0 && s < 10) second = `0${s}`;
+
+  return [hour, minute, second].join(':');
+};
+
 export const showDateToAmPmHourMinute = (date: Date) => {
   const hour = date.getHours();
   const minute = date.getMinutes();
@@ -80,6 +80,29 @@ export const showDateToAmPmHourMinute = (date: Date) => {
   const minuteDisplay = minute < 10 ? `0${minute}` : minute;
 
   return `${head} ${hour}:${minuteDisplay}`;
+};
+
+export const togetherDate = (value: string) => {
+  const today = new Date();
+  const timeValue = new Date(value);
+
+  const betweenTime = Math.floor((timeValue.getTime() - today.getTime()) / 1000 / 60);
+  if (betweenTime < 1) return '모집마감';
+  if (betweenTime < 60) {
+    return `${betweenTime}분 후 마감`;
+  }
+
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  if (betweenTimeHour < 24) {
+    return `모집마감 ${betweenTimeHour}시간전`;
+  }
+
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+  if (betweenTimeDay < 365) {
+    return `모집마감 ${betweenTimeDay}일전`;
+  }
+
+  return `모집마감 ${Math.floor(betweenTimeDay / 365)}년전`;
 };
 
 export const timeForToday = (value: string) => {

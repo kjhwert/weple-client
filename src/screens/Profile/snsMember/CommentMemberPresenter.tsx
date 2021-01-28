@@ -25,9 +25,7 @@ export default ({navigation, member}: IProps) => {
                 </MemberTextWrapper>
 
                 <DotMoreBtn>
-                  <DotMoreImage
-                    source={require('../../../assets/dotMore.png')}
-                  />
+                  <DotMoreImage source={require('../../../assets/dotMore.png')} />
                 </DotMoreBtn>
               </MemberWrapper>
             ))}

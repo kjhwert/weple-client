@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
 import PasswordPresenter from './PasswordPresenter';
-import UserContext from '../../../module/context/UserContext';
 import {userApi} from '../../../module/api';
+import UserContext from '../../../module/context/UserContext';
+import AlertContext from '../../../module/context/AlertContext';
+import CheckAlert from '../../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
@@ -9,18 +11,13 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {createUser}: any = useContext(UserContext);
+  const {setAlertVisible}: any = useContext(AlertContext);
 
   const [isActive, setIsActive] = useState(false);
   const [userEmail, setUserEmail] = useState({
     data: '',
     activeFlag: 0,
   });
-
-  const [showAlert, setShowAlert] = useState(false);
-
-  const alertFrame = (showFlag) => {
-    setShowAlert(showFlag);
-  };
 
   const userEmailChange = (e) => {
     const value = e.nativeEvent.text;
@@ -43,8 +40,34 @@ export default ({navigation}: IProps) => {
     const emailRequest = {
       email: userEmail.data,
     };
-    const passwordInfoData = await userApi.passwordForget(emailRequest);
-    console.log('passwordInfoData:', passwordInfoData);
+    const {statusCode, message} = await userApi.passwordForget(emailRequest);
+    if (statusCode !== 201) {
+      setIsActive(true);
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: message,
+            description: '다시 입력하세요.',
+          }}
+          checked={() => {}}
+        />,
+      );
+    } else {
+      setIsActive(false);
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'check',
+            title: message,
+            description: '로그인페이지로 이동합니다.',
+          }}
+          checked={() => {
+            navigation.navigate('login');
+          }}
+        />,
+      );
+    }
   };
 
   useEffect(() => {
@@ -65,8 +88,6 @@ export default ({navigation}: IProps) => {
       userEmailValidation={userEmailValidation}
       userEmail={userEmail}
       isActive={isActive}
-      showAlert={showAlert}
-      alertFrame={alertFrame}
       passwordInfoMail={passwordInfoMail}
     />
   );

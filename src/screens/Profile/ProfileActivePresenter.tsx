@@ -1,62 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
-import AlertWrapper from '../../components/AlertWrapper';
-import RadioButtonRN from 'radio-buttons-react-native';
+import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;
-  showAlert: boolean;
-  alertFrame: Function;
-  loginUser: any;
+  profileData: any;
+  sortAlert: Function;
 }
 
 interface IColorChangeProps {
   isClick: boolean;
 }
 
-export default ({
-  navigation,
-  showAlert,
-  alertFrame,
-  menuList,
-  radioBoxSortData,
-  loginUser,
-}: IProps) => {
+export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
+  const {getProfileUri}: any = useContext(UserContext);
+
   return (
     <Container>
-      {showAlert && (
-        <AlertWrapper>
-          <AlertTextWrapper>
-            <AlertTitleText>정렬</AlertTitleText>
-            <RadioButtonRN
-              box={false}
-              circleSize={8}
-              activeColor={'#187fe2'}
-              textStyle={{
-                fontSize: 13,
-                color: '#919191',
-                padding: 3,
-              }}
-              data={radioBoxSortData}
-            />
-          </AlertTextWrapper>
-          <ConfirmButton
-            onPress={() => {
-              alertFrame(false);
-            }}>
-            <ConfirmButtonText>적용</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage
-                    source={require('../../assets/profile_1.png')}
-                  />
+                  <ProfileMainImage source={getProfileUri()} />
                   <EditCard
                     onPress={() => {
                       navigation.navigate('setProfile');
@@ -65,11 +32,11 @@ export default ({
                     <EditBtnText>프로필 수정</EditBtnText>
                   </EditCard>
                 </ProfileImageWrapper>
-                <ProfileNickName>{loginUser.name}</ProfileNickName>
+                <ProfileNickName>{profileData.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
-                      <ActiveNumber>846</ActiveNumber>
+                      <ActiveNumber>{profileData.feedCount}</ActiveNumber>
                     </ActiveBtn>
                     <ActiveText>활동들</ActiveText>
                   </ActiveBtnWrapper>
@@ -78,7 +45,7 @@ export default ({
                       onPress={() => {
                         navigation.navigate('followerMember');
                       }}>
-                      <FollowerNumber>1,226</FollowerNumber>
+                      <FollowerNumber>{profileData.userFollower}</FollowerNumber>
                     </ActiveBtn>
                     <ActiveText>팔로워</ActiveText>
                   </ActiveBtnWrapper>
@@ -87,17 +54,12 @@ export default ({
                       onPress={() => {
                         navigation.navigate('followingMember');
                       }}>
-                      <FollowingNumber>987</FollowingNumber>
+                      <FollowingNumber>{profileData.userFollow}</FollowingNumber>
                     </ActiveBtn>
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
-
-                <ActiveIntroduceText>
-                  {
-                    "Hello, I'm GilDong. My hobby is riding a bicycle. My hobby is riding a bicycle."
-                  }
-                </ActiveIntroduceText>
+                <ActiveIntroduceText>{profileData.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn
@@ -145,7 +107,7 @@ export default ({
               </ProfileTitleBtn>
               <SortBtn
                 onPress={() => {
-                  alertFrame(true);
+                  sortAlert();
                 }}>
                 <SortImage source={require('../../assets/sort_icon.png')} />
               </SortBtn>
@@ -170,26 +132,20 @@ export default ({
                 }}>
                 <PostImage source={require('../../assets/photo_1.jpeg')} />
                 <RecordWrapper>
-                  <RecordImage
-                    source={require('../../assets/active_cycle.png')}
-                  />
+                  <RecordImage source={require('../../assets/active_cycle.png')} />
                   <RecordText>21.7 킬로미터</RecordText>
                 </RecordWrapper>
               </PostImageWrapper>
               <IconWrapper>
                 <IconImageWrapper>
                   <IconBtn>
-                    <IconImage
-                      source={require('../../assets/icon_heart.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_heart.png')} />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
                       navigation.navigate('commentMember');
                     }}>
-                    <IconImage
-                      source={require('../../assets/icon_comment.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_comment.png')} />
                   </IconBtn>
                 </IconImageWrapper>
                 <AlarmBtn
@@ -227,38 +183,6 @@ export default ({
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const AlertTextWrapper = styled.View`
-  display: flex;
-  width: 100%;
-  padding: 20px 10px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 13px;
-  color: #121212;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 5px;
-  padding: 5px 0;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 10px;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
 `;
 
 const ScrollContainer = styled.View`
@@ -455,8 +379,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IColorChangeProps) =>
-    props.isClick ? '#007bf1' : '#fff'};
+  border-color: ${(props: IColorChangeProps) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`

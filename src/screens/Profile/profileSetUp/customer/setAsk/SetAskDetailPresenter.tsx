@@ -1,32 +1,33 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
-  navigation: any;
+  inquryAskDetail: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({inquryAskDetail}: IProps) => {
   return (
     <Container>
-      <ContainerCard>
-        <AskDetailWrapper>
-          <AskDetailTextWrapper>
-            <AskDetailTitle>안녕하세요. 문의드립니다.</AskDetailTitle>
-            <AskDetailDate>2020-01-01 11:11:11</AskDetailDate>
-          </AskDetailTextWrapper>
-          <FollowBtn>
-            <FollowBtnText>답변완료</FollowBtnText>
-          </FollowBtn>
-        </AskDetailWrapper>
-
-        <AskWrapper>
-          <AskText>
-            제가 문의하고 싶은 내용은 이것입니다. 제가 문의하고 싶은 내용은
-            이것입니다. 제가 문의하고 싶은 내용은 이것입니다.
-          </AskText>
-        </AskWrapper>
-      </ContainerCard>
+      <ScrollContainer>
+        <ScrollWrapper>
+          <ContainerCard>
+            <AskDetailWrapper>
+              <AskDetailTextWrapper>
+                <AskDetailTitle>{inquryAskDetail.requestTitle}</AskDetailTitle>
+                <AskDetailDate>{getTotalTime(inquryAskDetail.requestDate)}</AskDetailDate>
+              </AskDetailTextWrapper>
+              <FollowBtn backgroundColor={inquryAskDetail.requestStatus}>
+                <FollowBtnText>{inquryAskDetail.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
+              </FollowBtn>
+            </AskDetailWrapper>
+            <AskWrapper vertical={true}>
+              <AskText>{inquryAskDetail.requestDescription}</AskText>
+            </AskWrapper>
+          </ContainerCard>
+        </ScrollWrapper>
+      </ScrollContainer>
     </Container>
   );
 };
@@ -35,11 +36,18 @@ const Container = styled.View`
   flex: 1;
 `;
 
+const ScrollContainer = styled.View`
+  height: 100%;
+  background-color: #fff;
+`;
+
+const ScrollWrapper = styled.ScrollView``;
+
 const AskDetailWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 10px;
 `;
@@ -59,22 +67,20 @@ const AskDetailTitle = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333;
-  padding-bottom: 5px;
+  margin-bottom: 5px;
 `;
 
-const AskDetailDate = styled.TextInput`
+const AskDetailDate = styled.Text`
   width: 100%;
   font-size: 11px;
   color: #999;
 `;
 
 const FollowBtn = styled.TouchableOpacity`
-  width: 26%;
+  width: 23%;
   padding: 7px;
-  align-items: center;
-  justify-content: center;
   border-radius: 5px;
-  background-color: #00bbc7;
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#00bbc7' : '#bcbcbc')};
 `;
 
 const FollowBtnText = styled.Text`
@@ -84,10 +90,11 @@ const FollowBtnText = styled.Text`
   text-align: center;
 `;
 
-const AskWrapper = styled.View`
+const AskWrapper = styled.ScrollView`
   display: flex;
   width: 100%;
-  padding: 20px 10px;
+  height: 300px;
+  padding: 10px;
   border-width: 1px;
   border-color: #bcbcbc;
   background-color: #f4f4f4;
@@ -97,5 +104,5 @@ const AskText = styled.Text`
   font-size: 13px;
   color: #555555;
   text-align: left;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 `;

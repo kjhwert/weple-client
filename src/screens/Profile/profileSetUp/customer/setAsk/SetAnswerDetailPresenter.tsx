@@ -1,44 +1,38 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
-  navigation: any;
+  inquryAnswerDetail: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({inquryAnswerDetail}: IProps) => {
   return (
     <Container>
       <ContainerCard>
         <AskDetailWrapper>
           <AskDetailTextWrapper>
-            <AskDetailTitle>안녕하세요. 문의드립니다.</AskDetailTitle>
-            <AskDetailDate>2020-01-01 11:11:11</AskDetailDate>
+            <AskDetailTitle>{inquryAnswerDetail.requestTitle}</AskDetailTitle>
+            <AskDetailDate>{getTotalTime(inquryAnswerDetail.requestDate)}</AskDetailDate>
           </AskDetailTextWrapper>
-          <FollowBtn>
-            <FollowBtnText>답변완료</FollowBtnText>
+          <FollowBtn backgroundColor={inquryAnswerDetail.requestStatus}>
+            <FollowBtnText>{inquryAnswerDetail.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
           </FollowBtn>
         </AskDetailWrapper>
-
-        <AskWrapper>
-          <AskText>
-            제가 문의하고 싶은 내용은 이것입니다. 제가 문의하고 싶은 내용은
-            이것입니다. 제가 문의하고 싶은 내용은 이것입니다.
-          </AskText>
+        <AskWrapper vertical={true}>
+          <AskText>{inquryAnswerDetail.requestDescription}</AskText>
         </AskWrapper>
-
         <AnswerDetailWrapper>
           <AskDetailTextWrapper>
-            <AskDetailTitle>문의에 대한 답변 내용입니다.</AskDetailTitle>
-            <AskDetailDate>2020-01-01 11:11:11</AskDetailDate>
+            <AskDetailTitle>문의에 대한 답변입니다.</AskDetailTitle>
+            <AskDetailDate>
+              {inquryAnswerDetail.responseDate == null ? '' : getTotalTime(inquryAnswerDetail.responseDate)}
+            </AskDetailDate>
           </AskDetailTextWrapper>
         </AnswerDetailWrapper>
-
         <AskWrapper>
-          <AskText>
-            문의에 대한 답변입니다. 문의에 대한 답변입니다. 문의에 대한
-            답변입니다. 문의에 대한 답변입니다. 감사합니다.
-          </AskText>
+          <AskText>{inquryAnswerDetail.responseDescription}</AskText>
         </AskWrapper>
       </ContainerCard>
     </Container>
@@ -89,7 +83,7 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: #00bbc7;
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#00bbc7' : '#bcbcbc')};
 `;
 
 const FollowBtnText = styled.Text`
@@ -99,10 +93,11 @@ const FollowBtnText = styled.Text`
   text-align: center;
 `;
 
-const AskWrapper = styled.View`
+const AskWrapper = styled.ScrollView`
   display: flex;
   width: 100%;
-  padding: 20px 10px;
+  height: 200px;
+  padding: 10px;
   border-width: 1px;
   border-color: #bcbcbc;
   background-color: #f4f4f4;
@@ -112,7 +107,7 @@ const AskText = styled.Text`
   font-size: 13px;
   color: #555555;
   text-align: left;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 `;
 
 const AnswerDetailWrapper = styled.View`

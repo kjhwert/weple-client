@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {secondsToHms} from '../module/common';
+import TimeTohms from './TimeTohms';
 
 interface IProps {
   distance: number;
@@ -10,8 +11,6 @@ interface IProps {
 }
 
 export default ({distance, speed, duration, calorie}: IProps) => {
-  const {hour, minute, second} = secondsToHms(duration);
-
   return (
     <RecordWrapper>
       <RecordTextWrapper>
@@ -30,26 +29,7 @@ export default ({distance, speed, duration, calorie}: IProps) => {
           <RecordUnitText>Speed</RecordUnitText>
         </RecordCheckWrapper>
         <RecordCheckWrapper>
-          <RecordDurationContainer>
-            {hour > 0 && (
-              <RecordDurationWrapper>
-                <RecordNumber>{hour}</RecordNumber>
-                <UnitNumber>h </UnitNumber>
-              </RecordDurationWrapper>
-            )}
-            {minute > 0 && (
-              <RecordDurationWrapper>
-                <RecordNumber>{minute}</RecordNumber>
-                <UnitNumber>m </UnitNumber>
-              </RecordDurationWrapper>
-            )}
-            {second >= 0 && (
-              <RecordDurationWrapper>
-                <RecordNumber>{second}</RecordNumber>
-                <UnitNumber>s</UnitNumber>
-              </RecordDurationWrapper>
-            )}
-          </RecordDurationContainer>
+          <TimeTohms duration={duration} />
           <RecordUnitText>Duration</RecordUnitText>
         </RecordCheckWrapper>
         <RecordCheckWrapper>

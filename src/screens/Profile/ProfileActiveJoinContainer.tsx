@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ProfileActiveJoinPresenter from './ProfileActiveJoinPresenter';
 
 const menuList = [
   {id: 0, name: '나의 활동', isClick: false},
-  {id: 1, name: '내가 참여중인 함께', isClick: true},
+  {id: 1, name: '내가 참여중인 모임', isClick: true},
 ];
 
 const openClub = [
@@ -44,39 +44,5 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const [showAlert, setShowAlert] = useState(false);
-
-  const alertFrame = (showFlag) => {
-    setShowAlert(showFlag);
-  };
-
-  const radioBoxSortData = [
-    {
-      label: '거리 가까운 순',
-      value: 'distance',
-    },
-    {
-      label: '참가자 많은 순',
-      value: 'participant',
-    },
-    {
-      label: '최신 등록 순',
-      value: 'registration',
-    },
-    {
-      label: '모집마감 임박 순',
-      value: 'deadline',
-    },
-  ];
-
-  return (
-    <ProfileActiveJoinPresenter
-      navigation={navigation}
-      showAlert={showAlert}
-      alertFrame={alertFrame}
-      radioBoxSortData={radioBoxSortData}
-      menuList={menuList}
-      openClub={openClub}
-    />
-  );
+  return <ProfileActiveJoinPresenter navigation={navigation} menuList={menuList} openClub={openClub} />;
 };

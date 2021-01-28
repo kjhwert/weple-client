@@ -1,29 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {serviceApi} from '../../../../../module/api';
 import SetFaqPresenter from './SetFaqPresenter';
-
-const qnaData = [
-  {
-    id: 0,
-    title: 'Q. 자주 묻는 질문입니다.',
-    answer: 'A. 자주 묻는 질문에 대한 답변입니다.',
-  },
-  {
-    id: 1,
-    title: 'Q. 자주 묻는 질문입니다.',
-    answer: 'A. 자주 묻는 질문에 대한 답변입니다.',
-  },
-  {
-    id: 2,
-    title: 'Q. 자주 묻는 질문입니다.',
-    answer:
-      'A. 자주 묻는 질문에 대한 답변입니다. 자주 묻는 질문에 대한 답변입니다. 자주 묻는 질문에 대한 답변입니다.',
-  },
-];
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  return <SetFaqPresenter navigation={navigation} qnaData={qnaData} />;
+  const [faqList, setFaqList] = useState([
+    {
+      id: 1,
+      request: '',
+      response: '',
+    },
+  ]);
+
+  const getfaq = async () => {
+    const {data, statusCode} = await serviceApi.faq();
+
+    if (statusCode !== 200) {
+    } else {
+      setFaqList(data);
+    }
+  };
+
+  useEffect(() => {
+    getfaq();
+  }, []);
+
+  return <SetFaqPresenter navigation={navigation} faqList={faqList} />;
 };

@@ -10,18 +10,10 @@ interface IProps {
   clearAlertFrame: Function;
 }
 
-interface IActiveProps {
-  isActive: boolean;
-}
-
 export default ({navigation}: IProps) => {
-  const {
-    onChangeLogin,
-    login,
-    isLoginBtnActive,
-    alertFrame,
-    clearAlertFrame,
-  }: any = useContext(UserContext);
+  const {onChangeLogin, login, isLoginActive, isLoginBtnActive, alertFrame, clearAlertFrame}: any = useContext(
+    UserContext,
+  );
 
   return (
     <Container>
@@ -53,6 +45,7 @@ export default ({navigation}: IProps) => {
                 autoCapitalize="none"
                 autoFocus={true}
                 onChange={onChangeLogin}
+                borderColor={isLoginActive.emailFlag}
               />
               <PasswordSearchWrapper>
                 <PasswordWrapper>
@@ -63,6 +56,7 @@ export default ({navigation}: IProps) => {
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onChange={onChangeLogin}
+                    borderColor={isLoginActive.passwordFlag}
                   />
                 </PasswordWrapper>
                 <PasswordBtn
@@ -72,16 +66,14 @@ export default ({navigation}: IProps) => {
                   <PasswordText>잊으셨나요?</PasswordText>
                 </PasswordBtn>
               </PasswordSearchWrapper>
-
               <LoginButton
-                isActive={isLoginBtnActive}
+                backgroundColor={isLoginBtnActive}
                 onPress={async () => {
                   (await login()) ? navigation.navigate('bottomTab') : {};
                 }}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
             </SignInWrapper>
-
             <SnsLoginWrapper>
               <KakaoLoginBtn
                 onPress={() => {
@@ -108,7 +100,6 @@ export default ({navigation}: IProps) => {
                 <LogoImage source={require('../../assets/logo_google.png')} />
                 <GoogleLoginText>Google로 로그인</GoogleLoginText>
               </GoogleLoginBtn>
-
               <FreeSignInWrapper>
                 <SignInInfoText>아직 계정이 없으신가요?</SignInInfoText>
                 <SignInButton
@@ -207,7 +198,7 @@ const SignInTitle = styled.Text`
 const LoginInput = styled.TextInput`
   padding: 5px 10px;
   border-bottom-width: 1px;
-  border-color: #babfc7;
+  border-color: ${({borderColor}: {borderColor: string}) => (borderColor ? '#007bf1' : '#babfc7')};
   margin-bottom: 20px;
   width: 100%;
 `;
@@ -248,8 +239,7 @@ const LoginButton = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: ${(props: IActiveProps) =>
-    props.isActive ? '#007bf1' : '#b2b2b2'};
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#007bf1' : '#b2b2b2')};
 `;
 
 const LoginText = styled.Text`

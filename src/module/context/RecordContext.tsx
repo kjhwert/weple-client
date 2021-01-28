@@ -8,7 +8,7 @@ import {
   ISetActivityCategory,
   ISqliteCallBack,
 } from '../type/recordContext';
-import {DURATION_TIME, getDistanceBetweenTwoGPS, getDistanceWithSpeedAndTime, MINUTE} from '../common';
+import {DURATION_TIME, getDistanceBetweenTwoGPS, GOOGLE_MAPS_GEOCODING_API_TOKEN, MINUTE} from '../common';
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
@@ -17,9 +17,11 @@ import AlertContext from './AlertContext';
 import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
-import SaveLoading from '../../components/SaveLoading';
 import {captureRef} from 'react-native-view-shot';
 import {PERMISSIONS, request} from 'react-native-permissions';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
 const RecordContext = createContext({});
 const sqlite = Database.getInstance();
@@ -337,6 +339,17 @@ export const RecordContextProvider = ({children}: IProps) => {
     setRecord({...record, duration});
   };
 
+  const getAddress = async (records: Array<number>) => {
+    const {results: res} = await Geocoder.from(records[1], records[0]);
+
+    return [
+      res[0].address_components[3].long_name,
+      res[0].address_components[2].long_name,
+      res[0].address_components[1].long_name,
+      res[0].address_components[0].long_name,
+    ].join(' ');
+  };
+
   const createFeed = async (navigation: any) => {
     setFinishLoading(true);
 
@@ -364,18 +377,24 @@ export const RecordContextProvider = ({children}: IProps) => {
     const {activity, startDate, endDate} = recordSetting;
     const {duration, calorie} = record;
     const {distance, map, music, coordinates: records} = mapboxRecord;
+    const address = await getAddress(records[0]);
+    const startLatitude = records[0][0];
+    const startLongitude = records[0][1];
     const coordinates = JSON.stringify(records);
     const feedRecords = {
-      activityId: activity.id,
       startDate: `${startDate}`,
       endDate: `${endDate}`,
       duration,
       calorie,
       distance,
-      mapId: map.id,
-      musicId: music.id,
+      map: map.id,
+      music: music.id,
+      activity: activity.id,
       coordinates,
       thumbnail,
+      address,
+      startLatitude,
+      startLongitude,
     };
 
     const {data, statusCode, message} = await feedApi.create(feedRecords);

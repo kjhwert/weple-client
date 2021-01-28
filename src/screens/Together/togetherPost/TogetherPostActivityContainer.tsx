@@ -1,59 +1,111 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import TogetherPostActivityPresenter from './TogetherPostActivityPresenter';
-
-const menuList = [
-  {id: 0, name: '내 활동', isClick: true},
-  {id: 1, name: '인기 활동', isClick: false},
-];
-
-const ActivityData = [
-  {
-    id: 0,
-    image: require('../../../assets/photo_2.jpeg'),
-    kind: '싸이클',
-    distance: 21.7,
-    address: '서울특별시 마포구 공덕동 118-1',
-  },
-  {
-    id: 1,
-    image: require('../../../assets/photo_4.jpeg'),
-    kind: '드라이빙',
-    distance: 18.8,
-    address: '서울시 마포구 백범로 110-10',
-  },
-  {
-    id: 2,
-    image: require('../../../assets/photo_4.jpeg'),
-    kind: '하이킹',
-    distance: 30.5,
-    address: '서울시 마포구 백범로 110-10',
-  },
-  {
-    id: 3,
-    image: require('../../../assets/photo_2.jpeg'),
-    kind: '모터싸이클',
-    distance: 30.5,
-    address: '서울시 마포구 백범로 110-10',
-  },
-  {
-    id: 3,
-    image: require('../../../assets/photo_2.jpeg'),
-    kind: '모터싸이클',
-    distance: 30.5,
-    address: '서울시 마포구 백범로 110-10',
-  },
-];
+import {feedApi} from '../../../module/api';
+import UserContext from '../../../module/context/UserContext';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {getUserId}: any = useContext(UserContext);
+  const {createRoomFeedData}: any = useContext(TogetherContext);
+
+  const [toggleCheckBox, setToggleCheckBox] = useState('');
+  const [isActive, setIsActive] = useState(false);
+  const [feedActiveList, setFeedActiveList] = useState([
+    {
+      id: 0,
+      thumbnail: '',
+      distance: 0,
+      address: '',
+      activityName: '',
+      activityColor: '',
+    },
+  ]);
+  const [togetherPaging, setTogetherPaging] = useState({
+    id: 0,
+    hasNextPage: true,
+    page: 1,
+    sort: 'likeCount',
+    order: 'DESC',
+  });
+
+  const setMyfeedPaging = async () => {
+    const myFeedPaging = {id: 0, page: 1, sort: '', order: ''};
+    setTogetherPaging(myFeedPaging);
+    await getMyFeed(myFeedPaging);
+  };
+
+  const setLikefeedPaging = async () => {
+    const likeFeedPaging = {id: 1, page: 1, sort: 'likeCount', order: 'DESC'};
+    setTogetherPaging(likeFeedPaging);
+    await getLikefeed(likeFeedPaging);
+  };
+
+  const getMyFeed = async (myFeedPaging) => {
+    const page = myFeedPaging ? myFeedPaging.page : 1;
+    const id = await getUserId();
+    const {data, statusCode} = await feedApi.getMyfeed(id, page);
+    if (statusCode !== 200) {
+    } else {
+      const newActive = data.map((item) => ({
+        id: item.id,
+        thumbnail: item.thumbnail,
+        distance: item.distance,
+        address: item.address,
+        activityName: item.activity.name,
+        activityColor: item.activity.color,
+      }));
+      setFeedActiveList(newActive);
+    }
+  };
+
+  const getLikefeed = async (likeFeedPaging) => {
+    const page = likeFeedPaging ? likeFeedPaging.page : 1;
+    const {data, statusCode} = await feedApi.getLikefeed(page, likeFeedPaging.sort, likeFeedPaging.order);
+    if (statusCode !== 200) {
+    } else {
+      const newActive = data.map((item) => ({
+        id: item.id,
+        thumbnail: item.thumbnail,
+        distance: item.distance,
+        address: item.address,
+        activityName: item.activityName,
+        activityColor: item.activityColor,
+      }));
+      setFeedActiveList(newActive);
+    }
+  };
+
+  const setFeedId = () => {
+    feedActiveList.map((item) => {
+      if (item.id + '' == toggleCheckBox) {
+        createRoomFeedData(toggleCheckBox, item.thumbnail, item.address);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getMyFeed();
+  }, []);
+
+  useEffect(() => {
+    setIsActive(toggleCheckBox ? true : false);
+  }, [toggleCheckBox]);
+
   return (
     <TogetherPostActivityPresenter
       navigation={navigation}
-      menuList={menuList}
-      ActivityData={ActivityData}
+      feedActiveList={feedActiveList}
+      toggleCheckBox={toggleCheckBox}
+      setToggleCheckBox={setToggleCheckBox}
+      isActive={isActive}
+      setFeedId={setFeedId}
+      togetherPaging={togetherPaging}
+      setMyfeedPaging={setMyfeedPaging}
+      setLikefeedPaging={setLikefeedPaging}
     />
   );
 };

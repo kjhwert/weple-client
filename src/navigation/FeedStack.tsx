@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
 import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
@@ -17,10 +17,14 @@ import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
 import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
 import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowerContainer';
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
+import FeedContext from '../module/context/FeedContext';
+import {IFeedContext} from '../module/type/feedContext';
 
 const Stack = createStackNavigator();
 
 export default () => {
+  const {show}: IFeedContext = useContext(FeedContext);
+
   return (
     <Stack.Navigator
       screenOptions={({navigation, route}) => ({
@@ -32,9 +36,7 @@ export default () => {
           fontWeight: 'bold',
         },
         headerLeft: () => <BackBtn navigation={navigation} />,
-        headerRight: () => (
-          <Notification navigation={navigation} route={route} />
-        ),
+        headerRight: () => <Notification navigation={navigation} route={route} />,
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
@@ -46,7 +48,13 @@ export default () => {
         name="feedMain"
         component={FeedContainer}
       />
-      <Stack.Screen name="activeDetail" component={ActiveDetailContainer} />
+      <Stack.Screen
+        name="activeDetail"
+        options={{
+          headerTitle: `${show ? show.userNickName : ''}님의 활동`,
+        }}
+        component={ActiveDetailContainer}
+      />
       <Stack.Screen name="feedPopularity" component={FeedPopularityContainer} />
       <Stack.Screen name="feedRecommend" component={FeedRecommendContainer} />
       <Stack.Screen
@@ -91,11 +99,14 @@ export default () => {
         name="friendComment"
         component={FriendCommentContainer}
       />
-      <Stack.Screen name="friendFollower" component={FriendFollowerContainer} />
       <Stack.Screen
-        name="friendFollowing"
-        component={FriendFollowingContainer}
+        name="friendFollower"
+        options={{
+          headerTitle: '팔로우',
+        }}
+        component={FriendFollowerContainer}
       />
+      <Stack.Screen name="friendFollowing" component={FriendFollowingContainer} />
       <Stack.Screen
         options={{
           headerTitle: '좋아하는 사람들',

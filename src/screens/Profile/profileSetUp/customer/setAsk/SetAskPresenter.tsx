@@ -1,43 +1,41 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import NextBtn from '../../../../../components/NextBtn';
+import {StartNextBtn} from '../../../../../components/CommonBtn';
+import {getTotalTime} from '../../../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
+  inquiryList: any;
 }
 
-export default ({navigation, askList}: IProps) => {
+export default ({navigation, inquiryList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {askList.map((item, idx) => (
+            {inquiryList.map((item, idx) => (
               <AskWrapper key={idx}>
                 <AskTextWrapper>
                   <AskTextBtn
                     onPress={() => {
-                      navigation.navigate('setAnswerDetail');
+                      item.requestStatus
+                        ? navigation.navigate('setAnswerDetail', {data: item})
+                        : navigation.navigate('setAskDetail', {data: item});
                     }}>
-                    <AskText>{item.title}</AskText>
+                    <AskText>{item.requestTitle}</AskText>
                   </AskTextBtn>
-                  <AskDateText>{item.date}</AskDateText>
+                  <AskDateText>{getTotalTime(item.requestDate)}</AskDateText>
                 </AskTextWrapper>
-
-                <FollowBtn isClick={item.isClick}>
-                  <FollowBtnText isClick={item.isClick}>
-                    {item.isClick ? '답변완료' : '미답변'}
-                  </FollowBtnText>
+                <FollowBtn backgroundColor={item.requestStatus}>
+                  <FollowBtnText>{item.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
                 </FollowBtn>
               </AskWrapper>
             ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
-      <NextBtn nextPage={'setAskWrite'} navigation={navigation}>
-        {`문의하기`}
-      </NextBtn>
+      <StartNextBtn StartNextPage={'setAskWrite'} text={'문의하기'} navigation={navigation} isActive={true} />
     </Container>
   );
 };
@@ -59,6 +57,7 @@ const Card = styled.View`
   display: flex;
   align-items: center;
   background-color: #fff;
+  margin-bottom: 80px;
 `;
 
 const AskWrapper = styled.View`
@@ -84,13 +83,14 @@ const AskTextWrapper = styled.View`
 
 const AskTextBtn = styled.TouchableOpacity`
   width: 100%;
+  flex-flow: row;
   padding: 5px 0;
   align-items: flex-start;
   justify-content: flex-start;
 `;
 
 const AskText = styled.Text`
-  width: 100%;
+  width: 70%;
   font-size: 13px;
   font-weight: bold;
   color: #333;
@@ -109,8 +109,7 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${(props: IProps) =>
-    props.isClick ? '#00bbc7' : '#bcbcbc'};
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#00bbc7' : '#bcbcbc')};
 `;
 
 const FollowBtnText = styled.Text`

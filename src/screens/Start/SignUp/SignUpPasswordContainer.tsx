@@ -1,12 +1,15 @@
 import React, {useState, useEffect, useContext} from 'react';
 import SignUpPasswordPresenter from './SignUpPasswordPresenter';
 import UserContext from '../../../module/context/UserContext';
+import AlertContext from '../../../module/context/AlertContext';
+import CheckAlert from '../../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {setAlertVisible}: any = useContext(AlertContext);
   const {createUser, createUserData}: any = useContext(UserContext);
 
   const [isActive, setIsActive] = useState(false);
@@ -16,18 +19,6 @@ export default ({navigation}: IProps) => {
     activeFlag1: 0,
     activeFlag2: 0,
   });
-
-  const [alertFrame, setAlertFrame] = useState({
-    showAlert: false,
-    usable: false,
-  });
-
-  const clearAlertFrame = () => {
-    setAlertFrame({
-      ...alertFrame,
-      showAlert: false,
-    });
-  };
 
   const userPasswordChange1 = (e) => {
     const value = e.nativeEvent.text;
@@ -48,17 +39,36 @@ export default ({navigation}: IProps) => {
   };
 
   const userPasswordValidation = () => {
-    if (
-      userPassword.password1.length <= 0 ||
-      userPassword.password2.length <= 0
-    ) {
+    if (userPassword.password1.length <= 0 || userPassword.password2.length <= 0) {
       setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
       return false;
     }
     if (userPassword.password1 !== userPassword.password2) {
       setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
-      setAlertFrame({showAlert: true, usable: false});
-      return false;
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '입력하신 비밀번호가 다릅니다.',
+            description: '다시 입력해주세요.',
+          }}
+          checked={() => {}}
+        />,
+      );
+    }
+
+    if (/\s/g.test(userPassword.password1)) {
+      setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '비밀번호는 빈칸없이 입력해주세요.',
+            description: '다시 입력해주세요.',
+          }}
+          checked={() => {}}
+        />,
+      );
     }
     return true;
   };
@@ -68,9 +78,7 @@ export default ({navigation}: IProps) => {
   };
 
   useEffect(() => {
-    setIsActive(
-      userPassword.password1.length > 0 && userPassword.password2.length > 0,
-    );
+    setIsActive(userPassword.password1.length > 0 && userPassword.password2.length > 0);
   }, [userPassword]);
 
   useEffect(() => {
@@ -90,8 +98,6 @@ export default ({navigation}: IProps) => {
       userPasswordValidation={userPasswordValidation}
       isActive={isActive}
       createUserPassword={createUserPassword}
-      alertFrame={alertFrame}
-      clearAlertFrame={clearAlertFrame}
     />
   );
 };

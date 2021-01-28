@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import AlertWrapper from '../../../components/AlertWrapper';
 import {InputBox} from '../../../components/CommonInput';
 import {StartNextBtn} from '../../../components/CommonBtn';
 
@@ -11,41 +10,12 @@ interface IProps {
   userEmailValidation: Function;
   userEmail: any;
   isActive: boolean;
-  showAlert: boolean;
-  alertFrame: Function;
   passwordInfoMail: Function;
 }
 
-export default ({
-  navigation,
-  userEmailChange,
-  userEmailValidation,
-  userEmail,
-  isActive,
-  showAlert,
-  alertFrame,
-  passwordInfoMail,
-}: IProps) => {
+export default ({navigation, userEmailChange, userEmailValidation, userEmail, isActive, passwordInfoMail}: IProps) => {
   return (
     <Container>
-      {showAlert && (
-        <AlertWrapper>
-          <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertEmail_icon.png')}
-            />
-          </AlertImageWrapper>
-          <AlertTitleText>
-            {'입력하신 이메일로 임시비밀번호를\n보내드렸습니다.'}
-          </AlertTitleText>
-          <ConfirmButton
-            onPress={() => {
-              navigation.navigate('login');
-            }}>
-            <ConfirmButtonText>확인</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
       <ContainerCard>
         <InputBox
           title={'이메일'}
@@ -63,7 +33,6 @@ export default ({
         isActive={isActive}
         callBack={() => {
           passwordInfoMail();
-          alertFrame(true);
         }}
       />
     </Container>
@@ -72,42 +41,4 @@ export default ({
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const AlertImageWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 30px;
-`;
-
-const AlertImage = styled.Image`
-  width: 70px;
-  height: 70px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 14px;
-  color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 10px;
-  background-color: #007bf1;
-  position: absolute;
-  bottom: 0;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
 `;

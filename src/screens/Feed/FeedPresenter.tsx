@@ -4,49 +4,59 @@ import LinearGradient from 'react-native-linear-gradient';
 import {IEvent, IFeed} from '../../module/type/feed';
 import Swiper from 'react-native-swiper';
 import {BASE_URL, timeForToday} from '../../module/common';
-import {StyleSheet} from 'react-native';
-import Loading from '../../components/Loading';
+import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet} from 'react-native';
 import UserContext from '../../module/context/UserContext';
-import {IFeedIndex} from '../../module/type/api';
+import FeedContext from '../../module/context/FeedContext';
+import {IUserFollower} from '../../module/type/user';
+import SearchComponent from '../../components/SearchComponent';
 
 interface IProps {
   navigation: any;
-  newFollower: any;
-  menuList: any;
   events: Array<IEvent>;
-  feeds: Array<IFeed>;
-  setHomePaging: () => void;
-  setPopularPaging: () => void;
-  setRecommendPaging: () => void;
-  feedLoading: boolean;
-  feedLike: (feed: IFeed) => void;
-  feedPaging: IFeedIndex;
-  onLoadFeedPaging: () => void;
+  userFollowAndReload: (userId: number) => void;
+  newFollowers: {
+    newFollowCount: number;
+    followers: Array<IUserFollower>;
+  };
 }
 
-export default ({
-  navigation,
-  newFollower,
-  events,
-  feeds,
-  setPopularPaging,
-  setHomePaging,
-  feedLoading,
-  feedLike,
-  setRecommendPaging,
-  feedPaging,
-  onLoadFeedPaging,
-}: IProps) => {
+const sorts = [
+  {sort: 'createdAt', tab: '홈'},
+  {sort: 'likeCount', tab: '인기'},
+  {sort: 'location', tab: '추천'},
+];
+
+export default ({navigation, events, newFollowers}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
+  const {
+    index,
+    pagination,
+    userFollowAndReload,
+    feedLikedAndReload,
+    switchingSortIndex,
+    getMoreIndex,
+    searchVisible,
+  }: any = useContext(FeedContext);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
   };
 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+  };
+
+  const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (isCloseToBottom(nativeEvent)) {
+      await getMoreIndex();
+    }
+  };
+
   return (
     <Container>
+      {searchVisible && <SearchComponent navigation={navigation} />}
       <ScrollContainer>
-        <ScrollWrapper onMomentumScrollEnd={onLoadFeedPaging}>
+        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <Card>
             <NewFollowerWrapper>
               <NewFollowerBtn
@@ -54,13 +64,17 @@ export default ({
                   navigation.navigate('friendFollower');
                 }}>
                 <NewFollowerText>새로운 팔로워</NewFollowerText>
-                <NewFollowerNumber>8</NewFollowerNumber>
+                <NewFollowerNumber>{newFollowers.newFollowCount}</NewFollowerNumber>
                 <NewFollowerMoreImage source={require('../../assets/more.png')} />
               </NewFollowerBtn>
 
               <FollowerWrapper horizontal={true} showsHorizontalScrollIndicator={false}>
-                {newFollower.map((item, idx) => (
-                  <FollowerImageWrapper key={idx}>
+                {newFollowers.followers.map(({id, image, nickName}) => (
+                  <FollowerImageWrapper
+                    key={id}
+                    onPress={() => {
+                      navigation.navigate('profileActiveMain', {id});
+                    }}>
                     <LinearGradient
                       colors={['#61d7ff', '#79a6fa', '#3065f4']}
                       start={{x: 0, y: 1}}
@@ -72,14 +86,11 @@ export default ({
                         justifyContent: 'center',
                         borderRadius: 50,
                       }}>
-                      <FollowerImage source={item.followerImage} />
+                      <FollowerImage source={{uri: `${BASE_URL}/${image ? image : 'public/user/no_profile.png'}`}} />
                     </LinearGradient>
 
-                    <NewFollowNameBtn
-                      onPress={() => {
-                        navigation.navigate('friendActive');
-                      }}>
-                      <FollowerName>{item.name}</FollowerName>
+                    <NewFollowNameBtn>
+                      <FollowerName>{nickName}</FollowerName>
                     </NewFollowNameBtn>
                   </FollowerImageWrapper>
                 ))}
@@ -89,131 +100,125 @@ export default ({
             <Line></Line>
 
             <Swiper style={styles.swiperWrapper} height={200} showsButtons={false} autoplay={true}>
-              {events.map(({id, img}) => (
+              {events.map(({id, image}) => (
                 <EventWrapper
                   key={id}
                   onPress={() => {
                     navigation.navigate('feedEventDetail');
                   }}>
-                  <EventImage source={{uri: `${BASE_URL}/${img}`}} style={{resizeMode: 'cover'}} />
+                  <EventImage source={{uri: `${BASE_URL}/${image}`}} style={{resizeMode: 'cover'}} />
                 </EventWrapper>
               ))}
             </Swiper>
             <Line></Line>
 
             <MenuBarWrapper>
-              {['홈', '인기', '추천'].map((name, idx) => (
-                <MenuWrapper key={idx} focused={feedPaging.id === idx}>
+              {sorts.map(({tab, sort}, idx) => (
+                <MenuWrapper key={idx} focused={pagination.sort === sort}>
                   <MenuBtn
                     onPress={() => {
-                      switch (idx) {
-                        case 0:
-                          return setHomePaging();
-                        case 1:
-                          return setPopularPaging();
-                        case 2:
-                          return setRecommendPaging();
-                      }
+                      switchingSortIndex(sort);
                     }}>
-                    <MenuText focused={feedPaging.id === idx}>{name}</MenuText>
+                    <MenuText focused={pagination.sort === sort}>{tab}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
             </MenuBarWrapper>
             <Line></Line>
 
-            {feedLoading ? (
-              <Loading />
-            ) : (
-              feeds.map((feed) => (
-                <PostWrapper key={feed.id}>
-                  <ProfileWrapper>
-                    <ProfileInfoWrapper>
-                      <ProfileImage
-                        source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
-                      />
-                      <ProfileTextWrapper>
-                        <ProfileNameBtn
-                          onPress={() => {
-                            navigation.navigate('profileActiveMain');
-                          }}>
-                          <ProfileName>{feed.userName}</ProfileName>
-                        </ProfileNameBtn>
-                        <PostTime>{timeForToday(feed.createdAt)}</PostTime>
-                      </ProfileTextWrapper>
-                    </ProfileInfoWrapper>
-
-                    {!isLoginUserFeed(feed.userId) && (
-                      <FollowBtn onPress={() => {}}>
-                        <FollowBtnText>{feed.isFollowed ? '언팔로우' : '팔로우'}</FollowBtnText>
-                      </FollowBtn>
-                    )}
-                  </ProfileWrapper>
-                  <PostImageWrapper
+            {index.map((feed: IFeed) => (
+              <PostWrapper key={feed.id}>
+                <ProfileWrapper>
+                  <ProfileInfoWrapper
                     onPress={() => {
-                      navigation.navigate('activeDetail');
+                      navigation.navigate('profileActiveMain', {id: feed.userId});
                     }}>
-                    <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
-                    <RecordWrapper color={feed.activityColor}>
-                      <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
-                      <RecordText>{feed.distance} 킬로미터</RecordText>
-                    </RecordWrapper>
-                  </PostImageWrapper>
+                    <ProfileImage
+                      source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
+                    />
+                    <ProfileTextWrapper>
+                      <ProfileNameBtn>
+                        <ProfileName>{feed.userNickName}</ProfileName>
+                      </ProfileNameBtn>
+                      <PostTime>{timeForToday(feed.createdAt)}</PostTime>
+                    </ProfileTextWrapper>
+                  </ProfileInfoWrapper>
+                  {!isLoginUserFeed(feed.userId) && (
+                    <FollowBtn
+                      isFollow={feed.isUserFollowed}
+                      onPress={() => {
+                        userFollowAndReload(feed.userId);
+                      }}>
+                      <FollowBtnText isFollow={feed.isUserFollowed}>
+                        {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
+                      </FollowBtnText>
+                    </FollowBtn>
+                  )}
+                </ProfileWrapper>
+                <PostImageWrapper
+                  onPress={() => {
+                    navigation.navigate('activeDetail', {id: feed.id});
+                  }}>
+                  <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
+                  <RecordWrapper color={feed.activityColor}>
+                    <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
+                    <RecordText>{feed.distance} 킬로미터</RecordText>
+                  </RecordWrapper>
+                </PostImageWrapper>
 
-                  <IconWrapper>
-                    <IconImageWrapper>
-                      <IconBtn onPress={() => feedLike(feed)}>
-                        <IconImage
-                          source={
-                            feed.isUserLiked
-                              ? require('../../assets/icon_heartRed.png')
-                              : require('../../assets/icon_heart.png')
-                          }
-                        />
-                      </IconBtn>
-                      <IconBtn
+                <IconWrapper>
+                  <IconImageWrapper>
+                    <IconBtn onPress={() => feedLikedAndReload(feed)}>
+                      <IconImage
+                        source={
+                          feed.isUserLiked
+                            ? require('../../assets/icon_heartRed.png')
+                            : require('../../assets/icon_heart.png')
+                        }
+                      />
+                    </IconBtn>
+                    <IconBtn
+                      onPress={() => {
+                        navigation.navigate('friendComment', {id: feed.id});
+                      }}>
+                      <IconImage source={require('../../assets/icon_comment.png')} />
+                    </IconBtn>
+                  </IconImageWrapper>
+                  <AlarmBtn
+                    onPress={() => {
+                      navigation.navigate('friendLike');
+                    }}>
+                    <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
+                  </AlarmBtn>
+                </IconWrapper>
+                {feed.commentCount > 0 && (
+                  <FollowWrapper>
+                    <ProfileImage
+                      source={{
+                        uri: `${BASE_URL}/${
+                          feed.commentUserImage ? feed.commentUserImage : 'public/user/no_profile.png'
+                        }`,
+                      }}
+                    />
+                    <FollowTextWrapper>
+                      <FollowNameBtn
+                        onPress={() => {
+                          navigation.navigate('friendActive');
+                        }}>
+                        <FollowName>{feed.commentUserName}</FollowName>
+                      </FollowNameBtn>
+                      <CommentText>{feed.commentDescription}</CommentText>
+                      <AllCommentBtn
                         onPress={() => {
                           navigation.navigate('friendComment', {id: feed.id});
                         }}>
-                        <IconImage source={require('../../assets/icon_comment.png')} />
-                      </IconBtn>
-                    </IconImageWrapper>
-                    <AlarmBtn
-                      onPress={() => {
-                        navigation.navigate('friendLike');
-                      }}>
-                      <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
-                    </AlarmBtn>
-                  </IconWrapper>
-                  {feed.commentUserName && (
-                    <FollowWrapper>
-                      <ProfileImage
-                        source={{
-                          uri: `${BASE_URL}/${
-                            feed.commentUserImage ? feed.commentUserImage : 'public/user/no_profile.png'
-                          }`,
-                        }}
-                      />
-                      <FollowTextWrapper>
-                        <FollowNameBtn
-                          onPress={() => {
-                            navigation.navigate('friendActive');
-                          }}>
-                          <FollowName>{feed.commentUserName}</FollowName>
-                        </FollowNameBtn>
-                        <CommentText>{feed.commentDescription}</CommentText>
-                        <AllCommentBtn
-                          onPress={() => {
-                            navigation.navigate('friendComment', {id: feed.id});
-                          }}>
-                          <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
-                        </AllCommentBtn>
-                      </FollowTextWrapper>
-                    </FollowWrapper>
-                  )}
-                </PostWrapper>
-              ))
-            )}
+                        <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
+                      </AllCommentBtn>
+                    </FollowTextWrapper>
+                  </FollowWrapper>
+                )}
+              </PostWrapper>
+            ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -290,7 +295,7 @@ const FollowerWrapper = styled.ScrollView`
   padding: 10px 0px 0 5px;
 `;
 
-const FollowerImageWrapper = styled.View`
+const FollowerImageWrapper = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,8 +303,8 @@ const FollowerImageWrapper = styled.View`
 `;
 
 const FollowerImage = styled.Image`
-  width: 53px;
-  height: 53px;
+  width: 55px;
+  height: 55px;
   border-radius: 50px;
 `;
 
@@ -371,7 +376,7 @@ const ProfileWrapper = styled.View`
   width: 100%;
 `;
 
-const ProfileInfoWrapper = styled.View`
+const ProfileInfoWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   width: 60%;
@@ -417,11 +422,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;
-  background-color: #007bf1;
+  border-width: 1px;
+  border-color: #007bf1;
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
 `;
@@ -440,13 +447,11 @@ const PostImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 40%;
   align-items: center;
-  justify-content: center;
   background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
   position: absolute;
   margin-top: 20px;
-  padding: 5px;
+  padding: 5px 15px;
 `;
 
 const RecordText = styled.Text`
@@ -457,8 +462,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 25px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

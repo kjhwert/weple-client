@@ -1,37 +1,55 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL} from '../../../../../module/common';
+import {getDate} from '../../../../../components/CommonTime';
 
 interface IProps {
   navigation: any;
-  isOpen: boolean;
+  eventList: any;
+  pagingInfo: any;
+  getEventList: Function;
 }
 
-export default ({navigation, eventData}: IProps) => {
+export default ({navigation, eventList, pagingInfo, getEventList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
-          <ContainerCard>
-            {eventData.map((item, idx) => (
+          <Card>
+            {eventList.map((item, idx) => (
               <EventWrapper key={idx}>
-                <EventImageWrapper onPress={() => {}}>
-                  <EventImage source={item.image} />
+                <EventImageWrapper
+                  onPress={() => {
+                    navigation.navigate('setEventDetail', {id: item.id});
+                  }}>
+                  <EventImage source={{uri: BASE_URL + '/' + item.image}} />
                 </EventImageWrapper>
                 <EventTextWrapper>
-                  <EventOpenWrapper isOpen={item.isOpen}>
-                    <EventOpenText>
-                      {item.isOpen ? '진행중' : '진행종료'}
-                    </EventOpenText>
+                  <EventOpenWrapper backgroundColor={item.isOnGoing}>
+                    <EventOpenText>{item.isOnGoing ? '진행중' : '진행종료'}</EventOpenText>
                   </EventOpenWrapper>
-                  <EventTitleBtn onPress={() => {}}>
+                  <EventTitleBtn
+                    onPress={() => {
+                      navigation.navigate('setEventDetail', {id: item.id});
+                    }}>
                     <EventTitle>{item.title}</EventTitle>
                   </EventTitleBtn>
-                  <EventContent>{item.content}</EventContent>
-                  <EventDate>{item.date}</EventDate>
+                  <EventContent>{item.description}</EventContent>
+                  <EventDate>{getDate(item.createdAt)}</EventDate>
                 </EventTextWrapper>
               </EventWrapper>
             ))}
-          </ContainerCard>
+          </Card>
+          {pagingInfo.hasNextPage && (
+            <MoreBtnWrapper>
+              <MoreButton
+                onPress={() => {
+                  getEventList(pagingInfo.page + 1);
+                }}>
+                <MoreBtnText>더보기</MoreBtnText>
+              </MoreButton>
+            </MoreBtnWrapper>
+          )}
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -49,11 +67,12 @@ const ScrollContainer = styled.View`
 
 const ScrollWrapper = styled.ScrollView``;
 
-const ContainerCard = styled.View`
+const Card = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
+  flex: 9;
 `;
 
 const EventWrapper = styled.View`
@@ -95,8 +114,7 @@ const EventOpenWrapper = styled.View`
   width: 40%;
   border-radius: 5px;
   padding: 4px;
-  background-color: ${(props: IProps) =>
-    props.isOpen ? '#007bf1' : '#b3b3b3'};
+  background-color: ${({backgroundColor}: {backgroundColor: string}) => (backgroundColor ? '#007bf1' : '#b3b3b3')};
 `;
 
 const EventOpenText = styled.Text`
@@ -116,7 +134,7 @@ const EventTitle = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333333;
-  padding: 5px 0;
+  padding-top: 5px;
 `;
 
 const EventContent = styled.Text`
@@ -130,4 +148,27 @@ const EventDate = styled.Text`
   width: 100%;
   font-size: 11px;
   color: #bebebe;
+`;
+
+const MoreBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  padding: 20px 0;
+  margin: 10px 0;
+  flex: 1;
+`;
+
+const MoreButton = styled.TouchableOpacity`
+  width: 100%;
+  padding: 10px 0;
+  align-items: center;
+  position: absolute;
+  bottom: 0px;
+`;
+
+const MoreBtnText = styled.Text`
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
 `;

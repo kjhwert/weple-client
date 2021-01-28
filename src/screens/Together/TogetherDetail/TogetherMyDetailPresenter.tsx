@@ -1,73 +1,97 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import {getComma, getTotalTime} from '../../../components/CommonTime';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
+  listDetail: any;
 }
 
-export default ({navigation, content}: IProps) => {
+export default ({navigation, listDetail}: IProps) => {
+  const {getTogetherThumbnail}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <JoinImageWrapper>
-            <JoinImage source={require('../../../assets/photo_2.jpeg')} />
+            <JoinImage source={getTogetherThumbnail(listDetail.together.thumbnail)} />
           </JoinImageWrapper>
           <Card>
             <JoinWrapper>
               <JoinInfoWrapper>
-                <JoinTitle>함께하는 강변북로 라이딩</JoinTitle>
+                <JoinTitleWrapper>
+                  <JoinTitle>{listDetail.together.title}</JoinTitle>
+                  <ShareBtn
+                    onPress={() => {
+                      navigation.navigate('togetherShare');
+                    }}>
+                    <ShareImage source={require('../../../assets/icon_share.png')} />
+                  </ShareBtn>
+                </JoinTitleWrapper>
                 <JoinTextWrapper>
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
                     onPress={() => {
-                      navigation.navigate('togetherMember');
+                      navigation.navigate('togetherMember', {togertherId: listDetail.together.id});
                     }}>
-                    <JoinInfoNumber>12명</JoinInfoNumber>
-                    <JoinInfoMoreImage
-                      source={require('../../../assets/more.png')}
-                    />
+                    <JoinInfoNumber>{listDetail.userCount}명</JoinInfoNumber>
+                    <JoinInfoMoreImage source={require('../../../assets/more.png')} />
                   </JoinInfoContentBtn>
-
                   <JoinInfoTitle>참가비</JoinInfoTitle>
-                  <JoinInfoContent>10,000원</JoinInfoContent>
+                  <JoinInfoContent>{getComma(listDetail.together.togetherPrice)}원</JoinInfoContent>
                   <JoinInfoTitle>지역</JoinInfoTitle>
-                  <JoinInfoContent>서울시 마포구 백범로 31길</JoinInfoContent>
+                  <JoinInfoContent>{listDetail.together.address}</JoinInfoContent>
                   <JoinInfoTitle>모임일시</JoinInfoTitle>
-                  <JoinInfoContent>2020년 12월 25일 13시 30분</JoinInfoContent>
+                  <JoinInfoContent>{getTotalTime(listDetail.together.togetherDate)}</JoinInfoContent>
                   <JoinInfoTitle>모임위치</JoinInfoTitle>
-                  <JoinInfoContent>공덕역 2번출구 앞</JoinInfoContent>
+                  <JoinInfoContent>{listDetail.together.togetherPlace}</JoinInfoContent>
                 </JoinTextWrapper>
               </JoinInfoWrapper>
-
-              {content.map((item, idx) => (
-                <JoinContentWrapper key={idx}>
-                  <JoinContentTitle>{item.title}</JoinContentTitle>
-                  <JoinContent>{item.content}</JoinContent>
-                </JoinContentWrapper>
-              ))}
+              <JoinContentWrapper>
+                <JoinContentTitle>모임하기 설명</JoinContentTitle>
+                <ContentWrap>
+                  <JoinContent>{listDetail.together.description}</JoinContent>
+                </ContentWrap>
+                <JoinContentTitle>이런 분들께 추천합니다.</JoinContentTitle>
+                <ContentWrap>
+                  <JoinContent>{listDetail.together.recommend}</JoinContent>
+                </ContentWrap>
+                <JoinContentTitle>공지사항</JoinContentTitle>
+                <ContentWrap>
+                  <JoinContent>{listDetail.together.notice}</JoinContent>
+                </ContentWrap>
+              </JoinContentWrapper>
 
               <FollowWrapper>
-                <ProfileImage
-                  source={require('../../../assets/profile_2.png')}
-                />
+                <ProfileImage source={require('../../../assets/profile_2.png')} />
                 <FollowTextWrapper>
-                  <FollowName>Benjamin</FollowName>
+                  <FollowNameBtn onPress={() => {}}>
+                    <FollowName>Benjamin</FollowName>
+                  </FollowNameBtn>
                   <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn onPress={() => {}}>
+                  <AllCommentBtn
+                    onPress={() => {
+                      navigation.navigate('togetherComment', {id: listDetail.together.id});
+                    }}>
                     <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
                   </AllCommentBtn>
                 </FollowTextWrapper>
               </FollowWrapper>
 
-              <JoinBtnWrapper>
-                <JoinButton
-                  onPress={() => {
-                    navigation.navigate('togetherMain');
-                  }}>
-                  <JoinText>나가기</JoinText>
-                </JoinButton>
-              </JoinBtnWrapper>
+              {getTotalTime(new Date()) > getTotalTime(listDetail.together.togetherDate) ? (
+                <></>
+              ) : (
+                <ModifyBtnWrapper>
+                  <ModifyButton
+                    onPress={() => {
+                      navigation.navigate('togetherModify', {id: listDetail.together.id});
+                    }}>
+                    <ModifyText>수정하기</ModifyText>
+                  </ModifyButton>
+                </ModifyBtnWrapper>
+              )}
             </JoinWrapper>
           </Card>
         </ScrollWrapper>
@@ -116,6 +140,11 @@ const JoinWrapper = styled.View`
   padding: 20px;
   border-width: 1px;
   border-color: #e2e2e2;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+  shadow-color: grey;
+  shadow-offset: 0px 0px;
+  elevation: 0.5;
 `;
 
 const JoinInfoWrapper = styled.View`
@@ -128,21 +157,32 @@ const JoinInfoWrapper = styled.View`
   border-color: #dcdcdc;
 `;
 
-const JoinTextWrapper = styled.View`
+const JoinTitleWrapper = styled.View`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 10px 0 20px 0;
 `;
 
 const JoinTitle = styled.Text`
-  width: 100%;
+  width: 85%;
   font-size: 15px;
   font-weight: bold;
   color: #222;
   padding: 10px 0;
+`;
+
+const ShareBtn = styled.TouchableOpacity`
+  width: 15%;
+  flex-flow: row wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+`;
+
+const ShareImage = styled.Image`
+  width: 23px;
+  height: 23px;
 `;
 
 const JoinInfoTitle = styled.Text`
@@ -159,6 +199,14 @@ const JoinInfoContent = styled.Text`
   color: #333333;
   padding: 5px 0;
   text-align: right;
+`;
+const JoinTextWrapper = styled.View`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 0 20px 0;
 `;
 
 const JoinInfoContentBtn = styled.TouchableOpacity`
@@ -187,9 +235,6 @@ const JoinContentWrapper = styled.View`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  border-bottom-width: 1px;
-  border-color: #dcdcdc;
-  padding: 20px 0;
 `;
 
 const JoinContentTitle = styled.Text`
@@ -197,7 +242,15 @@ const JoinContentTitle = styled.Text`
   font-size: 15px;
   font-weight: bold;
   color: #2e2e2e;
-  padding: 5px 0;
+  padding-top: 20px;
+`;
+
+const ContentWrap = styled.View`
+  display: flex;
+  width: 100%;
+  border-bottom-width: 1px;
+  border-color: #dcdcdc;
+  padding: 10px 0 20px 0;
 `;
 
 const JoinContent = styled.Text`
@@ -231,6 +284,14 @@ const FollowTextWrapper = styled.View`
   width: 75%;
 `;
 
+const FollowNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row wrap;
+  padding: 5px 0;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const FollowName = styled.Text`
   font-size: 15px;
   font-weight: 500;
@@ -256,22 +317,23 @@ const AllCommentText = styled.Text`
   color: #7c7c7c;
 `;
 
-const JoinBtnWrapper = styled.View`
+const ModifyBtnWrapper = styled.View`
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
-  padding-top: 20px;
 `;
 
-const JoinButton = styled.TouchableOpacity`
+const ModifyButton = styled.TouchableOpacity`
+  display: flex;
   width: 100%;
+  align-items: center;
   padding: 15px;
-  border-radius: 5px;
-  background-color: #b2b2b2;
+  margin-top: 20px;
+  background-color: #007bf1;
 `;
 
-const JoinText = styled.Text`
+const ModifyText = styled.Text`
   color: #fff;
   font-size: 15px;
   font-weight: bold;

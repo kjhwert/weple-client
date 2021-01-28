@@ -15,9 +15,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage
-                    source={require('../../../assets/profile_2.png')}
-                  />
+                  <ProfileMainImage source={require('../../../assets/profile_2.png')} />
                   <ProfileNickName>Bejamin</ProfileNickName>
                 </ProfileImageWrapper>
                 <ActiveTextWrapper>
@@ -47,9 +45,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
                 <ActiveIntroduceText>
-                  {
-                    "Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is riding a bicycle."
-                  }
+                  {"Hello, I'm Benjamin. My hobby is riding a bicycle. My hobby is riding a bicycle."}
                 </ActiveIntroduceText>
                 <FollowingBtnWrapper>
                   <FollowingBtn onPress={() => {}}>
@@ -75,7 +71,7 @@ export default ({navigation, menuList, openClub}: IProps) => {
             <ProfileActiveTitleWrapper>
               <ProfileTitleBtn onPress={() => {}}>
                 <ProfileActiveTitle>
-                  <BoldText>Benjamin</BoldText>님이 참여중인 함께
+                  <BoldText>Benjamin</BoldText>님이 참여중인 모임
                 </ProfileActiveTitle>
                 <ProfileActiveNumber>8</ProfileActiveNumber>
               </ProfileTitleBtn>

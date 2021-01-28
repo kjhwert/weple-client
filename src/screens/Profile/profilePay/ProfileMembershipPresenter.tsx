@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
-import NextBtn from '../../../components/NextBtn';
+import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
@@ -32,9 +32,7 @@ export default ({navigation, member}: IProps) => {
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
-      <NextBtn nextPage={'profileActiveMain'} navigation={navigation}>
-        {`결제`}
-      </NextBtn>
+      <StartNextBtn StartNextPage={'profileActiveMain'} text={'결제'} navigation={navigation} isActive={true} />
     </Container>
   );
 };

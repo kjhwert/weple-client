@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {getDate} from '../../../../../components/CommonTime';
 
 interface IProps {
-  navigation: any;
+  noticeDetail: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({noticeDetail}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -13,13 +14,10 @@ export default ({navigation}: IProps) => {
           <ContainerCard>
             <NoticeWrapper>
               <NoticeTextWrapper>
-                <NoticeTitle>공지드립니다.</NoticeTitle>
-                <NoticeDate>2020-12-30</NoticeDate>
+                <NoticeTitle>{noticeDetail.title}</NoticeTitle>
+                <NoticeDate>{getDate(noticeDetail.createdAt)}</NoticeDate>
               </NoticeTextWrapper>
-              <NoticeContent>
-                공지사항 내용입니다. 공지사항 내용입니다. 공지사항 내용입니다.
-                공지사항 내용입니다. 공지사항 내용입니다.
-              </NoticeContent>
+              <NoticeContent>{noticeDetail.description}</NoticeContent>
             </NoticeWrapper>
           </ContainerCard>
         </ScrollWrapper>

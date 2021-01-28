@@ -1,28 +1,44 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {getDate} from '../../../../../components/CommonTime';
 
-interface IProps {}
+interface IProps {
+  navigation: any;
+  noticeList: any;
+  pagingInfo: any;
+  getNoticeList: Function;
+}
 
-export default ({navigation, noticeData}: IProps) => {
+export default ({navigation, noticeList, pagingInfo, getNoticeList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {noticeData.map((item, idx) => (
+            {noticeList.map((item, idx) => (
               <NoticeWrapper key={idx}>
                 <NoticeBtnWrapper>
                   <NoticeBtn
                     onPress={() => {
-                      navigation.navigate('setNoticeDetail');
+                      navigation.navigate('setNoticeDetail', {id: item.id});
                     }}>
                     <NoticeTitleText>{item.title}</NoticeTitleText>
                   </NoticeBtn>
-                  <NoticeDateText>{item.date}</NoticeDateText>
+                  <NoticeDateText>{getDate(item.createdAt)}</NoticeDateText>
                 </NoticeBtnWrapper>
               </NoticeWrapper>
             ))}
           </Card>
+          {pagingInfo.hasNextPage && (
+            <MoreBtnWrapper>
+              <MoreButton
+                onPress={() => {
+                  getNoticeList(pagingInfo.page + 1);
+                }}>
+                <MoreBtnText>더보기</MoreBtnText>
+              </MoreButton>
+            </MoreBtnWrapper>
+          )}
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
@@ -45,6 +61,7 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
+  flex: 9;
 `;
 
 const NoticeWrapper = styled.View`
@@ -81,4 +98,27 @@ const NoticeDateText = styled.Text`
   font-size: 11px;
   color: #7f7f7f;
   padding-bottom: 5px;
+`;
+
+const MoreBtnWrapper = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  padding: 20px 0;
+  margin: 10px 0;
+  flex: 1;
+`;
+
+const MoreButton = styled.TouchableOpacity`
+  width: 100%;
+  padding: 10px 0;
+  align-items: center;
+  position: absolute;
+  bottom: 0px;
+`;
+
+const MoreBtnText = styled.Text`
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
 `;

@@ -1,6 +1,6 @@
 export interface IEvent {
   id: number;
-  img: string;
+  image: string;
   title: string;
   description: string;
   createdAt: string;
@@ -16,13 +16,13 @@ export interface IFeed {
   commentUserName: string;
   commentUserImage: string;
   userId: number;
-  userName: string;
+  userNickName: string;
   userImage: string;
   feedImage: string;
-  likeCount: string;
-  commentCount: string;
+  likeCount: number;
+  commentCount: number;
   isUserLiked: boolean;
-  isFollowed: boolean;
+  isUserFollowed: boolean;
   activityName: string;
   activityColor: string;
   activityImage: string;

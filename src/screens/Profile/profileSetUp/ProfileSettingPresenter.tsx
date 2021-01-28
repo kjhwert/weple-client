@@ -6,56 +6,20 @@ import {CommonActions} from '@react-navigation/native';
 
 interface IProps {
   navigation: any;
-  dropOutAlert: boolean;
   logOutAlert: boolean;
-  dropOutAlertFrame: Function;
   logOutAlertFrame: Function;
+  dropOutAlert: Function;
 }
 
-export default ({
-  navigation,
-  dropOutAlert,
-  logOutAlert,
-  dropOutAlertFrame,
-  logOutAlertFrame,
-}: IProps) => {
+export default ({navigation, logOutAlert, logOutAlertFrame, dropOutAlert}: IProps) => {
   const {userLogout}: any = useContext(UserContext);
 
   return (
     <Container>
-      {dropOutAlert && (
-        <AlertWrapper>
-          <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertWarn_icon.png')}
-            />
-          </AlertImageWrapper>
-          <AlertTitleText>{'계정을 삭제하시겠습니까?'}</AlertTitleText>
-          <AlertContentText>
-            {'삭제된 데이터는 되돌릴 수 없습니다.'}
-          </AlertContentText>
-          <AlertBtnWrapper>
-            <ConfirmButton
-              onPress={() => {
-                navigation.navigate('login');
-              }}>
-              <ConfirmButtonText>삭제</ConfirmButtonText>
-            </ConfirmButton>
-            <CancelButton
-              onPress={() => {
-                dropOutAlertFrame(false);
-              }}>
-              <CancelButtonText>취소</CancelButtonText>
-            </CancelButton>
-          </AlertBtnWrapper>
-        </AlertWrapper>
-      )}
       {logOutAlert && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertCheck_icon.png')}
-            />
+            <AlertImage source={require('../../../assets/alertCheck_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{'로그아웃 하시겠습니까?'}</AlertTitleText>
           <AlertBtnWrapper>
@@ -63,7 +27,6 @@ export default ({
               onPress={() => {
                 userLogout();
                 logOutAlertFrame(false);
-
                 navigation.dispatch(
                   CommonActions.reset({
                     index: 1,
@@ -99,6 +62,15 @@ export default ({
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
+                    navigation.navigate('setCategory');
+                  }}>
+                  <SetUpListText>관심 카테고리 수정</SetUpListText>
+                  <MoreImage source={require('../../../assets/set_more.png')} />
+                </SetBtn>
+              </SetBtnWrapper>
+              <SetBtnWrapper>
+                <SetBtn
+                  onPress={() => {
                     navigation.navigate('setPassword');
                   }}>
                   <SetUpListText>비밀번호 변경</SetUpListText>
@@ -123,7 +95,6 @@ export default ({
                   <MoreImage source={require('../../../assets/set_more.png')} />
                 </SetBtn>
               </SetBtnWrapper>
-
               <SetUpTitleText>고객센터</SetUpTitleText>
               <SetBtnWrapper>
                 <SetBtn
@@ -164,7 +135,7 @@ export default ({
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    navigation.navigate('setClause');
+                    navigation.navigate('setTerms');
                   }}>
                   <SetUpListText>약관 및 개인정보보호정책</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
@@ -182,7 +153,7 @@ export default ({
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
-                    dropOutAlertFrame(true);
+                    dropOutAlert();
                   }}>
                   <SetUpListText>회원탈퇴</SetUpListText>
                   <MoreImage source={require('../../../assets/set_more.png')} />
@@ -225,14 +196,6 @@ const AlertImage = styled.Image`
 const AlertTitleText = styled.Text`
   font-size: 14px;
   color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const AlertContentText = styled.Text`
-  font-size: 12px;
-  color: #878787;
   font-weight: bold;
   text-align: center;
   padding-bottom: 10px;

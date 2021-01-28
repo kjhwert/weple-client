@@ -1,30 +1,59 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
-  navigation: any;
-  isFollow: boolean;
+  togetherMemberData: any;
 }
 
-export default ({navigation, member}: IProps) => {
+export default ({togetherMemberData}: IProps) => {
+  const {getTogetherProfile}: any = useContext(TogetherContext);
+
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {member.map((item, idx) => (
-              <MemberWrapper key={idx}>
-                <ProfileImage source={item.image} />
-                <MemberTextWrapper>
-                  <MemberText>{item.name}</MemberText>
-                  <FollowBtn isFollow={item.isFollow}>
-                    <FollowBtnText isFollow={item.isFollow}>
-                      {item.isFollow ? '팔로우' : '팔로우 중'}
-                    </FollowBtnText>
-                  </FollowBtn>
-                </MemberTextWrapper>
-              </MemberWrapper>
-            ))}
+            {togetherMemberData.length > 0 ? (
+              <>
+                {togetherMemberData.map((item, idx) => (
+                  <MemberWrapper key={idx}>
+                    <ProfileImageWrap>
+                      <ProfileImage source={getTogetherProfile(item.userImage)} />
+                    </ProfileImageWrap>
+                    <MemberRecordWrapper>
+                      <MemberNameBtn onPress={() => {}}>
+                        <MemberName>{item.userNickName}</MemberName>
+                      </MemberNameBtn>
+                      <RecordWrapper>
+                        <BestRecordWrap>
+                          <ImageColor1>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor1>
+                          <BestRecordText>500 km</BestRecordText>
+                        </BestRecordWrap>
+                        <BestRecordWrap>
+                          <ImageColor2>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor2>
+                          <BestRecordText>300 km</BestRecordText>
+                        </BestRecordWrap>
+                        <BestRecordWrap>
+                          <ImageColor3>
+                            <BestImage source={require('../../../assets/active_cycle.png')} />
+                          </ImageColor3>
+                          <BestRecordText>100 km</BestRecordText>
+                        </BestRecordWrap>
+                      </RecordWrapper>
+                    </MemberRecordWrapper>
+                  </MemberWrapper>
+                ))}
+              </>
+            ) : (
+              <MemberInfoWrap>
+                <MemberInfoText>현재 참여인원이 없습니다.</MemberInfoText>
+              </MemberInfoWrap>
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
@@ -38,7 +67,7 @@ const Container = styled.View`
 
 const ScrollContainer = styled.View`
   height: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
 `;
 
 const ScrollWrapper = styled.ScrollView``;
@@ -48,7 +77,6 @@ const Card = styled.View`
   height: 100%;
   display: flex;
   align-items: center;
-  background-color: #fff;
 `;
 
 const MemberWrapper = styled.View`
@@ -61,41 +89,104 @@ const MemberWrapper = styled.View`
   border-color: #e0e0e0;
 `;
 
+const ProfileImageWrap = styled.View`
+  width: 20%;
+  align-items: flex-start;
+`;
+
 const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  margin-right: 20px;
 `;
 
-const MemberTextWrapper = styled.View`
+const MemberRecordWrapper = styled.View`
+  width: 80%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const MemberNameBtn = styled.TouchableOpacity`
+  width: 100%;
+  flex-flow: row;
+  padding: 5px 0;
+`;
+
+const MemberName = styled.Text`
+  font-size: 13px;
+  color: #333333;
+`;
+
+const RecordWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+`;
+
+const BestRecordWrap = styled.View`
+  display: flex;
+  flex-flow: row;
+  width: 33%;
+  align-items: center;
+`;
+
+const ImageColor1 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #007bf1;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImageColor2 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #8784ff;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImageColor3 = styled.View`
+  width: 25px;
+  height: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #00bbc7;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BestImage = styled.Image`
+  width: 15px;
+  height: 13px;
+`;
+
+const BestRecordText = styled.Text`
+  font-size: 10px;
+  color: #6d6d6d;
+  text-align: left;
+  width: 68%;
+  margin-left: 5px;
+`;
+
+const MemberInfoWrap = styled.View`
+  width: 100%;
+  height: 200px;
   display: flex;
   flex-flow: row;
   align-items: center;
-  justify-content: space-between;
-  width: 80%;
-`;
-
-const MemberText = styled.Text`
-  font-size: 13px;
-  color: #333;
-  margin-bottom: 5px;
-`;
-
-const FollowBtn = styled.TouchableOpacity`
-  width: 26%;
-  padding: 7px;
-  align-items: center;
   justify-content: center;
-  border-radius: 5px;
-  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
-  border-width: 1px;
-  border-color: #007bf1;
 `;
 
-const FollowBtnText = styled.Text`
-  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
-  font-size: 12px;
+const MemberInfoText = styled.Text`
+  font-size: 15px;
+  color: #333333;
   font-weight: bold;
-  text-align: center;
 `;

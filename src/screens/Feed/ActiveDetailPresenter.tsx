@@ -1,68 +1,86 @@
-import React from 'react';
+import React, {useContext, useRef} from 'react';
 import styled from 'styled-components/native';
+import {IShowFeed} from '../../module/type/feedContext';
+import {BASE_URL, secondsToTimeFormat, showDateToAmPmHourMinute, timeForToday} from '../../module/common';
+import UserContext from '../../module/context/UserContext';
+import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
+import WebView from 'react-native-webview';
 
 interface IProps {
   navigation: any;
+  feed: IShowFeed;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, feed}: IProps) => {
+  const {loginUser}: any = useContext(UserContext);
+  const webViewRef = useRef<any>(null);
+
+  const isLoginUserFeed = (id: number) => {
+    return loginUser.id === id;
+  };
+
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             <MapPlayWrapper>
-              <MapPlayImage source={require('../../assets/map_1.png')} />
-              <PlayBtn onPress={() => {}}>
-                <PlayImage source={require('../../assets/play_icon.png')} />
-              </PlayBtn>
+              <WebView
+                ref={(ref) => (webViewRef.current = ref)}
+                source={{
+                  uri: `${BASE_URL}/public/map/test.html`,
+                }}
+                injectedJavaScript={webViewJavaScriptCode({
+                  coordinates: feed.coordinates,
+                  map: {id: feed.mapId, style: feed.mapStyle},
+                  music: {id: feed.musicId, url: feed.musicUrl},
+                })}
+              />
             </MapPlayWrapper>
 
             <ProfileTopWrapper>
               <ProfileWrapper>
-                <ProfileImage source={require('../../assets/profile_1.png')} />
-                <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
-                    <ProfileName>GilDong Hong</ProfileName>
-                  </ProfileNameBtn>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
+                <ProfileInfoWrapper>
+                  <ProfileImage
+                    source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
+                  />
+                  <ProfileTextWrapper>
+                    <ProfileNameBtn onPress={() => {}}>
+                      <ProfileName>{feed.userNickName}</ProfileName>
+                    </ProfileNameBtn>
+                    <PostTime>{timeForToday(feed.createdAt)}</PostTime>
+                  </ProfileTextWrapper>
+                </ProfileInfoWrapper>
+                {!isLoginUserFeed(feed.userId) && (
+                  <FollowBtn onPress={() => {}}>
+                    <FollowBtnText>{feed.isUserFollowed ? '팔로우' : '팔로잉'}</FollowBtnText>
+                  </FollowBtn>
+                )}
               </ProfileWrapper>
               <RecordWrapper>
                 <ActiveTextWrapper>
-                  <ActiveLeftImgWrapper>
-                    <ActiveImage
-                      source={require('../../assets/active_cycle.png')}
-                    />
+                  <ActiveLeftImgWrapper color={feed.activityColor}>
+                    <ActiveImage source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
                   </ActiveLeftImgWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>
-                      <KmIconImg
-                        source={require('../../assets/icon_ruler.png')}
-                      />
+                      <KmIconImg source={require('../../assets/icon_ruler.png')} />
                     </ActiveBtn>
-                    <ActiveNumber>5,650</ActiveNumber>
-                    <ActiveText>Killometer</ActiveText>
+                    <ActiveNumber>{feed.distance}</ActiveNumber>
+                    <ActiveText>Kilometer</ActiveText>
                   </ActiveBtnWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>
-                      <ClockIconImg
-                        source={require('../../assets/icon_clock.png')}
-                      />
+                      <ClockIconImg source={require('../../assets/icon_clock.png')} />
                     </ActiveBtn>
-                    <FollowerNumber>2:35:08</FollowerNumber>
+                    <FollowerNumber>{secondsToTimeFormat(feed.duration)}</FollowerNumber>
                     <ActiveText>Duration</ActiveText>
                   </ActiveBtnWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>
-                      <HeartbeatIconImg
-                        source={require('../../assets/icon_heartbeat.png')}
-                      />
+                      <HeartbeatIconImg source={require('../../assets/icon_heartbeat.png')} />
                     </ActiveBtn>
-                    <FollowingNumber>420</FollowingNumber>
+                    <FollowingNumber>{feed.calorie}</FollowingNumber>
                     <ActiveText>Calorie</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
@@ -70,37 +88,31 @@ export default ({navigation}: IProps) => {
               <IconWrapper>
                 <IconBtnText>
                   <IconBtn>
-                    <IconImage
-                      source={require('../../assets/icon_heart.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_heart.png')} />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
-                      navigation.navigate('friendLike');
+                      navigation.navigate('friendLike', {id: feed.id});
                     }}>
                     <IconText>좋아요</IconText>
-                    <IconTextNumber>(56)</IconTextNumber>
+                    <IconTextNumber>{`(${feed.likeCount})`}</IconTextNumber>
                   </IconBtn>
                 </IconBtnText>
                 <IconBtnText>
                   <IconBtn>
-                    <IconImage
-                      source={require('../../assets/icon_comment.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_comment.png')} />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
-                      navigation.navigate('friendComment');
+                      navigation.navigate('friendComment', {id: feed.id});
                     }}>
                     <IconText>댓글</IconText>
-                    <IconTextNumber>(30)</IconTextNumber>
+                    <IconTextNumber>{`(${feed.commentCount})`}</IconTextNumber>
                   </IconBtn>
                 </IconBtnText>
                 <ShareIconBtnText>
                   <IconBtn>
-                    <IconImage
-                      source={require('../../assets/icon_share_2.png')}
-                    />
+                    <IconImage source={require('../../assets/icon_share_2.png')} />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
@@ -117,18 +129,14 @@ export default ({navigation}: IProps) => {
               <ActiveDetailTitleWrapper>
                 <ActiveMarkWrapper>
                   <ActiveStartMark>
-                    <StartImage
-                      source={require('../../assets/start_icon.png')}
-                    />
+                    <StartImage source={require('../../assets/start_icon.png')} />
                   </ActiveStartMark>
                 </ActiveMarkWrapper>
-                <ActiveDetailTitle>오후 15:35에 출발</ActiveDetailTitle>
+                <ActiveDetailTitle>{showDateToAmPmHourMinute(new Date(feed.startDate))} 에 출발</ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
 
               <ActiveDetailImageWrapper>
-                <ActiveDetailMapImage
-                  source={require('../../assets/map_2.png')}
-                />
+                <ActiveDetailMapImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} />
               </ActiveDetailImageWrapper>
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
@@ -136,63 +144,57 @@ export default ({navigation}: IProps) => {
                   <ActiveSmallestMark></ActiveSmallestMark>
                 </ActiveSmallMarkWrapper>
                 <DetailTextWrapper>
-                  <ActiveDetailText>"965m"</ActiveDetailText>
-
-                  <ActiveDetailTimeText>
-                    2.5km 이동 후 오후 16:05
-                  </ActiveDetailTimeText>
+                  <ActiveDetailTimeText>{`${feed.distance}km 이동 후 ${showDateToAmPmHourMinute(
+                    new Date(feed.endDate),
+                  )}`}</ActiveDetailTimeText>
                 </DetailTextWrapper>
               </ActiveDetailTextWrapper>
 
-              <ActiveDetailImageWrapper>
-                <ActiveDetailImage
-                  source={require('../../assets/photo_3.jpeg')}
-                />
-              </ActiveDetailImageWrapper>
-              <ActiveDetailTextWrapper>
-                <ActiveSmallMarkWrapper>
-                  <ActiveSmallMark></ActiveSmallMark>
-                  <ActiveSmallestMark></ActiveSmallestMark>
-                </ActiveSmallMarkWrapper>
-                <DetailTextWrapper>
-                  <ActiveDetailTimeText>
-                    12.5km 이동 후 오후 16:35에 촬영
-                  </ActiveDetailTimeText>
-                </DetailTextWrapper>
-              </ActiveDetailTextWrapper>
+              {feed.images.map((image) => (
+                <FeedImageWrapper key={image.id}>
+                  <ActiveDetailImageWrapper>
+                    <ActiveDetailImage source={{uri: `${BASE_URL}/${image.img}`}} />
+                  </ActiveDetailImageWrapper>
+                  <ActiveDetailTextWrapper>
+                    <ActiveSmallMarkWrapper>
+                      <ActiveSmallMark></ActiveSmallMark>
+                      <ActiveSmallestMark></ActiveSmallestMark>
+                    </ActiveSmallMarkWrapper>
+                    <DetailTextWrapper>
+                      <ActiveDetailTimeText>{image.distance}km 이동 후 1232에 촬영</ActiveDetailTimeText>
+                    </DetailTextWrapper>
+                  </ActiveDetailTextWrapper>
+                </FeedImageWrapper>
+              ))}
 
               <ActiveDetailFinishTitleWrapper>
                 <ActiveMarkFinishWrapper>
                   <ActiveFinishMark>
-                    <FinishImage
-                      source={require('../../assets/finish_icon.png')}
-                    />
+                    <FinishImage source={require('../../assets/finish_icon.png')} />
                   </ActiveFinishMark>
                 </ActiveMarkFinishWrapper>
                 <ActiveDetailFinishTitle>
-                  오후 17:10에 끝맞쳤습니다.
+                  {showDateToAmPmHourMinute(new Date(feed.endDate))} 에 끝마쳤습니다.
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
 
             <RecordLastWrapper>
               <ActiveTextWrapper>
-                <ActiveLastImgWrapper>
-                  <ActiveLastImage
-                    source={require('../../assets/active_cycle.png')}
-                  />
+                <ActiveLastImgWrapper color={feed.activityColor}>
+                  <ActiveLastImage source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
                 </ActiveLastImgWrapper>
                 <ActiveLastWrapper>
-                  <ActiveLastNumber>5,650</ActiveLastNumber>
-                  <ActiveLastText>Killometer</ActiveLastText>
+                  <ActiveLastNumber>{feed.distance}</ActiveLastNumber>
+                  <ActiveLastText>Kilometer</ActiveLastText>
                 </ActiveLastWrapper>
 
                 <ActiveLastWrapper>
-                  <ActiveLastNumber>2:35:08</ActiveLastNumber>
+                  <ActiveLastNumber>{secondsToTimeFormat(feed.duration)}</ActiveLastNumber>
                   <ActiveLastText>Duration</ActiveLastText>
                 </ActiveLastWrapper>
                 <ActiveLastWrapper>
-                  <ActiveLastNumber>420</ActiveLastNumber>
+                  <ActiveLastNumber>{feed.calorie}</ActiveLastNumber>
                   <ActiveLastText>Calorie</ActiveLastText>
                 </ActiveLastWrapper>
               </ActiveTextWrapper>
@@ -206,6 +208,10 @@ export default ({navigation}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const FeedImageWrapper = styled.View`
+  width: 100%;
 `;
 
 const ScrollContainer = styled.View`
@@ -223,27 +229,8 @@ const Card = styled.View`
 `;
 
 const MapPlayWrapper = styled.View`
-  display: flex;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MapPlayImage = styled.Image`
-  width: 100%;
-  height: 150px;
-`;
-
-const PlayBtn = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap;
-  position: absolute;
-`;
-
-const PlayImage = styled.Image`
-  width: 35px;
-  height: 35px;
+  height: 200px;
 `;
 
 const ProfileTopWrapper = styled.View`
@@ -268,10 +255,9 @@ const ProfileWrapper = styled.View`
 `;
 
 const ProfileImage = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50px;
-  background-color: #007bf1;
 `;
 
 const ProfileTextWrapper = styled.View`
@@ -279,7 +265,7 @@ const ProfileTextWrapper = styled.View`
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 60%;
+  margin-left: 15px;
 `;
 
 const ProfileNameBtn = styled.TouchableOpacity`
@@ -309,6 +295,12 @@ const FollowBtn = styled.TouchableOpacity`
   background-color: #007bf1;
 `;
 
+const ProfileInfoWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+`;
+
 const FollowBtnText = styled.Text`
   color: #fff;
   font-size: 12px;
@@ -331,12 +323,12 @@ const ActiveLeftImgWrapper = styled.View`
   width: 20%;
   height: 80px;
   padding: 10px 5px;
-  background-color: #007bf1;
+  background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
 `;
 
 const ActiveImage = styled.Image`
   width: 40px;
-  height: 40px;
+  height: 25px;
 `;
 
 const ActiveTextWrapper = styled.View`
@@ -564,13 +556,6 @@ const DetailTextWrapper = styled.View`
   width: 80%;
 `;
 
-const ActiveDetailText = styled.Text`
-  font-size: 12px;
-  font-weight: bold;
-  color: #353434;
-  margin-top: 10px;
-`;
-
 const ActiveDetailTimeText = styled.Text`
   font-size: 13px;
   font-weight: bold;
@@ -625,12 +610,12 @@ const ActiveLastImgWrapper = styled.View`
   width: 18%;
   height: 70px;
   padding: 5px;
-  background-color: #007bf1;
+  background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
 `;
 
 const ActiveLastImage = styled.Image`
   width: 40px;
-  height: 40px;
+  height: 25px;
 `;
 
 const ActiveLastWrapper = styled.View`

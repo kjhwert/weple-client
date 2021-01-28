@@ -1,21 +1,23 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IProps {}
+interface IProps {
+  faqList: any;
+}
 
-export default ({navigation, qnaData}: IProps) => {
+export default ({faqList}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {qnaData.map((item, idx) => (
+            {faqList.map((item, idx) => (
               <FaqWrapper key={idx}>
                 <FaqBtnWrapper>
-                  <FaqBtn onPress={() => {}}>
-                    <FaqTitleText>{item.title}</FaqTitleText>
+                  <FaqBtn>
+                    <FaqTitleText>{item.request}</FaqTitleText>
                   </FaqBtn>
-                  <FaqAnswerText>{item.answer}</FaqAnswerText>
+                  <FaqAnswerText>{item.response}</FaqAnswerText>
                 </FaqBtnWrapper>
               </FaqWrapper>
             ))}
@@ -60,7 +62,7 @@ const FaqBtnWrapper = styled.View`
   width: 100%;
 `;
 
-const FaqBtn = styled.TouchableOpacity`
+const FaqBtn = styled.View`
   width: 100%;
   padding: 5px 0;
   align-items: flex-start;

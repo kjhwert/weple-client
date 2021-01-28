@@ -1,28 +1,34 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL} from '../../../../module/common';
 
 interface IProps {
-  navigation: any;
-  isFollow: boolean;
+  users: Array<{id: number; userId: number; userNickName: string; userImage: string; isUserFollowed: string}>;
+  userFollowAction: (userId: number) => void;
 }
 
-export default ({navigation, member}: IProps) => {
+export default ({users, userFollowAction}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {member.map((item, idx) => (
-              <MemberWrapper key={idx}>
-                <ProfileImage source={item.image} />
+            {users.map((user) => (
+              <MemberWrapper key={user.id}>
+                <ProfileImage source={{uri: `${BASE_URL}/${user.userImage}`}} />
                 <MemberTextWrapper>
-                  <MemberText>{item.name}</MemberText>
-
-                  <FollowBtn isFollow={item.isFollow}>
-                    <FollowBtnText isFollow={item.isFollow}>
-                      {item.isFollow ? '팔로우' : '팔로우 중'}
-                    </FollowBtnText>
-                  </FollowBtn>
+                  <MemberText>{user.userNickName}</MemberText>
+                  {Number(user.isUserFollowed) !== 2 && (
+                    <FollowBtn
+                      isFollow={Number(user.isUserFollowed)}
+                      onPress={() => {
+                        userFollowAction(user.userId);
+                      }}>
+                      <FollowBtnText isFollow={Number(user.isUserFollowed)}>
+                        {user.isUserFollowed === '1' ? '팔로우' : '팔로잉'}
+                      </FollowBtnText>
+                    </FollowBtn>
+                  )}
                 </MemberTextWrapper>
               </MemberWrapper>
             ))}
@@ -89,13 +95,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
+  background-color: ${(props: {isFollow: number}) => (props.isFollow !== 1 ? '#007bf1' : '#fff')};
   border-width: 1px;
   border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
+  color: ${(props: {isFollow: number}) => (props.isFollow !== 1 ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;
