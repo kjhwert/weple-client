@@ -63,7 +63,7 @@ export default () => {
         />
         <Tab.Screen
           options={{
-            tabBarLabel: '함께',
+            tabBarLabel: '모임',
           }}
           name="together"
           component={TogetherStack}
