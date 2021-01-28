@@ -60,10 +60,7 @@ export default ({
               <>
                 {userList.togethers.map((item, idx) => (
                   <RecruitWrapper key={idx}>
-                    <RecruitImageWrapper
-                      onPress={() => {
-                        navigation.navigate('togetherMyDetail', {id: item.id});
-                      }}>
+                    <RecruitImageWrapper>
                       <RecruitImage source={getTogetherThumbnail(item.feed.thumbnail)} />
                       <RecordWrapper backgroundColor={item.activity.color}>
                         <RecordImage source={getTogetherActivityImage(item.activity.image)} />
@@ -71,10 +68,7 @@ export default ({
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
-                      <RecruitTitleBtn
-                        onPress={() => {
-                          navigation.navigate('togetherMyDetail', {id: item.id});
-                        }}>
+                      <RecruitTitleBtn>
                         <RecruitTitle>{item.title}</RecruitTitle>
                       </RecruitTitleBtn>
                       <RecruitAddress>{item.togetherPlace}</RecruitAddress>
@@ -135,11 +129,12 @@ export default ({
             ) : (
               <>
                 {togetherMenu?.map((item, idx) => (
-                  <RecruitWrapper key={idx}>
-                    <RecruitImageWrapper
-                      onPress={() => {
-                        navigation.navigate('togetherDetail', {id: item.id});
-                      }}>
+                  <RecruitWrapper
+                    key={idx}
+                    onPress={() => {
+                      navigation.navigate('togetherMyDetail', {id: item.id});
+                    }}>
+                    <RecruitImageWrapper>
                       <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
                       <RecordWrapper backgroundColor={item.activityColor}>
                         <RecordImage source={getTogetherActivityImage(item.activityImage)} />
@@ -298,7 +293,7 @@ const MapImage = styled.Image`
   width: 100%;
 `;
 
-const RecruitWrapper = styled.View`
+const RecruitWrapper = styled.TouchableOpacity`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
