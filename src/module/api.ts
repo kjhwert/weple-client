@@ -14,12 +14,10 @@ import {
   ITogetherApiOpneRoom,
   ITogetherCreateComment,
   IFeedCreate,
-  IFeedIndex,
   IFeedCreateComment,
   IUtilityApiEvents,
   IFeedPagination,
 } from './type/api';
-import {IFeedComments} from './type/feed';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -62,7 +60,7 @@ export const userApi = {
   hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
   passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post('/user/password-forget', passwordForget)),
   passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
-  getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
+  getProfile: (userId: number) => apiRequest(api.get(`/user/${userId}`)),
   putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
   userImage: (file: string) =>
     apiRequest(
@@ -151,7 +149,8 @@ export const feedApi = {
   showLikeUsers: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/like`)),
   feedLike: (feedId: number) => apiRequest(api.post(`/feed/like`, {feedId})),
   feedDisLike: (feedId: number) => apiRequest(api.post(`/feed/dis-like`, {feedId})),
-  createComment: (data: IFeedCreateComment) => apiRequest(api.post(`/feed/comment`, data)),
+  createComment: ({feedId, description}: IFeedCreateComment) =>
+    apiRequest(api.post(`/feed/${feedId}/comment`, {description})),
   updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
 

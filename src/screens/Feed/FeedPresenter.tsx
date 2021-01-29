@@ -73,7 +73,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                   <FollowerImageWrapper
                     key={id}
                     onPress={() => {
-                      navigation.navigate('profileActiveMain', {id});
+                      navigation.navigate('profile', {screen: 'profileActiveMain', params: {id}});
                     }}>
                     <LinearGradient
                       colors={['#61d7ff', '#79a6fa', '#3065f4']}

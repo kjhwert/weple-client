@@ -1,19 +1,22 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import UserContext from '../../module/context/UserContext';
+import {IProfileUserInfo} from '../../module/type/user';
+import {BASE_URL} from '../../module/common';
 
 interface IProps {
   navigation: any;
   profileData: any;
   sortAlert: Function;
+  user: IProfileUserInfo;
 }
 
 interface IColorChangeProps {
   isClick: boolean;
 }
 
-export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
-  const {getProfileUri}: any = useContext(UserContext);
+export default ({navigation, profileData, menuList, sortAlert, user}: IProps) => {
+  const {loginUser}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -23,20 +26,24 @@ export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
-                  <ProfileMainImage source={getProfileUri()} />
-                  <EditCard
-                    onPress={() => {
-                      navigation.navigate('setProfile');
-                    }}>
-                    <EditImage source={require('../../assets/edit_icon.png')} />
-                    <EditBtnText>프로필 수정</EditBtnText>
-                  </EditCard>
+                  <ProfileMainImage
+                    source={{uri: `${BASE_URL}/${user.user.image ? user.user.image : 'public/user/no_profile.png'}`}}
+                  />
+                  {user.user.id === loginUser.id && (
+                    <EditCard
+                      onPress={() => {
+                        navigation.navigate('setProfile');
+                      }}>
+                      <EditImage source={require('../../assets/edit_icon.png')} />
+                      <EditBtnText>프로필 수정</EditBtnText>
+                    </EditCard>
+                  )}
                 </ProfileImageWrapper>
-                <ProfileNickName>{profileData.nickName}</ProfileNickName>
+                <ProfileNickName>{user.user.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
-                      <ActiveNumber>{profileData.feedCount}</ActiveNumber>
+                      <ActiveNumber>{user.feedCount}</ActiveNumber>
                     </ActiveBtn>
                     <ActiveText>활동들</ActiveText>
                   </ActiveBtnWrapper>
@@ -45,7 +52,7 @@ export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
                       onPress={() => {
                         navigation.navigate('followerMember');
                       }}>
-                      <FollowerNumber>{profileData.userFollower}</FollowerNumber>
+                      <FollowerNumber>{user.userFollower}</FollowerNumber>
                     </ActiveBtn>
                     <ActiveText>팔로워</ActiveText>
                   </ActiveBtnWrapper>
@@ -54,12 +61,12 @@ export default ({navigation, profileData, menuList, sortAlert}: IProps) => {
                       onPress={() => {
                         navigation.navigate('followingMember');
                       }}>
-                      <FollowingNumber>{profileData.userFollow}</FollowingNumber>
+                      <FollowingNumber>{user.userFollow}</FollowingNumber>
                     </ActiveBtn>
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
-                <ActiveIntroduceText>{profileData.description}</ActiveIntroduceText>
+                <ActiveIntroduceText>{user.user.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn

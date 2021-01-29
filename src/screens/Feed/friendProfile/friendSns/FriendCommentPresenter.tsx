@@ -58,9 +58,7 @@ export default ({
                         onChangeText={onUpdateDescription}
                       />
                     ) : (
-                      <CommentText editable={false} multiline={true} modifiable={false}>
-                        {comment.description}
-                      </CommentText>
+                      <CommentText editable={false} multiline={true} modifiable={false} value={comment.description} />
                     )}
                   </MemberTextWrapper>
                 </ProfileImageWrapper>

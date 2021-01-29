@@ -23,7 +23,6 @@ import SocialNicknameContainer from '../screens/Start/SignUp/SocialNicknameConta
 import FacebookCreate from '../screens/Start/socialCreate/FacebookCreate';
 import GoogleCreate from '../screens/Start/socialCreate/GoogleCreate';
 import KakaoCreate from '../screens/Start/socialCreate/KakaoCreate';
-import RecordFinishContainer from '../screens/Record/RecordFinishContainer';
 
 const Stack = createStackNavigator();
 

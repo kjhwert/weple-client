@@ -5,7 +5,6 @@ import Loading from '../../components/Loading';
 import FeedContext from '../../module/context/FeedContext';
 import AlertContext from '../../module/context/AlertContext';
 import CheckAlert from '../../components/CheckAlert';
-import UserContext from '../../module/context/UserContext';
 
 interface IProps {
   navigation: any;

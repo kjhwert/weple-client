@@ -115,6 +115,6 @@ export interface IFeedPagination {
 }
 
 export interface IFeedCreateComment {
-  feed: number;
+  feedId: number;
   description: string;
 }

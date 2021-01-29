@@ -7,6 +7,7 @@ import AlertContext from '../../../../module/context/AlertContext';
 import CheckAlert from '../../../../components/CheckAlert';
 import ModifyAlert from '../../../../components/ModifyAlert';
 import ConfirmAlert from '../../../../components/ConfirmAlert';
+import {IFeedCreateComment} from '../../../../module/type/api';
 
 interface IProps {
   navigation: any;
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
   const [commentStatus, setCommentStatus] = useState({
     id: 0,
     isModifiable: false,
@@ -22,27 +23,19 @@ export default ({navigation, route}: IProps) => {
   });
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState<Array<IFeedComments>>([]);
-  const [userComment, setUserComment] = useState({
-    feed: 0,
+  const [userComment, setUserComment] = useState<IFeedCreateComment>({
+    feedId: 0,
     description: '',
   });
   const getComments = async () => {
-    const id = route?.params?.id;
-    if (!id) {
+    const feedId = route?.params?.id;
+    if (!feedId) {
       navigation.goBack();
     }
-    setUserComment({...userComment, feed: id});
-    const {data, statusCode, message} = await feedApi.showComments(id);
+    setUserComment({...userComment, feedId});
+    const {data, statusCode, message} = await feedApi.showComments(feedId);
     if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터 조회에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setComments(data);
   };
@@ -58,15 +51,7 @@ export default ({navigation, route}: IProps) => {
   const finishComments = async () => {
     const {statusCode, message} = await feedApi.createComment(userComment);
     if (statusCode !== 201) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터 조회에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setUserComment({...userComment, description: ''});
     await getComments();
@@ -83,9 +68,8 @@ export default ({navigation, route}: IProps) => {
 
   const initializeCommentStatus = () => {
     setCommentStatus({
-      id: 0,
+      ...commentStatus,
       isModifiable: false,
-      description: '',
     });
   };
 
@@ -97,15 +81,7 @@ export default ({navigation, route}: IProps) => {
     const {description, id} = commentStatus;
     const {statusCode, message} = await feedApi.updateComment(id, description);
     if (statusCode !== 201) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '수정에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('댓글 수정에 실패했습니다.', message);
     }
 
     await initializeCommentStatus();
@@ -133,15 +109,7 @@ export default ({navigation, route}: IProps) => {
   const destroyComment = async (id: number) => {
     const {statusCode, message} = await feedApi.destroyComment(id);
     if (statusCode !== 201) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '삭제에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('삭제에 실패했습니다.', message);
     }
 
     await getComments();

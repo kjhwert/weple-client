@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProfileSetupBtn from '../components/ProfileSetupBtn';
 import BackBtn from '../components/BackBtn';
@@ -31,7 +31,6 @@ import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPass
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
 import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/AlarmSetContainer';
 import {View} from 'react-native';
-
 const Stack = createStackNavigator();
 
 export default () => {

@@ -23,3 +23,19 @@ export interface IUserFollow {
   userImage: string;
   isUserFollowed: string;
 }
+
+export interface IProfileUser {
+  id: number;
+  name: string;
+  nickName: string;
+  email: string;
+  image: string;
+  description: string;
+}
+
+export interface IProfileUserInfo {
+  user: IProfileUser;
+  feedCount: number;
+  userFollow: number;
+  userFollower: number;
+}

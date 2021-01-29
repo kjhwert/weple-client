@@ -4,6 +4,8 @@ import AlertContext from '../../module/context/AlertContext';
 import SortAlert from '../../components/SortAlert';
 import UserContext from '../../module/context/UserContext';
 import {userApi} from '../../module/api';
+import {IProfileUserInfo} from '../../module/type/user';
+import Loading from '../../components/Loading';
 
 const menuList = [
   {id: 0, name: '나의 활동', isClick: true},
@@ -16,8 +18,9 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {getUserId}: any = useContext(UserContext);
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {loginUser}: any = useContext(UserContext);
+  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
+  const [user, setUser] = useState<IProfileUserInfo | null>(null);
 
   const [profileData, setProfileData] = useState({
     nickName: '',
@@ -28,18 +31,16 @@ export default ({navigation, route}: IProps) => {
     userFollower: 0,
   });
 
-  const getProfileInfo = async () => {
-    const id = await getUserId();
-    const {data} = await userApi.getProfile(id);
-    setProfileData({
-      ...profileData,
-      nickName: data.user.nickName ? data.user.nickName : '',
-      description: data.user.description ? data.user.description : '',
-      image: data.user.image ? data.user.image : '',
-      feedCount: data.feedCount ? data.feedCount : 0,
-      userFollow: data.userFollow ? data.userFollow : 0,
-      userFollower: data.userFollower ? data.userFollower : 0,
-    });
+  const getProfile = async () => {
+    const id = route?.params?.id;
+
+    let userId = loginUser.id;
+    if (id) {
+      userId = id;
+    }
+
+    const {data} = await userApi.getProfile(userId);
+    setUser(data);
   };
 
   const sortDataType = [
@@ -58,14 +59,18 @@ export default ({navigation, route}: IProps) => {
   };
 
   useEffect(() => {
-    getProfileInfo();
-  }, []);
+    getProfile();
+  }, [route]);
 
-  useEffect(() => {
-    if (route.params?.refresh) getProfileInfo();
-  }, [route.params?.refresh]);
-
-  return (
-    <ProfilePresenter navigation={navigation} profileData={profileData} menuList={menuList} sortAlert={sortAlert} />
+  return !user ? (
+    <Loading />
+  ) : (
+    <ProfilePresenter
+      navigation={navigation}
+      user={user}
+      profileData={profileData}
+      menuList={menuList}
+      sortAlert={sortAlert}
+    />
   );
 };
