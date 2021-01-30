@@ -3,36 +3,50 @@ import styled from 'styled-components/native';
 import {togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
+import {ITogethers, IUserTogethers} from '../../module/type/together';
+import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 
 interface IProps {
   navigation: any;
-  userList: any;
+  userTogethers: {togetherCount: number; togethers: Array<IUserTogethers>};
   togetherPaging: any;
-  togetherMenu: any;
+  togethers: Array<ITogethers>;
   isMapView: boolean;
   turnMapView: Function;
-  setLocationPaging: () => void;
-  setFollowerPaging: () => void;
-  setEndSoonPaging: () => void;
+  getLocation: () => void;
+  getFollower: () => void;
+  getEndSoon: () => void;
+  getMoreTogethers: () => void;
 }
 
 export default ({
   navigation,
-  userList,
+  userTogethers,
   togetherPaging,
-  togetherMenu,
+  togethers,
   isMapView,
   turnMapView,
-  setLocationPaging,
-  setFollowerPaging,
-  setEndSoonPaging,
+  getLocation,
+  getFollower,
+  getEndSoon,
+  getMoreTogethers,
 }: IProps) => {
   const {getTogetherThumbnail, getTogetherActivityImage}: any = useContext(TogetherContext);
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+  };
+
+  const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (isCloseToBottom(nativeEvent)) {
+      await getMoreTogethers();
+    }
+  };
 
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper>
+        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <Card>
             <RecruitTogetherWrapper>
               <RecruitTogetherBtn
@@ -40,11 +54,11 @@ export default ({
                   navigation.navigate('togetherMyTotalList');
                 }}>
                 <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
-                <RecruitTogetherNumber>{userList.togetherCount}</RecruitTogetherNumber>
+                <RecruitTogetherNumber>{userTogethers.togetherCount}</RecruitTogetherNumber>
                 <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
               </RecruitTogetherBtn>
             </RecruitTogetherWrapper>
-            {userList?.togetherCount <= 0 ? (
+            {userTogethers.togetherCount <= 0 ? (
               <Wrapper>
                 <TogetherOpenWrapper>
                   <OpenBtnWrapper
@@ -58,22 +72,22 @@ export default ({
               </Wrapper>
             ) : (
               <>
-                {userList.togethers.map((item, idx) => (
-                  <RecruitWrapper key={idx}>
+                {userTogethers.togethers.map((together) => (
+                  <RecruitWrapper key={together.id}>
                     <RecruitImageWrapper>
-                      <RecruitImage source={getTogetherThumbnail(item.feed.thumbnail)} />
-                      <RecordWrapper backgroundColor={item.activity.color}>
-                        <RecordImage source={getTogetherActivityImage(item.activity.image)} />
-                        <RecordText>{item.feed.distance}KM</RecordText>
+                      <RecruitImage source={getTogetherThumbnail(together.feed.thumbnail)} />
+                      <RecordWrapper backgroundColor={together.activity.color}>
+                        <RecordImage source={getTogetherActivityImage(together.activity.image)} />
+                        <RecordText>{together.feed.distance}KM</RecordText>
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
                       <RecruitTitleBtn>
-                        <RecruitTitle>{item.title}</RecruitTitle>
+                        <RecruitTitle>{together.title}</RecruitTitle>
                       </RecruitTitleBtn>
-                      <RecruitAddress>{item.togetherPlace}</RecruitAddress>
-                      <EntryFee>참가비 {getComma(item.togetherPrice)}원</EntryFee>
-                      <Deadline>{togetherDate(item.limitDate)}</Deadline>
+                      <RecruitAddress>{together.togetherPlace}</RecruitAddress>
+                      <EntryFee>참가비 {getComma(together.togetherPrice)}원</EntryFee>
+                      <Deadline>{togetherDate(together.limitDate)}</Deadline>
                     </RecruitTextWrapper>
                   </RecruitWrapper>
                 ))}
@@ -96,11 +110,11 @@ export default ({
                     onPress={() => {
                       switch (idx) {
                         case 0:
-                          return setLocationPaging();
+                          return getLocation();
                         case 1:
-                          return setFollowerPaging();
+                          return getFollower();
                         case 2:
-                          return setEndSoonPaging();
+                          return getEndSoon();
                       }
                     }}>
                     <MenuText focused={togetherPaging.id === idx}>{name}</MenuText>
@@ -128,29 +142,29 @@ export default ({
               </MapImageWrap>
             ) : (
               <>
-                {togetherMenu?.map((item, idx) => (
+                {togethers.map((together) => (
                   <RecruitWrapper
-                    key={idx}
+                    key={together.id}
                     onPress={() => {
-                      navigation.navigate('togetherMyDetail', {id: item.id});
+                      navigation.navigate('togetherMyDetail', {id: together.id});
                     }}>
                     <RecruitImageWrapper>
-                      <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
-                      <RecordWrapper backgroundColor={item.activityColor}>
-                        <RecordImage source={getTogetherActivityImage(item.activityImage)} />
-                        <RecordText>{item.distance}KM</RecordText>
+                      <RecruitImage source={getTogetherThumbnail(together.thumbnail)} />
+                      <RecordWrapper backgroundColor={together.activityColor}>
+                        <RecordImage source={getTogetherActivityImage(together.activityImage)} />
+                        <RecordText>{together.distance}KM</RecordText>
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
                       <RecruitTitleBtn
                         onPress={() => {
-                          navigation.navigate('togetherDetail', {id: item.id});
+                          navigation.navigate('togetherDetail', {id: together.id});
                         }}>
-                        <RecruitTitle>{item.title}</RecruitTitle>
+                        <RecruitTitle>{together.title}</RecruitTitle>
                       </RecruitTitleBtn>
-                      <RecruitAddress>{item.place}</RecruitAddress>
-                      <EntryFee>참가비 {getComma(item.price)}원</EntryFee>
-                      <Deadline>{togetherDate(item.limitDate)}</Deadline>
+                      <RecruitAddress>{together.place}</RecruitAddress>
+                      <EntryFee>참가비 {getComma(together.price)}원</EntryFee>
+                      <Deadline>{togetherDate(together.limitDate)}</Deadline>
                     </RecruitTextWrapper>
                   </RecruitWrapper>
                 ))}
