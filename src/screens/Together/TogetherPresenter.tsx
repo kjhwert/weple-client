@@ -73,7 +73,11 @@ export default ({
             ) : (
               <>
                 {userTogethers.togethers.map((together) => (
-                  <RecruitWrapper key={together.id}>
+                  <RecruitWrapper
+                    key={together.id}
+                    onPress={() => {
+                      navigation.navigate('togetherDetail', {id: together.id});
+                    }}>
                     <RecruitImageWrapper>
                       <RecruitImage source={getTogetherThumbnail(together.feed.thumbnail)} />
                       <RecordWrapper backgroundColor={together.activity.color}>
@@ -146,7 +150,7 @@ export default ({
                   <RecruitWrapper
                     key={together.id}
                     onPress={() => {
-                      navigation.navigate('togetherMyDetail', {id: together.id});
+                      navigation.navigate('togetherDetail', {id: together.id});
                     }}>
                     <RecruitImageWrapper>
                       <RecruitImage source={getTogetherThumbnail(together.thumbnail)} />
@@ -318,7 +322,7 @@ const RecruitWrapper = styled.TouchableOpacity`
   border-color: #eee;
 `;
 
-const RecruitImageWrapper = styled.TouchableOpacity`
+const RecruitImageWrapper = styled.View`
   display: flex;
   width: 45%;
   border-width: 1px;
@@ -367,7 +371,7 @@ const RecruitTextWrapper = styled.View`
   width: 50%;
 `;
 
-const RecruitTitleBtn = styled.TouchableOpacity`
+const RecruitTitleBtn = styled.View`
   width: 100%;
 `;
 

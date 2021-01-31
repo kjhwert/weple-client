@@ -4,6 +4,8 @@ import {togetherApi} from '../../../module/api';
 import AlertContext from '../../../module/context/AlertContext';
 import CheckAlert from '../../../components/CheckAlert';
 import ConfirmAlert from '../../../components/ConfirmAlert';
+import {IShowTogether} from '../../../module/type/together';
+import Loading from '../../../components/Loading';
 
 interface IProps {
   navigation: any;
@@ -13,34 +15,21 @@ interface IProps {
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
 
-  const [listDetail, setListDetail] = useState({
-    userCount: 0,
-    together: {
-      id: 0,
-      title: '',
-      Place: '',
-      price: '',
-      limitDate: '',
-      description: '',
-      recommend: '',
-      notice: '',
-      address: '',
-      thumbnail: '',
-      commentNickName: null,
-      commentImage: null,
-      commentDescription: null,
-      isUserJoined: '0',
-    },
-    commentCount: 0,
-  });
+  const [show, setShow] = useState<IShowTogether | null>(null);
 
-  const getTogethertDetail = async () => {
-    const id = route.params?.id;
+  const getTogether = async () => {
+    const id = route?.params?.id;
+    if (!id) {
+      return;
+    }
     const {data, statusCode} = await togetherApi.userOpenDetail(id);
     if (statusCode !== 200) {
-    } else {
-      setListDetail(data);
+      return;
     }
+
+    data.together.isUserJoined = !!+data.together.isUserJoined;
+    data.together.isUsersTogether = !!+data.together.isUsersTogether;
+    setShow(data);
   };
 
   const togetherInto = async () => {
@@ -102,17 +91,15 @@ export default ({navigation, route}: IProps) => {
   };
 
   useEffect(() => {
-    getTogethertDetail();
-  }, []);
+    getTogether();
+  }, [route]);
 
-  useEffect(() => {
-    if (route.params?.refresh) getTogethertDetail();
-  }, [route.params?.refresh]);
-
-  return (
+  return !show ? (
+    <Loading />
+  ) : (
     <TogetherDetailPresenter
       navigation={navigation}
-      listDetail={listDetail}
+      show={show}
       togetherInto={togetherInto}
       togetherOutOf={togetherOutOf}
     />

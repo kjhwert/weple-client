@@ -156,5 +156,5 @@ export const feedApi = {
 
   getMyfeed: (id: string, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page + '&userId=' + id)),
   getLikefeed: (page: number, sort: string, order: string) =>
-    apiRequest(api.get('/feed?page=' + page + '&sort=' + sort + '&order=' + order)),
+    apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=`)),
 };

@@ -41,3 +41,28 @@ export interface ITogethers {
   distance: number;
   address: string;
 }
+
+export interface IShowTogether {
+  userCount: number;
+  together: ITogether;
+  commentCount: number;
+}
+
+export interface ITogether {
+  address: string;
+  commentDescription: string | null;
+  commentImage: string | null;
+  commentNickName: string | null;
+  description: string;
+  id: number;
+  isUserJoined: boolean;
+  isUsersTogether: boolean;
+  maxMember: number;
+  notice: string;
+  recommend: string;
+  thumbnail: string;
+  title: string;
+  togetherDate: Date;
+  togetherPlace: string;
+  togetherPrice: string;
+}
