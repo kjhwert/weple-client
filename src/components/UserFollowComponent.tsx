@@ -1,46 +1,82 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL} from '../module/common';
+import FollowContext from '../module/context/FollowContext';
+import Loading from './Loading';
+import UserContext from '../module/context/UserContext';
+import {IUserFollow} from '../module/type/user';
 
 interface IProps {
   navigation: any;
-  isClick: boolean;
-  isFollow: boolean;
+  route: {
+    params: {
+      id: number;
+    };
+  };
 }
 
-export default ({navigation, menuList, member}: IProps) => {
-  return (
+export default ({route}: IProps) => {
+  const {loading, counts, pagination, switchingTabs, followers, follow, getUserAndFollow}: any = useContext(
+    FollowContext,
+  );
+  const {loginUser}: any = useContext(UserContext);
+
+  const tabCountPresent = (tab: string) => {
+    switch (tab) {
+      case '팔로워':
+        return counts.followerCount;
+      case '팔로잉':
+        return counts.followingCount;
+    }
+  };
+
+  const userId = () => {
+    const id = route?.params?.id;
+    if (id) {
+      return id;
+    }
+
+    return loginUser.id;
+  };
+
+  useEffect(() => {
+    getUserAndFollow(userId());
+  }, [route]);
+
+  return loading ? (
+    <Loading />
+  ) : (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             <Line></Line>
             <MenuBarWrapper>
-              {menuList.map((item, idx) => (
-                <MenuWrapper key={idx} isClick={item.isClick}>
-                  <MenuBtn
-                    onPress={() => {
-                      navigation.navigate('friendFollower');
-                    }}>
-                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
-                    <MenuNumberText isClick={item.isClick}>
-                      {item.number}
-                    </MenuNumberText>
+              {['팔로워', '팔로잉'].map((tab, idx) => (
+                <MenuWrapper key={idx} isClick={tab === pagination.tab}>
+                  <MenuBtn onPress={switchingTabs}>
+                    <MenuText isClick={tab === pagination.tab}>{tab}</MenuText>
+                    <MenuNumberText isClick={tab === pagination.tab}>{tabCountPresent(tab)}</MenuNumberText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
             </MenuBarWrapper>
             <Line></Line>
 
-            {member.map((item, idx) => (
-              <MemberWrapper key={idx}>
-                <ProfileImage source={item.image} />
+            {followers.map(({id, userImage, userNickName, isUserFollowed}: IUserFollow) => (
+              <MemberWrapper key={id}>
+                <ProfileImage source={{uri: `${BASE_URL}/${userImage ? userImage : 'public/user/no_profile.png'}`}} />
                 <MemberTextWrapper>
                   <MemberBtn onPress={() => {}}>
-                    <MemberText>{item.name}</MemberText>
+                    <MemberText>{userNickName}</MemberText>
                   </MemberBtn>
-                  <FollowBtn isFollow={item.isFollow}>
-                    <FollowBtnText isFollow={item.isFollow}>
-                      {item.isFollow ? '팔로우' : '팔로우 중'}
+                  <FollowBtn
+                    isFollow={isUserFollowed === '1'}
+                    onPress={() => {
+                      follow(id);
+                    }}>
+                    <FollowBtnText isFollow={isUserFollowed === '1'}>
+                      {isUserFollowed === '1' ? '팔로우' : '팔로잉'}
                     </FollowBtnText>
                   </FollowBtn>
                 </MemberTextWrapper>
@@ -91,18 +127,20 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#fff')};
+  border-color: ${(props: {isClick: boolean}) => (props.isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
   width: 100%;
-  flex-flow: row wrap;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 5px 0;
 `;
 
 const MenuText = styled.Text`
   font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
+  color: ${(props: {isClick: boolean}) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   margin-right: 5px;
@@ -111,7 +149,7 @@ const MenuText = styled.Text`
 
 const MenuNumberText = styled.Text`
   font-size: 15px;
-  color: ${(props: IProps) => (props.isClick ? '#007bf1' : '#333')};
+  color: ${(props: {isClick: boolean}) => (props.isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px 0;
@@ -158,13 +196,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${(props: IProps) => (props.isFollow ? '#007bf1' : '#fff')};
+  background-color: ${(props: {isFollow: boolean}) => (props.isFollow ? '#007bf1' : '#fff')};
   border-width: 1px;
   border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: ${(props: IProps) => (props.isFollow ? '#fff' : '#007bf1')};
+  color: ${(props: {isFollow: boolean}) => (props.isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;

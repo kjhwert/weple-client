@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProfileSetupBtn from '../components/ProfileSetupBtn';
 import BackBtn from '../components/BackBtn';
@@ -9,7 +9,6 @@ import ProfileMembershipContainer from '../screens/Profile/profilePay/ProfileMem
 import ProfilePointContainer from '../screens/Profile/profilePay/ProfilePointContainer';
 import ProfileActiveStatisticContainer from '../screens/Profile/profilePay/ProfileActiveStatisticContainer';
 import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMemberContainer';
-import FollowingMemberContainer from '../screens/Profile/snsMember/FollowingMemberContainer';
 import LikeMemberContainer from '../screens/Profile/snsMember/LikeMemberContainer';
 import CommentMemberContainer from '../screens/Profile/snsMember/CommentMemberContainer';
 import ProfileSettingContainer from '../screens/Profile/profileSetUp/ProfileSettingContainer';
@@ -31,9 +30,12 @@ import SetPasswordContainer from '../screens/Profile/profileSetUp/myInfo/setPass
 import SetPersonalContainer from '../screens/Profile/profileSetUp/myInfo/setPersonal/SetPersonalContainer';
 import AlarmSetContainer from '../screens/Profile/profileSetUp/myInfo/setAlarm/AlarmSetContainer';
 import {View} from 'react-native';
+import FollowContext from '../module/context/FollowContext';
 const Stack = createStackNavigator();
 
 export default () => {
+  const {user}: any = useContext(FollowContext);
+
   return (
     <Stack.Navigator
       screenOptions={({navigation}) => ({
@@ -88,8 +90,13 @@ export default () => {
         name="ProfileActiveStatistic"
         component={ProfileActiveStatisticContainer}
       />
-      <Stack.Screen name="followerMember" component={FollowerMemberContainer} />
-      <Stack.Screen name="followingMember" component={FollowingMemberContainer} />
+      <Stack.Screen
+        name="followerMember"
+        options={{
+          headerTitle: user.nickName,
+        }}
+        component={FollowerMemberContainer}
+      />
       <Stack.Screen
         options={{
           headerTitle: '좋아하는 사람들',

@@ -47,7 +47,7 @@ export default ({navigation, route}: IProps) => {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [route]);
 
   return loading ? (
     <Loading />

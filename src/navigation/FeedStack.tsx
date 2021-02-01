@@ -4,7 +4,6 @@ import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShar
 import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
 import FriendActiveContainer from '../screens/Feed/friendProfile/FriendActiveContainer';
 import ActiveDetailContainer from '../screens/Feed/ActiveDetailContainer';
-import FriendFollowingContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowingContainer';
 import FeedContainer from '../screens/Feed/FeedContainer';
 import Notification from '../components/Notification';
 import FeedRecommendContainer from '../screens/Feed/FeedRecommendContainer';
@@ -19,10 +18,12 @@ import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/Fri
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
 import FeedContext from '../module/context/FeedContext';
 import {IFeedContext} from '../module/type/feedContext';
+import FollowContext from '../module/context/FollowContext';
 
 const Stack = createStackNavigator();
 
 export default () => {
+  const {user}: any = useContext(FollowContext);
   const {show}: IFeedContext = useContext(FeedContext);
 
   return (
@@ -102,11 +103,10 @@ export default () => {
       <Stack.Screen
         name="friendFollower"
         options={{
-          headerTitle: '팔로우',
+          headerTitle: user.nickName,
         }}
         component={FriendFollowerContainer}
       />
-      <Stack.Screen name="friendFollowing" component={FriendFollowingContainer} />
       <Stack.Screen
         options={{
           headerTitle: '좋아하는 사람들',

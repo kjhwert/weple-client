@@ -50,7 +50,7 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followerMember');
+                        navigation.navigate('followerMember', {id: user.user.id});
                       }}>
                       <FollowerNumber>{user.userFollower}</FollowerNumber>
                     </ActiveBtn>
@@ -59,7 +59,7 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followingMember');
+                        navigation.navigate('followerMember', {id: user.user.id});
                       }}>
                       <FollowingNumber>{user.userFollow}</FollowingNumber>
                     </ActiveBtn>
