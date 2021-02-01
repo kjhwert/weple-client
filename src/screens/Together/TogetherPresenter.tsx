@@ -160,10 +160,7 @@ export default ({
                       </RecordWrapper>
                     </RecruitImageWrapper>
                     <RecruitTextWrapper>
-                      <RecruitTitleBtn
-                        onPress={() => {
-                          navigation.navigate('togetherDetail', {id: together.id});
-                        }}>
+                      <RecruitTitleBtn>
                         <RecruitTitle>{together.title}</RecruitTitle>
                       </RecruitTitleBtn>
                       <RecruitAddress>{together.place}</RecruitAddress>

@@ -37,7 +37,7 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
                     onPress={() => {
-                      navigation.navigate('togetherMember', {togertherId: show.together.id});
+                      navigation.navigate('togetherMember', {togetherId: show.together.id});
                     }}>
                     <JoinInfoNumber>{show.userCount}명</JoinInfoNumber>
                     <JoinInfoMoreImage source={require('../../../assets/more.png')} />
