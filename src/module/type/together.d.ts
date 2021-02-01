@@ -7,7 +7,6 @@ export interface ITogetherComments {
     image: string;
     nickName: string;
   };
-  isModify: false;
 }
 
 export interface IUserTogethers {

@@ -106,11 +106,10 @@ export const togetherApi = {
   getComment: (togetherId: number) => apiRequest(api.get('/together/' + togetherId + '/comment/')),
   createComment: (togetherId: number, data: ITogetherCreateComment) =>
     apiRequest(api.post('/together/' + togetherId + '/comment/', data)),
-  putComment: (commentId: number, description: any) =>
-    apiRequest(api.put('/together/comment/' + commentId, description)),
-  deleteComment: (commentId: number) => apiRequest(api.delete('/together/comment/' + commentId)),
   togetherIn: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-in')),
   togetherOut: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-out')),
+  updateComment: (id: number, description: string) => apiRequest(api.put(`/together/comment/${id}`, {description})),
+  destroyComment: (id: number) => apiRequest(api.delete(`/together/comment/${id}`)),
 };
 
 export const feedApi = {

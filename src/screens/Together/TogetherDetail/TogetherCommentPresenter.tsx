@@ -1,21 +1,38 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {ITogetherComments} from '../../../module/type/together';
-import {ACTIVE_BUTTON, BASE_URL, INACTIVE_BUTTON} from '../../../module/common';
+import {ACTIVE_BUTTON, ACTIVE_TEXT, BASE_URL, INACTIVE_BUTTON} from '../../../module/common';
 import UserContext from '../../../module/context/UserContext';
 import {ITogetherCreateComment} from '../../../module/type/api';
+import {IFeedComments} from '../../../module/type/feed';
+import {Text} from 'react-native';
 
 interface IProps {
   comments: Array<ITogetherComments>;
   userComment: ITogetherCreateComment;
   onChangeDescription: (e: string) => void;
   finishComments: () => void;
+  setModifyAlertVisible: (comment: ITogetherComments) => void;
+  commentStatus: {
+    id: number;
+    isModifiable: boolean;
+    description: string;
+  };
+  updateComment: () => void;
+  onUpdateDescription: (text: string) => void;
 }
 
-export default ({comments, onChangeDescription, userComment, finishComments}: IProps) => {
-  const {
-    loginUser: {image, id},
-  }: any = useContext(UserContext);
+export default ({
+  comments,
+  onChangeDescription,
+  userComment,
+  finishComments,
+  commentStatus,
+  updateComment,
+  setModifyAlertVisible,
+  onUpdateDescription,
+}: IProps) => {
+  const {loginUser}: any = useContext(UserContext);
   return (
     <Container>
       <ScrollContainer>
@@ -33,14 +50,34 @@ export default ({comments, onChangeDescription, userComment, finishComments}: IP
                     <MemberNameBtn>
                       <MemberText>{comment.user.nickName}</MemberText>
                     </MemberNameBtn>
-                    <CommentText>{comment.description}</CommentText>
+                    {commentStatus.isModifiable && commentStatus.id === comment.id ? (
+                      <CommentText
+                        value={commentStatus.description}
+                        modifiable={true}
+                        onChangeText={onUpdateDescription}
+                      />
+                    ) : (
+                      <CommentText editable={false} multiline={true} modifiable={false} value={comment.description} />
+                    )}
                   </MemberTextWrapper>
                 </ProfileImageWrapper>
 
-                {comment.user.id === id ? (
-                  <DotMoreBtn onPress={() => {}}>
-                    <DotMoreImage source={require('../../../assets/dotMore.png')} />
-                  </DotMoreBtn>
+                {loginUser.id === comment.user.id ? (
+                  commentStatus.isModifiable && commentStatus.id === comment.id ? (
+                    <DotMoreBtn
+                      onPress={() => {
+                        updateComment();
+                      }}>
+                      <Text>수정</Text>
+                    </DotMoreBtn>
+                  ) : (
+                    <DotMoreBtn
+                      onPress={() => {
+                        setModifyAlertVisible(comment);
+                      }}>
+                      <DotMoreImage source={require('../../../assets/dotMore.png')} />
+                    </DotMoreBtn>
+                  )
                 ) : (
                   <></>
                 )}
@@ -51,7 +88,7 @@ export default ({comments, onChangeDescription, userComment, finishComments}: IP
         <CommentWrapper>
           <WriteCommentUserProfile
             source={{
-              uri: `${BASE_URL}/${image ? image : 'public/user/no_profile.png'}`,
+              uri: `${BASE_URL}/${loginUser.image ? loginUser.image : 'public/user/no_profile.png'}`,
             }}
           />
           <WriteComment
@@ -163,10 +200,12 @@ const MemberText = styled.Text`
   padding-bottom: 5px;
 `;
 
-const CommentText = styled.Text`
+const CommentText = styled.TextInput`
   width: 100%;
   font-size: 13px;
   color: #333;
+  border-width: ${({modifiable}: {modifiable: boolean}) => (modifiable ? '1px' : '0px')};
+  border-color: ${ACTIVE_TEXT};
 `;
 
 const DotMoreBtn = styled.TouchableOpacity`
