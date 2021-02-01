@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
 
   const [show, setShow] = useState<IShowTogether | null>(null);
 
@@ -22,9 +22,9 @@ export default ({navigation, route}: IProps) => {
     if (!id) {
       return;
     }
-    const {data, statusCode} = await togetherApi.userOpenDetail(id);
+    const {data, statusCode, message} = await togetherApi.userOpenDetail(id);
     if (statusCode !== 200) {
-      return;
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
 
     data.together.isUserJoined = !!+data.together.isUserJoined;
