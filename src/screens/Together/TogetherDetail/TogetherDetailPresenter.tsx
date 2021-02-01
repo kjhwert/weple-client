@@ -66,7 +66,7 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                   <JoinContent>{show.together.notice}</JoinContent>
                 </ContentWrap>
               </JoinContentWrapper>
-              {show.together.commentNickName && (
+              {show.together.commentNickName ? (
                 <FollowWrapper>
                   <ProfileImage source={getTogetherProfile(show.together.commentImage)} />
                   <FollowTextWrapper>
@@ -81,6 +81,15 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                       <AllCommentText>{show.commentCount}개의 댓글 모두 보기</AllCommentText>
                     </AllCommentBtn>
                   </FollowTextWrapper>
+                </FollowWrapper>
+              ) : (
+                <FollowWrapper>
+                  <AllCommentBtn
+                    onPress={() => {
+                      navigation.navigate('togetherComment', {id: show.together.id});
+                    }}>
+                    <AllCommentText>댓글 달기</AllCommentText>
+                  </AllCommentBtn>
                 </FollowWrapper>
               )}
               {show.together.isUsersTogether && getTotalTime(new Date()) > getTotalTime(show.together.togetherDate) && (
