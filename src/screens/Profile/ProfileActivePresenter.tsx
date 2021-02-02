@@ -27,9 +27,9 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
                   <ProfileMainImage
-                    source={{uri: `${BASE_URL}/${user.user.image ? user.user.image : 'public/user/no_profile.png'}`}}
+                    source={{uri: `${BASE_URL}/${user?.user?.image ? user.user.image : 'public/user/no_profile.png'}`}}
                   />
-                  {user.user.id === loginUser.id && (
+                  {user?.user?.id === loginUser.id && (
                     <EditCard
                       onPress={() => {
                         navigation.navigate('setProfile');
@@ -39,18 +39,18 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                     </EditCard>
                   )}
                 </ProfileImageWrapper>
-                <ProfileNickName>{user.user.nickName}</ProfileNickName>
+                <ProfileNickName>{user?.user?.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn onPress={() => {}}>
-                      <ActiveNumber>{user.feedCount}</ActiveNumber>
+                      <ActiveNumber>{user?.feedCount}</ActiveNumber>
                     </ActiveBtn>
                     <ActiveText>활동들</ActiveText>
                   </ActiveBtnWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followerMember', {id: user.user.id});
+                        navigation.navigate('followerMember', {id: user?.user?.id});
                       }}>
                       <FollowerNumber>{user.userFollower}</FollowerNumber>
                     </ActiveBtn>
@@ -59,14 +59,14 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followerMember', {id: user.user.id});
+                        navigation.navigate('followerMember', {id: user?.user?.id});
                       }}>
-                      <FollowingNumber>{user.userFollow}</FollowingNumber>
+                      <FollowingNumber>{user?.userFollow}</FollowingNumber>
                     </ActiveBtn>
                     <ActiveText>팔로우 중</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
-                <ActiveIntroduceText>{user.user.description}</ActiveIntroduceText>
+                <ActiveIntroduceText>{user?.user?.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn
