@@ -9,6 +9,7 @@ import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
+
 interface IProps {
   navigation: any;
   userTogethers: {togetherCount: number; togethers: Array<IUserTogethers>};
@@ -149,7 +150,13 @@ export default ({
 
             {isMapView ? (
               <>
-                <MapboxGL.MapView style={{width: '100%', height: 400}} styleURL={MAPBOX_DEFAULT_STYLE}>
+                <MapboxGL.MapView
+                  style={{width: '100%', height: 400}}
+                  styleURL={MAPBOX_DEFAULT_STYLE}
+                  zoomEnabled={false}
+                  scrollEnabled={false}
+                  pitchEnabled={false}
+                  rotateEnabled={false}>
                   <MapboxGL.Camera zoomLevel={12} centerCoordinate={[togetherPaging.lon, togetherPaging.lat]} />
                   {togethers.map((together) => (
                     <MapboxGL.PointAnnotation

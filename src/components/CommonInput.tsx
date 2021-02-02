@@ -64,7 +64,6 @@ export const InputBox2 = ({title = '', placeholder = '', name = '', onChange = (
         onChange={onChange}
         borderColor={borderColor}
         value={value}
-        keyboardType="numeric"
       />
     </InputBoxWrap>
   );

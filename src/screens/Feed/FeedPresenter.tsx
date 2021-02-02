@@ -1,10 +1,10 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {IEvent, IFeed} from '../../module/type/feed';
 import Swiper from 'react-native-swiper';
 import {BASE_URL, timeForToday} from '../../module/common';
-import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, RefreshControl, StyleSheet} from 'react-native';
 import UserContext from '../../module/context/UserContext';
 import FeedContext from '../../module/context/FeedContext';
 import {IUserFollower} from '../../module/type/user';
@@ -38,6 +38,14 @@ export default ({navigation, events, newFollowers}: IProps) => {
     searchVisible,
   }: any = useContext(FeedContext);
 
+  const [refresh, setRefresh] = useState(false);
+
+  const onRefresh = () => {
+    setRefresh(true);
+    switchingSortIndex(pagination.sort);
+    setRefresh(false);
+  };
+
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
   };
@@ -56,7 +64,10 @@ export default ({navigation, events, newFollowers}: IProps) => {
     <Container>
       {searchVisible && <SearchComponent navigation={navigation} />}
       <ScrollContainer>
-        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
+        <ScrollWrapper
+          onScroll={onScroll}
+          scrollEventThrottle={60}
+          refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
           <Card>
             <NewFollowerWrapper>
               <NewFollowerBtn

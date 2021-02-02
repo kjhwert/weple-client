@@ -20,6 +20,7 @@ import {Platform} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import Geocoder from 'react-native-geocoding';
+import SaveLoading from '../../components/SaveLoading';
 
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
@@ -301,7 +302,6 @@ export const RecordContextProvider = ({children}: IProps) => {
 
     //TODO Distance 데이터가 오차율이 큼.
     const {distance: recordedDistance} = mapboxRecord;
-
     if (!locationSpeed || locationSpeed < 0) return;
 
     const currentSpeed = Math.floor(locationSpeed * 10) / 10;
@@ -314,7 +314,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         [longitude, latitude],
       ]);
     }
-    const distance = Math.floor(currentDistance * 1000) / 10 + recordedDistance;
+    const distance = Math.floor(currentDistance * 1000) / 1000 + recordedDistance;
     const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
 
     const speed = mapboxRecord.speed.concat(currentSpeed);
@@ -537,7 +537,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         clearAllState,
         changeImage,
       }}>
-      {children}
+      {finishLoading ? <SaveLoading /> : children}
     </RecordContext.Provider>
   );
 };
