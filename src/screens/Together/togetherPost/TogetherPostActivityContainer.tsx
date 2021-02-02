@@ -14,16 +14,7 @@ export default ({navigation}: IProps) => {
 
   const [toggleCheckBox, setToggleCheckBox] = useState('');
   const [isActive, setIsActive] = useState(false);
-  const [feedActiveList, setFeedActiveList] = useState([
-    {
-      id: 0,
-      thumbnail: '',
-      distance: 0,
-      address: '',
-      activityName: '',
-      activityColor: '',
-    },
-  ]);
+  const [feedActiveList, setFeedActiveList] = useState([]);
   const [togetherPaging, setTogetherPaging] = useState({
     id: 0,
     hasNextPage: true,
