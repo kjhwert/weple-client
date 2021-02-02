@@ -39,6 +39,8 @@ export interface ITogethers {
   thumbnail: string;
   distance: number;
   address: string;
+  lat: number;
+  lon: number;
 }
 
 export interface IShowTogether {

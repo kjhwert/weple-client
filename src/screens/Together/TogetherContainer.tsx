@@ -46,13 +46,19 @@ export default ({navigation, route}: IProps) => {
   };
 
   const getLocation = async () => {
-    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
+    const coordinates = await getLatestLocation();
+    if (!coordinates) {
+      return setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.');
+    }
+    const {latitude: lat, longitude: lon} = coordinates;
+    // const lat = 37.546474;
+    // const lon = 126.949941;
     const {statusCode, message, data, paging} = await togetherApi.locationList(lat, lon, 1);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패헀습니다.', message);
     }
     setTogethers(data);
-    setTogetherPaging({...togetherPaging, id: 0, page: 1, hasNextPage: paging.hasNextPage});
+    setTogetherPaging({...togetherPaging, id: 0, page: 1, lat, lon, hasNextPage: paging.hasNextPage});
   };
 
   const getMoreLocation = async () => {

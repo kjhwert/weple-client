@@ -1,11 +1,14 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
-import {togetherDate} from '../../module/common';
+import {BASE_URL, togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {Image, NativeScrollEvent, NativeSyntheticEvent, Text, View} from 'react-native';
+import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
+MapboxGL.setAccessToken(MAPBOX_TOKEN);
 interface IProps {
   navigation: any;
   userTogethers: {togetherCount: number; togethers: Array<IUserTogethers>};
@@ -32,6 +35,8 @@ export default ({
   getMoreTogethers,
 }: IProps) => {
   const {getTogetherThumbnail, getTogetherActivityImage}: any = useContext(TogetherContext);
+
+  const [selected, setSelected] = useState<ITogethers | null>(null);
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
@@ -128,22 +133,62 @@ export default ({
             </MenuBarWrapper>
             <Line></Line>
 
-            <RecruitTogetherWrapper>
-              <RecruitTogetherWrap>
-                <RecruitTogetherText>내 주변 개설 모임</RecruitTogetherText>
-              </RecruitTogetherWrap>
-              <LocationBtn
-                onPress={() => {
-                  turnMapView();
-                }}>
-                <LocationImage source={require('../../assets/icon_location.png')} />
-              </LocationBtn>
-            </RecruitTogetherWrapper>
+            {togetherPaging.id === 0 && (
+              <RecruitTogetherWrapper>
+                <RecruitTogetherWrap>
+                  <RecruitTogetherText>내 주변 개설 모임</RecruitTogetherText>
+                </RecruitTogetherWrap>
+                <LocationBtn
+                  onPress={() => {
+                    turnMapView();
+                  }}>
+                  <LocationImage source={require('../../assets/icon_location.png')} />
+                </LocationBtn>
+              </RecruitTogetherWrapper>
+            )}
 
             {isMapView ? (
-              <MapImageWrap>
-                <MapImage source={require('../../assets/mapStyle_3.png')} />
-              </MapImageWrap>
+              <>
+                <MapboxGL.MapView style={{width: '100%', height: 400}} styleURL={MAPBOX_DEFAULT_STYLE}>
+                  <MapboxGL.Camera zoomLevel={12} centerCoordinate={[togetherPaging.lon, togetherPaging.lat]} />
+                  {togethers.map((together) => (
+                    <MapboxGL.PointAnnotation
+                      key={together.id}
+                      id={`${together.id}`}
+                      coordinate={[together.lat, together.lon]}
+                      onSelected={() => setSelected(together)}>
+                      <MapboxMarkWrapper color={together.activityColor}>
+                        <Image
+                          source={{uri: `${BASE_URL}/${together.activityImage}`}}
+                          style={{width: 20, height: 20}}
+                        />
+                      </MapboxMarkWrapper>
+                    </MapboxGL.PointAnnotation>
+                  ))}
+                </MapboxGL.MapView>
+                {selected && (
+                  <SelectedWrapper
+                    onPress={() => {
+                      navigation.navigate('togetherDetail', {id: selected.id});
+                    }}>
+                    <RecruitImageWrapper>
+                      <RecruitImage source={getTogetherThumbnail(selected.thumbnail)} />
+                      <RecordWrapper backgroundColor={selected.activityColor}>
+                        <RecordImage source={getTogetherActivityImage(selected.activityImage)} />
+                        <RecordText>{selected.distance}KM</RecordText>
+                      </RecordWrapper>
+                    </RecruitImageWrapper>
+                    <RecruitTextWrapper>
+                      <RecruitTitleBtn>
+                        <RecruitTitle>{selected.title}</RecruitTitle>
+                      </RecruitTitleBtn>
+                      <RecruitAddress>{selected.place}</RecruitAddress>
+                      <EntryFee>참가비 {getComma(selected.price)}원</EntryFee>
+                      <Deadline>{togetherDate(selected.limitDate)}</Deadline>
+                    </RecruitTextWrapper>
+                  </SelectedWrapper>
+                )}
+              </>
             ) : (
               <>
                 {togethers.map((together) => (
@@ -180,6 +225,26 @@ export default ({
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const SelectedWrapper = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+`;
+
+const MapboxMarkWrapper = styled.View`
+  border-radius: 50px;
+  background-color: ${({color}: {color: string}) => color};
+  width: 33px;
+  height: 33px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ScrollContainer = styled.View`
@@ -296,18 +361,6 @@ const LocationImage = styled.Image`
   height: 20px;
 `;
 
-const MapImageWrap = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const MapImage = styled.Image`
-  width: 100%;
-`;
-
 const RecruitWrapper = styled.TouchableOpacity`
   display: flex;
   flex-flow: row wrap;
@@ -335,7 +388,7 @@ const RecruitImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 65%;
+  width: 50%;
   align-items: center;
   justify-content: center;
   background-color: ${({backgroundColor}: {backgroundColor: string}) =>
