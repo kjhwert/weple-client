@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import SetAskPresenter from './SetAskPresenter';
 import {serviceApi} from '../../../../../module/api';
+import AlertContext from '../../../../../module/context/AlertContext';
 
 interface IProps {
   navigation: any;
@@ -8,14 +9,15 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
   const [inquiryList, setInquiryList] = useState([]);
 
   const initInquiry = async () => {
-    const {data, statusCode} = await serviceApi.getInquiry();
+    const {data, statusCode, message} = await serviceApi.getInquiry();
     if (statusCode !== 200) {
-    } else {
-      setInquiryList(data);
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
+    setInquiryList(data);
   };
 
   useEffect(() => {
