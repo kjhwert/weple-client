@@ -35,6 +35,7 @@ export interface IUserApiProfile {
 export interface IServiceApiInquiry {
   requestTitle: string;
   requestDescription: string;
+  requestType: string;
 }
 
 export interface IUserApiCategory {

@@ -84,7 +84,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                   <FollowerImageWrapper
                     key={id}
                     onPress={() => {
-                      navigation.navigate('profile', {screen: 'profileActiveMain', params: {id}});
+                      navigation.navigate('friendActive', {id});
                     }}>
                     <LinearGradient
                       colors={['#61d7ff', '#79a6fa', '#3065f4']}
@@ -142,7 +142,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                 <ProfileWrapper>
                   <ProfileInfoWrapper
                     onPress={() => {
-                      navigation.navigate('profileActiveMain', {id: feed.userId});
+                      navigation.navigate('friendActive', {id: feed.userId});
                     }}>
                     <ProfileImage
                       source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
@@ -212,12 +212,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                       }}
                     />
                     <FollowTextWrapper>
-                      <FollowNameBtn
-                        onPress={() => {
-                          navigation.navigate('friendActive');
-                        }}>
-                        <FollowName>{feed.commentUserName}</FollowName>
-                      </FollowNameBtn>
+                      <FollowName>{feed.commentUserName}</FollowName>
                       <CommentText>{feed.commentDescription}</CommentText>
                       <AllCommentBtn
                         onPress={() => {

@@ -9,7 +9,7 @@ interface IProps {
   navigation: any;
   askData: any;
   onChangeAskData: Function;
-  onCheckType: Function;
+  onCheckType: (label) => void;
   askDataRegister: Function;
   isActive: any;
   typeData: any;
@@ -38,9 +38,7 @@ export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegis
           }}
         />
         <TouchableOpacity style={styles.appButtonContainer} onPress={() => pickerRef.current.show()}>
-          <Text style={styles.appButtonText}>
-            {typeData.find((element) => element.value == askData.requestType)?.label}
-          </Text>
+          <Text style={styles.appButtonText}>{askData.requestLabel}</Text>
           <Image source={require('../../../../../assets/icon_selected.png')} style={styles.moreIconImage} />
         </TouchableOpacity>
         <AskWriteWrapper>

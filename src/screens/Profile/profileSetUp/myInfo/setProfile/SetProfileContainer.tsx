@@ -13,7 +13,7 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {getUserId, changeProfileImage, changeProfileData}: any = useContext(UserContext);
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
 
   const [activeFlag, setActiveFlag] = useState({
     nickNameFlag: 0,
@@ -132,11 +132,11 @@ export default ({navigation}: IProps) => {
         type: type,
         uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
       });
-      const {data, statusCode} = await userApi.userImage(imgFormData);
+      const {data, statusCode, message} = await userApi.userImage(imgFormData);
       if (statusCode !== 201) {
-      } else {
-        changeProfileImage(data.image);
+        return setWarningAlertVisible('이미지 변경에 실패했습니다.', message);
       }
+      changeProfileImage(data.image);
     });
   };
 

@@ -8,17 +8,7 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const [inquiryList, setInquiryList] = useState([
-    {
-      id: 0,
-      requestTitle: '',
-      requestDescription: '',
-      requestDate: '',
-      requestStatus: false,
-      responseDescription: null,
-      responseDate: null,
-    },
-  ]);
+  const [inquiryList, setInquiryList] = useState([]);
 
   const initInquiry = async () => {
     const {data, statusCode} = await serviceApi.getInquiry();

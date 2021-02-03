@@ -34,6 +34,7 @@ export default ({
   const {
     loginUser: {image},
   }: any = useContext(UserContext);
+
   return (
     <Container>
       <ScrollContainer>

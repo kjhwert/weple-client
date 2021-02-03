@@ -7,22 +7,21 @@ import CheckAlert from '../../../../../components/CheckAlert';
 interface IProps {
   navigation: any;
 }
+const typeData = [
+  {label: '회원정보', value: '01'},
+  {label: '환불/멤버십', value: '02'},
+  {label: '이용문의', value: '03'},
+  {label: '기타', value: '04'},
+];
 
 export default ({navigation}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-
-  const typeData = [
-    {label: '회원정보', value: '01'},
-    {label: '환불/멤버십', value: '02'},
-    {label: '이용문의', value: '03'},
-    {label: '기타', value: '04'},
-  ];
-
   const [isActive, setIsActive] = useState(false);
   const [askData, setAskData] = useState({
     requestTitle: '',
     requestDescription: '',
     requestType: '01',
+    requestLabel: '회원정보',
   });
 
   const onChangeAskData = (e) => {
@@ -34,21 +33,18 @@ export default ({navigation}: IProps) => {
     });
   };
 
-  const onCheckType = (type) => {
+  const onCheckType = (type: string) => {
+    const {label}: any = typeData.find(({value}) => value === type);
     setAskData({
       ...askData,
+      requestLabel: label,
       requestType: type,
     });
   };
 
   const askDataRegister = async () => {
-    const askDataRequest = {
-      requestTitle: askData.requestTitle,
-      requestDescription: askData.requestDescription,
-      requestType: askData.requestType,
-    };
-
-    const {message} = await serviceApi.setInquiry(askDataRequest);
+    const {requestTitle, requestDescription, requestLabel} = askData;
+    const {message} = await serviceApi.setInquiry({requestTitle, requestDescription, requestType: requestLabel});
     return setAlertVisible(
       <CheckAlert
         check={{

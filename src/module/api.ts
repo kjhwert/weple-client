@@ -77,7 +77,7 @@ export const userApi = {
   getNewFollowers: () => apiRequest(api.get('/user/follow')),
   getUserFollowing: (userId: number) => apiRequest(api.get(`/user/${userId}/follow/following`)),
   getUserFollower: (userId: number) => apiRequest(api.get(`/user/${userId}/follow/follower`)),
-  follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
+  follow: (userId: number) => apiRequest(api.put(`/user/${userId}/follow`)),
 };
 
 export const serviceApi = {
