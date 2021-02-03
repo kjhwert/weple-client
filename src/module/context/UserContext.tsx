@@ -266,9 +266,6 @@ export const UserContextProvider = ({children}: IProps) => {
 
   useEffect(() => {
     setIsLoginActive({emailFlag: loginUser.email?.length > 0, passwordFlag: loginUser.password?.length > 0});
-  }, [loginUser]);
-
-  useEffect(() => {
     setIsLoginBtnActive(loginUser.email?.length > 0 && loginUser.password?.length > 0);
   }, [loginUser]);
 

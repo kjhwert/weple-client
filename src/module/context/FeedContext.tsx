@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useContext, useState, useEffect} from 'react';
 import AlertContext from './AlertContext';
 import {feedApi} from '../api';
 import {IFeedPagination} from '../type/api';
@@ -264,7 +264,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     }
   };
 
-  useEffect(() => {}, [index, pagination]);
+  useEffect(() => {}, []);
 
   return (
     <FeedContext.Provider
