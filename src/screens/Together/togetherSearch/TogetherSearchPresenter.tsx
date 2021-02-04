@@ -46,7 +46,11 @@ export default ({navigation}: IProps) => {
               <CategoryTogetherText>카테고리</CategoryTogetherText>
             </CategoryTogetherBtn>
             <LocationBtn onPress={changeMapviewStatus}>
-              <LocationImage source={require('../../../assets/icon_location.png')} />
+              <LocationImage
+                source={
+                  isMapview ? require('../../../assets/icon_list.png') : require('../../../assets/icon_location.png')
+                }
+              />
             </LocationBtn>
           </ActiveSelectTitleWrapper>
         </Wrapper>

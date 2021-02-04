@@ -147,7 +147,7 @@ export default ({
                   }}>
                   <LocationImage
                     source={
-                      isMapView ? require('../../assets/sort_icon.png') : require('../../assets/icon_location.png')
+                      isMapView ? require('../../assets/icon_list.png') : require('../../assets/icon_location.png')
                     }
                   />
                 </LocationBtn>
