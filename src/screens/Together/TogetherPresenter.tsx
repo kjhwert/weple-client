@@ -4,9 +4,10 @@ import {BASE_URL, togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {Image, NativeScrollEvent, NativeSyntheticEvent, Text, View} from 'react-native';
+import {Image, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import SearchComponent from '../../components/SearchComponent';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -35,12 +36,12 @@ export default ({
   getEndSoon,
   getMoreTogethers,
 }: IProps) => {
-  const {getTogetherThumbnail, getTogetherActivityImage}: any = useContext(TogetherContext);
+  const {getTogetherThumbnail, getTogetherActivityImage, searchVisible}: any = useContext(TogetherContext);
 
   const [selected, setSelected] = useState<ITogethers | null>(null);
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 200;
   };
 
   const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -51,6 +52,7 @@ export default ({
 
   return (
     <Container>
+      {searchVisible && <SearchComponent navigation={navigation} stack={'together'} />}
       <ScrollContainer>
         <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <Card>
@@ -143,7 +145,11 @@ export default ({
                   onPress={() => {
                     turnMapView();
                   }}>
-                  <LocationImage source={require('../../assets/icon_location.png')} />
+                  <LocationImage
+                    source={
+                      isMapView ? require('../../assets/sort_icon.png') : require('../../assets/icon_location.png')
+                    }
+                  />
                 </LocationBtn>
               </RecruitTogetherWrapper>
             )}

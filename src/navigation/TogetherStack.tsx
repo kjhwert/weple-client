@@ -19,6 +19,7 @@ import TogetherPostActivityContainer from '../screens/Together/togetherPost/Toge
 import TogetherMyDetailContainer from '../screens/Together/TogetherDetail/TogetherMyDetailContainer';
 import TogetherDetailContainer from '../screens/Together/TogetherDetail/TogetherDetailContainer';
 import TogetherMyTotalListContainer from '../screens/Together/TogetherDetail/TogetherMyTotalListContainer';
+import SelectCategoryComponent from '../components/SelectCategoryComponent';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,13 @@ export default () => {
         }}
         name="togetherSearch"
         component={TogetherSearchContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '카테고리 선택',
+        }}
+        name="togetherSearchCategories"
+        component={SelectCategoryComponent}
       />
       <Stack.Screen
         options={{

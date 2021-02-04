@@ -103,6 +103,8 @@ export const togetherApi = {
     apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),
   followerList: (page: number) => apiRequest(api.get('/together/follower?page=' + page)),
   endSoonList: (page: number) => apiRequest(api.get('/together/end-soon?page=' + page)),
+  searchList: (page: number, title: string) => apiRequest(api.get(`/together/search?page=${page}&title=${title}`)),
+  searchMap: (title: string) => apiRequest(api.get(`/together/search?page=&title=${title}`)),
   getComment: (togetherId: number) => apiRequest(api.get('/together/' + togetherId + '/comment/')),
   createComment: (togetherId: number, data: ITogetherCreateComment) =>
     apiRequest(api.post('/together/' + togetherId + '/comment/', data)),

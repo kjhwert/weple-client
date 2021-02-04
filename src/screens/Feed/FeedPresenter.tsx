@@ -62,7 +62,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
 
   return (
     <Container>
-      {searchVisible && <SearchComponent navigation={navigation} />}
+      {searchVisible && <SearchComponent navigation={navigation} stack={'feed'} />}
       <ScrollContainer>
         <ScrollWrapper
           onScroll={onScroll}

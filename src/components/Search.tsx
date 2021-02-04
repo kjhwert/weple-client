@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import FeedContext from '../module/context/FeedContext';
+import TogetherContext from '../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
@@ -8,16 +9,16 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {changeSearchVisible}: any = useContext(FeedContext);
-
+  const {changeSearchVisible: feedSearchVisible}: any = useContext(FeedContext);
+  const {changeSearchVisible: togetherSearchVisible}: any = useContext(TogetherContext);
   const navigate = () => {
     const {name} = route;
     if (name === 'feedMain') {
-      return changeSearchVisible();
+      return feedSearchVisible();
     }
 
     if (name === 'togetherMain') {
-      return navigation.navigate('togetherSearch');
+      return togetherSearchVisible();
     }
   };
 

@@ -39,8 +39,8 @@ export interface ITogethers {
   thumbnail: string;
   distance: number;
   address: string;
-  lat: number;
-  lon: number;
+  lat?: number;
+  lon?: number;
 }
 
 export interface IShowTogether {
@@ -66,4 +66,16 @@ export interface ITogether {
   togetherDate: Date;
   togetherPlace: string;
   togetherPrice: string;
+}
+
+export interface IActivityGroup {
+  id: number;
+  name: string;
+  categoryActivity: Array<ICategoryActivity>;
+}
+
+export interface ICategoryActivity {
+  id: number;
+  name: string;
+  caloriesPerMinute: number;
 }
