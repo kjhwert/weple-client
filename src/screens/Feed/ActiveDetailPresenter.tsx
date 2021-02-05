@@ -5,6 +5,7 @@ import {BASE_URL, secondsToTimeFormat, showDateToAmPmHourMinute, timeForToday} f
 import UserContext from '../../module/context/UserContext';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
+import FeedContext from '../../module/context/FeedContext';
 
 interface IProps {
   navigation: any;
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 export default ({navigation, feed}: IProps) => {
+  const {showUserFollowAndReload}: any = useContext(FeedContext);
   const {loginUser}: any = useContext(UserContext);
   const webViewRef = useRef<any>(null);
 
@@ -52,8 +54,14 @@ export default ({navigation, feed}: IProps) => {
                   </ProfileTextWrapper>
                 </ProfileInfoWrapper>
                 {!isLoginUserFeed(feed.userId) && (
-                  <FollowBtn onPress={() => {}}>
-                    <FollowBtnText>{feed.isUserFollowed ? '팔로우' : '팔로잉'}</FollowBtnText>
+                  <FollowBtn
+                    onPress={() => {
+                      showUserFollowAndReload(feed.userId);
+                    }}
+                    isFollow={feed.isUserFollowed}>
+                    <FollowBtnText isFollow={feed.isUserFollowed}>
+                      {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
+                    </FollowBtnText>
                   </FollowBtn>
                 )}
               </ProfileWrapper>
@@ -292,7 +300,9 @@ const FollowBtn = styled.TouchableOpacity`
   padding: 7px;
   align-items: center;
   border-radius: 5px;
-  background-color: #007bf1;
+  border-width: 1px;
+  border-color: #007bf1;
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
 const ProfileInfoWrapper = styled.View`
@@ -302,7 +312,7 @@ const ProfileInfoWrapper = styled.View`
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
 `;

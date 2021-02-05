@@ -59,11 +59,11 @@ export const FeedContextProvider = ({children}: IProps) => {
     return await feedApi.feedLike(id);
   };
 
-  const userFollowAndReload = async (userId: number) => {
-    const {statusCode, message} = await userFollow(userId);
-    if (statusCode !== 201) {
-      return setWarningAlertVisible('팔로잉에 실패했습니다.', message);
+  const userFollowAndChangeFollowStatus = (userId: number) => {
+    if (show) {
+      setShow({...show, isUserFollowed: !show.isUserFollowed});
     }
+
     const newIndex = index.map((feed) => {
       if (feed.userId === userId) {
         feed.isUserFollowed = !feed.isUserFollowed;
@@ -72,6 +72,23 @@ export const FeedContextProvider = ({children}: IProps) => {
       return feed;
     });
     setIndex(newIndex);
+  };
+
+  const showUserFollowAndReload = async (userId: number) => {
+    const {statusCode, message} = await userFollow(userId);
+    if (statusCode !== 201) {
+      return setWarningAlertVisible('팔로잉에 실패했습니다.', message);
+    }
+
+    userFollowAndChangeFollowStatus(userId);
+  };
+
+  const userFollowAndReload = async (userId: number) => {
+    const {statusCode, message} = await userFollow(userId);
+    if (statusCode !== 201) {
+      return setWarningAlertVisible('팔로잉에 실패했습니다.', message);
+    }
+    userFollowAndChangeFollowStatus(userId);
   };
 
   const feedLikedAndReload = async (feed: IFeed) => {
@@ -90,8 +107,12 @@ export const FeedContextProvider = ({children}: IProps) => {
       return feedItem;
     });
 
-    const sortIndex = changeLikeStatus.sort((a, b) => b.likeCount - a.likeCount);
-    setIndex(sortIndex);
+    if (pagination.sort === 'likeCount') {
+      const sortIndex = changeLikeStatus.sort((a, b) => b.likeCount - a.likeCount);
+      setIndex(sortIndex);
+    } else {
+      setIndex(changeLikeStatus);
+    }
   };
 
   const getCreatedIndex = async () => {
@@ -285,7 +306,6 @@ export const FeedContextProvider = ({children}: IProps) => {
     }
 
     const newIndex = index.map((feed) => {
-      console.log(feed.id, feedId);
       if (feed.id === feedId) {
         feed.commentCount -= 1;
       }
@@ -314,6 +334,8 @@ export const FeedContextProvider = ({children}: IProps) => {
         searchVisible,
         increaseCommentCount,
         decreaseCommentCount,
+        showUserFollowAndReload,
+        userFollowAndChangeFollowStatus,
       }}>
       {children}
     </FeedContext.Provider>

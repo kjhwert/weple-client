@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../module/common';
 
 interface IProps {
-  users: Array<{id: number; userId: number; userNickName: string; userImage: string; isUserFollowed: string}>;
+  users: Array<{id: number; userId: number; userNickName: string; userImage: string; isUserFollowed: number}>;
   userFollowAction: (userId: number) => void;
 }
 
@@ -18,14 +18,14 @@ export default ({users, userFollowAction}: IProps) => {
                 <ProfileImage source={{uri: `${BASE_URL}/${user.userImage}`}} />
                 <MemberTextWrapper>
                   <MemberText>{user.userNickName}</MemberText>
-                  {Number(user.isUserFollowed) !== 2 && (
+                  {user.isUserFollowed !== 2 && (
                     <FollowBtn
-                      isFollow={Number(user.isUserFollowed)}
+                      isFollow={user.isUserFollowed}
                       onPress={() => {
                         userFollowAction(user.userId);
                       }}>
-                      <FollowBtnText isFollow={Number(user.isUserFollowed)}>
-                        {user.isUserFollowed === '1' ? '팔로우' : '팔로잉'}
+                      <FollowBtnText isFollow={user.isUserFollowed}>
+                        {!user.isUserFollowed ? '팔로우' : '팔로잉'}
                       </FollowBtnText>
                     </FollowBtn>
                   )}
@@ -95,13 +95,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${(props: {isFollow: number}) => (props.isFollow !== 1 ? '#007bf1' : '#fff')};
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
   border-width: 1px;
   border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: ${(props: {isFollow: number}) => (props.isFollow !== 1 ? '#fff' : '#007bf1')};
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;

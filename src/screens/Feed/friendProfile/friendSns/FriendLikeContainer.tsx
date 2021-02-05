@@ -2,29 +2,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import FriendLikePresenter from './FriendLikePresenter';
 import {feedApi} from '../../../../module/api';
 import AlertContext from '../../../../module/context/AlertContext';
-import CheckAlert from '../../../../components/CheckAlert';
 import UserContext from '../../../../module/context/UserContext';
-
-const member = [
-  {
-    id: 0,
-    image: require('../../../../assets/profile_1.png'),
-    name: 'GilDong',
-    isFollow: true,
-  },
-  {
-    id: 1,
-    image: require('../../../../assets/profile_2.png'),
-    name: 'Benjamin',
-    isFollow: true,
-  },
-  {
-    id: 2,
-    image: require('../../../../assets/follower_2.png'),
-    name: 'Jamin',
-    isFollow: false,
-  },
-];
+import FeedContext from '../../../../module/context/FeedContext';
 
 interface IProps {
   navigation: any;
@@ -32,45 +11,43 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
+  const {userFollowAndChangeFollowStatus}: any = useContext(FeedContext);
   const {userFollow}: any = useContext(UserContext);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<Array<any>>([]);
 
   const getLikeUsers = async () => {
     const {statusCode, message, data} = await feedApi.showLikeUsers(route.params.id);
     if (statusCode !== 200) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '데이터 조회에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
-    setUsers(data);
+    const result = data.map((user: any) => {
+      user.isUserFollowed = Number(user.isUserFollowed);
+
+      return user;
+    });
+    setUsers(result);
   };
 
   const userFollowAction = async (userId: number) => {
     const {statusCode, message} = await userFollow(userId);
     if (statusCode !== 201) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '팔로우 수정에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
+      return setWarningAlertVisible('팔로우 수정에 실패했습니다.', message);
     }
-    await getLikeUsers();
+
+    const newUsers = users.map((user: any) => {
+      if (userId === user.userId) {
+        user.isUserFollowed = !user.isUserFollowed;
+      }
+      return user;
+    });
+    userFollowAndChangeFollowStatus(userId);
+    setUsers(newUsers);
   };
 
   useEffect(() => {
     getLikeUsers();
-  }, []);
+  }, [route]);
 
   return <FriendLikePresenter users={users} userFollowAction={userFollowAction} />;
 };
