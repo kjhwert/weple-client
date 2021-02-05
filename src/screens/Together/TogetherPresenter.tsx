@@ -13,7 +13,6 @@ MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;
-  userTogethers: {togetherCount: number; togethers: Array<IUserTogethers>};
   togetherPaging: any;
   togethers: Array<ITogethers>;
   isMapView: boolean;
@@ -26,7 +25,6 @@ interface IProps {
 
 export default ({
   navigation,
-  userTogethers,
   togetherPaging,
   togethers,
   isMapView,
@@ -36,7 +34,9 @@ export default ({
   getEndSoon,
   getMoreTogethers,
 }: IProps) => {
-  const {getTogetherThumbnail, getTogetherActivityImage, searchVisible}: any = useContext(TogetherContext);
+  const {getTogetherThumbnail, getTogetherActivityImage, searchVisible, userTogethers}: any = useContext(
+    TogetherContext,
+  );
 
   const [selected, setSelected] = useState<ITogethers | null>(null);
 
@@ -56,16 +56,18 @@ export default ({
       <ScrollContainer>
         <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
           <Card>
-            <RecruitTogetherWrapper>
-              <RecruitTogetherBtn
-                onPress={() => {
-                  navigation.navigate('togetherMyTotalList');
-                }}>
-                <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
-                <RecruitTogetherNumber>{userTogethers.togetherCount}</RecruitTogetherNumber>
-                <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
-              </RecruitTogetherBtn>
-            </RecruitTogetherWrapper>
+            {userTogethers.togetherCount > 0 && (
+              <RecruitTogetherWrapper>
+                <RecruitTogetherBtn
+                  onPress={() => {
+                    navigation.navigate('togetherMyTotalList');
+                  }}>
+                  <RecruitTogetherText>내가 개설한 모임</RecruitTogetherText>
+                  <RecruitTogetherNumber>{userTogethers.togetherCount}</RecruitTogetherNumber>
+                  <RecruitTogetherMoreImage source={require('../../assets/more.png')} />
+                </RecruitTogetherBtn>
+              </RecruitTogetherWrapper>
+            )}
             {userTogethers.togetherCount <= 0 ? (
               <Wrapper>
                 <TogetherOpenWrapper>
@@ -408,7 +410,7 @@ const RecordWrapper = styled.View`
     backgroundColor ? backgroundColor : '#bcbcbc'};
   position: absolute;
   margin-top: 10px;
-  padding: 2px;
+  padding: 5px 15px;
 `;
 
 const RecordText = styled.Text`

@@ -29,8 +29,6 @@ export default ({
 }: IProps) => {
   const {getTogetherThumbnail}: any = useContext(TogetherContext);
 
-  console.log(feedActiveList);
-
   return (
     <Container>
       <ScrollContainer>

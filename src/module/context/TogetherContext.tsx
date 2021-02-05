@@ -1,9 +1,10 @@
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import {BASE_URL} from '../../module/common';
 import {togetherApi} from '../../module/api';
-import {ITogethers} from '../type/together';
+import {ITogethers, IUserTogethers} from '../type/together';
 import AlertContext from './AlertContext';
 import {getLatestLocation} from 'react-native-location';
+import UserContext from './UserContext';
 
 const TogetherContext = createContext({});
 
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 export const TogetherContextProvider = ({children}: IProps) => {
+  const {getUserId}: any = useContext(UserContext);
   const {setWarningAlertVisible}: any = useContext(AlertContext);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchCategories, setSearchCategories] = useState<Array<number>>([]);
@@ -41,6 +43,20 @@ export const TogetherContextProvider = ({children}: IProps) => {
     lat: 0,
     lon: 0,
   });
+
+  const [userTogethers, setUserTogethers] = useState<{togetherCount: number; togethers: Array<IUserTogethers>}>({
+    togetherCount: 0,
+    togethers: [],
+  });
+
+  const getUserTogethers = async () => {
+    const id = await getUserId();
+    const {data, statusCode, message} = await togetherApi.userOpenList(id);
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패헀습니다.', message);
+    }
+    setUserTogethers(data);
+  };
 
   const listIndex = async () => {
     setSearchLoading(true);
@@ -203,6 +219,24 @@ export const TogetherContextProvider = ({children}: IProps) => {
     if (statusCode !== 201) {
       return false;
     } else {
+      setCreateRoom({
+        title: '',
+        description: '',
+        recommend: '',
+        notice: '',
+        togetherDate: new Date(),
+        limitDate: '',
+        togetherPlace: '',
+        maxMember: '',
+        togetherPrice: '',
+        togetherTags: [],
+        isPublic: true,
+        feed: 0,
+        thumbnail: '',
+        address: '',
+        activity: 0,
+      });
+      getUserTogethers();
       return true;
     }
   };
@@ -232,6 +266,8 @@ export const TogetherContextProvider = ({children}: IProps) => {
         listIndex,
         listMoreIndex,
         mapIndex,
+        userTogethers,
+        getUserTogethers,
       }}>
       {children}
     </TogetherContext.Provider>

@@ -5,6 +5,7 @@ import UserContext from '../../module/context/UserContext';
 import {getLatestLocation} from 'react-native-location';
 import AlertContext from '../../module/context/AlertContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
+import TogetherContext from '../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
@@ -12,14 +13,8 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {getUserId}: any = useContext(UserContext);
+  const {getUserTogethers}: any = useContext(TogetherContext);
   const {setWarningAlertVisible}: any = useContext(AlertContext);
-
-  const [userTogethers, setUserTogethers] = useState<{togetherCount: number; togethers: Array<IUserTogethers>}>({
-    togetherCount: 0,
-    togethers: [],
-  });
-
   const [togetherPaging, setTogetherPaging] = useState({
     id: 0,
     hasNextPage: false,
@@ -29,20 +24,10 @@ export default ({navigation, route}: IProps) => {
   });
 
   const [togethers, setTogethers] = useState<Array<ITogethers>>([]);
-
   const [isMapView, setIsMapView] = useState(false);
 
   const turnMapView = () => {
     setIsMapView(!isMapView);
-  };
-
-  const getUserTogethers = async () => {
-    const id = await getUserId();
-    const {data, statusCode, message} = await togetherApi.userOpenList(id);
-    if (statusCode !== 200) {
-      return setWarningAlertVisible('데이터 조회에 실패헀습니다.', message);
-    }
-    setUserTogethers(data);
   };
 
   const getLocation = async () => {
@@ -142,7 +127,6 @@ export default ({navigation, route}: IProps) => {
   return (
     <TogetherPresenter
       navigation={navigation}
-      userTogethers={userTogethers}
       togetherPaging={togetherPaging}
       togethers={togethers}
       isMapView={isMapView}
