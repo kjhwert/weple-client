@@ -84,7 +84,7 @@ export const serviceApi = {
   noticeList: (page: string) => apiRequest(api.get('/notice?page=' + page)),
   notice: (id: string) => apiRequest(api.get('/notice/' + id)),
   eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
-  event: (id: string) => apiRequest(api.get('/event/' + id)),
+  event: (id: number) => apiRequest(api.get('/event/' + id)),
   getInquiry: () => apiRequest(api.get('/inquiry')),
   setInquiry: (ask: IServiceApiInquiry) => apiRequest(api.post('/inquiry', ask)),
   faq: () => apiRequest(api.get('/faq')),

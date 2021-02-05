@@ -327,7 +327,7 @@ const ActiveLeftImgWrapper = styled.View`
 `;
 
 const ActiveImage = styled.Image`
-  width: 40px;
+  width: 25px;
   height: 25px;
 `;
 
@@ -614,7 +614,7 @@ const ActiveLastImgWrapper = styled.View`
 `;
 
 const ActiveLastImage = styled.Image`
-  width: 40px;
+  width: 25px;
   height: 25px;
 `;
 
