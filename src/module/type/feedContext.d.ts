@@ -37,4 +37,5 @@ export interface IFeedImage {
   lat: number;
   lon: number;
   distance: number;
+  createdAt: string;
 }

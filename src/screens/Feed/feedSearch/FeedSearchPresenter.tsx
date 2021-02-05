@@ -50,7 +50,7 @@ export default ({
               </SortBtn>
             </ActiveSelectTitleWrapper>
 
-            {index.length === 0 && <Text>찾으시는 정보가 없습니다.</Text>}
+            {index.length === 0 && <Text style={{marginTop: 10}}>찾으시는 정보가 없습니다.</Text>}
 
             {index.map((feed) => (
               <PostWrapper key={feed.id}>

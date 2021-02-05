@@ -169,7 +169,9 @@ export default ({navigation, feed}: IProps) => {
                       <ActiveSmallestMark></ActiveSmallestMark>
                     </ActiveSmallMarkWrapper>
                     <DetailTextWrapper>
-                      <ActiveDetailTimeText>{image.distance}km 이동 후 1232에 촬영</ActiveDetailTimeText>
+                      <ActiveDetailTimeText>
+                        {image.distance}km 이동 후 {showDateToAmPmHourMinute(new Date(image.createdAt))}에 촬영
+                      </ActiveDetailTimeText>
                     </DetailTextWrapper>
                   </ActiveDetailTextWrapper>
                 </FeedImageWrapper>
