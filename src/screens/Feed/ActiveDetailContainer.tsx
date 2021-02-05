@@ -6,15 +6,30 @@ import Loading from '../../components/Loading';
 
 interface IProps {
   navigation: any;
-  route: any;
+  route: {
+    params: {
+      id: number;
+    };
+  };
 }
 
 export default ({navigation, route}: IProps) => {
-  const {show, getShow, showLoading}: IFeedContext = useContext(FeedContext);
+  const {show, getShow, showLoading}: any = useContext(FeedContext);
+
+  const reload = () => {
+    const id = route.params.id;
+    if (!show) {
+      return getShow(id);
+    }
+
+    if (show.id !== id) {
+      return getShow(id);
+    }
+  };
 
   useEffect(() => {
-    route?.params?.id && getShow(route.params.id);
-  }, []);
+    reload();
+  }, [route]);
 
   return showLoading ? <Loading /> : <ActiveDetailPresenter navigation={navigation} feed={show} />;
 };

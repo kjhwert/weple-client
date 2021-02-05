@@ -8,6 +8,7 @@ import CheckAlert from '../../../../components/CheckAlert';
 import ModifyAlert from '../../../../components/ModifyAlert';
 import ConfirmAlert from '../../../../components/ConfirmAlert';
 import {IFeedCreateComment} from '../../../../module/type/api';
+import FeedContext from '../../../../module/context/FeedContext';
 
 interface IProps {
   navigation: any;
@@ -15,6 +16,7 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
+  const {increaseCommentCount, decreaseCommentCount}: any = useContext(FeedContext);
   const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
   const [commentStatus, setCommentStatus] = useState({
     id: 0,
@@ -54,6 +56,7 @@ export default ({navigation, route}: IProps) => {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setUserComment({...userComment, description: ''});
+    increaseCommentCount(userComment.feedId);
     await getComments();
     return setAlertVisible(
       <CheckAlert
@@ -112,6 +115,7 @@ export default ({navigation, route}: IProps) => {
       return setWarningAlertVisible('삭제에 실패했습니다.', message);
     }
 
+    decreaseCommentCount(userComment.feedId);
     await getComments();
   };
 

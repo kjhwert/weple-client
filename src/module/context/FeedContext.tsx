@@ -264,7 +264,36 @@ export const FeedContextProvider = ({children}: IProps) => {
     }
   };
 
-  useEffect(() => {}, []);
+  const increaseCommentCount = (feedId: number) => {
+    if (show) {
+      setShow({...show, commentCount: show.commentCount + 1});
+    }
+
+    const newIndex = index.map((feed) => {
+      if (feed.id === feedId) {
+        feed.commentCount += 1;
+      }
+
+      return feed;
+    });
+    setIndex(newIndex);
+  };
+
+  const decreaseCommentCount = (feedId: number) => {
+    if (show) {
+      setShow({...show, commentCount: show.commentCount - 1});
+    }
+
+    const newIndex = index.map((feed) => {
+      console.log(feed.id, feedId);
+      if (feed.id === feedId) {
+        feed.commentCount -= 1;
+      }
+
+      return feed;
+    });
+    setIndex(newIndex);
+  };
 
   return (
     <FeedContext.Provider
@@ -283,6 +312,8 @@ export const FeedContextProvider = ({children}: IProps) => {
         getMoreIndex,
         changeSearchVisible,
         searchVisible,
+        increaseCommentCount,
+        decreaseCommentCount,
       }}>
       {children}
     </FeedContext.Provider>
