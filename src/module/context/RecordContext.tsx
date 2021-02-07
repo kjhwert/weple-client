@@ -314,7 +314,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         [longitude, latitude],
       ]);
     }
-    const distance = Math.floor(currentDistance * 1000) / 1000 + recordedDistance;
+    const distance = Math.floor((currentDistance + recordedDistance) * 1000) / 1000;
     const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
 
     const speed = mapboxRecord.speed.concat(currentSpeed);
