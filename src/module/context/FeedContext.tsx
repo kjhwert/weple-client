@@ -285,6 +285,35 @@ export const FeedContextProvider = ({children}: IProps) => {
     }
   };
 
+  const changeLikeCount = async (feedId: number) => {
+    const feed = index.find((feed) => feed.id === feedId);
+    if (!feed) {
+      return;
+    }
+
+    const {statusCode, message} = await feedLiked(feed);
+    if (statusCode !== 201) {
+      return setWarningAlertVisible('좋아요에 실패했습니다.', message);
+    }
+
+    if (show && show.id === feedId) {
+      setShow({
+        ...show,
+        isUserLiked: !feed.isUserLiked,
+        likeCount: feed.isUserLiked ? show.likeCount - 1 : show.likeCount + 1,
+      });
+    }
+    const newIndex = index.map((feedItem) => {
+      if (feedId === feedItem.id) {
+        feedItem.isUserLiked = !feed.isUserLiked;
+        feedItem.likeCount = feed.isUserLiked ? feedItem.likeCount + 1 : feedItem.likeCount - 1;
+      }
+
+      return feedItem;
+    });
+    setIndex(newIndex);
+  };
+
   const increaseCommentCount = (feedId: number) => {
     if (show) {
       setShow({...show, commentCount: show.commentCount + 1});
@@ -336,6 +365,7 @@ export const FeedContextProvider = ({children}: IProps) => {
         decreaseCommentCount,
         showUserFollowAndReload,
         userFollowAndChangeFollowStatus,
+        changeLikeCount,
       }}>
       {children}
     </FeedContext.Provider>

@@ -32,7 +32,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
     index,
     pagination,
     userFollowAndReload,
-    feedLikedAndReload,
+    changeLikeCount,
     switchingSortIndex,
     getMoreIndex,
     searchVisible,
@@ -183,7 +183,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
 
                   <IconWrapper>
                     <IconImageWrapper>
-                      <IconBtn onPress={() => feedLikedAndReload(feed)}>
+                      <IconBtn onPress={() => changeLikeCount(feed.id)}>
                         <IconImage
                           source={
                             feed.isUserLiked

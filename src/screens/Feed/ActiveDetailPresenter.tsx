@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export default ({navigation, feed}: IProps) => {
-  const {showUserFollowAndReload}: any = useContext(FeedContext);
+  const {showUserFollowAndReload, changeLikeCount}: any = useContext(FeedContext);
   const {loginUser}: any = useContext(UserContext);
   const webViewRef = useRef<any>(null);
 
@@ -96,8 +96,17 @@ export default ({navigation, feed}: IProps) => {
               </RecordWrapper>
               <IconWrapper>
                 <IconBtnText>
-                  <IconBtn>
-                    <IconImage source={require('../../assets/icon_heart.png')} />
+                  <IconBtn
+                    onPress={() => {
+                      changeLikeCount(feed.id);
+                    }}>
+                    <IconImage
+                      source={
+                        feed.isUserLiked
+                          ? require('../../assets/icon_heartRed.png')
+                          : require('../../assets/icon_heart.png')
+                      }
+                    />
                   </IconBtn>
                   <IconBtn
                     onPress={() => {
@@ -108,9 +117,7 @@ export default ({navigation, feed}: IProps) => {
                   </IconBtn>
                 </IconBtnText>
                 <IconBtnText>
-                  <IconBtn>
-                    <IconImage source={require('../../assets/icon_comment.png')} />
-                  </IconBtn>
+                  <IconImage source={require('../../assets/icon_comment.png')} />
                   <IconBtn
                     onPress={() => {
                       navigation.navigate('friendComment', {id: feed.id});
