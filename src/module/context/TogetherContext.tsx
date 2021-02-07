@@ -1,7 +1,7 @@
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import {BASE_URL} from '../../module/common';
 import {togetherApi} from '../../module/api';
-import {ITogethers, IUserTogethers} from '../type/together';
+import {IShowTogether, ITogethers, IUserTogethers} from '../type/together';
 import AlertContext from './AlertContext';
 import {getLatestLocation} from 'react-native-location';
 import UserContext from './UserContext';
@@ -48,6 +48,19 @@ export const TogetherContextProvider = ({children}: IProps) => {
     togetherCount: 0,
     togethers: [],
   });
+
+  const [show, setShow] = useState<IShowTogether | null>(null);
+
+  const getShow = async (togetherId: number) => {
+    const {data, statusCode, message} = await togetherApi.userOpenDetail(togetherId);
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+
+    data.together.isUserJoined = !!+data.together.isUserJoined;
+    data.together.isUsersTogether = !!+data.together.isUsersTogether;
+    setShow(data);
+  };
 
   const getUserTogethers = async () => {
     const id = await getUserId();
@@ -268,6 +281,8 @@ export const TogetherContextProvider = ({children}: IProps) => {
         mapIndex,
         userTogethers,
         getUserTogethers,
+        show,
+        getShow,
       }}>
       {children}
     </TogetherContext.Provider>

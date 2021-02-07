@@ -79,3 +79,18 @@ export interface ICategoryActivity {
   name: string;
   caloriesPerMinute: number;
 }
+
+export interface ITogetherUsersStatistics {
+  activities: Array<ITogetherUsersStatisticsActivity>;
+  userId: number;
+  userImage: string;
+  userNickName: string;
+}
+
+export interface ITogetherUsersStatisticsActivity {
+  activityColor: string;
+  activityImage: string;
+  activityName: string;
+  distance: number;
+  userId: number;
+}

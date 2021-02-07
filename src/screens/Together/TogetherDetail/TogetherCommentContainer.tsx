@@ -6,14 +6,20 @@ import {ITogetherComments} from '../../../module/type/together';
 import AlertContext from '../../../module/context/AlertContext';
 import ConfirmAlert from '../../../components/ConfirmAlert';
 import ModifyAlert from '../../../components/ModifyAlert';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
-  route: any;
+  route: {
+    params: {
+      id: number;
+    };
+  };
 }
 
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
+  const {getShow}: any = useContext(TogetherContext);
   const [loading, setLoading] = useState(false);
   const [commentStatus, setCommentStatus] = useState({
     id: 0,
@@ -46,7 +52,7 @@ export default ({navigation, route}: IProps) => {
   };
 
   const finishComments = async () => {
-    const id = route?.params?.id;
+    const id = route.params.id;
     const request = {
       description: userComment.description,
     };
@@ -54,6 +60,7 @@ export default ({navigation, route}: IProps) => {
     if (statusCode === 201) {
       setUserComment({...userComment, description: ''});
       await getComments();
+      await getShow(route.params.id);
     }
   };
 
@@ -104,6 +111,7 @@ export default ({navigation, route}: IProps) => {
     }
 
     await getComments();
+    await getShow(route.params.id);
   };
 
   const setModifyAlertVisible = (comment: ITogetherComments) => {

@@ -1,36 +1,22 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import TogetherDetailPresenter from './TogetherDetailPresenter';
 import {togetherApi} from '../../../module/api';
 import AlertContext from '../../../module/context/AlertContext';
 import CheckAlert from '../../../components/CheckAlert';
 import ConfirmAlert from '../../../components/ConfirmAlert';
-import {IShowTogether} from '../../../module/type/together';
 import Loading from '../../../components/Loading';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
-  route: any;
+  route: {
+    params: {id: number};
+  };
 }
 
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
-
-  const [show, setShow] = useState<IShowTogether | null>(null);
-
-  const getTogether = async () => {
-    const id = route?.params?.id;
-    if (!id) {
-      return;
-    }
-    const {data, statusCode, message} = await togetherApi.userOpenDetail(id);
-    if (statusCode !== 200) {
-      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
-    }
-
-    data.together.isUserJoined = !!+data.together.isUserJoined;
-    data.together.isUsersTogether = !!+data.together.isUsersTogether;
-    setShow(data);
-  };
+  const {show, getShow}: any = useContext(TogetherContext);
 
   const togetherInto = async () => {
     const id = route?.params?.id;
@@ -91,7 +77,7 @@ export default ({navigation, route}: IProps) => {
   };
 
   useEffect(() => {
-    getTogether();
+    getShow(route.params.id);
   }, [route]);
 
   return !show ? (

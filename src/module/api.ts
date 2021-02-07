@@ -97,7 +97,7 @@ export const togetherApi = {
   userOpenDetail: (id: number) => apiRequest(api.get('/together/' + id)),
   putTogetherDetail: (id: number, modify: ITogetherApiModify) => apiRequest(api.put('/together/' + id, modify)),
   deleteTogetherDetail: (id: number) => apiRequest(api.delete('/together/' + id)),
-  togetherMember: (id: number) => apiRequest(api.get('/together/' + id + '/user')),
+  togetherMember: (togetherId: number) => apiRequest(api.get(`/together/${togetherId}/user`)),
   userOpenRoom: (room: ITogetherApiOpneRoom) => apiRequest(api.post('/together', room)),
   locationList: (latitude: number, longitude: number, page: number) =>
     apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),

@@ -403,14 +403,13 @@ const RecruitImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 50%;
   align-items: center;
   justify-content: center;
   background-color: ${({backgroundColor}: {backgroundColor: string}) =>
     backgroundColor ? backgroundColor : '#bcbcbc'};
   position: absolute;
   margin-top: 10px;
-  padding: 5px 15px;
+  padding: 5px 10px;
 `;
 
 const RecordText = styled.Text`
