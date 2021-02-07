@@ -115,6 +115,7 @@ export const webViewJavaScriptCode = ({coordinates, music, map}: IWebViewJavaScr
                   }, timePerStep);
               }
       
+              // animate()
               document.getElementById('start').addEventListener('click', function () {
                   animate()
               })

@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext, useState, useEffect} from 'react';
+import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import AlertContext from './AlertContext';
 import {feedApi} from '../api';
 import {IFeedPagination} from '../type/api';
@@ -16,6 +16,7 @@ interface IProps {
 export const FeedContextProvider = ({children}: IProps) => {
   const {setWarningAlertVisible}: any = useContext(AlertContext);
   const {userFollow}: any = useContext(UserContext);
+  const [tabBarVisible, setTabBarVisible] = useState(true);
   const [pagination, setPagination] = useState<IFeedPagination>({
     page: 1,
     sort: 'createdAt',
@@ -29,6 +30,16 @@ export const FeedContextProvider = ({children}: IProps) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [show, setShow] = useState<IShowFeed | null>(null);
   const [showLoading, setShowLoading] = useState(true);
+
+  console.log(tabBarVisible);
+
+  const changeTabBarVisible = () => {
+    setTabBarVisible(true);
+  };
+
+  const changeTabBarInvisible = () => {
+    setTabBarVisible(false);
+  };
 
   const getShow = async (feedId: number) => {
     setShowLoading(true);
@@ -343,7 +354,6 @@ export const FeedContextProvider = ({children}: IProps) => {
     });
     setIndex(newIndex);
   };
-
   return (
     <FeedContext.Provider
       value={{
@@ -366,6 +376,9 @@ export const FeedContextProvider = ({children}: IProps) => {
         showUserFollowAndReload,
         userFollowAndChangeFollowStatus,
         changeLikeCount,
+        tabBarVisible,
+        changeTabBarVisible,
+        changeTabBarInvisible,
       }}>
       {children}
     </FeedContext.Provider>

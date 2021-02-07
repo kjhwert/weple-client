@@ -19,6 +19,8 @@ import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendL
 import FeedContext from '../module/context/FeedContext';
 import {IFeedContext} from '../module/type/feedContext';
 import FollowContext from '../module/context/FollowContext';
+import WhiteBackBtn from '../components/WhiteBackBtn';
+import NotificationWhite from '../components/NotificationWhite';
 
 const Stack = createStackNavigator();
 
@@ -115,9 +117,13 @@ export default () => {
         component={FriendLikeContainer}
       />
       <Stack.Screen
-        options={{
-          headerTitle: '공유하기',
-        }}
+        options={({navigation, route}) => ({
+          headerTitle: `${show ? show.userNickName : ''}님의 활동`,
+          headerTintColor: 'white',
+          headerStyle: {backgroundColor: 'black'},
+          headerLeft: () => <WhiteBackBtn navigation={navigation} />,
+          headerRight: () => <NotificationWhite navigation={navigation} route={route} />,
+        })}
         name="friendShare"
         component={FeedShareContainer}
       />

@@ -38,13 +38,9 @@ export default () => {
         component={RecordContainer}
         options={({navigation}) => ({
           headerLeft: () => <View />,
-          headerRight: () =>
-            isStart ? <View /> : <RecordSetupBtn navigation={navigation} />,
+          headerRight: () => (isStart ? <View /> : <RecordSetupBtn navigation={navigation} />),
           headerTitle: () => (
-            <HeaderTitleWrapper
-              onPress={() =>
-                !isStart && navigation.navigate('recordActiveType')
-              }>
+            <HeaderTitleWrapper onPress={() => !isStart && navigation.navigate('recordActiveType')}>
               <HeaderTitle>{recordSetting.activity.name}</HeaderTitle>
               <HeaderArrowImage source={require('../assets/arrowBlack.png')} />
             </HeaderTitleWrapper>

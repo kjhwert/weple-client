@@ -6,6 +6,7 @@ import UserContext from '../../module/context/UserContext';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
 import FeedContext from '../../module/context/FeedContext';
+import {Image, TouchableOpacity, View} from 'react-native';
 
 interface IProps {
   navigation: any;
@@ -26,18 +27,25 @@ export default ({navigation, feed}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapPlayWrapper>
-              <WebView
-                ref={(ref) => (webViewRef.current = ref)}
-                source={{
-                  uri: `${BASE_URL}/public/map/test.html`,
-                }}
-                injectedJavaScript={webViewJavaScriptCode({
-                  coordinates: feed.coordinates,
-                  map: {id: feed.mapId, style: feed.mapStyle},
-                  music: {id: feed.musicId, url: feed.musicUrl},
-                })}
-              />
+            <MapPlayWrapper source={{uri: `${BASE_URL}/${feed.thumbnail}`}} imageStyle={{opacity: 0.6}}>
+              <TouchableOpacity
+                style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                onPress={() => {
+                  navigation.navigate('friendShare', {feed});
+                }}>
+                <Image source={require('../../assets/play_icon.png')} style={{width: 40, height: 40}} />
+              </TouchableOpacity>
+              {/*<WebView*/}
+              {/*  ref={(ref) => (webViewRef.current = ref)}*/}
+              {/*  source={{*/}
+              {/*    uri: `${BASE_URL}/public/map/test.html`,*/}
+              {/*  }}*/}
+              {/*  injectedJavaScript={webViewJavaScriptCode({*/}
+              {/*    coordinates: feed.coordinates,*/}
+              {/*    map: {id: feed.mapId, style: feed.mapStyle},*/}
+              {/*    music: {id: feed.musicId, url: feed.musicUrl},*/}
+              {/*  })}*/}
+              {/*/>*/}
             </MapPlayWrapper>
 
             <ProfileTopWrapper>
@@ -246,7 +254,7 @@ const Card = styled.View`
   align-items: center;
 `;
 
-const MapPlayWrapper = styled.View`
+const MapPlayWrapper = styled.ImageBackground`
   width: 100%;
   height: 200px;
 `;
@@ -587,6 +595,11 @@ const ActiveDetailImageWrapper = styled.View`
 const ActiveDetailMapImage = styled.Image`
   width: 100%;
   height: 160px;
+`;
+
+const MapPlayThumbnail = styled.Image`
+  width: 100%;
+  height: 200px;
 `;
 
 const ActiveDetailImage = styled.Image`
