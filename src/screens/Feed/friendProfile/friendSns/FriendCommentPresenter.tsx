@@ -7,6 +7,7 @@ import {IFeedCreateComment} from '../../../../module/type/api';
 import {Text} from 'react-native';
 
 interface IProps {
+  navigation: any;
   comments: Array<IFeedComments>;
   userComment: IFeedCreateComment;
   onChangeDescription: (e: string) => void;
@@ -22,6 +23,7 @@ interface IProps {
 }
 
 export default ({
+  navigation,
   comments,
   onChangeDescription,
   userComment,
@@ -41,17 +43,19 @@ export default ({
         <ScrollWrapper>
           <Card>
             {comments.map((comment) => (
-              <MemberWrapper key={comment.id}>
-                <ProfileImageWrapper onPress={() => {}}>
+              <MemberWrapper
+                key={comment.id}
+                onPress={() => {
+                  navigation.navigate('friendActive', {id: comment.userId});
+                }}>
+                <ProfileImageWrapper>
                   <ProfileImage
                     source={{
                       uri: `${BASE_URL}/${comment.userImage ? comment.userImage : 'public/user/no_profile.png'}`,
                     }}
                   />
                   <MemberTextWrapper>
-                    <MemberNameBtn>
-                      <MemberText>{comment.userName}</MemberText>
-                    </MemberNameBtn>
+                    <MemberText>{comment.userName}</MemberText>
                     {commentStatus.isModifiable && commentStatus.id === comment.id ? (
                       <CommentText
                         value={commentStatus.description}
@@ -160,7 +164,7 @@ const Card = styled.View`
   background-color: #fff;
 `;
 
-const MemberWrapper = styled.View`
+const MemberWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -170,7 +174,7 @@ const MemberWrapper = styled.View`
   border-color: #eee;
 `;
 
-const ProfileImageWrapper = styled.TouchableOpacity`
+const ProfileImageWrapper = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -192,15 +196,12 @@ const MemberTextWrapper = styled.View`
   margin-right: 5px;
 `;
 
-const MemberNameBtn = styled.TouchableOpacity`
-  width: 100%;
-`;
-
 const MemberText = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333;
   padding-bottom: 5px;
+  width: 100%;
 `;
 
 const CommentText = styled.TextInput`

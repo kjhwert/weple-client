@@ -131,6 +131,7 @@ export default ({navigation, route}: IProps) => {
     <Loading />
   ) : (
     <FriendCommentPresenter
+      navigation={navigation}
       comments={comments}
       userComment={userComment}
       onChangeDescription={onChangeDescription}

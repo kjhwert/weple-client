@@ -154,9 +154,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                         source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
                       />
                       <ProfileTextWrapper>
-                        <ProfileNameBtn>
-                          <ProfileName>{feed.userNickName}</ProfileName>
-                        </ProfileNameBtn>
+                        <ProfileName>{feed.userNickName}</ProfileName>
                         <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                       </ProfileTextWrapper>
                     </ProfileInfoWrapper>
@@ -423,6 +421,7 @@ const ProfileNameBtn = styled.TouchableOpacity`
 `;
 
 const ProfileName = styled.Text`
+  padding: 5px 0;
   font-size: 15px;
   font-weight: 500;
   color: #303030;

@@ -42,14 +42,15 @@ export default ({navigation, feed}: IProps) => {
 
             <ProfileTopWrapper>
               <ProfileWrapper>
-                <ProfileInfoWrapper>
+                <ProfileInfoWrapper
+                  onPress={() => {
+                    navigation.navigate('friendActive', {id: feed.userId});
+                  }}>
                   <ProfileImage
                     source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
                   />
                   <ProfileTextWrapper>
-                    <ProfileNameBtn onPress={() => {}}>
-                      <ProfileName>{feed.userNickName}</ProfileName>
-                    </ProfileNameBtn>
+                    <ProfileName>{feed.userNickName}</ProfileName>
                     <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                   </ProfileTextWrapper>
                 </ProfileInfoWrapper>
@@ -278,17 +279,11 @@ const ProfileTextWrapper = styled.View`
   margin-left: 15px;
 `;
 
-const ProfileNameBtn = styled.TouchableOpacity`
-  width: 100%;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
 const ProfileName = styled.Text`
   font-size: 14px;
   font-weight: 500;
   color: #303030;
+  padding: 5px 0;
 `;
 
 const PostTime = styled.Text`
@@ -307,7 +302,7 @@ const FollowBtn = styled.TouchableOpacity`
   background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
-const ProfileInfoWrapper = styled.View`
+const ProfileInfoWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   width: 60%;

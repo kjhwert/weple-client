@@ -1,18 +1,35 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
+import FeedRecommendContainer from '../screens/Feed/FeedRecommendContainer';
+
+const feedScreens = [
+  'feedMain',
+  'activeDetail',
+  'feedSearch',
+  'feedAlarmInfo',
+  'feedEventDetail',
+  'friendActive',
+  'friendActiveJoin',
+  'friendComment',
+  'friendFollower',
+  'friendLike',
+  'friendShare',
+  'feedPopularity',
+  'feedRecommend',
+];
 
 export default ({navigation, route}) => {
   return (
     <Container
       onPress={() => {
         const {name} = route;
-        if (name === 'feedMain') {
+        const isFeedScreen = feedScreens.find((feed) => feed === name);
+        if (isFeedScreen) {
           return navigation.navigate('feedAlarmInfo');
         }
 
-        if (name === 'togetherMain') {
-          return navigation.navigate('togetherAlarmInfo');
-        }
+        return navigation.navigate('togetherAlarmInfo');
       }}>
       <AlarmImage source={require('../assets/header_alarm.png')} />
     </Container>

@@ -49,5 +49,5 @@ export default ({navigation, route}: IProps) => {
     getLikeUsers();
   }, [route]);
 
-  return <FriendLikePresenter users={users} userFollowAction={userFollowAction} />;
+  return <FriendLikePresenter users={users} navigation={navigation} userFollowAction={userFollowAction} />;
 };

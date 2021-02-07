@@ -32,6 +32,7 @@ export interface IFeedComments {
   id: number;
   description: string;
   createdAt: string;
+  userId: number;
   userName: string;
   userImage: string;
   isLoginUserWrote: boolean;

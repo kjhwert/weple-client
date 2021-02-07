@@ -3,18 +3,23 @@ import styled from 'styled-components/native';
 import {BASE_URL} from '../../../../module/common';
 
 interface IProps {
+  navigation: any;
   users: Array<{id: number; userId: number; userNickName: string; userImage: string; isUserFollowed: number}>;
   userFollowAction: (userId: number) => void;
 }
 
-export default ({users, userFollowAction}: IProps) => {
+export default ({navigation, users, userFollowAction}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             {users.map((user) => (
-              <MemberWrapper key={user.id}>
+              <MemberWrapper
+                key={user.id}
+                onPress={() => {
+                  navigation.navigate('friendActive', {id: user.userId});
+                }}>
                 <ProfileImage source={{uri: `${BASE_URL}/${user.userImage}`}} />
                 <MemberTextWrapper>
                   <MemberText>{user.userNickName}</MemberText>
@@ -58,7 +63,7 @@ const Card = styled.View`
   background-color: #fff;
 `;
 
-const MemberWrapper = styled.View`
+const MemberWrapper = styled.TouchableOpacity`
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -95,13 +100,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
+  background-color: ${({isFollow}: {isFollow: number}) => (!isFollow ? '#007bf1' : '#fff')};
   border-width: 1px;
   border-color: #007bf1;
 `;
 
 const FollowBtnText = styled.Text`
-  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
+  color: ${({isFollow}: {isFollow: number}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
   text-align: center;
