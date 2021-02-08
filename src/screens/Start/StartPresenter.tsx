@@ -15,36 +15,29 @@ export default ({navigation, isAutoLogin}: IProps) => {
         <Loading />
       ) : (
         <>
-          <LinearGradient
-            colors={['#79a6fa', '#3065f4', '#4e3adf']}
-            start={{x: 1, y: 0}}
-            end={{x: 0, y: 1}}>
-            <ContainerCard>
-              <AppLogoImageWrapper>
-                <AppLogoImage source={require('../../assets/ttamna.png')} />
-              </AppLogoImageWrapper>
+          <ContainerCard>
+            <AppLogoImageWrapper>
+              <AppLogoImage source={require('../../assets/ttamna.png')} />
+            </AppLogoImageWrapper>
 
-              <LoginWrapper>
-                <LoginInfoWrapper>
-                  <LoginInfoText>
-                    이미 가입하셨으면 로그인해주세요.
-                  </LoginInfoText>
-                  <LoginBtn
-                    onPress={() => {
-                      navigation.navigate('login');
-                    }}>
-                    <LoginBtnText>로그인</LoginBtnText>
-                  </LoginBtn>
-                </LoginInfoWrapper>
-                <StartBtn
+            <LoginWrapper>
+              <LoginInfoWrapper>
+                <LoginInfoText>이미 가입하셨으면 로그인해주세요.</LoginInfoText>
+                <LoginBtn
                   onPress={() => {
-                    navigation.navigate('createAccount');
+                    navigation.navigate('login');
                   }}>
-                  <StartText>시작하기</StartText>
-                </StartBtn>
-              </LoginWrapper>
-            </ContainerCard>
-          </LinearGradient>
+                  <LoginBtnText>로그인</LoginBtnText>
+                </LoginBtn>
+              </LoginInfoWrapper>
+              <StartBtn
+                onPress={() => {
+                  navigation.navigate('createAccount');
+                }}>
+                <StartText>시작하기</StartText>
+              </StartBtn>
+            </LoginWrapper>
+          </ContainerCard>
         </>
       )}
     </Container>
@@ -53,6 +46,7 @@ export default ({navigation, isAutoLogin}: IProps) => {
 
 const Container = styled.View`
   flex: 1;
+  background-color: #fefefe;
 `;
 
 const ContainerCard = styled.View`
@@ -91,7 +85,7 @@ const LoginInfoWrapper = styled.View`
 `;
 
 const LoginInfoText = styled.Text`
-  color: #fefefe;
+  color: #007bf1;
   font-size: 12px;
   font-weight: bold;
   width: 70%;
@@ -109,7 +103,7 @@ const LoginBtn = styled.TouchableOpacity`
 `;
 
 const LoginBtnText = styled.Text`
-  color: #fefefe;
+  color: #007bf1;
   font-size: 15px;
   font-weight: bold;
   text-decoration: underline;
@@ -117,7 +111,7 @@ const LoginBtnText = styled.Text`
 `;
 
 const StartBtn = styled.TouchableOpacity`
-  background-color: #fff;
+  background-color: #007bf1;
   padding: 15px;
   align-items: center;
   justify-content: center;
@@ -125,7 +119,7 @@ const StartBtn = styled.TouchableOpacity`
 `;
 
 const StartText = styled.Text`
-  color: #007bf1;
+  color: #fefefe;
   font-size: 17px;
   font-weight: bold;
 `;
