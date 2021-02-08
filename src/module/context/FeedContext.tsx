@@ -31,8 +31,6 @@ export const FeedContextProvider = ({children}: IProps) => {
   const [show, setShow] = useState<IShowFeed | null>(null);
   const [showLoading, setShowLoading] = useState(true);
 
-  console.log(tabBarVisible);
-
   const changeTabBarVisible = () => {
     setTabBarVisible(true);
   };

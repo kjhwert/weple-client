@@ -112,6 +112,8 @@ export const togetherApi = {
   togetherOut: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-out')),
   updateComment: (id: number, description: string) => apiRequest(api.put(`/together/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/together/comment/${id}`)),
+  getProfileTogethers: (page: number, userId: number) =>
+    apiRequest(api.get(`/together/profile/${userId}?page=${page}`)),
 };
 
 export const feedApi = {
@@ -155,7 +157,9 @@ export const feedApi = {
   updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
 
-  getMyfeed: (id: string, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page + '&userId=' + id)),
+  getMyFeed: (id: number, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page)),
   getLikefeed: (page: number, sort: string, order: string) =>
     apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=`)),
+  getProfileFeeds: (page: number, order: 'likeCount' | 'createdAt', userId: number) =>
+    apiRequest(api.get(`/feed/profile/${userId}?page=${page}&order=${order}`)),
 };

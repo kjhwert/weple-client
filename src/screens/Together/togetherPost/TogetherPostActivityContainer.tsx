@@ -38,7 +38,7 @@ export default ({navigation}: IProps) => {
   const getMyFeed = async (myFeedPaging) => {
     const page = myFeedPaging ? myFeedPaging.page : 1;
     const id = await getUserId();
-    const {data, statusCode} = await feedApi.getMyfeed(id, page);
+    const {data, statusCode} = await feedApi.getMyFeed(id, page);
     if (statusCode !== 200) {
     } else {
       const newActive = data.map((item) => ({
