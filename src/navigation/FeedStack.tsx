@@ -21,6 +21,7 @@ import {IFeedContext} from '../module/type/feedContext';
 import FollowContext from '../module/context/FollowContext';
 import WhiteBackBtn from '../components/WhiteBackBtn';
 import NotificationWhite from '../components/NotificationWhite';
+import ProfileActiveStatisticContainer from '../screens/Profile/profilePay/ProfileActiveStatisticContainer';
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,13 @@ export default () => {
         }}
         name="friendActive"
         component={FriendActiveContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '활동 통계',
+        }}
+        name="ProfileActiveStatistic"
+        component={ProfileActiveStatisticContainer}
       />
       <Stack.Screen
         options={{

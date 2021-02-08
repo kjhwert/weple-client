@@ -162,4 +162,5 @@ export const feedApi = {
     apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=`)),
   getProfileFeeds: (page: number, order: 'likeCount' | 'createdAt', userId: number) =>
     apiRequest(api.get(`/feed/profile/${userId}?page=${page}&order=${order}`)),
+  userStatistics: (userId: number) => apiRequest(api.get(`/feed/user/${userId}/statistics`)),
 };

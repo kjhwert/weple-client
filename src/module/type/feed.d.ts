@@ -28,6 +28,13 @@ export interface IFeed {
   activityImage: string;
 }
 
+export interface IUserStatistics {
+  activityName: string;
+  calorie: string;
+  distance: number;
+  duration: string;
+}
+
 export interface IFeedComments {
   id: number;
   description: string;

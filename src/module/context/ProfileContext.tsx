@@ -22,6 +22,15 @@ export const ProfileContextProvider = ({children}: IProps) => {
     sort: 'feed',
     order: 'createdAt',
   });
+  const [userStatistics, setUserStatistics] = useState([]);
+
+  const getUserStatistics = async () => {
+    const {statusCode, message, data} = await feedApi.userStatistics(user.user.id);
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+    setUserStatistics(data);
+  };
 
   const userFollowAndReload = async (userId: number) => {
     const {statusCode, message} = await userFollow(userId);
@@ -114,6 +123,7 @@ export const ProfileContextProvider = ({children}: IProps) => {
         feeds,
         togethers,
         pagination,
+        userStatistics,
         getUser,
         getFeeds,
         getTogethers,
@@ -122,6 +132,7 @@ export const ProfileContextProvider = ({children}: IProps) => {
         switchOrder,
         userFollowAndReload,
         changeLikeCount,
+        getUserStatistics,
       }}>
       {children}
     </ProfileContext.Provider>

@@ -3,26 +3,13 @@ import UserContext from '../module/context/UserContext';
 import styled from 'styled-components/native';
 import {BASE_URL, timeForToday, togetherDate} from '../module/common';
 import AlertContext from '../module/context/AlertContext';
-import {IProfileUserInfo} from '../module/type/user';
-import {userApi} from '../module/api';
 import SortAlert from './SortAlert';
 import ProfileContext from '../module/context/ProfileContext';
 import Loading from './Loading';
 import {IFeed} from '../module/type/feed';
-import FeedContext from '../module/context/FeedContext';
 import {getComma} from './CommonTime';
 import {ITogethers} from '../module/type/together';
 import {RefreshControl} from 'react-native';
-
-const menuList = [
-  {id: 0, name: '나의 활동', isClick: true},
-  {id: 1, name: '내가 참여중인 모임', isClick: false},
-];
-
-const tabs = [
-  {sort: 'feed', tab: '나의 활동'},
-  {sort: 'together', tab: '내가 참여중인 모임'},
-];
 
 const sortDataType = [
   {
