@@ -124,7 +124,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                     style={{
                       lineWidth: 5,
                       lineJoin: 'bevel',
-                      lineColor: '#fff',
+                      lineColor: '#007bf1',
                     }}
                   />
                 </MapboxGL.ShapeSource>

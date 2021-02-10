@@ -105,7 +105,7 @@ export default ({navigation, route}: IProps) => {
             description: '',
           }}
           checked={() => {
-            navigation.navigate('togetherMyDetail', {refresh: true});
+            navigation.navigate('togetherDetail', {refresh: true});
           }}
         />,
       );

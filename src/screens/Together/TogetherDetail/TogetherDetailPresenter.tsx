@@ -92,7 +92,7 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                   </AllCommentBtn>
                 </FollowWrapper>
               )}
-              {show.together.isUsersTogether && getTotalTime(new Date()) > getTotalTime(show.together.togetherDate) && (
+              {show.together.isUsersTogether && (
                 <ModifyBtnWrapper>
                   <ModifyButton
                     onPress={() => {

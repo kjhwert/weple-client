@@ -124,7 +124,7 @@ export default ({navigation}: IProps) => {
   };
 
   const showPicker = () => {
-    const options = {storageOptions: {skipBackup: true, path: 'image'}};
+    const options = {storageOptions: {skipBackup: true, path: 'image'}, quality: 0.5};
     ImagePicker.launchImageLibrary(options, async ({uri, type, fileName}) => {
       const imgFormData = new FormData();
       imgFormData.append('image', {

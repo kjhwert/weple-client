@@ -128,7 +128,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     }
 
     ImagePicker.launchCamera(
-      {storageOptions: {privateDirectory: true}},
+      {storageOptions: {privateDirectory: true}, quality: 0.5},
       ({didCancel, error, latitude, longitude, uri, timestamp, type, fileName}) => {
         if (didCancel) {
           return;
@@ -155,7 +155,7 @@ export const RecordContextProvider = ({children}: IProps) => {
   const uploadThumbnailImage = async () => {
     const thumbnail = await captureRef(thumbnailRef, {
       format: 'jpg',
-      quality: 0.8,
+      quality: 0.5,
     });
 
     const image = new FormData();
