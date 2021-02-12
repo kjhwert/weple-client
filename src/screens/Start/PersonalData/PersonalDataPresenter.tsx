@@ -5,6 +5,8 @@ import Swiper from 'react-native-swiper';
 interface IProps {
   navigation: any;
   slideData: any;
+  confirmUserLocation: () => void;
+  confirmCameraAccess: () => void;
 }
 interface IColorChangeProps {
   process: number;
@@ -21,18 +23,31 @@ const renderPagination = (index: number, total: number) => {
   );
 };
 
-export default ({navigation, slideData}: IProps) => {
+export default ({navigation, slideData, confirmCameraAccess, confirmUserLocation}: IProps) => {
   const swiperRef = useRef(null);
-  const nextSlider = () => {
+  const nextSlider = async () => {
     if (swiperRef) {
       const indexNumber = swiperRef.current.state.index + 1;
       const totalNumber = swiperRef.current.state.total;
-      if (indexNumber === totalNumber) {
-        return true;
-      } else {
+      if (indexNumber === 2) {
+        console.log('ask camera access permission');
+        await confirmCameraAccess();
         swiperRef.current.scrollBy(1);
-        return false;
+        return;
       }
+      if (indexNumber === 3) {
+        console.log('ask user location permission');
+        await confirmUserLocation();
+        swiperRef.current.scrollBy(1);
+        return;
+      }
+
+      if (indexNumber === totalNumber) {
+        return navigation.navigate('startAlarmSet');
+      }
+
+      swiperRef.current.scrollBy(1);
+      return;
     }
   };
 
@@ -65,7 +80,7 @@ export default ({navigation, slideData}: IProps) => {
 
       <NextBtn
         onPress={() => {
-          nextSlider() && navigation.navigate('startAlarmSet');
+          nextSlider();
         }}>
         <NextText>동의함</NextText>
       </NextBtn>
@@ -167,16 +182,14 @@ const LineWrapper = styled.View`
 const NowLine = styled.View`
   display: flex;
   width: ${(props: IColorChangeProps) => props.process}%;
-  border-width: ${(props: IColorChangeProps) =>
-    props.process === 0 ? 0 : 3}px;
+  border-width: ${(props: IColorChangeProps) => (props.process === 0 ? 0 : 3)}px;
   border-color: #007bf1;
 `;
 
 const NextLine = styled.View`
   display: flex;
   width: ${(props: IColorChangeProps) => props.process}%;
-  border-width: ${(props: IColorChangeProps) =>
-    props.process === 0 ? 0 : 3}px;
+  border-width: ${(props: IColorChangeProps) => (props.process === 0 ? 0 : 3)}px;
   border-color: #b2b2b2;
 `;
 

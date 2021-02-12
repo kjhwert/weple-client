@@ -442,58 +442,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     );
   };
 
-  const userCameraPermission = async () => {
-    try {
-      if (Platform.OS === 'android') {
-        const camera = await request(PERMISSIONS.ANDROID.CAMERA);
-        console.log('android: ', camera);
-      }
-      if (Platform.OS === 'android') {
-        const camera = await request(PERMISSIONS.IOS.CAMERA);
-        console.log('ios: ', camera);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  //TODO 얘 위치 옮겨야함
-  const userLocatePermission = async () => {
-    const checkPermissionResult = await checkPermission({
-      ios: 'whenInUse',
-      android: {detail: 'coarse'},
-    });
-    if (!checkPermissionResult) {
-      const result = await requestPermission({
-        android: {
-          detail: 'coarse',
-        },
-        ios: 'whenInUse',
-      });
-    } else {
-      await configure({
-        distanceFilter: 0, // Meters
-        desiredAccuracy: {
-          ios: 'best',
-          android: 'highAccuracy',
-        },
-        // Android only
-        androidProvider: 'auto',
-        interval: 5000, // Milliseconds
-        fastestInterval: 5000, // Milliseconds
-        maxWaitTime: 5000, // Milliseconds
-        // iOS Only
-        activityType: 'other',
-        allowsBackgroundLocationUpdates: false,
-        headingFilter: 1, // Degrees
-        headingOrientation: 'portrait',
-        pausesLocationUpdatesAutomatically: false,
-        showsBackgroundLocationIndicator: false,
-      });
-    }
-  };
-
   useEffect(() => {
-    userLocatePermission();
     if (recordSetting.isStart) {
       timer.current = setInterval(() => updateRecordOnInterval(), 1000);
     }
