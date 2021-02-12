@@ -6,14 +6,18 @@ import AlertWrapper from '../../components/AlertWrapper';
 
 interface IProps {
   navigation: any;
-  alertFrame: any;
-  clearAlertFrame: Function;
 }
 
 export default ({navigation}: IProps) => {
-  const {onChangeLogin, login, isLoginActive, isLoginBtnActive, alertFrame, clearAlertFrame}: any = useContext(
-    UserContext,
-  );
+  const {
+    login,
+    isLoginActive,
+    isLoginBtnActive,
+    alertFrame,
+    clearAlertFrame,
+    onChangeEmail,
+    onChangePassword,
+  }: any = useContext(UserContext);
 
   return (
     <Container>
@@ -41,10 +45,9 @@ export default ({navigation}: IProps) => {
               <SignInTitle>이메일</SignInTitle>
               <LoginInput
                 placeholder="이메일을 입력하세요."
-                name="email"
                 autoCapitalize="none"
                 autoFocus={true}
-                onChange={onChangeLogin}
+                onChangeText={onChangeEmail}
                 borderColor={isLoginActive.emailFlag}
               />
               <PasswordSearchWrapper>
@@ -52,10 +55,9 @@ export default ({navigation}: IProps) => {
                   <SignInTitle>비밀번호</SignInTitle>
                   <LoginInput
                     placeholder="비밀번호를 입력하세요."
-                    name="password"
                     autoCapitalize="none"
                     secureTextEntry={true}
-                    onChange={onChangeLogin}
+                    onChangeText={onChangePassword}
                     borderColor={isLoginActive.passwordFlag}
                   />
                 </PasswordWrapper>

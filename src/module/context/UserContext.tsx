@@ -28,13 +28,12 @@ export const UserContextProvider = ({children}: IProps) => {
     description: '',
   });
 
-  const onChangeLogin = (e) => {
-    const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
-    const value = e.nativeEvent.text;
-    setLoginUser({
-      ...loginUser,
-      [name]: value,
-    });
+  const onChangeEmail = (text: string) => {
+    setLoginUser({...loginUser, email: text});
+  };
+
+  const onChangePassword = (text: string) => {
+    setLoginUser({...loginUser, password: text});
   };
 
   const login = async () => {
@@ -94,15 +93,15 @@ export const UserContextProvider = ({children}: IProps) => {
       showAlertFrame(responseSocial.message);
       return false;
     } else {
-      setLoginUserData(responseSocial);
+      await setLoginUserData(responseSocial);
       setLoading(false);
       return true;
     }
   };
 
-  const setLoginUserData = (loginData: any) => {
+  const setLoginUserData = async (loginData: any) => {
     setLoginUser(Object.assign(loginUser, loginData));
-    setAsyncStorage('@user', JSON.stringify(Object.assign(loginUser, loginData)));
+    await setAsyncStorage('@user', JSON.stringify(Object.assign(loginUser, loginData)));
   };
 
   const autoLogin = async () => {
@@ -157,13 +156,13 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
-  const snsUserData = (emailData: string, nickNameData: string, nameData: string, UidData: string) => {
+  const snsUserData = (email: string, nickName: string, name: string, socialUid: string) => {
     setCreateUser({
       ...createUser,
-      email: emailData,
-      name: nameData,
-      nickName: nickNameData,
-      socialUid: UidData,
+      email,
+      name,
+      nickName,
+      socialUid,
     });
   };
 
@@ -199,23 +198,23 @@ export const UserContextProvider = ({children}: IProps) => {
     }
   };
 
-  const changeProfileImage = (imageData) => {
+  const changeProfileImage = async (imageData) => {
     const changeData = {
       ...loginUser,
       image: imageData,
     };
     setLoginUser(changeData);
-    setAsyncStorage('@user', JSON.stringify(changeData));
+    await setAsyncStorage('@user', JSON.stringify(changeData));
   };
 
-  const changeProfileData = (nickName: string, description: string) => {
+  const changeProfileData = async (nickName: string, description: string) => {
     const changeData = {
       ...loginUser,
-      nickName: nickName,
-      description: description,
+      nickName,
+      description,
     };
     setLoginUser(changeData);
-    setAsyncStorage('@user', JSON.stringify(changeData));
+    await setAsyncStorage('@user', JSON.stringify(changeData));
   };
 
   const getProfileUri = () => {
@@ -276,7 +275,6 @@ export const UserContextProvider = ({children}: IProps) => {
         isLoginActive,
         isLoginBtnActive,
         loginUser,
-        onChangeLogin,
         login,
         socialLogin,
         setLoginUserData,
@@ -294,6 +292,8 @@ export const UserContextProvider = ({children}: IProps) => {
         alertFrame,
         clearAlertFrame,
         userFollow,
+        onChangeEmail,
+        onChangePassword,
       }}>
       {children}
     </UserContext.Provider>
