@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../../../components/ContainerCard';
 import {CategoryBtn, StartNextBtn} from '../../../../../components/CommonBtn';
+import {View} from 'react-native';
 
 interface IProps {
   navigation: any;
   activities: Array<IActivity>;
-  categoriesClick: Function;
-  createUserCategory: Function;
+  selectCategories: (categoryId: number, isSelect: boolean) => void;
+  updateUserCategories: () => void;
   isActive: boolean;
 }
 
@@ -15,12 +16,14 @@ interface IActivity {
   id: number;
   name: string;
   categoryActivity: Array<{
+    caloriesPerMinute: number;
     id: number;
     name: string;
+    isSelect: boolean;
   }>;
 }
 
-export default ({navigation, activities, categoriesClick, isActive, createUserCategory}: IProps) => {
+export default ({navigation, activities, selectCategories, isActive, updateUserCategories}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -36,7 +39,7 @@ export default ({navigation, activities, categoriesClick, isActive, createUserCa
                       key={id}
                       text={name}
                       onPress={() => {
-                        categoriesClick(activity.id, id);
+                        selectCategories(id, isSelect);
                       }}
                       isSelect={isSelect}
                     />
@@ -45,13 +48,31 @@ export default ({navigation, activities, categoriesClick, isActive, createUserCa
               </CategoryWrapper>
             ))}
           </ContainerCard>
+          <View style={{width: '100%', padding: 50}} />
         </ScrollWrapper>
+        <ActiveButton isActive={isActive} onPress={updateUserCategories}>
+          <ActiveButtonText>저장</ActiveButtonText>
+        </ActiveButton>
       </ScrollContainer>
-
-      <StartNextBtn text={'저장'} navigation={navigation} callBack={createUserCategory} isActive={isActive} />
     </Container>
   );
 };
+
+const ActiveButton = styled.TouchableOpacity`
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  align-items: center;
+  background-color: ${({isActive}: {isActive: boolean}) => (isActive ? '#007bf1' : '#b2b2b2')};
+`;
+
+const ActiveButtonText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+`;
 
 const Container = styled.View`
   flex: 1;

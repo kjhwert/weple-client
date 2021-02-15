@@ -5,132 +5,137 @@ import {userApi} from '../../../../../module/api';
 import Loading from '../../../../../components/Loading';
 import AlertContext from '../../../../../module/context/AlertContext';
 import CheckAlert from '../../../../../components/CheckAlert';
-
 interface IProps {
   navigation: any;
 }
 
+interface IUserCategories {
+  category: {
+    color: string;
+    id: number;
+    image: string;
+    name: string;
+  };
+  id: number;
+}
+
+interface IActivity {
+  categoryActivity: Array<ICategoryActivity>;
+  id: number;
+  name: string;
+}
+
+interface ICategoryActivity {
+  caloriesPerMinute: number;
+  id: number;
+  name: string;
+  isSelect: boolean;
+}
+
 export default ({navigation}: IProps) => {
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
 
   const [isActive, setIsActive] = useState(false);
-  const [activities, setActivities] = useState([
-    {
-      id: 0,
-      name: '',
-      categoryActivity: [
-        {
-          id: 0,
-          name: '',
-          caloriesPerMinute: 0,
-          isSelect: false,
-        },
-      ],
-    },
-  ]);
+  const [activities, setActivities] = useState([]);
+  const [userCategories, setUserCategories] = useState<Array<number>>([]);
+  const [initCategories, setInitCategories] = useState<Array<number>>([]);
   const [loading, setLoading] = useState(true);
 
-  const initTotalCategory = async () => {
+  const getCategories = async () => {
     setLoading(true);
-    const {data, statusCode} = await categoryApi.activities();
+    const {data, statusCode, message} = await categoryApi.activities();
     if (statusCode !== 200) {
-    } else {
-      setActivities(data);
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
+
+    const categories: number[] = await getUserCategories();
+    const activities = data.map((activity: IActivity) => {
+      const categoryActivity = activity.categoryActivity.map((category) => {
+        if (categories.includes(category.id)) {
+          return {...category, isSelect: true};
+        }
+
+        return {...category, isSelect: false};
+      });
+      return {...activity, categoryActivity};
+    });
+    setActivities(activities);
+    setUserCategories(categories);
+    setInitCategories(categories);
     setLoading(false);
   };
 
-  const initSelectCategory = async () => {
-    const {data, statusCode} = await userApi.getCategory();
-    const selectActivities: number[] = [];
+  const getUserCategories = async () => {
+    const {data, statusCode, message} = await userApi.getCategory();
     if (statusCode !== 200) {
-    } else {
-      data.map((item: any) => {
-        selectActivities.push(item.category.id);
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+    return data.map(({category}: IUserCategories) => category.id);
+  };
+
+  const selectCategories = (categoryId: number, isSelect: boolean) => {
+    const results = activities.map((activity: IActivity) => {
+      const categoryActivity = activity.categoryActivity.map((category) => {
+        if (category.id === categoryId) {
+          return {...category, isSelect: !category.isSelect};
+        }
+        return category;
       });
-      categories(selectActivities);
+      return {...activity, categoryActivity};
+    });
+
+    changeUserCategories(categoryId, isSelect);
+    setActivities(results);
+  };
+
+  const changeUserCategories = (categoryId: number, isSelect: boolean) => {
+    if (isSelect) {
+      const newCategories = userCategories.filter((id) => id !== categoryId);
+      changeActiveStatus(newCategories);
+      setUserCategories(newCategories);
+      return;
     }
+
+    const newCategories = userCategories.concat(categoryId);
+    changeActiveStatus(newCategories);
+    setUserCategories(newCategories);
   };
 
-  const categories = (selectActivities: number[]) => {
-    const newCategory = activities.map((item) => ({
-      ...item,
-      categoryActivity: categoriesActivity(selectActivities, item.categoryActivity),
-    }));
-    setActivities(newCategory);
-  };
-  const categoriesActivity = (selectActivities: number[], categoryActivity: any) => {
-    const subCategory = categoryActivity.map((item: any) =>
-      selectActivities.includes(item.id) ? {...item, isSelect: true} : item,
-    );
-    return subCategory;
+  const changeActiveStatus = (newCategories: number[]) => {
+    if (
+      newCategories.length === initCategories.length &&
+      newCategories.every((val, index) => val === initCategories[index])
+    ) {
+      setIsActive(false);
+      return;
+    }
+
+    setIsActive(true);
   };
 
-  const categoriesClick = (catId: number, selectId: number) => {
-    const newCategory = activities.map((item) =>
-      item.id === catId
-        ? {
-            ...item,
-            categoryActivity: categoriesActivityClick(selectId, item.categoryActivity),
-          }
-        : item,
-    );
-    setActivities(newCategory);
-  };
-  const categoriesActivityClick = (selectId: number, categoryActivity: any) => {
-    const subCategory = categoryActivity.map((item: any) =>
-      item.id === selectId ? {...item, isSelect: !item.isSelect} : item,
-    );
-    return subCategory;
-  };
-
-  const checkSelect = () => {
-    setIsActive(false);
-    activities.map((item) => item.categoryActivity.map((subItem) => (subItem.isSelect ? setIsActive(true) : {})));
-  };
-
-  const getSelectedActivity = () => {
-    const selectActivities: number[] = [];
-    activities.map((item) =>
-      item.categoryActivity.map((subItem) => (subItem.isSelect ? selectActivities.push(subItem.id) : null)),
-    );
-    return selectActivities;
-  };
-
-  const createUserCategory = async () => {
-    const requestCategory = {
-      categories: getSelectedActivity(),
-    };
-    const {statusCode, message} = await userApi.putCategory(requestCategory);
+  const updateUserCategories = async () => {
+    const {statusCode, message} = await userApi.putCategory({categories: userCategories});
     if (statusCode !== 201) {
-    } else {
-      setIsActive(true);
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'check',
-            title: message,
-            description: '',
-          }}
-          checked={() => {
-            navigation.navigate('profileSetting');
-          }}
-        />,
-      );
+      return setWarningAlertVisible('카테고리 수정에 실패했습니다.', message);
     }
+
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'check',
+          title: message,
+          description: '',
+        }}
+        checked={() => {
+          navigation.navigate('profileSetting');
+        }}
+      />,
+    );
   };
 
   useEffect(() => {
-    initTotalCategory();
+    getCategories();
   }, []);
-
-  useEffect(() => {
-    initSelectCategory();
-  }, [loading]);
-
-  useEffect(() => {
-    checkSelect();
-  }, [activities]);
 
   return loading ? (
     <Loading />
@@ -138,9 +143,9 @@ export default ({navigation}: IProps) => {
     <SetCategoryPresenter
       navigation={navigation}
       activities={activities}
-      categoriesClick={categoriesClick}
+      selectCategories={selectCategories}
       isActive={isActive}
-      createUserCategory={createUserCategory}
+      updateUserCategories={updateUserCategories}
     />
   );
 };
