@@ -53,7 +53,7 @@ export default ({navigation, route}: IProps) => {
   const finishComments = async () => {
     const {statusCode, message} = await feedApi.createComment(userComment);
     if (statusCode !== 201) {
-      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+      return setWarningAlertVisible('댓글 등록에 실패했습니다.', message);
     }
     setUserComment({...userComment, description: ''});
     increaseCommentCount(userComment.feedId);

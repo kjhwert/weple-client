@@ -1,35 +1,61 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import UserContext from '../../module/context/UserContext';
 import {IProfileUserInfo} from '../../module/type/user';
-import {BASE_URL} from '../../module/common';
+import {BASE_URL, timeForToday, togetherDate} from '../../module/common';
+import {RefreshControl} from 'react-native';
+import {IFeed} from '../../module/type/feed';
+import {ITogethers} from '../../module/type/together';
+import {getComma} from '../../components/CommonTime';
 
 interface IProps {
   navigation: any;
-  profileData: any;
-  sortAlert: Function;
   user: IProfileUserInfo;
+  feeds: Array<IFeed>;
+  togethers: Array<ITogethers>;
+  pagination: {
+    page: number;
+    sort: string;
+    order: 'createdAt' | 'likeCount';
+  };
+  init: () => void;
+  switchingIndex: (sort: 'feed' | 'together') => void;
+  sortAlert: () => void;
+  changeLikeCount: (feedId: number) => void;
 }
 
-interface IColorChangeProps {
-  isClick: boolean;
-}
-
-export default ({navigation, profileData, menuList, sortAlert, user}: IProps) => {
+export default ({
+  navigation,
+  user,
+  feeds,
+  togethers,
+  pagination,
+  init,
+  switchingIndex,
+  sortAlert,
+  changeLikeCount,
+}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
+  const [refresh, setRefresh] = useState(false);
+
+  const onRefresh = async () => {
+    setRefresh(true);
+    await init();
+    setRefresh(false);
+  };
 
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper>
+        <ScrollWrapper refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
           <Card>
             <BackgroundLine>
               <ProfileTopWrapper>
                 <ProfileImageWrapper>
                   <ProfileMainImage
-                    source={{uri: `${BASE_URL}/${user?.user?.image ? user.user.image : 'public/user/no_profile.png'}`}}
+                    source={{uri: `${BASE_URL}/${user.user.image ? user.user.image : 'public/user/no_profile.png'}`}}
                   />
-                  {user?.user?.id === loginUser.id && (
+                  {user.user.id === loginUser.id && (
                     <EditCard
                       onPress={() => {
                         navigation.navigate('setProfile');
@@ -39,18 +65,16 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                     </EditCard>
                   )}
                 </ProfileImageWrapper>
-                <ProfileNickName>{user?.user?.nickName}</ProfileNickName>
+                <ProfileNickName>{user.user.nickName}</ProfileNickName>
                 <ActiveTextWrapper>
                   <ActiveBtnWrapper>
-                    <ActiveBtn onPress={() => {}}>
-                      <ActiveNumber>{user?.feedCount}</ActiveNumber>
-                    </ActiveBtn>
+                    <ActiveNumber>{user.feedCount}</ActiveNumber>
                     <ActiveText>활동들</ActiveText>
                   </ActiveBtnWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followerMember', {id: user?.user?.id});
+                        navigation.navigate('followerMember', {id: user.user.id});
                       }}>
                       <FollowerNumber>{user.userFollower}</FollowerNumber>
                     </ActiveBtn>
@@ -59,14 +83,14 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
                   <ActiveBtnWrapper>
                     <ActiveBtn
                       onPress={() => {
-                        navigation.navigate('followerMember', {id: user?.user?.id});
+                        navigation.navigate('followerMember', {id: user.user.id});
                       }}>
-                      <FollowingNumber>{user?.userFollow}</FollowingNumber>
+                      <FollowingNumber>{user.userFollow}</FollowingNumber>
                     </ActiveBtn>
-                    <ActiveText>팔로우 중</ActiveText>
+                    <ActiveText>팔로잉</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
-                <ActiveIntroduceText>{user?.user?.description}</ActiveIntroduceText>
+                <ActiveIntroduceText>{user.user.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
                   <PaymentBtn
@@ -92,101 +116,255 @@ export default ({navigation, profileData, menuList, sortAlert, user}: IProps) =>
             </BackgroundLine>
 
             <MenuBarWrapper>
-              {menuList.map((item, idx) => (
-                <MenuWrapper key={idx} isClick={item.isClick}>
+              {[
+                {sort: 'feed', label: `나의 활동`},
+                {sort: 'together', label: `내가 참여중인 모임`},
+              ].map(({label, sort}, idx) => (
+                <MenuWrapper key={idx} isClick={pagination.sort === sort}>
                   <MenuBtn
                     onPress={() => {
-                      navigation.navigate('profileActiveJoin');
+                      switchingIndex(sort);
                     }}>
-                    <MenuText isClick={item.isClick}>{item.name}</MenuText>
+                    <MenuText isClick={pagination.sort === sort}>{label}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
             </MenuBarWrapper>
             <Line></Line>
 
-            <ProfileActiveTitleWrapper>
-              <ProfileTitleBtn onPress={() => {}}>
-                <ProfileActiveTitle>
-                  <BoldText>GilDong</BoldText>님의 활동
-                </ProfileActiveTitle>
-                <ProfileActiveNumber>8</ProfileActiveNumber>
-              </ProfileTitleBtn>
-              <SortBtn
-                onPress={() => {
-                  sortAlert();
-                }}>
-                <SortImage source={require('../../assets/sort_icon.png')} />
-              </SortBtn>
-            </ProfileActiveTitleWrapper>
-
-            <PostWrapper>
-              <ProfileWrapper>
-                <ProfileImage source={require('../../assets/profile_1.png')} />
-                <ProfileTextWrapper>
-                  <ProfileNameBtn onPress={() => {}}>
-                    <ProfileName>GilDong Hong</ProfileName>
-                  </ProfileNameBtn>
-                  <PostTime>10분 전</PostTime>
-                </ProfileTextWrapper>
-                <FollowBtn onPress={() => {}}>
-                  <FollowBtnText>팔로우</FollowBtnText>
-                </FollowBtn>
-              </ProfileWrapper>
-              <PostImageWrapper
-                onPress={() => {
-                  navigation.navigate('activeDetail');
-                }}>
-                <PostImage source={require('../../assets/photo_1.jpeg')} />
-                <RecordWrapper>
-                  <RecordImage source={require('../../assets/active_cycle.png')} />
-                  <RecordText>21.7 킬로미터</RecordText>
-                </RecordWrapper>
-              </PostImageWrapper>
-              <IconWrapper>
-                <IconImageWrapper>
-                  <IconBtn>
-                    <IconImage source={require('../../assets/icon_heart.png')} />
-                  </IconBtn>
-                  <IconBtn
-                    onPress={() => {
-                      navigation.navigate('commentMember');
-                    }}>
-                    <IconImage source={require('../../assets/icon_comment.png')} />
-                  </IconBtn>
-                </IconImageWrapper>
-                <AlarmBtn
+            {pagination.sort === 'feed' && (
+              <ProfileActiveTitleWrapper>
+                <ProfileTitleBtn>
+                  <ProfileActiveTitle>내 활동</ProfileActiveTitle>
+                  <ProfileActiveNumber>{user.feedCount}</ProfileActiveNumber>
+                </ProfileTitleBtn>
+                <SortBtn
                   onPress={() => {
-                    navigation.navigate('likeMember');
+                    sortAlert();
                   }}>
-                  <AlarmBtnText>806명이 좋아합니다.</AlarmBtnText>
-                </AlarmBtn>
-              </IconWrapper>
-              <FollowWrapper>
-                <ProfileImage source={require('../../assets/profile_2.png')} />
-                <FollowTextWrapper>
-                  <FollowNameBtn
-                    onPress={() => {
-                      navigation.navigate('friendActive');
-                    }}>
-                    <FollowName>Benjamin</FollowName>
-                  </FollowNameBtn>
-                  <CommentText>bicycles very nice..!!</CommentText>
-                  <AllCommentBtn
-                    onPress={() => {
-                      navigation.navigate('commentMember');
-                    }}>
-                    <AllCommentText>9개의 댓글 모두 보기</AllCommentText>
-                  </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-            </PostWrapper>
+                  <SortImage source={require('../../assets/sort_icon.png')} />
+                </SortBtn>
+              </ProfileActiveTitleWrapper>
+            )}
+
+            {pagination.sort === 'feed' &&
+              feeds.map((feed: IFeed) => (
+                <LineWrapper key={feed.id}>
+                  <PostWrapper>
+                    <ProfileWrapper>
+                      <ProfileInfoWrapper
+                        onPress={() => {
+                          navigation.navigate('friendActive', {id: feed.userId});
+                        }}>
+                        <ProfileImage
+                          source={{
+                            uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`,
+                          }}
+                        />
+                        <ProfileTextWrapper>
+                          <ProfileName>{feed.userNickName}</ProfileName>
+                          <PostTime>{timeForToday(feed.createdAt)}</PostTime>
+                        </ProfileTextWrapper>
+                      </ProfileInfoWrapper>
+                      {/*{!isLoginUserFeed(feed.userId) && (*/}
+                      {/*  <FollowBtn*/}
+                      {/*    isFollow={feed.isUserFollowed}*/}
+                      {/*    onPress={() => {*/}
+                      {/*      userFollowAndReload(feed.userId);*/}
+                      {/*    }}>*/}
+                      {/*    <FollowBtnText isFollow={feed.isUserFollowed}>*/}
+                      {/*      {!feed.isUserFollowed ? '팔로우' : '팔로잉'}*/}
+                      {/*    </FollowBtnText>*/}
+                      {/*  </FollowBtn>*/}
+                      {/*)}*/}
+                    </ProfileWrapper>
+                    <PostImageWrapper
+                      onPress={() => {
+                        navigation.navigate('activeDetail', {id: feed.id});
+                      }}>
+                      <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
+                      <RecordWrapper color={feed.activityColor}>
+                        <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
+                        <RecordText>{feed.distance} 킬로미터</RecordText>
+                      </RecordWrapper>
+                    </PostImageWrapper>
+
+                    <IconWrapper>
+                      <IconImageWrapper>
+                        <IconBtn onPress={() => changeLikeCount(feed.id)}>
+                          <IconImage
+                            source={
+                              feed.isUserLiked
+                                ? require('../../assets/icon_heartRed.png')
+                                : require('../../assets/icon_heart.png')
+                            }
+                          />
+                        </IconBtn>
+                        <IconBtn
+                          onPress={() => {
+                            navigation.navigate('friendComment', {id: feed.id});
+                          }}>
+                          <IconImage source={require('../../assets/icon_comment.png')} />
+                        </IconBtn>
+                      </IconImageWrapper>
+                      <AlarmBtn
+                        onPress={() => {
+                          navigation.navigate('friendLike');
+                        }}>
+                        <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
+                      </AlarmBtn>
+                    </IconWrapper>
+                    {feed.commentCount > 0 && (
+                      <FollowWrapper>
+                        <ProfileImage
+                          source={{
+                            uri: `${BASE_URL}/${
+                              feed.commentUserImage ? feed.commentUserImage : 'public/user/no_profile.png'
+                            }`,
+                          }}
+                        />
+                        <FollowTextWrapper>
+                          <FollowName>{feed.commentUserName}</FollowName>
+                          <CommentText>{feed.commentDescription}</CommentText>
+                          <AllCommentBtn
+                            onPress={() => {
+                              navigation.navigate('friendComment', {id: feed.id});
+                            }}>
+                            <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
+                          </AllCommentBtn>
+                        </FollowTextWrapper>
+                      </FollowWrapper>
+                    )}
+                  </PostWrapper>
+                  <Line />
+                </LineWrapper>
+              ))}
+
+            {pagination.sort === 'together' &&
+              togethers.map((together: ITogethers) => (
+                <RecruitWrapper
+                  key={together.id}
+                  onPress={() => {
+                    navigation.navigate('togetherDetail', {id: together.id});
+                  }}>
+                  <RecruitImageWrapper>
+                    <RecruitImage source={{uri: `${BASE_URL}/${together.thumbnail}`}} />
+                    <RecordWrapper2 backgroundColor={together.activityColor}>
+                      <RecordImage2 source={{uri: `${BASE_URL}/${together.activityImage}`}} />
+                      <RecordText2>{together.distance}KM</RecordText2>
+                    </RecordWrapper2>
+                  </RecruitImageWrapper>
+                  <RecruitTextWrapper>
+                    <RecruitTitleBtn>
+                      <RecruitTitle>{together.title}</RecruitTitle>
+                    </RecruitTitleBtn>
+                    <RecruitAddress>{together.place}</RecruitAddress>
+                    <EntryFee>참가비 {getComma(together.price)}원</EntryFee>
+                    <Deadline>{togetherDate(together.limitDate)}</Deadline>
+                  </RecruitTextWrapper>
+                </RecruitWrapper>
+              ))}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
   );
 };
+
+const RecruitWrapper = styled.TouchableOpacity`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 20px;
+  border-bottom-width: 1px;
+  border-color: #eee;
+`;
+
+const RecruitImageWrapper = styled.View`
+  display: flex;
+  width: 45%;
+  border-width: 1px;
+  border-color: #dfdfdf;
+  margin-right: 10px;
+`;
+
+const RecruitImage = styled.Image`
+  width: 100%;
+  height: 100px;
+`;
+
+const RecordWrapper2 = styled.View`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({backgroundColor}: {backgroundColor: string}) =>
+    backgroundColor ? backgroundColor : '#bcbcbc'};
+  position: absolute;
+  margin-top: 10px;
+  padding: 5px 10px;
+`;
+
+const RecordText2 = styled.Text`
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const RecordImage2 = styled.Image`
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RecruitTextWrapper = styled.View`
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 50%;
+`;
+
+const RecruitTitleBtn = styled.View`
+  width: 100%;
+`;
+
+const RecruitTitle = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+`;
+
+const RecruitAddress = styled.Text`
+  width: 100%;
+  font-size: 12px;
+  color: #777;
+  padding: 5px 0;
+`;
+
+const EntryFee = styled.Text`
+  width: 100%;
+  font-size: 11px;
+  color: #000;
+  font-weight: bold;
+  padding-bottom: 5px;
+`;
+
+const Deadline = styled.Text`
+  width: 100%;
+  font-size: 10px;
+  color: #007bf1;
+  font-weight: bold;
+`;
+
+const LineWrapper = styled.View`
+  width: 100%;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -386,7 +564,7 @@ const MenuWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-bottom-width: 3px;
-  border-color: ${(props: IColorChangeProps) => (props.isClick ? '#007bf1' : '#fff')};
+  border-color: ${({isClick}: {isClick: boolean}) => (isClick ? '#007bf1' : '#fff')};
 `;
 
 const MenuBtn = styled.TouchableOpacity`
@@ -397,7 +575,7 @@ const MenuBtn = styled.TouchableOpacity`
 
 const MenuText = styled.Text`
   font-size: 15px;
-  color: ${(props: IColorChangeProps) => (props.isClick ? '#007bf1' : '#333')};
+  color: ${({isClick}: {isClick: boolean}) => (isClick ? '#007bf1' : '#333')};
   font-weight: bold;
   text-align: center;
   padding: 10px;
@@ -414,7 +592,7 @@ const ProfileActiveTitleWrapper = styled.View`
   padding: 20px;
 `;
 
-const ProfileTitleBtn = styled.TouchableOpacity`
+const ProfileTitleBtn = styled.View`
   width: 85%;
   flex-flow: row wrap;
 `;
@@ -463,6 +641,12 @@ const ProfileWrapper = styled.View`
   width: 100%;
 `;
 
+const ProfileInfoWrapper = styled.TouchableOpacity`
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+`;
+
 const ProfileImage = styled.Image`
   width: 50px;
   height: 50px;
@@ -474,7 +658,7 @@ const ProfileTextWrapper = styled.View`
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
-  width: 55%;
+  margin-left: 15px;
 `;
 
 const ProfileNameBtn = styled.TouchableOpacity`
@@ -503,11 +687,13 @@ const FollowBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: flex-start;
   border-radius: 5px;
-  background-color: #007bf1;
+  border-width: 1px;
+  border-color: #007bf1;
+  background-color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#007bf1' : '#fff')};
 `;
 
 const FollowBtnText = styled.Text`
-  color: #fff;
+  color: ${({isFollow}: {isFollow: boolean}) => (!isFollow ? '#fff' : '#007bf1')};
   font-size: 12px;
   font-weight: bold;
 `;
@@ -526,13 +712,11 @@ const PostImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 40%;
   align-items: center;
-  justify-content: center;
-  background-color: #007bf1;
+  background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
   position: absolute;
   margin-top: 20px;
-  padding: 5px;
+  padding: 5px 15px;
 `;
 
 const RecordText = styled.Text`
@@ -543,8 +727,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 22px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

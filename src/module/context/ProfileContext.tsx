@@ -4,6 +4,7 @@ import AlertContext from './AlertContext';
 import {IProfileUserInfo} from '../type/user';
 import UserContext from './UserContext';
 import {IFeed} from '../type/feed';
+import {ITogethers} from '../type/together';
 
 const ProfileContext = createContext({});
 
@@ -11,20 +12,35 @@ interface IProps {
   children: ReactNode;
 }
 
+interface IPagination {
+  feedPage: number;
+  togetherPage: number;
+  sort: 'feed' | 'together';
+  order: 'createdAt' | 'likeCount';
+  feedHasNextPage: boolean;
+  togetherHasNextPage: boolean;
+}
+
 export const ProfileContextProvider = ({children}: IProps) => {
   const {setWarningAlertVisible}: any = useContext(AlertContext);
   const {userFollow}: any = useContext(UserContext);
   const [user, setUser] = useState<IProfileUserInfo | null>(null);
-  const [feeds, setFeeds] = useState([]);
-  const [togethers, setTogethers] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
+  const [feeds, setFeeds] = useState<Array<IFeed>>([]);
+  const [togethers, setTogethers] = useState<Array<ITogethers>>([]);
+  const [pagination, setPagination] = useState<IPagination>({
+    feedPage: 1,
+    togetherPage: 1,
     sort: 'feed',
     order: 'createdAt',
+    feedHasNextPage: false,
+    togetherHasNextPage: false,
   });
   const [userStatistics, setUserStatistics] = useState([]);
 
   const getUserStatistics = async () => {
+    if (!user) {
+      return;
+    }
     const {statusCode, message, data} = await feedApi.userStatistics(user.user.id);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -78,6 +94,9 @@ export const ProfileContextProvider = ({children}: IProps) => {
   };
 
   const switchOrder = async (order: 'createdAt' | 'likeCount') => {
+    if (!user) {
+      return;
+    }
     await getFeeds(user.user.id, order);
     setPagination({...pagination, order});
   };
@@ -91,29 +110,64 @@ export const ProfileContextProvider = ({children}: IProps) => {
   };
 
   const getFeeds = async (userId: number, order: 'createdAt' | 'likeCount') => {
-    const {statusCode, message, data} = await feedApi.getProfileFeeds(1, order, userId);
+    const {statusCode, message, data, paging} = await feedApi.getProfileFeeds(1, order, userId);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setFeeds(data.feeds);
+    setPagination({...pagination, feedHasNextPage: paging.hasNextPage});
+  };
+
+  const getMoreFeeds = async () => {
+    const {feedPage, order, feedHasNextPage} = pagination;
+    if (!feedHasNextPage || !user) {
+      return;
+    }
+    const page = feedPage + 1;
+    const {statusCode, message, data, paging} = await feedApi.getProfileFeeds(page, order, user.user.id);
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+    const newFeeds = feeds.concat(data.feeds);
+    setFeeds(newFeeds);
+    setPagination({...pagination, feedPage: page, feedHasNextPage: paging.hasNextPage});
   };
 
   const getTogethers = async (userId: number) => {
-    const {statusCode, message, data} = await togetherApi.getProfileTogethers(1, userId);
+    const {statusCode, message, data, paging} = await togetherApi.getProfileTogethers(1, userId);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }
     setTogethers(data);
+    setPagination({...pagination, togetherHasNextPage: paging.hasNextPage});
   };
 
-  const switchingIndex = (sort: 'feed' | 'together') => {
+  const getMoreTogethers = async () => {
+    const {togetherPage, togetherHasNextPage} = pagination;
+    if (!togetherHasNextPage || !user) {
+      return;
+    }
+    const page = togetherPage + 1;
+    const {statusCode, message, data, paging} = await togetherApi.getProfileTogethers(page, user.user.id);
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+    const newTogethers = togethers.concat(data);
+    setTogethers(newTogethers);
+    setPagination({...pagination, togetherPage: page, togetherHasNextPage: paging.hasNextPage});
+  };
+
+  const switchingIndex = async (sort: 'feed' | 'together') => {
+    if (!user) return;
+    if (sort === 'together') {
+      await getTogethers(user.user.id);
+    }
     setPagination({...pagination, sort});
   };
 
   const profileInit = async (userId: number) => {
     await getUser(userId);
     await getFeeds(userId, pagination.order);
-    await getTogethers(userId);
   };
 
   return (
@@ -133,6 +187,8 @@ export const ProfileContextProvider = ({children}: IProps) => {
         userFollowAndReload,
         changeLikeCount,
         getUserStatistics,
+        getMoreFeeds,
+        getMoreTogethers,
       }}>
       {children}
     </ProfileContext.Provider>

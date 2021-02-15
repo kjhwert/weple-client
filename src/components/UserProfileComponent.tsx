@@ -9,7 +9,7 @@ import Loading from './Loading';
 import {IFeed} from '../module/type/feed';
 import {getComma} from './CommonTime';
 import {ITogethers} from '../module/type/together';
-import {RefreshControl} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, RefreshControl} from 'react-native';
 
 const sortDataType = [
   {
@@ -39,9 +39,10 @@ export default ({navigation, route}: IProps) => {
     switchOrder,
     userFollowAndReload,
     changeLikeCount,
+    getMoreFeeds,
+    getMoreTogethers,
   }: any = useContext(ProfileContext);
   const {setAlertVisible}: any = useContext(AlertContext);
-
   const [refresh, setRefresh] = useState(false);
 
   const onRefresh = async () => {
@@ -70,8 +71,24 @@ export default ({navigation, route}: IProps) => {
     profileInit(id);
   };
 
-  const isLoginUserFeed = (id: number) => {
+  const isLoginUser = (id: number) => {
     return loginUser.id === id;
+  };
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+  };
+
+  const onScroll = async ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (isCloseToBottom(nativeEvent)) {
+      if (pagination.sort === 'feed') {
+        await getMoreFeeds();
+      }
+
+      if (pagination.sort === 'together') {
+        await getMoreTogethers();
+      }
+    }
   };
 
   useEffect(() => {
@@ -83,7 +100,10 @@ export default ({navigation, route}: IProps) => {
   ) : (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
+        <ScrollWrapper
+          onScroll={onScroll}
+          scrollEventThrottle={60}
+          refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
           <Card>
             <BackgroundLine>
               <ProfileTopWrapper>
@@ -129,18 +149,22 @@ export default ({navigation, route}: IProps) => {
                 <ActiveIntroduceText>{user.user.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
-                  <PaymentBtn
-                    onPress={() => {
-                      navigation.navigate('profilePay');
-                    }}>
-                    <PayBtnText>결제내역</PayBtnText>
-                  </PaymentBtn>
-                  <MembershipBtn
-                    onPress={() => {
-                      navigation.navigate('profileMembership');
-                    }}>
-                    <PayBtnText>멤버십</PayBtnText>
-                  </MembershipBtn>
+                  {isLoginUser(user.user.id) && (
+                    <>
+                      <PaymentBtn
+                        onPress={() => {
+                          navigation.navigate('profilePay');
+                        }}>
+                        <PayBtnText>결제내역</PayBtnText>
+                      </PaymentBtn>
+                      <MembershipBtn
+                        onPress={() => {
+                          navigation.navigate('profileMembership');
+                        }}>
+                        <PayBtnText>멤버십</PayBtnText>
+                      </MembershipBtn>
+                    </>
+                  )}
                   <PointBtn
                     onPress={() => {
                       navigation.navigate('ProfileActiveStatistic');
@@ -153,8 +177,11 @@ export default ({navigation, route}: IProps) => {
 
             <MenuBarWrapper>
               {[
-                {sort: 'feed', label: `${user.user.nickName}의 활동`},
-                {sort: 'together', label: `${user.user.nickName}이(가) 참여중인 모임`},
+                {sort: 'feed', label: isLoginUser(user.user.id) ? `내 활동` : `${user.user.nickName}의 활동`},
+                {
+                  sort: 'together',
+                  label: isLoginUser(user.user.id) ? `내가 참여중인 모임` : `${user.user.nickName}이(가) 참여중인 모임`,
+                },
               ].map(({label, sort}, idx) => (
                 <MenuWrapper key={idx} isClick={pagination.sort === sort}>
                   <MenuBtn
@@ -172,7 +199,13 @@ export default ({navigation, route}: IProps) => {
               <ProfileActiveTitleWrapper>
                 <ProfileTitleBtn>
                   <ProfileActiveTitle>
-                    <BoldText>{user.user.nickName}</BoldText>님의 활동
+                    {isLoginUser(user.user.id) ? (
+                      '내 활동'
+                    ) : (
+                      <>
+                        <BoldText>{user.user.nickName}</BoldText>님의 활동
+                      </>
+                    )}
                   </ProfileActiveTitle>
                   <ProfileActiveNumber>{user.feedCount}</ProfileActiveNumber>
                 </ProfileTitleBtn>
@@ -204,7 +237,7 @@ export default ({navigation, route}: IProps) => {
                           <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                         </ProfileTextWrapper>
                       </ProfileInfoWrapper>
-                      {!isLoginUserFeed(feed.userId) && (
+                      {!isLoginUser(feed.userId) && (
                         <FollowBtn
                           isFollow={feed.isUserFollowed}
                           onPress={() => {
