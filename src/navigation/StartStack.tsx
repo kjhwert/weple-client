@@ -29,148 +29,146 @@ const Stack = createStackNavigator();
 
 export default () => {
   return (
-    <RecordContextProvider>
-      <Stack.Navigator
-        screenOptions={({navigation}) => ({
-          headerBackTitleVisible: false,
-          headerTitleStyle: {
-            fontSize: 16,
-            fontWeight: 'bold',
-          },
-          headerLeft: () => <BackBtn navigation={navigation} />,
-          headerRight: () => <View />,
-        })}>
-        <Stack.Screen options={{headerShown: false}} name="start" component={StartContainer} />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="createAccount"
-          component={CreateAccountContainer}
-        />
-        <Stack.Screen
-          options={({route, navigation}) => ({
-            headerTitle: '',
-            headerLeft: () => <BackBtn navigation={navigation} route={route} />,
-          })}
-          name="login"
-          component={LoginContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="facebookLogin"
-          component={FacebookLogin}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="googleLogin"
-          component={GoogleLogin}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="kakaoLogin"
-          component={KakaoLogin}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>비밀번호 찾기</Text>,
-          }}
-          name="password"
-          component={PasswordContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>이메일로 가입하기</Text>,
-          }}
-          name="signUpEmail"
-          component={SignUpEmailContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>비밀번호 설정하기</Text>,
-          }}
-          name="signUpPassword"
-          component={SignUpPasswordContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>닉네임 설정하기</Text>,
-          }}
-          name="signUpNickname"
-          component={SignUpNicknameContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>이름 입력하기</Text>,
-          }}
-          name="signUpName"
-          component={SignUpNameContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>관심 카테고리</Text>,
-          }}
-          name="startCategory"
-          component={StartCategoryContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>개인정보 수집동의</Text>,
-          }}
-          name="personalData"
-          component={PersonalDataContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>알림 선택</Text>,
-          }}
-          name="startAlarmSet"
-          component={StartAlarmSetContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: () => <Text style={{textAlign: 'center'}}>시작하기</Text>,
-          }}
-          name="welcome"
-          component={WelcomeContainer}
-        />
-        <Stack.Screen options={{headerShown: false}} name="bottomTab" component={BottomTab} />
-        <Stack.Screen
-          options={({route, navigation}) => ({
-            headerTitle: () => <Text style={{textAlign: 'center'}}>닉네임 설정하기</Text>,
-            headerLeft: () => <SocialBackBtn navigation={navigation} route={route} />,
-          })}
-          name="socialNickname"
-          component={SocialNicknameContainer}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="signUpFacebook"
-          component={FacebookCreate}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="signUpGoogle"
-          component={GoogleCreate}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: '',
-          }}
-          name="signUpKakao"
-          component={KakaoCreate}
-        />
-      </Stack.Navigator>
-    </RecordContextProvider>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerBackTitleVisible: false,
+        headerTitleStyle: {
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+        headerLeft: () => <BackBtn navigation={navigation} />,
+        headerRight: () => <View />,
+      })}>
+      <Stack.Screen options={{headerShown: false}} name="start" component={StartContainer} />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="createAccount"
+        component={CreateAccountContainer}
+      />
+      <Stack.Screen
+        options={({route, navigation}) => ({
+          headerTitle: '',
+          headerLeft: () => <BackBtn navigation={navigation} route={route} />,
+        })}
+        name="login"
+        component={LoginContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="facebookLogin"
+        component={FacebookLogin}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="googleLogin"
+        component={GoogleLogin}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="kakaoLogin"
+        component={KakaoLogin}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>비밀번호 찾기</Text>,
+        }}
+        name="password"
+        component={PasswordContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>이메일로 가입하기</Text>,
+        }}
+        name="signUpEmail"
+        component={SignUpEmailContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>비밀번호 설정하기</Text>,
+        }}
+        name="signUpPassword"
+        component={SignUpPasswordContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>닉네임 설정하기</Text>,
+        }}
+        name="signUpNickname"
+        component={SignUpNicknameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>이름 입력하기</Text>,
+        }}
+        name="signUpName"
+        component={SignUpNameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>관심 카테고리</Text>,
+        }}
+        name="startCategory"
+        component={StartCategoryContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>개인정보 수집동의</Text>,
+        }}
+        name="personalData"
+        component={PersonalDataContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>알림 선택</Text>,
+        }}
+        name="startAlarmSet"
+        component={StartAlarmSetContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>시작하기</Text>,
+        }}
+        name="welcome"
+        component={WelcomeContainer}
+      />
+      <Stack.Screen options={{headerShown: false}} name="bottomTab" component={BottomTab} />
+      <Stack.Screen
+        options={({route, navigation}) => ({
+          headerTitle: () => <Text style={{textAlign: 'center'}}>닉네임 설정하기</Text>,
+          headerLeft: () => <SocialBackBtn navigation={navigation} route={route} />,
+        })}
+        name="socialNickname"
+        component={SocialNicknameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="signUpFacebook"
+        component={FacebookCreate}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="signUpGoogle"
+        component={GoogleCreate}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="signUpKakao"
+        component={KakaoCreate}
+      />
+    </Stack.Navigator>
   );
 };

@@ -1,7 +1,8 @@
-import React, {createContext, ReactNode, useState, useEffect} from 'react';
+import React, {createContext, ReactNode, useState, useEffect, useContext} from 'react';
 import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BASE_URL} from '../../module/common';
+import AlertContext from './AlertContext';
 
 const UserContext = createContext({});
 
@@ -10,6 +11,7 @@ interface IProps {
 }
 
 export const UserContextProvider = ({children}: IProps) => {
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoginActive, setIsLoginActive] = useState({
     emailFlag: false,
@@ -36,26 +38,24 @@ export const UserContextProvider = ({children}: IProps) => {
     setLoginUser({...loginUser, password: text});
   };
 
-  const login = async () => {
+  const login = async (navigation: any) => {
     setLoading(true);
     if (loginUser.email.length <= 0 || loginUser.password.length <= 0) {
-      showAlertFrame('이메일 또는 비밀번호를');
-      return false;
+      return setWarningAlertVisible('로그인에 실패했습니다.', '아이디 혹은 비밀번호를 입력해주세요.');
     }
 
-    const requstLogin = {
+    const requestLogin = {
       email: loginUser.email,
       password: loginUser.password,
     };
-    const responseLogin = await userApi.login(requstLogin);
-    if (responseLogin.statusCode !== 201) {
-      showAlertFrame(responseLogin.message);
-      return false;
-    } else {
-      setLoginUserData(responseLogin);
-      setLoading(false);
-      return true;
+    const result = await userApi.login(requestLogin);
+    if (result.statusCode !== 201) {
+      return setWarningAlertVisible('로그인에 실패했습니다.', result.message);
     }
+
+    await setLoginUserData(result);
+    setLoading(false);
+    navigation.navigate('bottomTab');
   };
 
   const paramLogin = async (email: string, password: string) => {

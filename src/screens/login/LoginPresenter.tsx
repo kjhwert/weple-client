@@ -21,22 +21,6 @@ export default ({navigation}: IProps) => {
 
   return (
     <Container>
-      {alertFrame.showAlert && (
-        <AlertWrapper>
-          <AlertImageWrapper>
-            <AlertImage source={require('../../assets/alertWarn_icon.png')} />
-          </AlertImageWrapper>
-          <AlertTitleText>{alertFrame.message}</AlertTitleText>
-          <AlertContentText>{'다시 입력하세요.'}</AlertContentText>
-          <ConfirmButton
-            onPress={() => {
-              clearAlertFrame();
-            }}>
-            <ConfirmButtonText>확인</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
-
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
@@ -68,11 +52,7 @@ export default ({navigation}: IProps) => {
                   <PasswordText>잊으셨나요?</PasswordText>
                 </PasswordBtn>
               </PasswordSearchWrapper>
-              <LoginButton
-                backgroundColor={isLoginBtnActive}
-                onPress={async () => {
-                  (await login()) ? navigation.navigate('bottomTab') : {};
-                }}>
+              <LoginButton backgroundColor={isLoginBtnActive} onPress={() => login(navigation)}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
             </SignInWrapper>
