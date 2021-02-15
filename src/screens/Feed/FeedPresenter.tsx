@@ -201,7 +201,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                     </IconImageWrapper>
                     <AlarmBtn
                       onPress={() => {
-                        navigation.navigate('friendLike');
+                        navigation.navigate('friendLike', {id: feed.id});
                       }}>
                       <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
                     </AlarmBtn>
