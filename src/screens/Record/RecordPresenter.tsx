@@ -25,28 +25,27 @@ export default ({navigation}: IProps) => {
     finishRecording,
   }: any = useContext(RecordContext);
 
+  const getUserCoordinates = () => {
+    if (mapboxRecord.coordinates.length > 0) {
+      return mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1];
+    }
+
+    return [];
+  };
+
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            <MapboxGL.MapView
-              style={{width: '100%', height: 300}}
-              styleURL={MAPBOX_STYLE}
-              userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-              localizeLabels={true}>
-              <MapboxGL.Camera zoomLevel={15} followUserLocation={true} />
-              <MapboxGL.UserLocation />
+            <MapboxGL.MapView style={{width: '100%', height: 300}} styleURL={MAPBOX_STYLE} localizeLabels={true}>
+              <MapboxGL.Camera zoomLevel={15} centerCoordinate={getUserCoordinates()} />
             </MapboxGL.MapView>
 
             <RecordUnits
               distance={mapboxRecord.distance}
-              speed={
-                mapboxRecord.speed.length > 0
-                  ? mapboxRecord.speed[mapboxRecord.speed.length - 1]
-                  : 0
-              }
+              speed={mapboxRecord.speed.length > 0 ? mapboxRecord.speed[mapboxRecord.speed.length - 1] : 0}
               calorie={record.calorie}
               duration={record.duration}
             />
@@ -56,9 +55,7 @@ export default ({navigation}: IProps) => {
                   onPress={() => {
                     showCamera();
                   }}>
-                  <IconImage
-                    source={require('../../assets/record_camera.png')}
-                  />
+                  <IconImage source={require('../../assets/record_camera.png')} />
                 </IconBtn>
 
                 {recordSetting.isInit && !recordSetting.isStart && (

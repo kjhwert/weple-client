@@ -18,7 +18,6 @@ import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
-import {PERMISSIONS, request} from 'react-native-permissions';
 import Geocoder from 'react-native-geocoding';
 import SaveLoading from '../../components/SaveLoading';
 
