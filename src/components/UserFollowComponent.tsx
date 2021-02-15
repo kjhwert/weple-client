@@ -15,7 +15,7 @@ interface IProps {
   };
 }
 
-export default ({route}: IProps) => {
+export default ({navigation, route}: IProps) => {
   const {loading, counts, pagination, switchingTabs, followers, follow, getUserAndFollow}: any = useContext(
     FollowContext,
   );
@@ -67,16 +67,19 @@ export default ({route}: IProps) => {
               <MemberWrapper key={id}>
                 <ProfileImage source={{uri: `${BASE_URL}/${userImage ? userImage : 'public/user/no_profile.png'}`}} />
                 <MemberTextWrapper>
-                  <MemberBtn onPress={() => {}}>
+                  <MemberBtn
+                    onPress={() => {
+                      navigation.navigate('friendActive', {id});
+                    }}>
                     <MemberText>{userNickName}</MemberText>
                   </MemberBtn>
                   <FollowBtn
-                    isFollow={isUserFollowed === '1'}
+                    isFollow={isUserFollowed === '0'}
                     onPress={() => {
                       follow(id);
                     }}>
-                    <FollowBtnText isFollow={isUserFollowed === '1'}>
-                      {isUserFollowed === '1' ? '팔로우' : '팔로잉'}
+                    <FollowBtnText isFollow={isUserFollowed === '0'}>
+                      {isUserFollowed === '1' ? '팔로잉' : '팔로우'}
                     </FollowBtnText>
                   </FollowBtn>
                 </MemberTextWrapper>

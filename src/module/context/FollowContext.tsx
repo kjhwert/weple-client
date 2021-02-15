@@ -61,9 +61,12 @@ export const FollowContextProvider = ({children}: IProps) => {
 
   const getFollowCount = async (userId: number) => {
     const {statusCode, message, data} = await userApi.getFollowCount(userId);
+    console.log(data);
     if (statusCode !== 200) return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     setCounts(data);
   };
+
+  console.log(user);
 
   const follow = async (userId: number) => {
     const {statusCode, message} = await userApi.follow(userId);
@@ -73,13 +76,13 @@ export const FollowContextProvider = ({children}: IProps) => {
 
     const newState = followers.map((user) => {
       if (user.id === userId) {
-        user.isUserFollowed = user.isUserFollowed === '1' ? '1' : '0';
+        user.isUserFollowed = user.isUserFollowed === '1' ? '0' : '1';
       }
 
       return user;
     });
     setFollowers(newState);
-    await getFollowCount(userId);
+    await getFollowCount(user.id);
   };
 
   return (

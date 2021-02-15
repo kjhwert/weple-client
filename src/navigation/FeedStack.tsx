@@ -22,6 +22,7 @@ import FollowContext from '../module/context/FollowContext';
 import WhiteBackBtn from '../components/WhiteBackBtn';
 import NotificationWhite from '../components/NotificationWhite';
 import ProfileActiveStatisticContainer from '../screens/Profile/profilePay/ProfileActiveStatisticContainer';
+import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMemberContainer';
 
 const Stack = createStackNavigator();
 
@@ -98,13 +99,6 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '프로필',
-        }}
-        name="friendActiveJoin"
-        component={FriendActiveJoinContainer}
-      />
-      <Stack.Screen
-        options={{
           headerTitle: '댓글',
         }}
         name="friendComment"
@@ -116,6 +110,13 @@ export default () => {
           headerTitle: user.nickName,
         }}
         component={FriendFollowerContainer}
+      />
+      <Stack.Screen
+        name="feedFollowerMember"
+        options={{
+          headerTitle: user.nickName,
+        }}
+        component={FollowerMemberContainer}
       />
       <Stack.Screen
         options={{
