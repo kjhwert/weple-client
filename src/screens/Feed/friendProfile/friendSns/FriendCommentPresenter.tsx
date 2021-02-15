@@ -3,13 +3,12 @@ import styled from 'styled-components/native';
 import {IFeedComments} from '../../../../module/type/feed';
 import {ACTIVE_BUTTON, ACTIVE_TEXT, BASE_URL, INACTIVE_BUTTON} from '../../../../module/common';
 import UserContext from '../../../../module/context/UserContext';
-import {IFeedCreateComment} from '../../../../module/type/api';
 import {Text} from 'react-native';
 
 interface IProps {
   navigation: any;
   comments: Array<IFeedComments>;
-  userComment: IFeedCreateComment;
+  description: string;
   onChangeDescription: (e: string) => void;
   finishComments: () => void;
   setModifyAlertVisible: (comment: IFeedComments) => void;
@@ -26,8 +25,8 @@ export default ({
   navigation,
   comments,
   onChangeDescription,
-  userComment,
   finishComments,
+  description,
   setModifyAlertVisible,
   commentStatus,
   onUpdateDescription,
@@ -99,8 +98,9 @@ export default ({
           />
           <WriteComment
             placeholder="코멘트를 달아보세요"
-            value={userComment.description}
+            value={description}
             onChangeText={onChangeDescription}
+            clearButtonMode="always"
           />
           <WriteCommentButton onPress={finishComments}>
             <WriteCommentButtonText>전송</WriteCommentButtonText>
