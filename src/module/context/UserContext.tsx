@@ -3,6 +3,8 @@ import {userApi} from '../../module/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BASE_URL} from '../../module/common';
 import AlertContext from './AlertContext';
+import {localNotificationService} from '../LocalNotificationService';
+import {fcmServices} from '../FCMService';
 
 const UserContext = createContext({});
 
@@ -139,6 +141,7 @@ export const UserContextProvider = ({children}: IProps) => {
     socialUid: '',
     isSocialLogin: true,
     activityCategories: [0],
+    deviceToken: '',
   });
 
   const createUserData = (name: string, signUpData: any) => {
@@ -175,6 +178,7 @@ export const UserContextProvider = ({children}: IProps) => {
       socialUid: createUser.socialUid,
       isSocialLogin: createUser.isSocialLogin,
       activityCategories: createUser.activityCategories,
+      deviceToken: createUser.deviceToken,
     };
 
     const responseCreat = await userApi.create(requestCreate);
@@ -263,9 +267,37 @@ export const UserContextProvider = ({children}: IProps) => {
     return await userApi.follow(userId);
   };
 
+  const onRegister = (token) => {
+    setCreateUser({...createUser, deviceToken: token});
+    console.log('[App] onRegister: ', token);
+  };
+
+  const onNotification = (notify) => {
+    console.log('[App] onNotification: ', notify);
+    const options = {
+      soundName: 'default',
+      playSound: true,
+    };
+
+    localNotificationService.showNotification(0, notify.title, notify.body, notify, options);
+  };
+
+  const onOpenNotification = (notify) => {
+    console.log('[App] onOpenNotification: ', notify);
+  };
+
   useEffect(() => {
     setIsLoginActive({emailFlag: loginUser.email?.length > 0, passwordFlag: loginUser.password?.length > 0});
     setIsLoginBtnActive(loginUser.email?.length > 0 && loginUser.password?.length > 0);
+
+    fcmServices.registerAppWithFCM();
+    fcmServices.register(onRegister, onNotification, onOpenNotification);
+    localNotificationService.configure(onOpenNotification);
+    return () => {
+      console.log('[App] unRegister');
+      fcmServices.unRegister();
+      localNotificationService.unregister();
+    };
   }, [loginUser]);
 
   return (

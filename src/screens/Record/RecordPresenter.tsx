@@ -25,14 +25,6 @@ export default ({navigation}: IProps) => {
     finishRecording,
   }: any = useContext(RecordContext);
 
-  const getUserCoordinates = () => {
-    if (mapboxRecord.coordinates.length > 0) {
-      return mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1];
-    }
-
-    return [];
-  };
-
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
@@ -40,7 +32,12 @@ export default ({navigation}: IProps) => {
         <ScrollWrapper>
           <Card>
             <MapboxGL.MapView style={{width: '100%', height: 300}} styleURL={MAPBOX_STYLE} localizeLabels={true}>
-              <MapboxGL.Camera zoomLevel={15} centerCoordinate={getUserCoordinates()} />
+              {mapboxRecord.coordinates.length > 0 && (
+                <MapboxGL.Camera
+                  zoomLevel={15}
+                  centerCoordinate={mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1]}
+                />
+              )}
             </MapboxGL.MapView>
 
             <RecordUnits
