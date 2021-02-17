@@ -228,8 +228,6 @@ export const FeedContextProvider = ({children}: IProps) => {
     setIndex(index.concat(indexData));
   };
 
-  console.log(sort);
-
   const getLikeCountIndex = async () => {
     setIndexLoading(true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

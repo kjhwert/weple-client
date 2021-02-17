@@ -4,10 +4,11 @@ import {BASE_URL, togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {Image, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {Image, NativeScrollEvent, NativeSyntheticEvent, Text, View} from 'react-native';
 import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import SearchComponent from '../../components/SearchComponent';
+import Loading from '../../components/Loading';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -21,6 +22,9 @@ interface IProps {
   getFollower: () => void;
   getEndSoon: () => void;
   getMoreTogethers: () => void;
+  offMapView: () => void;
+  sort: number;
+  loading: boolean;
 }
 
 export default ({
@@ -33,6 +37,9 @@ export default ({
   getFollower,
   getEndSoon,
   getMoreTogethers,
+  offMapView,
+  sort,
+  loading,
 }: IProps) => {
   const {getTogetherThumbnail, getTogetherActivityImage, searchVisible, userTogethers}: any = useContext(
     TogetherContext,
@@ -119,19 +126,21 @@ export default ({
             <Line></Line>
             <MenuBarWrapper>
               {['내 주변', '팔로워', '모집임박'].map((name, idx) => (
-                <MenuWrapper key={idx} focused={togetherPaging.id === idx}>
+                <MenuWrapper key={idx} focused={sort === idx}>
                   <MenuBtn
                     onPress={() => {
                       switch (idx) {
                         case 0:
                           return getLocation();
                         case 1:
+                          offMapView();
                           return getFollower();
                         case 2:
+                          offMapView();
                           return getEndSoon();
                       }
                     }}>
-                    <MenuText focused={togetherPaging.id === idx}>{name}</MenuText>
+                    <MenuText focused={sort === idx}>{name}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
@@ -206,29 +215,39 @@ export default ({
               </>
             ) : (
               <>
-                {togethers.map((together) => (
-                  <RecruitWrapper
-                    key={together.id}
-                    onPress={() => {
-                      navigation.navigate('togetherDetail', {id: together.id});
-                    }}>
-                    <RecruitImageWrapper>
-                      <RecruitImage source={getTogetherThumbnail(together.thumbnail)} />
-                      <RecordWrapper backgroundColor={together.activityColor}>
-                        <RecordImage source={getTogetherActivityImage(together.activityImage)} />
-                        <RecordText>{together.distance}KM</RecordText>
-                      </RecordWrapper>
-                    </RecruitImageWrapper>
-                    <RecruitTextWrapper>
-                      <RecruitTitleBtn>
-                        <RecruitTitle>{together.title}</RecruitTitle>
-                      </RecruitTitleBtn>
-                      <RecruitAddress>{together.place}</RecruitAddress>
-                      <EntryFee>참가비 {getComma(together.price)}원</EntryFee>
-                      <Deadline>{togetherDate(together.limitDate)}</Deadline>
-                    </RecruitTextWrapper>
-                  </RecruitWrapper>
-                ))}
+                {loading ? (
+                  <View style={{width: '100%', marginTop: 20}}>
+                    <Loading />
+                  </View>
+                ) : togethers.length === 0 ? (
+                  <View style={{width: '100%', marginTop: 20}}>
+                    <Text style={{fontSize: 12, width: '100%', textAlign: 'center'}}>데이터가 없습니다.</Text>
+                  </View>
+                ) : (
+                  togethers.map((together) => (
+                    <RecruitWrapper
+                      key={together.id}
+                      onPress={() => {
+                        navigation.navigate('togetherDetail', {id: together.id});
+                      }}>
+                      <RecruitImageWrapper>
+                        <RecruitImage source={getTogetherThumbnail(together.thumbnail)} />
+                        <RecordWrapper backgroundColor={together.activityColor}>
+                          <RecordImage source={getTogetherActivityImage(together.activityImage)} />
+                          <RecordText>{together.distance}KM</RecordText>
+                        </RecordWrapper>
+                      </RecruitImageWrapper>
+                      <RecruitTextWrapper>
+                        <RecruitTitleBtn>
+                          <RecruitTitle>{together.title}</RecruitTitle>
+                        </RecruitTitleBtn>
+                        <RecruitAddress>{together.place}</RecruitAddress>
+                        <EntryFee>참가비 {getComma(together.price)}원</EntryFee>
+                        <Deadline>{togetherDate(together.limitDate)}</Deadline>
+                      </RecruitTextWrapper>
+                    </RecruitWrapper>
+                  ))
+                )}
               </>
             )}
           </Card>

@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
 import TogetherPresenter from './TogetherPresenter';
 import {togetherApi} from '../../module/api';
-import UserContext from '../../module/context/UserContext';
 import {getLatestLocation} from 'react-native-location';
 import AlertContext from '../../module/context/AlertContext';
-import {ITogethers, IUserTogethers} from '../../module/type/together';
+import {ITogethers} from '../../module/type/together';
 import TogetherContext from '../../module/context/TogetherContext';
 
 interface IProps {
@@ -22,15 +21,23 @@ export default ({navigation, route}: IProps) => {
     lat: 0,
     lon: 0,
   });
+  const [sort, setSort] = useState(0);
 
   const [togethers, setTogethers] = useState<Array<ITogethers>>([]);
   const [isMapView, setIsMapView] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const turnMapView = () => {
     setIsMapView(!isMapView);
   };
 
+  const offMapView = () => {
+    setIsMapView(false);
+  };
+
   const getLocation = async () => {
+    setSort(0);
+    setLoading(true);
     const coordinates = await getLatestLocation();
     if (!coordinates) {
       return setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.');
@@ -44,6 +51,7 @@ export default ({navigation, route}: IProps) => {
     }
     setTogethers(data);
     setTogetherPaging({...togetherPaging, id: 0, page: 1, lat, lon, hasNextPage: paging.hasNextPage});
+    setLoading(false);
   };
 
   const getMoreLocation = async () => {
@@ -60,12 +68,15 @@ export default ({navigation, route}: IProps) => {
   };
 
   const getFollower = async () => {
+    setSort(1);
+    setLoading(true);
     const {statusCode, message, data, paging} = await togetherApi.followerList(1);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패헀습니다.', message);
     }
     setTogethers(data);
     setTogetherPaging({...togetherPaging, id: 1, page: 1, hasNextPage: paging.hasNextPage});
+    setLoading(false);
   };
 
   const getMoreFollower = async () => {
@@ -82,12 +93,15 @@ export default ({navigation, route}: IProps) => {
   };
 
   const getEndSoon = async () => {
+    setSort(2);
+    setLoading(true);
     const {statusCode, message, data, paging} = await togetherApi.endSoonList(1);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패헀습니다.', message);
     }
     setTogethers(data);
     setTogetherPaging({...togetherPaging, id: 2, page: 1, hasNextPage: paging.hasNextPage});
+    setLoading(false);
   };
 
   const getMoreEndSoon = async () => {
@@ -126,6 +140,8 @@ export default ({navigation, route}: IProps) => {
 
   return (
     <TogetherPresenter
+      sort={sort}
+      loading={loading}
       navigation={navigation}
       togetherPaging={togetherPaging}
       togethers={togethers}
@@ -135,6 +151,7 @@ export default ({navigation, route}: IProps) => {
       getEndSoon={getEndSoon}
       turnMapView={turnMapView}
       getMoreTogethers={getMoreTogethers}
+      offMapView={offMapView}
     />
   );
 };
