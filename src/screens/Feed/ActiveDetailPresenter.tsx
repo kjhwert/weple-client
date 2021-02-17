@@ -7,6 +7,7 @@ import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
 import FeedContext from '../../module/context/FeedContext';
 import {Image, TouchableOpacity, View} from 'react-native';
+import {captureRef} from 'react-native-view-shot';
 
 interface IProps {
   navigation: any;
@@ -16,10 +17,17 @@ interface IProps {
 export default ({navigation, feed}: IProps) => {
   const {showUserFollowAndReload, changeLikeCount}: any = useContext(FeedContext);
   const {loginUser}: any = useContext(UserContext);
-  const webViewRef = useRef<any>(null);
+  const thumbnailRef = useRef(null);
 
   const isLoginUserFeed = (id: number) => {
     return loginUser.id === id;
+  };
+
+  const navigateShare = async () => {
+    const thumbnail = await captureRef(thumbnailRef, {
+      format: 'jpg',
+    });
+    navigation.navigate('friendShare', {thumbnail});
   };
 
   return (
@@ -30,22 +38,9 @@ export default ({navigation, feed}: IProps) => {
             <MapPlayWrapper source={{uri: `${BASE_URL}/${feed.thumbnail}`}} imageStyle={{opacity: 0.6}}>
               <TouchableOpacity
                 style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-                onPress={() => {
-                  navigation.navigate('friendShare', {feed});
-                }}>
+                onPress={navigateShare}>
                 <Image source={require('../../assets/play_icon.png')} style={{width: 40, height: 40}} />
               </TouchableOpacity>
-              {/*<WebView*/}
-              {/*  ref={(ref) => (webViewRef.current = ref)}*/}
-              {/*  source={{*/}
-              {/*    uri: `${BASE_URL}/public/map/test.html`,*/}
-              {/*  }}*/}
-              {/*  injectedJavaScript={webViewJavaScriptCode({*/}
-              {/*    coordinates: feed.coordinates,*/}
-              {/*    map: {id: feed.mapId, style: feed.mapStyle},*/}
-              {/*    music: {id: feed.musicId, url: feed.musicUrl},*/}
-              {/*  })}*/}
-              {/*/>*/}
             </MapPlayWrapper>
 
             <ProfileTopWrapper>
@@ -138,10 +133,7 @@ export default ({navigation, feed}: IProps) => {
                   <IconBtn>
                     <IconImage source={require('../../assets/icon_share_2.png')} />
                   </IconBtn>
-                  <IconBtn
-                    onPress={() => {
-                      navigation.navigate('friendShare');
-                    }}>
+                  <IconBtn onPress={navigateShare}>
                     <IconText>공유</IconText>
                   </IconBtn>
                 </ShareIconBtnText>
@@ -160,7 +152,7 @@ export default ({navigation, feed}: IProps) => {
               </ActiveDetailTitleWrapper>
 
               <ActiveDetailImageWrapper>
-                <ActiveDetailMapImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} />
+                <ActiveDetailMapImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} ref={thumbnailRef} />
               </ActiveDetailImageWrapper>
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>

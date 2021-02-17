@@ -1,10 +1,5 @@
-import React, {useContext, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import RecordContext from '../module/context/RecordContext';
-import {IRecordContext} from '../module/type/recordContext';
-import AlertContext from '../module/context/AlertContext';
-import ConfirmAlert from './ConfirmAlert';
-import FeedContext from '../module/context/FeedContext';
 
 interface IProps {
   navigation: any;
@@ -12,10 +7,7 @@ interface IProps {
 }
 
 export default ({navigation, route}: IProps) => {
-  const {changeTabBarVisible}: any = useContext(FeedContext);
-
   const onPressed = () => {
-    changeTabBarVisible();
     navigation.goBack();
   };
 

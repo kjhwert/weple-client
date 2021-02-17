@@ -1,26 +1,38 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import styled from 'styled-components/native';
 import {BASE_URL, secondsToTimeFormat} from '../module/common';
-import {IShowFeed} from '../module/type/feedContext';
 import FeedContext from '../module/context/FeedContext';
 import {webViewJavaScriptCode} from '../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
+import {ShareDialog} from 'react-native-fbsdk';
+import {Platform} from 'react-native';
+import Share from 'react-native-share';
+import AlertContext from '../module/context/AlertContext';
 
 interface IProps {
   navigation: any;
-  route: {
-    params: {
-      feed: IShowFeed;
-    };
-  };
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
-  const {show, changeTabBarInvisible}: any = useContext(FeedContext);
+export default ({navigation, route}: IProps) => {
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
+  const {show, changeTabBarInvisible, changeTabBarVisible}: any = useContext(FeedContext);
   const webViewRef = useRef<any>(null);
+  const photoUri = route.params.thumbnail;
+
+  const share = async () => {
+    try {
+      await Share.open({url: Platform.OS === 'android' ? photoUri : photoUri.replace('file://', '')});
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     changeTabBarInvisible();
+    return () => {
+      changeTabBarVisible();
+    };
   }, []);
   return (
     <Container>
@@ -61,15 +73,15 @@ export default ({navigation}: IProps) => {
             </RecordWrapper>
 
             <SnsIconWrapper>
-              <KakaoIconBtn onPress={() => {}}>
+              <KakaoIconBtn onPress={share}>
                 <LogoImage source={require('../assets/logo_kakao.jpg')} />
                 <KakaoIconText>카카오톡 공유하기</KakaoIconText>
               </KakaoIconBtn>
-              <FaceBookIconBtn onPress={() => {}}>
+              <FaceBookIconBtn onPress={share}>
                 <LogoImage source={require('../assets/logo_facebook.png')} />
                 <FaceBookIconText>페이스북 공유하기</FaceBookIconText>
               </FaceBookIconBtn>
-              <InstagramIconBtn onPress={() => {}}>
+              <InstagramIconBtn onPress={share}>
                 <LogoImage source={require('../assets/logo_instagram.png')} />
                 <InstagramIconText>인스타그램 공유하기</InstagramIconText>
               </InstagramIconBtn>

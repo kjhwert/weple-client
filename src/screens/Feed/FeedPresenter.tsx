@@ -4,11 +4,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {IEvent, IFeed} from '../../module/type/feed';
 import Swiper from 'react-native-swiper';
 import {BASE_URL, timeForToday} from '../../module/common';
-import {NativeScrollEvent, NativeSyntheticEvent, RefreshControl, StyleSheet} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import UserContext from '../../module/context/UserContext';
 import FeedContext from '../../module/context/FeedContext';
 import {IUserFollower} from '../../module/type/user';
 import SearchComponent from '../../components/SearchComponent';
+import Loading from '../../components/Loading';
 
 interface IProps {
   navigation: any;
@@ -30,7 +31,8 @@ export default ({navigation, events, newFollowers}: IProps) => {
   const {loginUser}: any = useContext(UserContext);
   const {
     index,
-    pagination,
+    indexLoading,
+    sort: pagingSort,
     userFollowAndReload,
     changeLikeCount,
     switchingSortIndex,
@@ -42,7 +44,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
 
   const onRefresh = () => {
     setRefresh(true);
-    switchingSortIndex(pagination.sort);
+    switchingSortIndex(pagingSort);
     setRefresh(false);
   };
 
@@ -130,107 +132,119 @@ export default ({navigation, events, newFollowers}: IProps) => {
 
             <MenuBarWrapper>
               {sorts.map(({tab, sort}, idx) => (
-                <MenuWrapper key={idx} focused={pagination.sort === sort}>
+                <MenuWrapper key={idx} focused={pagingSort === sort}>
                   <MenuBtn
                     onPress={() => {
                       switchingSortIndex(sort);
                     }}>
-                    <MenuText focused={pagination.sort === sort}>{tab}</MenuText>
+                    <MenuText focused={pagingSort === sort}>{tab}</MenuText>
                   </MenuBtn>
                 </MenuWrapper>
               ))}
             </MenuBarWrapper>
             <Line></Line>
 
-            {index.map((feed: IFeed) => (
-              <LineWrapper key={feed.id}>
-                <PostWrapper>
-                  <ProfileWrapper>
-                    <ProfileInfoWrapper
-                      onPress={() => {
-                        navigation.navigate('friendActive', {id: feed.userId});
-                      }}>
-                      <ProfileImage
-                        source={{uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`}}
-                      />
-                      <ProfileTextWrapper>
-                        <ProfileName>{feed.userNickName}</ProfileName>
-                        <PostTime>{timeForToday(feed.createdAt)}</PostTime>
-                      </ProfileTextWrapper>
-                    </ProfileInfoWrapper>
-                    {!isLoginUserFeed(feed.userId) && (
-                      <FollowBtn
-                        isFollow={feed.isUserFollowed}
+            {indexLoading ? (
+              <View style={{width: '100%', marginTop: 20}}>
+                <Loading />
+              </View>
+            ) : index.length === 0 ? (
+              <View style={{width: '100%', marginTop: 20}}>
+                <Text style={{fontSize: 12, width: '100%', textAlign: 'center'}}>데이터가 없습니다.</Text>
+              </View>
+            ) : (
+              index.map((feed: IFeed) => (
+                <LineWrapper key={feed.id}>
+                  <PostWrapper>
+                    <ProfileWrapper>
+                      <ProfileInfoWrapper
                         onPress={() => {
-                          userFollowAndReload(feed.userId);
+                          navigation.navigate('friendActive', {id: feed.userId});
                         }}>
-                        <FollowBtnText isFollow={feed.isUserFollowed}>
-                          {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
-                        </FollowBtnText>
-                      </FollowBtn>
-                    )}
-                  </ProfileWrapper>
-                  <PostImageWrapper
-                    onPress={() => {
-                      navigation.navigate('activeDetail', {id: feed.id});
-                    }}>
-                    <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
-                    <RecordWrapper color={feed.activityColor}>
-                      <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
-                      <RecordText>{feed.distance} 킬로미터</RecordText>
-                    </RecordWrapper>
-                  </PostImageWrapper>
-
-                  <IconWrapper>
-                    <IconImageWrapper>
-                      <IconBtn onPress={() => changeLikeCount(feed.id)}>
-                        <IconImage
-                          source={
-                            feed.isUserLiked
-                              ? require('../../assets/icon_heartRed.png')
-                              : require('../../assets/icon_heart.png')
-                          }
+                        <ProfileImage
+                          source={{
+                            uri: `${BASE_URL}/${feed.userImage ? feed.userImage : 'public/user/no_profile.png'}`,
+                          }}
                         />
-                      </IconBtn>
-                      <IconBtn
-                        onPress={() => {
-                          navigation.navigate('friendComment', {id: feed.id});
-                        }}>
-                        <IconImage source={require('../../assets/icon_comment.png')} />
-                      </IconBtn>
-                    </IconImageWrapper>
-                    <AlarmBtn
+                        <ProfileTextWrapper>
+                          <ProfileName>{feed.userNickName}</ProfileName>
+                          <PostTime>{timeForToday(feed.createdAt)}</PostTime>
+                        </ProfileTextWrapper>
+                      </ProfileInfoWrapper>
+                      {!isLoginUserFeed(feed.userId) && (
+                        <FollowBtn
+                          isFollow={feed.isUserFollowed}
+                          onPress={() => {
+                            userFollowAndReload(feed.userId);
+                          }}>
+                          <FollowBtnText isFollow={feed.isUserFollowed}>
+                            {!feed.isUserFollowed ? '팔로우' : '팔로잉'}
+                          </FollowBtnText>
+                        </FollowBtn>
+                      )}
+                    </ProfileWrapper>
+                    <PostImageWrapper
                       onPress={() => {
-                        navigation.navigate('friendLike', {id: feed.id});
+                        navigation.navigate('activeDetail', {id: feed.id});
                       }}>
-                      <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
-                    </AlarmBtn>
-                  </IconWrapper>
-                  {feed.commentCount > 0 && (
-                    <FollowWrapper>
-                      <ProfileImage
-                        source={{
-                          uri: `${BASE_URL}/${
-                            feed.commentUserImage ? feed.commentUserImage : 'public/user/no_profile.png'
-                          }`,
-                        }}
-                      />
-                      <FollowTextWrapper>
-                        <FollowName>{feed.commentUserName}</FollowName>
-                        <CommentText>{feed.commentDescription}</CommentText>
-                        <AllCommentBtn
+                      <PostImage source={{uri: `${BASE_URL}/${feed.feedImage ? feed.feedImage : feed.thumbnail}`}} />
+                      <RecordWrapper color={feed.activityColor}>
+                        <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
+                        <RecordText>{feed.distance} 킬로미터</RecordText>
+                      </RecordWrapper>
+                    </PostImageWrapper>
+
+                    <IconWrapper>
+                      <IconImageWrapper>
+                        <IconBtn onPress={() => changeLikeCount(feed.id)}>
+                          <IconImage
+                            source={
+                              feed.isUserLiked
+                                ? require('../../assets/icon_heartRed.png')
+                                : require('../../assets/icon_heart.png')
+                            }
+                          />
+                        </IconBtn>
+                        <IconBtn
                           onPress={() => {
                             navigation.navigate('friendComment', {id: feed.id});
                           }}>
-                          <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
-                        </AllCommentBtn>
-                      </FollowTextWrapper>
-                    </FollowWrapper>
-                  )}
-                </PostWrapper>
-                <Line />
-              </LineWrapper>
-            ))}
+                          <IconImage source={require('../../assets/icon_comment.png')} />
+                        </IconBtn>
+                      </IconImageWrapper>
+                      <AlarmBtn
+                        onPress={() => {
+                          navigation.navigate('friendLike', {id: feed.id});
+                        }}>
+                        <AlarmBtnText>{feed.likeCount}명이 좋아합니다.</AlarmBtnText>
+                      </AlarmBtn>
+                    </IconWrapper>
+                    {feed.commentCount > 0 && (
+                      <FollowWrapper>
+                        <ProfileImage
+                          source={{
+                            uri: `${BASE_URL}/${
+                              feed.commentUserImage ? feed.commentUserImage : 'public/user/no_profile.png'
+                            }`,
+                          }}
+                        />
+                        <FollowTextWrapper>
+                          <FollowName>{feed.commentUserName}</FollowName>
+                          <CommentText>{feed.commentDescription}</CommentText>
+                          <AllCommentBtn
+                            onPress={() => {
+                              navigation.navigate('friendComment', {id: feed.id});
+                            }}>
+                            <AllCommentText>{feed.commentCount}개의 댓글 모두 보기</AllCommentText>
+                          </AllCommentBtn>
+                        </FollowTextWrapper>
+                      </FollowWrapper>
+                    )}
+                  </PostWrapper>
+                  <Line />
+                </LineWrapper>
+              ))
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>

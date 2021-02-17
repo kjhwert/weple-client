@@ -19,14 +19,15 @@ export const FeedContextProvider = ({children}: IProps) => {
   const [tabBarVisible, setTabBarVisible] = useState(true);
   const [pagination, setPagination] = useState<IFeedPagination>({
     page: 1,
-    sort: 'createdAt',
     order: 'DESC',
     lat: 0,
     lon: 0,
     nickName: '',
     hasNextPage: false,
   });
+  const [sort, setSort] = useState<'createdAt' | 'location' | 'likeCount'>('createdAt');
   const [index, setIndex] = useState<Array<IFeed>>([]);
+  const [indexLoading, setIndexLoading] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [show, setShow] = useState<IShowFeed | null>(null);
   const [showLoading, setShowLoading] = useState(true);
@@ -116,7 +117,7 @@ export const FeedContextProvider = ({children}: IProps) => {
       return feedItem;
     });
 
-    if (pagination.sort === 'likeCount') {
+    if (sort === 'likeCount') {
       const sortIndex = changeLikeStatus.sort((a, b) => b.likeCount - a.likeCount);
       setIndex(sortIndex);
     } else {
@@ -125,11 +126,11 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getCreatedIndex = async () => {
+    setIndexLoading(true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
 
     const page = 1;
-    const sort = 'createdAt';
     const {
       statusCode,
       message,
@@ -144,8 +145,9 @@ export const FeedContextProvider = ({children}: IProps) => {
     const indexData = data.map((feed: any) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
-    setPagination({...pagination, sort, hasNextPage});
+    setPagination({...pagination, hasNextPage});
     setIndex(indexData);
+    setIndexLoading(false);
   };
 
   const getCreatedMoreIndex = async (page: number) => {
@@ -171,8 +173,17 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getLocationIndex = async () => {
+    setIndexLoading(true);
     const {nickName} = pagination;
-    const {latitude: lat, longitude: lon}: any = await getLatestLocation();
+    let lat = 0;
+    let lon = 0;
+    try {
+      const {latitude, longitude}: any = await getLatestLocation();
+      lat = latitude;
+      lon = longitude;
+    } catch (e) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', '현재 위치를 가져올 수 없습니다.');
+    }
     const page = 1;
 
     const {
@@ -190,8 +201,9 @@ export const FeedContextProvider = ({children}: IProps) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
 
-    setPagination({...pagination, sort: 'location', hasNextPage});
+    setPagination({...pagination, hasNextPage});
     setIndex(indexData);
+    setIndexLoading(false);
   };
 
   const getLocationMoreIndex = async (page: number) => {
@@ -216,18 +228,22 @@ export const FeedContextProvider = ({children}: IProps) => {
     setIndex(index.concat(indexData));
   };
 
+  console.log(sort);
+
   const getLikeCountIndex = async () => {
+    setIndexLoading(true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
+    const {lat, lon, page: unUsedPage, order, nickName} = pagination;
 
     const page = 1;
-    const sort = 'likeCount';
+    const pagingSort = 'likeCount';
+
     const {
       statusCode,
       message,
       data,
       paging: {hasNextPage},
-    } = await feedApi.index({...sortOrder, sort, page});
+    } = await feedApi.index({order, nickName, sort: pagingSort, page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -236,8 +252,9 @@ export const FeedContextProvider = ({children}: IProps) => {
     const indexData = data.map((feed: any) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
-    setPagination({...pagination, sort, hasNextPage});
+    setPagination({...pagination, hasNextPage});
     setIndex(indexData);
+    setIndexLoading(false);
   };
 
   const getLikeCountMoreIndex = async (page: number) => {
@@ -263,6 +280,7 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const switchingSortIndex = (sort: 'createdAt' | 'location' | 'likeCount') => {
+    setSort(sort);
     if (sort === 'createdAt') {
       return getCreatedIndex();
     }
@@ -277,7 +295,7 @@ export const FeedContextProvider = ({children}: IProps) => {
   };
 
   const getMoreIndex = () => {
-    const {page, sort, hasNextPage} = pagination;
+    const {page, hasNextPage} = pagination;
     if (!hasNextPage) {
       return;
     }
@@ -358,7 +376,9 @@ export const FeedContextProvider = ({children}: IProps) => {
         index,
         show,
         showLoading,
+        indexLoading,
         getShow,
+        sort,
         pagination,
         userFollowAndReload,
         feedLikedAndReload,
