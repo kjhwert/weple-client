@@ -136,7 +136,7 @@ export const FeedContextProvider = ({children}: IProps) => {
       message,
       data,
       paging: {hasNextPage},
-    } = await feedApi.index({...sortOrder, sort, page});
+    } = await feedApi.index({...sortOrder, sort: 'createdAt', page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -234,14 +234,13 @@ export const FeedContextProvider = ({children}: IProps) => {
     const {lat, lon, page: unUsedPage, order, nickName} = pagination;
 
     const page = 1;
-    const pagingSort = 'likeCount';
 
     const {
       statusCode,
       message,
       data,
       paging: {hasNextPage},
-    } = await feedApi.index({order, nickName, sort: pagingSort, page});
+    } = await feedApi.index({order, nickName, sort: 'likeCount', page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
