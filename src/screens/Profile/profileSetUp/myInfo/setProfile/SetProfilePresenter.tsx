@@ -14,6 +14,8 @@ interface IProps {
   isActive: boolean;
   hasNickName: Function;
   showPicker: Function;
+  onChangeNickName: (e: string) => void;
+  onChangeDescription: (e: string) => void;
 }
 
 export default ({
@@ -25,6 +27,8 @@ export default ({
   isActive,
   hasNickName,
   showPicker,
+  onChangeNickName,
+  onChangeDescription,
 }: IProps) => {
   const {getProfileUri}: any = useContext(UserContext);
 
@@ -45,14 +49,23 @@ export default ({
               </EditBtnWrapper>
             </ProfileTopWrapper>
             <SignUpWrapper>
-              <DuplicateInputBox
-                title={'닉네임'}
-                placeholder="닉네임을 입력하세요."
-                name="nickName"
-                value={profileData.nickName}
-                onChange={onChangeProfile}
-                activeFlag={activeFlag.nickNameFlag}
-              />
+              {/*<DuplicateInputBox*/}
+              {/*  title={'닉네임'}*/}
+              {/*  placeholder="닉네임을 입력하세요."*/}
+              {/*  name="nickName"*/}
+              {/*  value={profileData.nickName}*/}
+              {/*  onChange={onChangeProfile}*/}
+              {/*  activeFlag={activeFlag.nickNameFlag}*/}
+              {/*/>*/}
+              <DuplicateInputBoxWrapper>
+                <DuplicateInputBoxTitle>닉네임</DuplicateInputBoxTitle>
+                <DuplicateInputBoxData
+                  placeholder={'닉네임을 입력하세요.'}
+                  onChangeText={onChangeNickName}
+                  autoFocus={true}
+                  value={profileData.nickName}
+                />
+              </DuplicateInputBoxWrapper>
               <DuplicateBtn
                 onPress={() => {
                   hasNickName();
@@ -61,13 +74,16 @@ export default ({
               </DuplicateBtn>
             </SignUpWrapper>
             <IntroduceWrapper>
-              <TextLimitBox
-                title={'간략하게 자신을 소개해주세요 (최대 100자)'}
-                name="description"
-                value={profileData.description}
-                onChange={onChangeProfile}
-                activeFlag={activeFlag.descriptionFlag}
-              />
+              <TextLimitWrapper>
+                <TextLimitTitle>간략하게 자신을 소개해주세요 (최대 100자)</TextLimitTitle>
+                <TextLimitData
+                  value={profileData.description}
+                  onChangeText={onChangeDescription}
+                  multiline={true}
+                  maxLength={100}
+                  textAlignVertical={'top'}
+                />
+              </TextLimitWrapper>
             </IntroduceWrapper>
           </ContainerCard>
         </ScrollWrapper>
@@ -77,6 +93,51 @@ export default ({
   );
 };
 
+const TextLimitWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const TextLimitTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const TextLimitData = styled.TextInput`
+  width: 100%;
+  height: 100px;
+  max-height: 100px;
+  padding: 10px;
+  margin-bottom: 100px;
+  border-width: 1px;
+  border-color: #b5b5b5;
+  font-size: 14px;
+  color: #6f6f6f;
+`;
+
+const DuplicateInputBoxWrapper = styled.View`
+  display: flex;
+  width: 70%;
+`;
+
+const DuplicateInputBoxTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const DuplicateInputBoxData = styled.TextInput`
+  padding: 5px 10px;
+  border-bottom-width: 1px;
+  border-color: #acacac;
+  font-size: 15px;
+  color: #6f6f6f;
+`;
 const Container = styled.View`
   flex: 1;
 `;

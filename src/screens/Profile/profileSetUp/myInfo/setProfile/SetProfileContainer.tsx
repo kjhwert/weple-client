@@ -25,6 +25,14 @@ export default ({navigation}: IProps) => {
     description: '',
   });
 
+  const onChangeNickName = (e: string) => {
+    setProfileData({...profileData, nickName: e});
+  };
+
+  const onChangeDescription = (e: string) => {
+    setProfileData({...profileData, description: e});
+  };
+
   const onChangeProfile = (e) => {
     const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
     const value = e.nativeEvent.text;
@@ -162,6 +170,8 @@ export default ({navigation}: IProps) => {
       isActive={isActive}
       hasNickName={hasNickName}
       showPicker={showPicker}
+      onChangeNickName={onChangeNickName}
+      onChangeDescription={onChangeDescription}
     />
   );
 };
