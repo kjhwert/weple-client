@@ -57,6 +57,20 @@ export default ({
     }
   };
 
+  const togetherAnnotation = (together: ITogethers) => {
+    return (
+      <MapboxGL.PointAnnotation
+        key={together.id}
+        id={`${together.id}`}
+        coordinate={[together.lat, together.lon]}
+        onSelected={() => setSelected(together)}>
+        <MapboxMarkWrapper color={together.activityColor}>
+          <Image source={{uri: `${BASE_URL}/${together.activityImage}`}} style={{width: 20, height: 20}} />
+        </MapboxMarkWrapper>
+      </MapboxGL.PointAnnotation>
+    );
+  };
+
   return (
     <Container>
       {searchVisible && <SearchComponent navigation={navigation} stack={'together'} />}
@@ -167,28 +181,12 @@ export default ({
 
             {isMapView ? (
               <>
-                <MapboxGL.MapView
-                  style={{width: '100%', height: 400}}
-                  styleURL={MAPBOX_DEFAULT_STYLE}
-                  zoomEnabled={false}
-                  scrollEnabled={false}
-                  pitchEnabled={false}
-                  rotateEnabled={false}>
+                <MapboxGL.MapView style={{width: '100%', height: 400}} styleURL={MAPBOX_DEFAULT_STYLE}>
                   <MapboxGL.Camera zoomLevel={12} centerCoordinate={[togetherPaging.lon, togetherPaging.lat]} />
-                  {togethers.map((together) => (
-                    <MapboxGL.PointAnnotation
-                      key={together.id}
-                      id={`${together.id}`}
-                      coordinate={[together.lat, together.lon]}
-                      onSelected={() => setSelected(together)}>
-                      <MapboxMarkWrapper color={together.activityColor}>
-                        <Image
-                          source={{uri: `${BASE_URL}/${together.activityImage}`}}
-                          style={{width: 20, height: 20}}
-                        />
-                      </MapboxMarkWrapper>
-                    </MapboxGL.PointAnnotation>
-                  ))}
+                  {togethers.map((together) => togetherAnnotation(together))}
+                  {/*{togethers.map((together) => (*/}
+                  {/*  */}
+                  {/*))}*/}
                 </MapboxGL.MapView>
                 {selected && (
                   <SelectedWrapper

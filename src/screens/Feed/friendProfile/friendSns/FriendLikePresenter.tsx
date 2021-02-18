@@ -20,7 +20,9 @@ export default ({navigation, users, userFollowAction}: IProps) => {
                 onPress={() => {
                   navigation.navigate('friendActive', {id: user.userId});
                 }}>
-                <ProfileImage source={{uri: `${BASE_URL}/${user.userImage}`}} />
+                <ProfileImage
+                  source={{uri: `${BASE_URL}/${user.userImage ? user.userImage : 'public/user/no_profile.png'}`}}
+                />
                 <MemberTextWrapper>
                   <MemberText>{user.userNickName}</MemberText>
                   {user.isUserFollowed !== 2 && (
