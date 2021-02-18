@@ -67,7 +67,7 @@ export default ({
                   </MemberTextWrapper>
                 </ProfileImageWrapper>
 
-                {comment.isLoginUserWrote ? (
+                {comment.isLoginUserWrote === '1' ? (
                   commentStatus.isModifiable && commentStatus.id === comment.id ? (
                     <DotMoreBtn
                       onPress={() => {
@@ -191,7 +191,7 @@ const ProfileImage = styled.Image`
 const MemberTextWrapper = styled.View`
   display: flex;
   align-items: center;
-  width: 65%;
+  width: 70%;
   height: 100%;
   margin-right: 5px;
 `;
@@ -200,8 +200,8 @@ const MemberText = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333;
-  padding-bottom: 5px;
   width: 100%;
+  margin-bottom: -5px;
 `;
 
 const CommentText = styled.TextInput`
@@ -210,6 +210,7 @@ const CommentText = styled.TextInput`
   color: #333;
   border-width: ${({modifiable}: {modifiable: boolean}) => (modifiable ? '1px' : '0px')};
   border-color: ${ACTIVE_TEXT};
+  padding: 0;
 `;
 
 const DotMoreBtn = styled.TouchableOpacity`

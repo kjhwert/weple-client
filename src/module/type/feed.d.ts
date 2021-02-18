@@ -42,5 +42,5 @@ export interface IFeedComments {
   userId: number;
   userName: string;
   userImage: string;
-  isLoginUserWrote: boolean;
+  isLoginUserWrote: string;
 }
