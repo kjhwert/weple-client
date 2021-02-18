@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
-import BouncingPreloader from 'react-native-bouncing-preloader';
+import BouncingPreloader from 'react-native-bouncing-preloaders';
 import LinearGradient from 'react-native-linear-gradient';
 import {LogBox} from 'react-native';
 
@@ -11,10 +11,7 @@ export default () => {
 
   return (
     <Container>
-      <LinearGradient
-        colors={['#79a6fa', '#3065f4', '#4e3adf']}
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}>
+      <LinearGradient colors={['#79a6fa', '#3065f4', '#4e3adf']} start={{x: 1, y: 0}} end={{x: 0, y: 1}}>
         <ContainerCard>
           <LoadingInfoWrapper>
             <LoadingTitleText>앱을 계속 열어 두세요.</LoadingTitleText>
@@ -22,10 +19,7 @@ export default () => {
           </LoadingInfoWrapper>
 
           <BouncingPreloader
-            icons={[
-              require('../assets/Loading_ttam.png'),
-              require('../assets/Loading_na.png'),
-            ]}
+            icons={[require('../assets/Loading_ttam.png'), require('../assets/Loading_na.png')]}
             leftDistance={-150}
             rightDistance={-200}
             speed={1000}
@@ -33,10 +27,7 @@ export default () => {
           />
 
           <BouncingPreloader
-            icons={[
-              require('../assets/Loading_sweat.png'),
-              require('../assets/Loading_sweat.png'),
-            ]}
+            icons={[require('../assets/Loading_sweat.png'), require('../assets/Loading_sweat.png')]}
             leftDistance={-200}
             rightDistance={-150}
             speed={1000}

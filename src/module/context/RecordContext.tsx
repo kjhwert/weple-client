@@ -12,14 +12,17 @@ import {DURATION_TIME, getDistanceBetweenTwoGPS, GOOGLE_MAPS_GEOCODING_API_TOKEN
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
-import {checkPermission, configure, getLatestLocation, requestPermission} from 'react-native-location';
+import {getLatestLocation} from 'react-native-location';
 import AlertContext from './AlertContext';
 import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
 import Geocoder from 'react-native-geocoding';
-import SaveLoading from '../../components/SaveLoading';
+// import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
+
+Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'auto'});
 
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
@@ -28,6 +31,19 @@ const sqlite = Database.getInstance();
 
 interface IProps {
   children: ReactNode;
+}
+
+interface IGeoLocation {
+  coords: {
+    latitude: number;
+    longitude: number;
+    altitude: number | null;
+    accuracy: number;
+    altitudeAccuracy: number | null;
+    heading: number | null;
+    speed: number | null;
+  };
+  timestamp: number;
 }
 
 const alertManagerInitialState = {
@@ -243,10 +259,12 @@ export const RecordContextProvider = ({children}: IProps) => {
   };
 
   const onStartRecord = () => {
+    setTabBarVisible(false);
     setRecordSetting({...recordSetting, isInit: true, isStart: true});
   };
 
   const onPauseRecord = () => {
+    setTabBarVisible(true);
     setRecordSetting({...recordSetting, isInit: true, isStart: false});
   };
 
@@ -295,15 +313,13 @@ export const RecordContextProvider = ({children}: IProps) => {
     await getUserLocation();
   };
 
-  const getUserLocation = async () => {
-    if (record.duration % DURATION_TIME !== 0) return;
-    const {latitude, longitude, speed: locationSpeed}: any = await getLatestLocation();
-
-    //TODO Distance 데이터가 오차율이 큼.
+  const getCoordinates = async ({coords: {speed: geoSpeed, latitude, longitude}}: IGeoLocation) => {
     const {distance: recordedDistance} = mapboxRecord;
-    if (!locationSpeed || locationSpeed < 0) return;
 
-    const currentSpeed = Math.floor(locationSpeed * 10) / 10;
+    if (geoSpeed === null) {
+      geoSpeed = 0;
+    }
+    const currentSpeed = Math.floor(geoSpeed * 10) / 10;
 
     // const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
     let currentDistance = 0;
@@ -323,7 +339,42 @@ export const RecordContextProvider = ({children}: IProps) => {
       distance,
       speed,
     });
-    // sqlite.insertRecord([longitude, latitude]);
+  };
+
+  const getUserLocation = async () => {
+    if (record.duration % DURATION_TIME !== 0) return;
+    await Geolocation.getCurrentPosition(
+      (res) => getCoordinates(res),
+      (err) => console.log(err),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+
+    return;
+    // const {latitude, longitude, speed: locationSpeed}: any = await getLatestLocation();
+    //
+    // const {distance: recordedDistance} = mapboxRecord;
+    // // if (!locationSpeed || locationSpeed < 0) return;
+    //
+    // const currentSpeed = Math.floor(locationSpeed * 10) / 10;
+    //
+    // // const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
+    // let currentDistance = 0;
+    // if (mapboxRecord.coordinates.length > 0) {
+    //   currentDistance = getDistanceBetweenTwoGPS([
+    //     mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1],
+    //     [longitude, latitude],
+    //   ]);
+    // }
+    // const distance = Math.floor((currentDistance + recordedDistance) * 1000) / 1000;
+    // const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
+    //
+    // const speed = mapboxRecord.speed.concat(currentSpeed);
+    // setMapboxRecord({
+    //   ...mapboxRecord,
+    //   coordinates,
+    //   distance,
+    //   speed,
+    // });
   };
 
   const onDurationAndCalorieUpdate = () => {
@@ -424,8 +475,8 @@ export const RecordContextProvider = ({children}: IProps) => {
         />,
       );
     }
-
     setFinishLoading(false);
+    clearAllState();
     return setAlertVisible(
       <CheckAlert
         check={{
@@ -434,7 +485,6 @@ export const RecordContextProvider = ({children}: IProps) => {
           description: '',
         }}
         checked={() => {
-          clearAllState();
           navigation.navigate('recordMain');
         }}
       />,
@@ -469,6 +519,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         tabBarVisible,
         alertManager,
         thumbnailRef,
+        finishLoading,
         initializeRecordStart,
         onPauseRecord,
         onStartRecord,
@@ -485,7 +536,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         clearAllState,
         changeImage,
       }}>
-      {finishLoading ? <SaveLoading /> : children}
+      {children}
     </RecordContext.Provider>
   );
 };

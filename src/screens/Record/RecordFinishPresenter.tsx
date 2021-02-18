@@ -7,6 +7,7 @@ import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/com
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import {Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import SaveLoading from '../../components/SaveLoading';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 

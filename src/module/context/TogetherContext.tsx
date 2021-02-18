@@ -189,13 +189,41 @@ export const TogetherContextProvider = ({children}: IProps) => {
     });
   };
 
+  const onChangeTitle = (e: string) => {
+    setCreateRoom({...createRoom, title: e});
+  };
+
+  const onChangeDescription = (e: string) => {
+    setCreateRoom({...createRoom, description: e});
+  };
+
+  const onChangeRecommend = (e: string) => {
+    setCreateRoom({...createRoom, recommend: e});
+  };
+
+  const onChangeNotice = (e: string) => {
+    setCreateRoom({...createRoom, notice: e});
+  };
+
+  const onChangePlace = (e: string) => {
+    setCreateRoom({...createRoom, togetherPlace: e});
+  };
+
+  const onChangeMaxMember = (e: string) => {
+    setCreateRoom({...createRoom, maxMember: e});
+  };
+
+  const onChangePrice = (e: string) => {
+    setCreateRoom({...createRoom, togetherPrice: e});
+  };
+
   const onChangeRoom = (e) => {
-    const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
-    const value = e.nativeEvent.text;
-    setCreateRoom({
-      ...createRoom,
-      [name]: value,
-    });
+    // const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
+    // const value = e.nativeEvent.text;
+    // setCreateRoom({
+    //   ...createRoom,
+    //   [name]: value,
+    // });
   };
 
   const pickTogetherDate = (date) => {
@@ -283,6 +311,13 @@ export const TogetherContextProvider = ({children}: IProps) => {
         getUserTogethers,
         show,
         getShow,
+        onChangeTitle,
+        onChangeDescription,
+        onChangeRecommend,
+        onChangeNotice,
+        onChangePlace,
+        onChangeMaxMember,
+        onChangePrice,
       }}>
       {children}
     </TogetherContext.Provider>

@@ -18,7 +18,6 @@ import StartContainer from '../screens/Start/StartContainer';
 import SignUpNameContainer from '../screens/Start/SignUp/SignUpNameContainer';
 import StartCategoryContainer from '../screens/Start/startCategory/StartCategoryContainer';
 import CreateAccountContainer from '../screens/Start/CreateAccount/CreateAccountContainer';
-import {RecordContextProvider} from '../module/context/RecordContext';
 import SocialNicknameContainer from '../screens/Start/SignUp/SocialNicknameContainer';
 import FacebookCreate from '../screens/Start/socialCreate/FacebookCreate';
 import GoogleCreate from '../screens/Start/socialCreate/GoogleCreate';

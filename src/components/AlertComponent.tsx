@@ -1,25 +1,56 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-
-const alerts = [];
+import {userApi} from '../module/api';
+import AlertContext from '../module/context/AlertContext';
+import {INotification} from '../module/type/notification';
+import {timeForToday} from '../module/common';
+import Loading from './Loading';
 
 export default () => {
-  return (
+  const [notification, setNotification] = useState<Array<INotification>>([]);
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
+  const [loading, setLoading] = useState(false);
+
+  const getNotification = async () => {
+    setLoading(true);
+    const {statusCode, data, message} = await userApi.getNotification();
+    if (statusCode !== 200) {
+      return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
+    }
+    setNotification(data);
+    setLoading(false);
+  };
+
+  const setNotificationRead = async () => {
+    await userApi.updateNotification();
+  };
+
+  useEffect(() => {
+    getNotification();
+
+    return () => {
+      setNotificationRead();
+    };
+  }, []);
+
+  return loading ? (
+    <Loading />
+  ) : (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {alerts.length > 0 ? (
-              alerts.map((item, idx) => (
-                <AlarmWrapper key={idx}>
+            {notification.length > 0 ? (
+              notification.map(({id, isRead, description, createdAt}) => (
+                <AlarmWrapper key={id}>
                   <AlarmMarkWrapper>
-                    <AlarmMark isNew={item.isNew}></AlarmMark>
+                    <AlarmMark isNew={isRead}></AlarmMark>
                   </AlarmMarkWrapper>
                   <AlarmBtnWrapper>
-                    <AlarmBtn onPress={() => {}}>
-                      <AlarmTitleText>{item.title}</AlarmTitleText>
+                    <AlarmBtn>
+                      <AlarmTitleText>{description}</AlarmTitleText>
                     </AlarmBtn>
-                    <AlarmDateText>{item.date}</AlarmDateText>
+                    <AlarmDateText>{timeForToday(createdAt)}</AlarmDateText>
                   </AlarmBtnWrapper>
                 </AlarmWrapper>
               ))
@@ -76,7 +107,7 @@ const AlarmMark = styled.View`
   width: 8px;
   height: 8px;
   border-radius: 50px;
-  background-color: ${({isNew}: {isNew: boolean}) => (isNew ? '#ff0d0d' : '#b5b5b5')};
+  background-color: ${({isNew}: {isNew: boolean}) => (!isNew ? '#ff0d0d' : '#b5b5b5')};
 `;
 
 const AlarmBtnWrapper = styled.View`
@@ -85,7 +116,7 @@ const AlarmBtnWrapper = styled.View`
   width: 80%;
 `;
 
-const AlarmBtn = styled.TouchableOpacity`
+const AlarmBtn = styled.View`
   width: 100%;
   padding: 5px 0;
   align-items: flex-start;

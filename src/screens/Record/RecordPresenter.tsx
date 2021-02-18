@@ -1,13 +1,27 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL, {Logger} from '@react-native-mapbox-gl/maps';
 import RecordContext from '../../module/context/RecordContext';
 import KeepAwake from 'react-native-keep-awake';
 import RecordUnits from '../../components/RecordUnits';
 import {MAPBOX_STYLE, MAPBOX_TOKEN} from '../../module/common';
+import {View} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
+
+Logger.setLogCallback((log) => {
+  const {message} = log;
+
+  // expected warnings - see https://github.com/mapbox/mapbox-gl-native/issues/15341#issuecomment-522889062
+  if (
+    message.match('Request failed due to a permanent error: Canceled') ||
+    message.match('Request failed due to a permanent error: Socket Closed')
+  ) {
+    return true;
+  }
+  return false;
+});
 
 interface IProps {
   navigation: any;
@@ -25,6 +39,41 @@ export default ({navigation}: IProps) => {
     finishRecording,
   }: any = useContext(RecordContext);
 
+  const getLastCoordinates = () => {
+    if (mapboxRecord.coordinates.length > 0) {
+      return mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1];
+    }
+
+    return [126.95041069, 37.54628322];
+  };
+
+  const renderAnnotations = () => {
+    return (
+      <MapboxGL.PointAnnotation key="pointAnnotation" id="pointAnnotation" coordinate={getLastCoordinates()}>
+        <View
+          style={{
+            height: 20,
+            width: 20,
+            backgroundColor: '#00cccc',
+            borderRadius: 50,
+            borderColor: '#fff',
+            borderWidth: 3,
+          }}
+        />
+      </MapboxGL.PointAnnotation>
+    );
+  };
+
+  const renderCamera = () => {
+    return (
+      <MapboxGL.Camera
+        zoomLevel={15}
+        centerCoordinate={getLastCoordinates()}
+        animationMode={'flyTo'}
+        animationDuration={0}></MapboxGL.Camera>
+    );
+  };
+
   return (
     <Container>
       {recordSetting.awake && <KeepAwake />}
@@ -32,12 +81,17 @@ export default ({navigation}: IProps) => {
         <ScrollWrapper>
           <Card>
             <MapboxGL.MapView style={{width: '100%', height: 300}} styleURL={MAPBOX_STYLE} localizeLabels={true}>
-              {mapboxRecord.coordinates.length > 0 && (
-                <MapboxGL.Camera
-                  zoomLevel={15}
-                  centerCoordinate={mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1]}
-                />
-              )}
+              {renderCamera()}
+              {renderAnnotations()}
+              {/*<MapboxGL.Camera zoomLevel={15} followUserLocation={true} />*/}
+              {/*<MapboxGL.UserLocation renderMode={'normal'} />*/}
+              {/*{mapboxRecord.coordinates.length > 0 && (*/}
+              {/*  <MapboxGL.Camera*/}
+              {/*    zoomLevel={15}*/}
+              {/*    // centerCoordinate={[126.87646021075436, 37.48213497621102]}*/}
+              {/*    // centerCoordinate={mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1]}*/}
+              {/*  />*/}
+              {/*)}*/}
             </MapboxGL.MapView>
 
             <RecordUnits
