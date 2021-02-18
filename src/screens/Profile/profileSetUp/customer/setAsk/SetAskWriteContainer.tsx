@@ -24,6 +24,14 @@ export default ({navigation}: IProps) => {
     requestLabel: '회원정보',
   });
 
+  const onChangeTitle = (e: string) => {
+    setAskData({...askData, requestTitle: e});
+  };
+
+  const onChangeDescription = (e: string) => {
+    setAskData({...askData, requestDescription: e});
+  };
+
   const onChangeAskData = (e) => {
     const name = e.target._internalFiberInstanceHandleDEV.memoizedProps.name;
     const value = e.nativeEvent.text;
@@ -72,6 +80,8 @@ export default ({navigation}: IProps) => {
       askDataRegister={askDataRegister}
       isActive={isActive}
       typeData={typeData}
+      onChangeTitle={onChangeTitle}
+      onChangeDescriptio={onChangeDescription}
     />
   );
 };
