@@ -72,7 +72,7 @@ export default ({navigation, feed}: IProps) => {
               <RecordWrapper>
                 <ActiveTextWrapper>
                   <ActiveLeftImgWrapper color={feed.activityColor}>
-                    <ActiveImage source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
+                    <ActiveImage source={{uri: `${BASE_URL}/${feed.activityImage}`}} resizeMode={'cover'} />
                   </ActiveLeftImgWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>

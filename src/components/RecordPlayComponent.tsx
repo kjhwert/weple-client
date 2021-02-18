@@ -55,7 +55,7 @@ export default ({navigation, route}: IProps) => {
             <RecordWrapper>
               <ActiveTextWrapper>
                 <ActiveLeftImgWrapper color={show.activityColor}>
-                  <ActiveImage source={{uri: `${BASE_URL}/${show.activityImage}`}} />
+                  <ActiveImage source={{uri: `${BASE_URL}/${show.activityImage}`}} resizeMode={'cover'} />
                 </ActiveLeftImgWrapper>
                 <ActiveBtnWrapper>
                   <ActiveNumber>{show.distance}</ActiveNumber>
