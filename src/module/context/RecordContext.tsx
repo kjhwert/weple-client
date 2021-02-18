@@ -22,7 +22,7 @@ import Geocoder from 'react-native-geocoding';
 // import Geolocation from 'react-native-geolocation-service';
 import Geolocation from '@react-native-community/geolocation';
 
-Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'auto'});
+Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'whenInUse'});
 
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
