@@ -1,9 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import {StartNextBtn} from '../../../components/CommonBtn';
 import RadioButtonRN from 'radio-buttons-react-native';
 import TogetherContext from '../../../module/context/TogetherContext';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {ACTIVE_BUTTON} from '../../../module/common';
 
 interface IProps {
   navigation: any;
@@ -12,7 +14,18 @@ interface IProps {
 }
 
 export default ({navigation, radioBoxData}: IProps) => {
-  const {createRoom, pickTogetherPublic}: any = useContext(TogetherContext);
+  const {createRoom, pickTogetherPublic, addTags, deleteTags}: any = useContext(TogetherContext);
+
+  const [tagText, setTagText] = useState('');
+
+  const onChangeText = (e: string) => {
+    const lastWord = e.substr(e.length - 1, 1);
+    if (!/\S/.test(lastWord)) {
+      addTags(`#${e.trim()}`);
+      return setTagText('');
+    }
+    setTagText(e);
+  };
 
   return (
     <Container>
@@ -40,7 +53,25 @@ export default ({navigation, radioBoxData}: IProps) => {
 
         <MethodTagWrapper>
           <MethodTagTitle>태그를 입력하세요.</MethodTagTitle>
-          <MethodTagInput multiline={true} textAlignVertical={'top'} />
+          <View style={{display: 'flex', width: '100%', padding: 5}}>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {createRoom.togetherTags.map((tag, idx) => (
+                <TouchableOpacity
+                  onPress={() => deleteTags(idx)}
+                  key={idx}
+                  style={{backgroundColor: ACTIVE_BUTTON, height: 25, marginRight: 5, marginBottom: 5, padding: 5}}>
+                  <Text style={{color: 'white'}}>{tag}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <MethodTagInput
+              value={tagText}
+              onChangeText={onChangeText}
+              multiline={true}
+              editable={true}
+              style={{width: '100%', height: 100, padding: 0}}
+            />
+          </View>
         </MethodTagWrapper>
       </ContainerCard>
       <StartNextBtn text={'다음'} StartNextPage={'togetherPostActivity'} navigation={navigation} isActive={true} />

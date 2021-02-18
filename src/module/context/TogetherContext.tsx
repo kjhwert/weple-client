@@ -240,6 +240,16 @@ export const TogetherContextProvider = ({children}: IProps) => {
     });
   };
 
+  const addTags = (e: string) => {
+    const newTags = createRoom.togetherTags.concat(e);
+    setCreateRoom({...createRoom, togetherTags: newTags});
+  };
+
+  const deleteTags = (idx: number) => {
+    const newTags = createRoom.togetherTags.filter((tag, index) => index !== idx);
+    setCreateRoom({...createRoom, togetherTags: newTags});
+  };
+
   const togetherOpen = async () => {
     const requestOpen = {
       title: createRoom.title,
@@ -256,6 +266,7 @@ export const TogetherContextProvider = ({children}: IProps) => {
       feed: Number(createRoom.feed),
       activity: createRoom.activity,
     };
+
     const {statusCode} = await togetherApi.userOpenRoom(requestOpen);
     if (statusCode !== 201) {
       return false;
@@ -318,6 +329,8 @@ export const TogetherContextProvider = ({children}: IProps) => {
         onChangePlace,
         onChangeMaxMember,
         onChangePrice,
+        addTags,
+        deleteTags,
       }}>
       {children}
     </TogetherContext.Provider>

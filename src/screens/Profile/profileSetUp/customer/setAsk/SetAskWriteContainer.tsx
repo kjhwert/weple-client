@@ -81,7 +81,7 @@ export default ({navigation}: IProps) => {
       isActive={isActive}
       typeData={typeData}
       onChangeTitle={onChangeTitle}
-      onChangeDescriptio={onChangeDescription}
+      onChangeDescription={onChangeDescription}
     />
   );
 };
