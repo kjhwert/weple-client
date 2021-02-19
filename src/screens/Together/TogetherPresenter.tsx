@@ -4,7 +4,7 @@ import {BASE_URL, togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {Image, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, Text, View} from 'react-native';
+import {Image, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, Text, View} from 'react-native';
 import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import SearchComponent from '../../components/SearchComponent';
@@ -75,9 +75,13 @@ export default ({
         id={`${together.id}`}
         coordinate={[together.lat, together.lon]}
         onSelected={() => setSelected(together)}>
-        <MapboxMarkWrapper color={together.activityColor}>
-          <Image source={{uri: `${BASE_URL}/${together.activityImage}`}} style={{width: 20, height: 20}} />
-        </MapboxMarkWrapper>
+        {/*<MapboxMarkWrapper color={together.activityColor}>*/}
+        {/*  <Image*/}
+        {/*    source={{uri: `${BASE_URL}/${together.activityImage}`}}*/}
+        {/*    style={{width: 20, height: 20}}*/}
+        {/*    resizeMode={'cover'}*/}
+        {/*  />*/}
+        {/*</MapboxMarkWrapper>*/}
       </MapboxGL.PointAnnotation>
     );
   };
@@ -198,9 +202,6 @@ export default ({
                 <MapboxGL.MapView style={{width: '100%', height: 400}} styleURL={MAPBOX_DEFAULT_STYLE}>
                   <MapboxGL.Camera zoomLevel={12} centerCoordinate={[togetherPaging.lon, togetherPaging.lat]} />
                   {togethers.map((together) => togetherAnnotation(together))}
-                  {/*{togethers.map((together) => (*/}
-                  {/*  */}
-                  {/*))}*/}
                 </MapboxGL.MapView>
                 {selected && (
                   <SelectedWrapper
