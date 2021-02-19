@@ -36,6 +36,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   coordinates: JSON.stringify(mapboxRecord.coordinates),
                   map: mapboxRecord.map,
                   music: mapboxRecord.music,
+                  images: mapboxRecord.images,
                 })}
               />
             </MapPlayWrapper>
