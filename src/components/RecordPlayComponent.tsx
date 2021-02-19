@@ -48,6 +48,7 @@ export default ({navigation, route}: IProps) => {
                 coordinates: show.coordinates,
                 map: {id: show.mapId, style: show.mapStyle},
                 music: {id: show.musicId, url: show.musicUrl},
+                images: show.images,
               })}
             />
           </MapPlayWrapper>

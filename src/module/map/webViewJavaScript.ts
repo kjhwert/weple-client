@@ -1,14 +1,34 @@
 import {IMusics} from '../type/music';
 import {IMapboxRecordMap} from '../type/recordContext';
-import {MAPBOX_TOKEN} from '../common';
+import {BASE_URL, MAPBOX_TOKEN} from '../common';
+import {IFeedImage} from '../type/feedContext';
 
 interface IWebViewJavaScriptCode {
   coordinates: string;
   music: IMusics;
   map: IMapboxRecordMap;
+  images: Array<IFeedImage>;
 }
 
-export const webViewJavaScriptCode = ({coordinates, music, map}: IWebViewJavaScriptCode) => {
+export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebViewJavaScriptCode) => {
+  const features = [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: [],
+      },
+    },
+  ];
+
+  images.map((image) => {
+    features.push({
+      type: 'Feature',
+      geometry: {type: 'Point', coordinates: [image.lat, image.lon]},
+      url: `${BASE_URL}/${image.img}`,
+    });
+  });
+
   return `
     (function () {
           var coordinates = ${coordinates};
@@ -27,18 +47,40 @@ export const webViewJavaScriptCode = ({coordinates, music, map}: IWebViewJavaScr
           var iPath = turf.linestring(coordinates);
           var geojson = {
               'type': 'FeatureCollection',
-              'features': [
-                  {
-                      'type': 'Feature',
-                      'geometry': {
-                          'type': 'LineString',
-                          'coordinates': []
-                      }
-                  }
-              ]
+              'features' : ${JSON.stringify(features)}
+              // 'features': [
+              //   {
+              //     'type': 'Feature',
+              //     'geometry': {
+              //       'type': 'LineString',
+              //       'coordinates': []
+              //     }
+              //   },
+              // ]
           };
+          
+          geojson.features.forEach(function (marker, index) {
+              if (index === 0) {
+                return;
+              }
+              // create a DOM element for the marker
+              var el = document.createElement('div');
+              el.className = 'marker';
+              el.style.backgroundImage = 'url(' + marker.url + ')';
+              el.style.width = '40px';
+              el.style.height = '40px';
+              el.style.backgroundSize = 'cover';
+              el.style.borderRadius = '50%';
+
+              // add marker to map
+              new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+          });
+          
           var iPathLength = turf.lineDistance(iPath, 'kilometers');
           var iPoint = turf.along(iPath, 0, 'miles');
+          
           map.on('load', function () {
               map.addSource("path", {
                   "type": "geojson",
