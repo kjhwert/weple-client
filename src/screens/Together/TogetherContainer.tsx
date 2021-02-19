@@ -133,6 +133,19 @@ export default ({navigation, route}: IProps) => {
     }
   };
 
+  const getTogethers = () => {
+    const {id} = togetherPaging;
+
+    switch (id) {
+      case 0:
+        return getLocation();
+      case 1:
+        return getFollower();
+      case 2:
+        return getEndSoon();
+    }
+  };
+
   useEffect(() => {
     getUserTogethers();
     getLocation();
@@ -152,6 +165,8 @@ export default ({navigation, route}: IProps) => {
       turnMapView={turnMapView}
       getMoreTogethers={getMoreTogethers}
       offMapView={offMapView}
+      getUserTogethers={getUserTogethers}
+      getTogethers={getTogethers}
     />
   );
 };

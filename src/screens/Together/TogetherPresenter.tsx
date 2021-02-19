@@ -4,7 +4,7 @@ import {BASE_URL, togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
 import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {Image, NativeScrollEvent, NativeSyntheticEvent, Text, View} from 'react-native';
+import {Image, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, Text, View} from 'react-native';
 import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import SearchComponent from '../../components/SearchComponent';
@@ -25,6 +25,8 @@ interface IProps {
   offMapView: () => void;
   sort: number;
   loading: boolean;
+  getUserTogethers: () => void;
+  getTogethers: () => void;
 }
 
 export default ({
@@ -40,13 +42,22 @@ export default ({
   offMapView,
   sort,
   loading,
+  getUserTogethers,
+  getTogethers,
 }: IProps) => {
   const {getTogetherThumbnail, getTogetherActivityImage, searchVisible, userTogethers}: any = useContext(
     TogetherContext,
   );
 
   const [selected, setSelected] = useState<ITogethers | null>(null);
+  const [refresh, setRefresh] = useState(false);
 
+  const onRefresh = async () => {
+    setRefresh(true);
+    await getUserTogethers();
+    await getTogethers();
+    setRefresh(false);
+  };
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - 200;
   };
@@ -75,7 +86,10 @@ export default ({
     <Container>
       {searchVisible && <SearchComponent navigation={navigation} stack={'together'} />}
       <ScrollContainer>
-        <ScrollWrapper onScroll={onScroll} scrollEventThrottle={60}>
+        <ScrollWrapper
+          onScroll={onScroll}
+          scrollEventThrottle={60}
+          refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
           <Card>
             {userTogethers.togetherCount > 0 && (
               <RecruitTogetherWrapper>
