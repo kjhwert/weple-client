@@ -44,7 +44,7 @@ export default ({navigation}: IProps) => {
       return mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1];
     }
 
-    return [126.95041069, 37.54628322];
+    return [126.97842453212644, 37.566629386346264];
   };
 
   const renderAnnotations = () => {
@@ -67,7 +67,7 @@ export default ({navigation}: IProps) => {
   const renderCamera = () => {
     return (
       <MapboxGL.Camera
-        zoomLevel={15}
+        zoomLevel={14}
         centerCoordinate={getLastCoordinates()}
         animationMode={'flyTo'}
         animationDuration={0}></MapboxGL.Camera>

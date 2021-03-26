@@ -14,7 +14,6 @@ import Loading from '../../components/Loading';
 interface IProps {
   navigation: any;
   events: Array<IEvent>;
-  userFollowAndReload: (userId: number) => void;
   newFollowers: {
     newFollowCount: number;
     followers: Array<IUserFollower>;

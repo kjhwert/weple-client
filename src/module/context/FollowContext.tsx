@@ -66,8 +66,6 @@ export const FollowContextProvider = ({children}: IProps) => {
     setCounts(data);
   };
 
-  console.log(user);
-
   const follow = async (userId: number) => {
     const {statusCode, message} = await userApi.follow(userId);
     if (statusCode !== 201) {

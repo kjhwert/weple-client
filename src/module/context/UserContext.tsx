@@ -32,6 +32,8 @@ export const UserContextProvider = ({children}: IProps) => {
     description: '',
   });
 
+  const [deviceToken, setDeviceToken] = useState('');
+
   const onChangeEmail = (text: string) => {
     setLoginUser({...loginUser, email: text});
   };
@@ -76,7 +78,7 @@ export const UserContextProvider = ({children}: IProps) => {
       showAlertFrame(responseLogin.message);
       return false;
     } else {
-      setLoginUserData(responseLogin);
+      await setLoginUserData(responseLogin);
       setLoading(false);
       return true;
     }
@@ -141,7 +143,6 @@ export const UserContextProvider = ({children}: IProps) => {
     socialUid: '',
     isSocialLogin: true,
     activityCategories: [0],
-    deviceToken: '',
   });
 
   const createUserData = (name: string, signUpData: any) => {
@@ -169,6 +170,17 @@ export const UserContextProvider = ({children}: IProps) => {
     });
   };
 
+  const [gender, setGender] = useState<null | string>(null);
+  const [age, setAge] = useState<null | number>(null);
+
+  const changeGender = (value: string) => {
+    setGender(value);
+  };
+
+  const changeAgeGroup = (value: number) => {
+    setAge(value);
+  };
+
   const join = async () => {
     const requestCreate = {
       email: createUser.email,
@@ -178,7 +190,9 @@ export const UserContextProvider = ({children}: IProps) => {
       socialUid: createUser.socialUid,
       isSocialLogin: createUser.isSocialLogin,
       activityCategories: createUser.activityCategories,
-      deviceToken: createUser.deviceToken,
+      deviceToken: deviceToken,
+      gender,
+      ageGroup: age,
     };
 
     const responseCreat = await userApi.create(requestCreate);
@@ -222,11 +236,7 @@ export const UserContextProvider = ({children}: IProps) => {
   };
 
   const getProfileUri = () => {
-    if (loginUser.image) {
-      return {uri: BASE_URL + '/' + loginUser.image};
-    } else {
-      return require('../../assets/bottomTab_profile.png');
-    }
+    return {uri: `${BASE_URL}/${loginUser.image ? loginUser.image : 'public/user/no_profile.png'}`};
   };
 
   const [alertFrame, setAlertFrame] = useState({
@@ -267,13 +277,14 @@ export const UserContextProvider = ({children}: IProps) => {
     return await userApi.follow(userId);
   };
 
-  const onRegister = (token) => {
-    setCreateUser({...createUser, deviceToken: token});
-    console.log('[App] onRegister: ', token);
+  const onRegister = async (token: string) => {
+    setDeviceToken(token);
+    if (loginUser.id !== 0) {
+      return await userApi.registerUserToken(token);
+    }
   };
 
   const onNotification = (notify) => {
-    console.log('[App] onNotification: ', notify);
     const options = {
       soundName: 'default',
       playSound: true,
@@ -294,7 +305,6 @@ export const UserContextProvider = ({children}: IProps) => {
     fcmServices.register(onRegister, onNotification, onOpenNotification);
     localNotificationService.configure(onOpenNotification);
     return () => {
-      console.log('[App] unRegister');
       fcmServices.unRegister();
       localNotificationService.unregister();
     };
@@ -326,6 +336,8 @@ export const UserContextProvider = ({children}: IProps) => {
         userFollow,
         onChangeEmail,
         onChangePassword,
+        changeGender,
+        changeAgeGroup,
       }}>
       {children}
     </UserContext.Provider>

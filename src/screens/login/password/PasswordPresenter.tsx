@@ -6,7 +6,7 @@ import {StartNextBtn} from '../../../components/CommonBtn';
 
 interface IProps {
   navigation: any;
-  userEmailChange: Function;
+  userEmailChange: (text: string) => void;
   userEmailValidation: Function;
   userEmail: any;
   isActive: boolean;
@@ -17,13 +17,10 @@ export default ({navigation, userEmailChange, userEmailValidation, userEmail, is
   return (
     <Container>
       <ContainerCard>
-        <InputBox
-          title={'이메일'}
-          placeholder="이메일을 입력하세요."
-          onChange={userEmailChange}
-          activeFlag={userEmail.activeFlag}
-          value={userEmail.data}
-        />
+        <InputBoxWrapper>
+          <InputBoxTitle>이메일</InputBoxTitle>
+          <InputBoxData placeholder={'이메일을 입력하세요.'} onChangeText={userEmailChange} autoFocus={true} />
+        </InputBoxWrapper>
       </ContainerCard>
 
       <StartNextBtn
@@ -41,4 +38,26 @@ export default ({navigation, userEmailChange, userEmailValidation, userEmail, is
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const InputBoxWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
+
+const InputBoxTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const InputBoxData = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: ${({borderColor}: {borderColor: string}) => (borderColor ? borderColor : '#acacac')};
+  font-size: 15px;
+  color: #6f6f6f;
 `;

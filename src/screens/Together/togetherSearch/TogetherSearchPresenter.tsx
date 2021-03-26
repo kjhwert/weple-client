@@ -59,7 +59,12 @@ export default ({navigation}: IProps) => {
             <Loading />
           ) : isMapview ? (
             <>
-              <MapboxGL.MapView style={{width: '100%', height: '100%'}} styleURL={MAPBOX_DEFAULT_STYLE}>
+              <MapboxGL.MapView
+                style={{width: '100%', height: '100%'}}
+                styleURL={MAPBOX_DEFAULT_STYLE}
+                zoomEnabled={false}
+                scrollEnabled={false}
+                rotateEnabled={false}>
                 <MapboxGL.Camera zoomLevel={12} centerCoordinate={[searchPagination.lon, searchPagination.lat]} />
                 {searchIndex.map((together: ITogethers) => (
                   <MapboxGL.PointAnnotation
@@ -69,9 +74,9 @@ export default ({navigation}: IProps) => {
                     onSelected={() => {
                       setSelected(together);
                     }}>
-                    <MapboxMarkWrapper color={together.activityColor}>
-                      <Image source={{uri: `${BASE_URL}/${together.activityImage}`}} style={{width: 20, height: 20}} />
-                    </MapboxMarkWrapper>
+                    {/*<MapboxMarkWrapper color={together.activityColor}>*/}
+                    {/*  <Image source={{uri: `${BASE_URL}/${together.activityImage}`}} style={{width: 20, height: 20}} />*/}
+                    {/*</MapboxMarkWrapper>*/}
                   </MapboxGL.PointAnnotation>
                 ))}
               </MapboxGL.MapView>
@@ -256,14 +261,13 @@ const RecruitImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 50%;
   align-items: center;
   justify-content: center;
   background-color: ${({backgroundColor}: {backgroundColor: string}) =>
     backgroundColor ? backgroundColor : '#bcbcbc'};
   position: absolute;
   margin-top: 10px;
-  padding: 2px;
+  padding: 5px 10px;
 `;
 
 const RecordText = styled.Text`
@@ -274,8 +278,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 22px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

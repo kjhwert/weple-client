@@ -7,7 +7,6 @@ import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/com
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import {Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import SaveLoading from '../../components/SaveLoading';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -235,13 +234,13 @@ const SetUpTypeWrapper = styled.View`
 `;
 
 const SetUpTypeText = styled.Text`
-  font-size: 12px;
+  font-size: 13px;
   margin-right: 10px;
   color: #b5b5b5;
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
   color: #333333;
 `;

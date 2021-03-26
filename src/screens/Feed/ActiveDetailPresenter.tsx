@@ -76,7 +76,7 @@ export default ({navigation, feed}: IProps) => {
                   </ActiveLeftImgWrapper>
                   <ActiveBtnWrapper>
                     <ActiveBtn>
-                      <KmIconImg source={require('../../assets/icon_ruler.png')} />
+                      <KmIconImg source={require('../../assets/icon_ruler.png')} resizeMode="cover" />
                     </ActiveBtn>
                     <ActiveNumber>{feed.distance}</ActiveNumber>
                     <ActiveText>Kilometer</ActiveText>
@@ -93,7 +93,7 @@ export default ({navigation, feed}: IProps) => {
                       <HeartbeatIconImg source={require('../../assets/icon_heartbeat.png')} />
                     </ActiveBtn>
                     <FollowingNumber>{feed.calorie}</FollowingNumber>
-                    <ActiveText>Calorie</ActiveText>
+                    <ActiveText>Kcal</ActiveText>
                   </ActiveBtnWrapper>
                 </ActiveTextWrapper>
               </RecordWrapper>
@@ -197,26 +197,7 @@ export default ({navigation, feed}: IProps) => {
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
 
-            <RecordLastWrapper>
-              <ActiveTextWrapper>
-                <ActiveLastImgWrapper color={feed.activityColor}>
-                  <ActiveLastImage source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
-                </ActiveLastImgWrapper>
-                <ActiveLastWrapper>
-                  <ActiveLastNumber>{feed.distance}</ActiveLastNumber>
-                  <ActiveLastText>Kilometer</ActiveLastText>
-                </ActiveLastWrapper>
-
-                <ActiveLastWrapper>
-                  <ActiveLastNumber>{secondsToTimeFormat(feed.duration)}</ActiveLastNumber>
-                  <ActiveLastText>Duration</ActiveLastText>
-                </ActiveLastWrapper>
-                <ActiveLastWrapper>
-                  <ActiveLastNumber>{feed.calorie}</ActiveLastNumber>
-                  <ActiveLastText>Calorie</ActiveLastText>
-                </ActiveLastWrapper>
-              </ActiveTextWrapper>
-            </RecordLastWrapper>
+            <View style={{margin: 10}} />
           </Card>
         </ScrollWrapper>
       </ScrollContainer>

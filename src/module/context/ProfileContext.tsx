@@ -23,7 +23,7 @@ interface IPagination {
 
 export const ProfileContextProvider = ({children}: IProps) => {
   const {setWarningAlertVisible}: any = useContext(AlertContext);
-  const {userFollow}: any = useContext(UserContext);
+  const {userFollow, loginUser}: any = useContext(UserContext);
   const [user, setUser] = useState<IProfileUserInfo | null>(null);
   const [feeds, setFeeds] = useState<Array<IFeed>>([]);
   const [togethers, setTogethers] = useState<Array<ITogethers>>([]);
@@ -38,10 +38,11 @@ export const ProfileContextProvider = ({children}: IProps) => {
   const [userStatistics, setUserStatistics] = useState([]);
 
   const getUserStatistics = async () => {
+    let userId = user?.user.id;
     if (!user) {
-      return;
+      userId = loginUser.id;
     }
-    const {statusCode, message, data} = await feedApi.userStatistics(user.user.id);
+    const {statusCode, message, data} = await feedApi.userStatistics(userId);
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
     }

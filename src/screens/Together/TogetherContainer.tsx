@@ -5,6 +5,8 @@ import {getLatestLocation} from 'react-native-location';
 import AlertContext from '../../module/context/AlertContext';
 import {ITogethers} from '../../module/type/together';
 import TogetherContext from '../../module/context/TogetherContext';
+import Geolocation from '@react-native-community/geolocation';
+import {IGeoLocation} from '../../module/context/RecordContext';
 
 interface IProps {
   navigation: any;
@@ -35,14 +37,8 @@ export default ({navigation, route}: IProps) => {
     setIsMapView(false);
   };
 
-  const getLocation = async () => {
-    setSort(0);
-    setLoading(true);
-    const coordinates = await getLatestLocation();
-    if (!coordinates) {
-      return setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.');
-    }
-    const {latitude: lat, longitude: lon} = coordinates;
+  const getCoordinates = async ({coords}: IGeoLocation) => {
+    const {latitude: lat, longitude: lon} = coords;
     // const lat = 37.546474;
     // const lon = 126.949941;
     const {statusCode, message, data, paging} = await togetherApi.locationList(lat, lon, 1);
@@ -52,6 +48,17 @@ export default ({navigation, route}: IProps) => {
     setTogethers(data);
     setTogetherPaging({...togetherPaging, id: 0, page: 1, lat, lon, hasNextPage: paging.hasNextPage});
     setLoading(false);
+  };
+
+  const getLocation = async () => {
+    setSort(0);
+    setLoading(true);
+
+    await Geolocation.getCurrentPosition(
+      (res) => getCoordinates(res),
+      (err) => setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.'),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
   };
 
   const getMoreLocation = async () => {

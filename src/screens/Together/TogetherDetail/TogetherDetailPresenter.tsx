@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import {getComma, getTotalTime} from '../../../components/CommonTime';
 import TogetherContext from '../../../module/context/TogetherContext';
 import {IShowTogether} from '../../../module/type/together';
+import {timeDifferentFromNow} from '../../../module/common';
 
 interface IProps {
   navigation: any;
@@ -113,14 +114,16 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                     </JoinButton>
                   </JoinBtnWrapper>
                 ) : (
-                  <CancelBtnWrapper>
-                    <CancelButton
-                      onPress={() => {
-                        togetherOutOf();
-                      }}>
-                      <CancelText>모임 나가기</CancelText>
-                    </CancelButton>
-                  </CancelBtnWrapper>
+                  timeDifferentFromNow(show.together.togetherDate) > 180 && (
+                    <CancelBtnWrapper>
+                      <CancelButton
+                        onPress={() => {
+                          togetherOutOf();
+                        }}>
+                        <CancelText>모임 나가기</CancelText>
+                      </CancelButton>
+                    </CancelBtnWrapper>
+                  )
                 ))}
             </JoinWrapper>
           </ContainerCard>

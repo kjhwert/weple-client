@@ -46,6 +46,16 @@
 				<string>kakao1c299398562a2f16149cb6fc67c19525</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.ttamna</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wepleapp</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

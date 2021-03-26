@@ -23,6 +23,7 @@ import FacebookCreate from '../screens/Start/socialCreate/FacebookCreate';
 import GoogleCreate from '../screens/Start/socialCreate/GoogleCreate';
 import KakaoCreate from '../screens/Start/socialCreate/KakaoCreate';
 import {Text, View} from 'react-native';
+import UserAdditionalContainer from '../screens/Start/UserAdditionalContainer';
 
 const Stack = createStackNavigator();
 
@@ -109,6 +110,13 @@ export default () => {
         }}
         name="signUpName"
         component={SignUpNameContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <Text style={{textAlign: 'center'}}>추가 정보</Text>,
+        }}
+        name="additional"
+        component={UserAdditionalContainer}
       />
       <Stack.Screen
         options={{

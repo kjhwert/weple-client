@@ -18,9 +18,9 @@
 		4A6A9FC164B1ED4D31FC3F74 /* libPods-ttamna-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 158BC7A8E2F03EF61A9A7E5F /* libPods-ttamna-tvOS.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D2C1BAFBDD71698454024E39 /* libPods-ttamna-ttamnaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF0421BB831EAACBD245DF2 /* libPods-ttamna-ttamnaTests.a */; };
-		E32894D125C11B23006CE3C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E32894D025C11B23006CE3C3 /* GoogleService-Info.plist */; };
 		EE01634ECD5AA6DD18340C6F /* libPods-ttamna-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F1DA310CEC2FA75C1DB2C60 /* libPods-ttamna-tvOSTests.a */; };
 		FB18B709257F3952004761E2 /* relieve.db in Resources */ = {isa = PBXBuildFile; fileRef = FB18B708257F3952004761E2 /* relieve.db */; };
+		FB59C30925E5E46E00C8BCD0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB59C30825E5E46E00C8BCD0 /* GoogleService-Info.plist */; };
 		FB866CDD258C849400D1D571 /* void.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB866CDC258C849400D1D571 /* void.swift */; };
 		FCE6759902D337C9C2A116D6 /* libPods-ttamna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D7F9AA940E7530597E44C0 /* libPods-ttamna.a */; };
 /* End PBXBuildFile section */
@@ -65,10 +65,10 @@
 		A88C1EE71570CCF14C25780F /* Pods-ttamna-ttamnaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-ttamnaTests.release.xcconfig"; path = "Target Support Files/Pods-ttamna-ttamnaTests/Pods-ttamna-ttamnaTests.release.xcconfig"; sourceTree = "<group>"; };
 		C7D7F9AA940E7530597E44C0 /* libPods-ttamna.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ttamna.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20644AFCAF05E8A68E1796D /* Pods-ttamna-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-ttamna-tvOSTests/Pods-ttamna-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E32894D025C11B23006CE3C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FB18B708257F3952004761E2 /* relieve.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = relieve.db; path = ttamna/www/relieve.db; sourceTree = "<group>"; };
+		FB59C30825E5E46E00C8BCD0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FB866CDC258C849400D1D571 /* void.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = void.swift; sourceTree = "<group>"; };
 		FB866CE2258C84DD00D1D571 /* ttamna-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ttamna-Bridging-Header.h"; sourceTree = "<group>"; };
 		FC88108B1D18E0DC4ED1F74F /* Pods-ttamna-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttamna-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ttamna-tvOS/Pods-ttamna-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -131,10 +131,10 @@
 		13B07FAE1A68108700A75B9A /* ttamna */ = {
 			isa = PBXGroup;
 			children = (
+				FB59C30825E5E46E00C8BCD0 /* GoogleService-Info.plist */,
 				FB18B708257F3952004761E2 /* relieve.db */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				E32894D025C11B23006CE3C3 /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -353,7 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				E32894D125C11B23006CE3C3 /* GoogleService-Info.plist in Resources */,
+				FB59C30925E5E46E00C8BCD0 /* GoogleService-Info.plist in Resources */,
 				FB18B709257F3952004761E2 /* relieve.db in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -744,7 +744,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.weple;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttamna;
 				PRODUCT_NAME = ttamna;
 				SWIFT_OBJC_BRIDGING_HEADER = "ttamna-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -763,12 +763,13 @@
 				DEVELOPMENT_TEAM = 596XBHR953;
 				INFOPLIST_FILE = ttamna/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.weple;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttamna;
 				PRODUCT_NAME = ttamna;
 				SWIFT_OBJC_BRIDGING_HEADER = "ttamna-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

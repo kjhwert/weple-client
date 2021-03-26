@@ -51,10 +51,10 @@ export default () => {
         cardStyle: {backgroundColor: '#f4f5fa'},
       })}>
       <Stack.Screen
-        options={({route, navigation}) => ({
+        options={(props) => ({
           headerTitle: '프로필',
           headerLeft: () => <View />,
-          headerRight: () => <ProfileSetupBtn navigation={navigation} route={route} />,
+          headerRight: () => <ProfileSetupBtn {...props} />,
         })}
         name="profileActiveMain"
         component={ProfileActiveContainer}

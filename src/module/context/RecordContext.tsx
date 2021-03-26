@@ -21,6 +21,8 @@ import {captureRef} from 'react-native-view-shot';
 import Geocoder from 'react-native-geocoding';
 // import Geolocation from 'react-native-geolocation-service';
 import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-community/async-storage';
+import {act} from 'react-test-renderer';
 
 Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'whenInUse'});
 
@@ -33,7 +35,7 @@ interface IProps {
   children: ReactNode;
 }
 
-interface IGeoLocation {
+export interface IGeoLocation {
   coords: {
     latitude: number;
     longitude: number;
@@ -54,19 +56,6 @@ const alertManagerInitialState = {
 };
 
 const tabBarVisibleInitialState = true;
-
-const recordSettingInitialState = {
-  isInit: false,
-  isStart: false,
-  awake: true,
-  activity: {
-    id: 1,
-    name: '싸이클링',
-    caloriesPerMinute: 7,
-  },
-  startDate: null,
-  endDate: null,
-};
 
 const recordInitialState = {
   duration: 0,
@@ -92,12 +81,25 @@ const mapboxRecordInitialState = {
   },
   images: [],
 };
+const recordSettingInitialState = {
+  isInit: false,
+  isStart: false,
+  awake: true,
+  startDate: null,
+  endDate: null,
+  activity: {
+    id: 1,
+    name: '싸이클링',
+    caloriesPerMinute: 7,
+  },
+};
 
 export const RecordContextProvider = ({children}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
   const [alertManager, setAlertManager] = useState(alertManagerInitialState);
   const [tabBarVisible, setTabBarVisible] = useState(tabBarVisibleInitialState);
   const [recordSetting, setRecordSetting] = useState<IRecordSetting>(recordSettingInitialState);
+
   const timer: any = useRef(null);
   const webViewRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -121,6 +123,13 @@ export const RecordContextProvider = ({children}: IProps) => {
       ...alertManager,
       created: !alertManager.created,
     });
+  };
+
+  const getActivityStorage = async () => {
+    const activity = await AsyncStorage.getItem('@activity');
+    if (activity) {
+      setRecordSetting({...recordSetting, activity: JSON.parse(activity)});
+    }
   };
 
   const onChangeActivityUnSelectedAlert = () => {
@@ -234,7 +243,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     webViewRef.current.reload();
   };
 
-  const setActivityCategory = ({id, name, caloriesPerMinute}: ISetActivityCategory) => {
+  const setActivityCategory = async ({id, name, caloriesPerMinute}: ISetActivityCategory) => {
     const calorie = Math.floor(record.duration / MINUTE) * caloriesPerMinute;
 
     setRecordSetting({
@@ -242,6 +251,7 @@ export const RecordContextProvider = ({children}: IProps) => {
       activity: {id, name, caloriesPerMinute},
     });
     setRecord({...record, calorie});
+    await AsyncStorage.setItem('@activity', JSON.stringify({id, name, caloriesPerMinute}));
   };
 
   const toggleAwakeSwitch = () => {
@@ -492,6 +502,7 @@ export const RecordContextProvider = ({children}: IProps) => {
   };
 
   useEffect(() => {
+    getActivityStorage();
     if (recordSetting.isStart) {
       timer.current = setInterval(() => updateRecordOnInterval(), 1000);
     }
@@ -499,7 +510,9 @@ export const RecordContextProvider = ({children}: IProps) => {
       clearInterval(timer.current);
     };
   }, [
-    recordSetting,
+    recordSetting.isInit,
+    recordSetting.isStart,
+    recordSetting.awake,
     record,
     mapboxRecord.distance,
     mapboxRecord.speed,

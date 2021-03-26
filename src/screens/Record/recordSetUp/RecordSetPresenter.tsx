@@ -19,9 +19,7 @@ export default ({navigation}: IProps) => {
             }}>
             <SetUpListText>활동</SetUpListText>
             <SetUpActiveText>
-              {!recordSetting.activity.name
-                ? '활동을 선택하세요'
-                : recordSetting.activity.name}
+              {!recordSetting.activity.name ? '활동을 선택하세요' : recordSetting.activity.name}
             </SetUpActiveText>
             <MoreImage source={require('../../../assets/set_more.png')} />
           </SetBtn>
@@ -30,9 +28,7 @@ export default ({navigation}: IProps) => {
         <AlarmSetWrapper>
           <AlarmSetTextWrapper>
             <AlarmSetTitle>화면 계속 켜두기</AlarmSetTitle>
-            <AlarmSetContent>
-              기록하는 중 화면이 꺼지는 것을 방지합니다.
-            </AlarmSetContent>
+            <AlarmSetContent>기록하는 중 화면이 꺼지는 것을 방지합니다.</AlarmSetContent>
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
@@ -77,14 +73,14 @@ const SetBtn = styled.TouchableOpacity`
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
   color: #333333;
   width: 34%;
 `;
 
 const SetUpActiveText = styled.Text`
-  font-size: 11px;
+  font-size: 13px;
   text-align: right;
   color: #7f7f7f;
   width: 60%;
@@ -118,7 +114,7 @@ const AlarmSetTextWrapper = styled.View`
 
 const AlarmSetTitle = styled.Text`
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -126,6 +122,6 @@ const AlarmSetTitle = styled.Text`
 
 const AlarmSetContent = styled.Text`
   width: 100%;
-  font-size: 11px;
+  font-size: 12px;
   color: #7f7f7f;
 `;

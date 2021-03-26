@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import ProfileContext from '../module/context/ProfileContext';
 import {IUserStatistics} from '../module/type/feed';
+import {Text} from 'react-native';
 
 export default () => {
   const {userStatistics, getUserStatistics}: any = useContext(ProfileContext);
@@ -15,16 +16,20 @@ export default () => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {userStatistics.map(({activityName, calorie, distance, duration}: IUserStatistics) => (
-              <StatisticWrapper key={activityName}>
-                <StatisticTitle>{activityName}</StatisticTitle>
-                <ActiveWrapper>
-                  <KmTotalStatistic>{distance} km</KmTotalStatistic>
-                  <MinTotalStatistic>{Math.floor(Number(duration) / 60)} 분</MinTotalStatistic>
-                  <CalTotalStatistic>{calorie} cal</CalTotalStatistic>
-                </ActiveWrapper>
-              </StatisticWrapper>
-            ))}
+            {userStatistics.length !== 0 ? (
+              userStatistics.map(({activityName, calorie, distance, duration}: IUserStatistics) => (
+                <StatisticWrapper key={activityName}>
+                  <StatisticTitle>{activityName}</StatisticTitle>
+                  <ActiveWrapper>
+                    <KmTotalStatistic>{distance} km</KmTotalStatistic>
+                    <MinTotalStatistic>{Math.floor(Number(duration) / 60)} 분</MinTotalStatistic>
+                    <CalTotalStatistic>{calorie} cal</CalTotalStatistic>
+                  </ActiveWrapper>
+                </StatisticWrapper>
+              ))
+            ) : (
+              <Text>데이터가 없습니다.</Text>
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>

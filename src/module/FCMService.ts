@@ -25,7 +25,6 @@ class FCMService {
         if (enabled) {
           // User has permissions
           this.enabled = true;
-          console.log('permission allowed : ', this.enabled);
           this.getToken(onRegister);
         } else {
           // User doesn't have permission
@@ -54,7 +53,6 @@ class FCMService {
   };
 
   requestPermission = (onRegister) => {
-    console.log('enabled : ', this.enabled);
     messaging()
       .requestPermission()
       .then((enable) => {
@@ -104,8 +102,6 @@ class FCMService {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
-        console.log('[FCMService] getInitialNotification Notification caused app to open');
-
         if (remoteMessage) {
           const notification = remoteMessage.notification;
           onOpenNotification(notification);

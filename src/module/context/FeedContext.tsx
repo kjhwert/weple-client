@@ -6,6 +6,8 @@ import {IFeed} from '../type/feed';
 import {getLatestLocation} from 'react-native-location';
 import UserContext from './UserContext';
 import {IShowFeed} from '../type/feedContext';
+import Geolocation from '@react-native-community/geolocation';
+import {IGeoLocation} from './RecordContext';
 
 const FeedContext = createContext({});
 
@@ -131,12 +133,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     const {lat, lon, page: unUsedPage, ...sortOrder} = pagination;
 
     const page = 1;
-    const {
-      statusCode,
-      message,
-      data,
-      paging: {hasNextPage},
-    } = await feedApi.index({...sortOrder, sort: 'createdAt', page});
+    const {statusCode, message, data, paging} = await feedApi.index({...sortOrder, sort: 'createdAt', page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -145,7 +142,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     const indexData = data.map((feed: any) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
-    setPagination({...pagination, hasNextPage});
+    setPagination({...pagination, hasNextPage: paging.hasNextPage});
     setIndex(indexData);
     setIndexLoading(false);
   };
@@ -172,26 +169,12 @@ export const FeedContextProvider = ({children}: IProps) => {
     setIndex(index.concat(indexData));
   };
 
-  const getLocationIndex = async () => {
-    setIndexLoading(true);
+  const getCoordinates = async ({coords}: IGeoLocation) => {
+    const {latitude: lat, longitude: lon} = coords;
     const {nickName} = pagination;
-    let lat = 0;
-    let lon = 0;
-    try {
-      const {latitude, longitude}: any = await getLatestLocation();
-      lat = latitude;
-      lon = longitude;
-    } catch (e) {
-      return setWarningAlertVisible('데이터 조회에 실패했습니다.', '현재 위치를 가져올 수 없습니다.');
-    }
     const page = 1;
 
-    const {
-      statusCode,
-      message,
-      data,
-      paging: {hasNextPage},
-    } = await feedApi.locationIndex({page, lon, lat, nickName});
+    const {statusCode, message, data, paging} = await feedApi.locationIndex({page, lon, lat, nickName});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -201,9 +184,18 @@ export const FeedContextProvider = ({children}: IProps) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
 
-    setPagination({...pagination, hasNextPage});
+    setPagination({...pagination, hasNextPage: paging.hasNextPage});
     setIndex(indexData);
     setIndexLoading(false);
+  };
+
+  const getLocationIndex = async () => {
+    setIndexLoading(true);
+    await Geolocation.getCurrentPosition(
+      (res) => getCoordinates(res),
+      (err) => setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.'),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
   };
 
   const getLocationMoreIndex = async (page: number) => {
@@ -235,12 +227,7 @@ export const FeedContextProvider = ({children}: IProps) => {
 
     const page = 1;
 
-    const {
-      statusCode,
-      message,
-      data,
-      paging: {hasNextPage},
-    } = await feedApi.index({order, nickName, sort: 'likeCount', page});
+    const {statusCode, message, data, paging} = await feedApi.index({order, nickName, sort: 'likeCount', page});
 
     if (statusCode !== 200) {
       return setWarningAlertVisible('데이터 조회에 실패했습니다.', message);
@@ -249,7 +236,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     const indexData = data.map((feed: any) => {
       return {...feed, commentCount: Number(feed.commentCount), likeCount: Number(feed.likeCount)};
     });
-    setPagination({...pagination, hasNextPage});
+    setPagination({...pagination, hasNextPage: paging.hasNextPage});
     setIndex(indexData);
     setIndexLoading(false);
   };

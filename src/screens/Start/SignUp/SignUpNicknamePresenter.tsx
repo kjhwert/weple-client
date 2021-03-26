@@ -32,9 +32,7 @@ export default ({
       {alertFrame.showAlert && alertFrame.usable && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertCheck_icon.png')}
-            />
+            <AlertImage source={require('../../../assets/alertCheck_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{'사용할 수 있는 닉네임입니다.'}</AlertTitleText>
           <AlertContentText>{'계속 진행하세요.'}</AlertContentText>
@@ -49,9 +47,7 @@ export default ({
       {alertFrame.showAlert && !alertFrame.usable && (
         <AlertWrapper>
           <AlertImageWrapper>
-            <AlertImage
-              source={require('../../../assets/alertWarn_icon.png')}
-            />
+            <AlertImage source={require('../../../assets/alertWarn_icon.png')} />
           </AlertImageWrapper>
           <AlertTitleText>{'사용하실 수 없는 닉네임입니다.'}</AlertTitleText>
           <AlertContentText>{'다른 닉네임을 사용하세요.'}</AlertContentText>
@@ -82,7 +78,7 @@ export default ({
         </SignUpWrapper>
       </ContainerCard>
       <StartNextBtn
-        StartNextPage={'signUpName'}
+        StartNextPage={'additional'}
         text={'다음'}
         navigation={navigation}
         isActive={isActive}

@@ -124,7 +124,11 @@ export default (props: IProps) => {
   };
 
   useEffect(() => {
-    init();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      init();
+    });
+
+    return unsubscribe;
   }, []);
 
   return !user ? (

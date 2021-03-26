@@ -13,7 +13,7 @@ export const INACTIVE_BUTTON = '#bfbfbf';
 export const INACTIVE_TEXT = '#6f6f6f';
 
 export const MINUTE = 60;
-export const DURATION_TIME = 5;
+export const DURATION_TIME = 2;
 
 export const getDistanceWithSpeedAndTime = (speed: number, time: number) => {
   /**
@@ -127,4 +127,11 @@ export const timeForToday = (value: string) => {
   }
 
   return `${Math.floor(betweenTimeDay / 365)}년전`;
+};
+
+export const timeDifferentFromNow = (value: Date) => {
+  const today = new Date();
+  const timeValue = new Date(value);
+
+  return Math.floor((timeValue.getTime() - today.getTime()) / 1000 / 60);
 };

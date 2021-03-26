@@ -199,7 +199,12 @@ export default ({
 
             {isMapView ? (
               <>
-                <MapboxGL.MapView style={{width: '100%', height: 400}} styleURL={MAPBOX_DEFAULT_STYLE}>
+                <MapboxGL.MapView
+                  style={{width: '100%', height: 400}}
+                  styleURL={MAPBOX_DEFAULT_STYLE}
+                  zoomEnabled={false}
+                  scrollEnabled={false}
+                  rotateEnabled={false}>
                   <MapboxGL.Camera zoomLevel={12} centerCoordinate={[togetherPaging.lon, togetherPaging.lat]} />
                   {togethers.map((together) => togetherAnnotation(together))}
                 </MapboxGL.MapView>

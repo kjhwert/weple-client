@@ -19,12 +19,11 @@ export default ({navigation}: IProps) => {
     activeFlag: 0,
   });
 
-  const userEmailChange = (e) => {
-    const value = e.nativeEvent.text;
+  const userEmailChange = (text: string) => {
     setUserEmail({
       ...userEmail,
-      data: value,
-      activeFlag: value.length,
+      data: text,
+      activeFlag: text.length,
     });
   };
 

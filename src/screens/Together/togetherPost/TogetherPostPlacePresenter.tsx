@@ -72,14 +72,6 @@ export default ({
                   value={createRoom.togetherPlace}
                 />
               </InputBoxWrap>
-              {/*<InputBox2*/}
-              {/*  title={'시작할 위치를 입력해주세요. [필수]'}*/}
-              {/*  placeholder="예&#41; 서울역 3번출구 앞"*/}
-              {/*  name="togetherPlace"*/}
-              {/*  value={createRoom.togetherPlace}*/}
-              {/*  onChange={onChangeRoom}*/}
-              {/*  activeFlag={activeFlag.togetherPlaceFlag}*/}
-              {/*/>*/}
               <InputBoxWrap>
                 <InputBoxTitleData>최대 인원을 입력해주세요. [필수]</InputBoxTitleData>
                 <InputBoxDescriptionData
@@ -88,14 +80,6 @@ export default ({
                   value={createRoom.maxMember}
                 />
               </InputBoxWrap>
-              {/*<InputBox2*/}
-              {/*  title={'최대 인원을 입력해주세요. [필수]'}*/}
-              {/*  placeholder="숫자를 입력해주세요."*/}
-              {/*  name="maxMember"*/}
-              {/*  value={createRoom.maxMember}*/}
-              {/*  onChange={onChangeRoom}*/}
-              {/*  activeFlag={activeFlag.maxMemberFlag}*/}
-              {/*/>*/}
               <InputBoxWrap>
                 <InputBoxTitleData>참가비를 입력해주세요. [선택]</InputBoxTitleData>
                 <InputBoxDescriptionData
@@ -104,14 +88,6 @@ export default ({
                   value={createRoom.togetherPrice}
                 />
               </InputBoxWrap>
-              {/*<InputBox2*/}
-              {/*  title={'참가비를 입력해주세요. [선택]'}*/}
-              {/*  placeholder="원단위로 입력해주세요."*/}
-              {/*  name="togetherPrice"*/}
-              {/*  value={createRoom.togetherPrice}*/}
-              {/*  onChange={onChangeRoom}*/}
-              {/*  activeFlag={activeFlag.togetherPriceFlag}*/}
-              {/*/>*/}
               <PlaceInfoText>참가비는 만나서 각자 사용할 예상 금액입니다.</PlaceInfoText>
             </PlaceWrapper>
           </ContainerCard>

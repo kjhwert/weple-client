@@ -23,7 +23,7 @@ export default () => {
 
   return (
     <View style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-      <Text>태그 이올시다</Text>
+      <Text>태그</Text>
       <View style={{display: 'flex', width: '100%', borderColor: 'red', borderWidth: 1, padding: 5}}>
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {tags.map((tag, idx) => (

@@ -42,7 +42,7 @@ export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebVie
               center: coordinates[0],
               pitch: 60, // pitch in degrees
               bearing: -60, // bearing in degrees
-              zoom: 17
+              zoom: 15
           });
           var iPath = turf.linestring(coordinates);
           var geojson = {

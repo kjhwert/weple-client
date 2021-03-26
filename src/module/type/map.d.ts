@@ -8,4 +8,5 @@ export interface IMaps {
   id: number;
   thumbnail: string;
   style: string;
+  name: string;
 }

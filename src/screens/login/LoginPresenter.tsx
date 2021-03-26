@@ -170,7 +170,7 @@ const SignInWrapper = styled.View`
 `;
 
 const SignInTitle = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: #6f6f6f;
   font-weight: bold;
   text-align: left;
@@ -178,6 +178,7 @@ const SignInTitle = styled.Text`
 `;
 
 const LoginInput = styled.TextInput`
+  font-size: 14px;
   padding: 5px 10px;
   border-bottom-width: 1px;
   border-color: ${({borderColor}: {borderColor: string}) => (borderColor ? '#007bf1' : '#babfc7')};
@@ -206,6 +207,7 @@ const PasswordBtn = styled.TouchableOpacity`
   position: absolute;
   right: 0;
   bottom: 30px;
+  z-index: 20;
 `;
 
 const PasswordText = styled.Text`

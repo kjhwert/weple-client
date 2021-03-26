@@ -28,7 +28,7 @@ export default ({navigation, userList}: IProps) => {
                 <RecruitWrapperBlur key={idx}>
                   <RecruitImageWrapper
                     onPress={() => {
-                      navigation.navigate('togetherMyDetail', {id: item.id});
+                      navigation.navigate('togetherDetail', {id: item.id});
                     }}>
                     <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
                     <RecordWrapper>
@@ -39,7 +39,7 @@ export default ({navigation, userList}: IProps) => {
                   <RecruitTextWrapper>
                     <RecruitTitleBtn
                       onPress={() => {
-                        navigation.navigate('togetherMyDetail', {id: item.id});
+                        navigation.navigate('togetherDetail', {id: item.id});
                       }}>
                       <RecruitTitle>{item.title}</RecruitTitle>
                     </RecruitTitleBtn>
@@ -52,7 +52,7 @@ export default ({navigation, userList}: IProps) => {
                 <RecruitWrapper key={idx}>
                   <RecruitImageWrapper
                     onPress={() => {
-                      navigation.navigate('togetherMyDetail', {id: item.id});
+                      navigation.navigate('togetherDetail', {id: item.id});
                     }}>
                     <RecruitImage source={getTogetherThumbnail(item.thumbnail)} />
                     <RecordWrapper>
@@ -63,7 +63,7 @@ export default ({navigation, userList}: IProps) => {
                   <RecruitTextWrapper>
                     <RecruitTitleBtn
                       onPress={() => {
-                        navigation.navigate('togetherMyDetail', {id: item.id});
+                        navigation.navigate('togetherDetail', {id: item.id});
                       }}>
                       <RecruitTitle>{item.title}</RecruitTitle>
                     </RecruitTitleBtn>

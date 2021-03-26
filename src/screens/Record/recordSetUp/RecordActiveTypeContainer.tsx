@@ -23,12 +23,5 @@ export default ({navigation}: IProps) => {
     getActivities();
   }, []);
 
-  return loading ? (
-    <Loading />
-  ) : (
-    <RecordActiveTypePresenter
-      navigation={navigation}
-      activities={activities}
-    />
-  );
+  return loading ? <Loading /> : <RecordActiveTypePresenter navigation={navigation} activities={activities} />;
 };

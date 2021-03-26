@@ -80,6 +80,7 @@ export const userApi = {
   follow: (userId: number) => apiRequest(api.put(`/user/${userId}/follow`)),
   getNotification: () => apiRequest(api.get(`/user/notification`)),
   updateNotification: () => apiRequest(api.put(`/user/notification`)),
+  registerUserToken: (deviceToken: string) => apiRequest(api.put(`/user/fcm`, {deviceToken})),
 };
 
 export const serviceApi = {

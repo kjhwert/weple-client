@@ -68,7 +68,7 @@ export default ({navigation, route}: IProps) => {
                 </ActiveBtnWrapper>
                 <ActiveBtnWrapper>
                   <ActiveNumber>{show.calorie}</ActiveNumber>
-                  <ActiveText>Calorie</ActiveText>
+                  <ActiveText>Kcal</ActiveText>
                 </ActiveBtnWrapper>
               </ActiveTextWrapper>
             </RecordWrapper>
