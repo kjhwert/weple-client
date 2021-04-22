@@ -1,9 +1,8 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
-import RecordContext from '../module/context/RecordContext';
-import {IRecordContext} from '../module/type/recordContext';
 import AlertContext from '../module/context/AlertContext';
 import ConfirmAlert from './ConfirmAlert';
+import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
@@ -12,7 +11,7 @@ interface IProps {
 
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible, setAlertInvisible}: any = useContext(AlertContext);
-  const {clearAllState}: IRecordContext = useContext(RecordContext);
+  const {clearAllState} = useContext(RecordContext2) as IRecordContext2;
 
   const onPressed = () => {
     if (route && route.name === 'recordFinish') {
@@ -26,7 +25,7 @@ export default ({navigation, route}: IProps) => {
             canceledText: '취소',
           }}
           confirmed={() => {
-            clearAllState && clearAllState();
+            clearAllState();
             navigation.goBack();
           }}
           canceled={() => setAlertInvisible()}

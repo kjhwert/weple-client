@@ -2,13 +2,14 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {Switch} from 'react-native';
 import RecordContext from '../../../module/context/RecordContext';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const {recordSetting, toggleAwakeSwitch}: any = useContext(RecordContext);
+  const {settings, onChangeSettingAwake} = useContext(RecordContext2) as IRecordContext2;
   return (
     <Container>
       <Card>
@@ -18,9 +19,7 @@ export default ({navigation}: IProps) => {
               navigation.navigate('recordActiveType');
             }}>
             <SetUpListText>활동</SetUpListText>
-            <SetUpActiveText>
-              {!recordSetting.activity.name ? '활동을 선택하세요' : recordSetting.activity.name}
-            </SetUpActiveText>
+            <SetUpActiveText>{!settings.activity.name ? '활동을 선택하세요' : settings.activity.name}</SetUpActiveText>
             <MoreImage source={require('../../../assets/set_more.png')} />
           </SetBtn>
         </SetBtnWrapper>
@@ -32,12 +31,10 @@ export default ({navigation}: IProps) => {
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
-            thumbColor={recordSetting.awake ? '#fff' : '#f4f3f4'}
+            thumbColor={settings.awake ? '#fff' : '#f4f3f4'}
             ios_backgroundColor="#c1c1c1"
-            onValueChange={() => {
-              toggleAwakeSwitch();
-            }}
-            value={recordSetting.awake}
+            onValueChange={onChangeSettingAwake}
+            value={settings.awake}
           />
         </AlarmSetWrapper>
       </Card>

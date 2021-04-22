@@ -3,9 +3,8 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import CheckBox from '@react-native-community/checkbox';
 import {IMusicGroup, IMusics} from '../../../module/type/music';
-import RecordContext from '../../../module/context/RecordContext';
-import {IRecordContext} from '../../../module/type/recordContext';
 import {BASE_URL} from '../../../module/common';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
   musicGroup: Array<IMusicGroup>;
@@ -15,10 +14,9 @@ interface IProps {
 }
 export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
   const {
-    mapboxRecord: {music: recordMusic},
-    setRecordMusic,
-  }: IRecordContext = useContext(RecordContext);
-
+    onChangeRecordsMusic,
+    records: {music: recordMusic},
+  } = useContext(RecordContext2) as IRecordContext2;
   useEffect(() => {
     return () => {
       musicPause();
@@ -34,53 +32,51 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
               <MusicGroupContainer key={id}>
                 <MusicGroupName>{name}</MusicGroupName>
                 <MusicContainer>
-                  {musics.length > 0 ? (
-                    musics.map((music) => (
-                      <MusicWrapper key={music.id}>
-                        <CheckBox
-                          disabled={false}
-                          value={recordMusic.id === music.id}
-                          onValueChange={() => {
-                            setRecordMusic && setRecordMusic(music);
-                          }}
-                        />
-                        <MusicContentWrapper>
-                          <MusicArtWorkImage
-                            source={{
-                              uri: `${BASE_URL}/${music.artwork}`,
-                            }}
-                            resizeMode="cover"
-                          />
-                          <MusicTiTleArtistWrapper>
-                            <MusicTitleText>{music.title}</MusicTitleText>
-                            <MusicArtistText>{music.artist}</MusicArtistText>
-                          </MusicTiTleArtistWrapper>
-                          {playedMusic !== music.id ? (
-                            <PlayBtn onPress={() => musicPlay(music)}>
-                              <PlayImage source={require('../../../assets/play_icon.png')} />
-                            </PlayBtn>
-                          ) : (
-                            <PauseBtn onPress={musicPause}>
-                              <PauseImage source={require('../../../assets/icon_pause.png')} />
-                            </PauseBtn>
-                          )}
-                        </MusicContentWrapper>
-                      </MusicWrapper>
-                    ))
-                  ) : (
-                    <MusicWrapper>
+                  {/*{musics.length > 0 ? (*/}
+                  {musics.map((music) => (
+                    <MusicWrapper key={music.id}>
                       <CheckBox
-                        value={recordMusic === null}
-                        onValueChange={() => setRecordMusic && setRecordMusic(null)}
+                        disabled={false}
+                        value={recordMusic.id === music.id}
+                        onValueChange={() => {
+                          onChangeRecordsMusic(music);
+                        }}
                       />
                       <MusicContentWrapper>
-                        <MusicEmptyImage />
+                        <MusicArtWorkImage
+                          source={{
+                            uri: `${BASE_URL}/${music.artwork}`,
+                          }}
+                          resizeMode="cover"
+                        />
                         <MusicTiTleArtistWrapper>
-                          <MusicTitleText>재생 가능한 음악이 없습니다.</MusicTitleText>
+                          <MusicTitleText>{music.title}</MusicTitleText>
+                          <MusicArtistText>{music.artist}</MusicArtistText>
                         </MusicTiTleArtistWrapper>
+                        {playedMusic !== music.id ? (
+                          <PlayBtn onPress={() => musicPlay(music)}>
+                            <PlayImage source={require('../../../assets/play_icon.png')} />
+                          </PlayBtn>
+                        ) : (
+                          <PauseBtn onPress={musicPause}>
+                            <PauseImage source={require('../../../assets/icon_pause.png')} />
+                          </PauseBtn>
+                        )}
                       </MusicContentWrapper>
                     </MusicWrapper>
-                  )}
+                  ))}
+
+                  {/*) : (*/}
+                  {/*  <MusicWrapper>*/}
+                  {/*    <CheckBox value={recordMusic === null} onValueChange={() => onChangeRecordsMusic(null)} />*/}
+                  {/*    <MusicContentWrapper>*/}
+                  {/*      <MusicEmptyImage />*/}
+                  {/*      <MusicTiTleArtistWrapper>*/}
+                  {/*        <MusicTitleText>재생 가능한 음악이 없습니다.</MusicTitleText>*/}
+                  {/*      </MusicTiTleArtistWrapper>*/}
+                  {/*    </MusicContentWrapper>*/}
+                  {/*  </MusicWrapper>*/}
+                  {/*)}*/}
                 </MusicContainer>
               </MusicGroupContainer>
             ))}

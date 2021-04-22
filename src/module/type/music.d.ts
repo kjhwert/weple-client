@@ -7,7 +7,7 @@ export interface IMusicGroup {
 export interface IMusics {
   id: number;
   url: string;
-  title?: string;
-  artist?: string;
-  artwork?: string;
+  title: string;
+  artist: string;
+  artwork: string;
 }

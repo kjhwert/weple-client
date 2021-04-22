@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import StartPresenter from './StartPresenter';
 import UserContext from '../../module/context/UserContext';
+import Loading from '../../components/Loading';
 
 interface IProps {
   navigation: any;
@@ -8,20 +9,19 @@ interface IProps {
 
 export default ({navigation}: IProps) => {
   const {autoLogin}: any = useContext(UserContext);
-  const [isAutoLogin, setIsAutoLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const autoStartLogin = async () => {
+    setIsLoading(true);
     if (await autoLogin()) {
-      setIsAutoLogin(true);
       navigation.navigate('bottomTab');
-    } else {
-      setIsAutoLogin(false);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     autoStartLogin();
   }, []);
 
-  return <StartPresenter navigation={navigation} isAutoLogin={isAutoLogin} />;
+  return isLoading ? <Loading /> : <StartPresenter navigation={navigation} />;
 };

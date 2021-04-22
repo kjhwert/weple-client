@@ -8,6 +8,7 @@ import RecordContext from '../../../module/context/RecordContext';
 import {IRecordContext} from '../../../module/type/recordContext';
 import {ACTIVE_BUTTON, INACTIVE_BUTTON, MAPBOX_TOKEN} from '../../../module/common';
 import {Text} from 'react-native';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
@@ -23,9 +24,9 @@ MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 export default ({navigation, mapGroup}: IProps) => {
   const {
-    mapboxRecord: {map},
-    setRecordMap,
-  }: IRecordContext = useContext(RecordContext);
+    records: {map},
+    onChangeRecordsMap,
+  } = useContext(RecordContext2) as IRecordContext2;
 
   return (
     <Container>
@@ -49,9 +50,7 @@ export default ({navigation, mapGroup}: IProps) => {
                         disabled={false}
                         value={map.id === id}
                         onValueChange={() => {
-                          if (setRecordMap) {
-                            setRecordMap({id, style});
-                          }
+                          onChangeRecordsMap({id, style, name});
                         }}
                         tintColors={{true: ACTIVE_BUTTON}}
                       />
@@ -90,15 +89,6 @@ const MapStyleTitle = styled.Text`
   text-align: left;
 `;
 
-const ActivityWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  padding-top: 10px;
-`;
-
 const MapGroupWrapper = styled.View`
   width: 100%;
 `;
@@ -119,18 +109,6 @@ const MapWrapper = styled.View`
   width: 32%;
   margin-bottom: 20px;
   margin-right: ${({isLastChild}: IStyledMapWrapper) => (isLastChild === true ? 5 : 0)}px;
-`;
-
-const ActivityImageWrapper = styled.TouchableOpacity`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  border-width: 1px;
-  border-color: #c1c1c1;
-  width: 32%;
-  margin-bottom: 20px;
 `;
 
 const ActivityImage = styled.Image`

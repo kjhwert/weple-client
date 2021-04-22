@@ -13,10 +13,8 @@ export default ({navigation}: IProps) => {
 
   const getMaps = async () => {
     setLoading(true);
-    const {data, statusCode, message} = await utilitiesApi.maps();
+    const {data, statusCode} = await utilitiesApi.maps();
     if (statusCode !== 200) {
-      // Error message
-      console.log(message);
       return;
     }
     setMapGroup(data);

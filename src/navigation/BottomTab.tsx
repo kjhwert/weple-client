@@ -5,15 +5,17 @@ import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
 import {Image} from 'react-native';
-import RecordContext from '../module/context/RecordContext';
 import FeedContext from '../module/context/FeedContext';
+import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2';
 
 const Tab = createBottomTabNavigator();
 const tabActiveColor = '#007bf1';
 const tabInActiveColor = '#000';
 
 export default () => {
-  const {tabBarVisible}: any = useContext(RecordContext);
+  const {
+    settings: {tabBarVisible},
+  } = useContext(RecordContext2) as IRecordContext2;
   const {tabBarVisible: feedTabBar}: any = useContext(FeedContext);
   return (
     <Tab.Navigator
@@ -72,7 +74,7 @@ export default () => {
       <Tab.Screen
         options={{
           tabBarLabel: '기록',
-          tabBarVisible: tabBarVisible,
+          tabBarVisible,
         }}
         name="record"
         component={RecordStack}

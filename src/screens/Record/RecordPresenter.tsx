@@ -1,47 +1,27 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
-import MapboxGL, {Logger} from '@react-native-mapbox-gl/maps';
-import RecordContext from '../../module/context/RecordContext';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import KeepAwake from 'react-native-keep-awake';
 import RecordUnits from '../../components/RecordUnits';
 import {MAPBOX_STYLE, MAPBOX_TOKEN} from '../../module/common';
 import {View} from 'react-native';
+import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
-
-Logger.setLogCallback((log) => {
-  const {message} = log;
-
-  // expected warnings - see https://github.com/mapbox/mapbox-gl-native/issues/15341#issuecomment-522889062
-  if (
-    message.match('Request failed due to a permanent error: Canceled') ||
-    message.match('Request failed due to a permanent error: Socket Closed')
-  ) {
-    return true;
-  }
-  return false;
-});
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const {
-    recordSetting,
-    record,
-    mapboxRecord,
-    initializeRecordStart,
-    onStartRecord,
-    onPauseRecord,
-    showCamera,
-    finishRecording,
-  }: any = useContext(RecordContext);
+  const {settings, records, onInitRecord, onChangeRecord, onFinishRecord, onTakePicture} = useContext(
+    RecordContext2,
+  ) as IRecordContext2;
 
   const getLastCoordinates = () => {
-    if (mapboxRecord.coordinates.length > 0) {
-      return mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1];
+    if (records.coordinates.length > 0) {
+      return records.coordinates[records.coordinates.length - 1];
     }
 
     return [126.97842453212644, 37.566629386346264];
@@ -76,7 +56,7 @@ export default ({navigation}: IProps) => {
 
   return (
     <Container>
-      {recordSetting.awake && <KeepAwake />}
+      {settings.awake && <KeepAwake />}
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
@@ -95,21 +75,18 @@ export default ({navigation}: IProps) => {
             </MapboxGL.MapView>
 
             <RecordUnits
-              distance={mapboxRecord.distance}
-              speed={mapboxRecord.speed.length > 0 ? mapboxRecord.speed[mapboxRecord.speed.length - 1] : 0}
-              calorie={record.calorie}
-              duration={record.duration}
+              distance={records.distance}
+              speed={records.speed.length > 0 ? records.speed[records.speed.length - 1] : 0}
+              calorie={records.calorie}
+              duration={records.duration}
             />
             <IconWrapper>
               <IconImageWrapper>
-                <IconBtn
-                  onPress={() => {
-                    showCamera();
-                  }}>
+                <IconBtn onPress={onTakePicture}>
                   <IconImage source={require('../../assets/record_camera.png')} />
                 </IconBtn>
 
-                {recordSetting.isInit && !recordSetting.isStart && (
+                {settings.isInit && !settings.isStart && (
                   <LinearGradient
                     colors={['#79a6fa', '#3065f4', '#4e3adf']}
                     start={{x: 1, y: 0}}
@@ -123,7 +100,7 @@ export default ({navigation}: IProps) => {
                       marginRight: 10,
                     }}>
                     <StartBtnWrapper>
-                      <ResumeBtn onPress={onStartRecord}>
+                      <ResumeBtn onPress={onChangeRecord}>
                         <ResumeBtnText>재개</ResumeBtnText>
                       </ResumeBtn>
                     </StartBtnWrapper>
@@ -142,23 +119,20 @@ export default ({navigation}: IProps) => {
                     borderRadius: 50,
                   }}>
                   <StartBtnWrapper>
-                    {!recordSetting.isInit && !recordSetting.isStart && (
-                      <StartBtn
-                        onPress={() => {
-                          initializeRecordStart();
-                        }}>
+                    {!settings.isInit && !settings.isStart && (
+                      <StartBtn onPress={onInitRecord}>
                         <StartBtnText>시작</StartBtnText>
                       </StartBtn>
                     )}
-                    {recordSetting.isInit && recordSetting.isStart && (
-                      <StopBtn onPress={onPauseRecord}>
+                    {settings.isInit && settings.isStart && (
+                      <StopBtn onPress={onChangeRecord}>
                         <StopBtnText>{'중지'}</StopBtnText>
                       </StopBtn>
                     )}
-                    {recordSetting.isInit && !recordSetting.isStart && (
+                    {settings.isInit && !settings.isStart && (
                       <FinishBtn
                         onPress={() => {
-                          finishRecording && finishRecording(navigation);
+                          onFinishRecord(navigation);
                         }}>
                         <FinishBtnText>완료</FinishBtnText>
                       </FinishBtn>
@@ -278,65 +252,6 @@ const ResumeBtn = styled.TouchableOpacity`
 const ResumeBtnText = styled.Text`
   font-size: 18px;
   color: #3065f4;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const AlertBtnWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  position: absolute;
-  bottom: 0;
-`;
-
-const AlertImageWrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 30px;
-`;
-
-const AlertImage = styled.Image`
-  width: 70px;
-  height: 70px;
-`;
-
-const AlertTitleText = styled.Text`
-  font-size: 14px;
-  color: #181818;
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 10px;
-`;
-
-const ConfirmButton = styled.TouchableOpacity`
-  display: flex;
-  width: 50%;
-  padding: 10px;
-  background-color: #007bf1;
-`;
-
-const ConfirmButtonText = styled.Text`
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const CancelButton = styled.TouchableOpacity`
-  display: flex;
-  width: 50%;
-  padding: 10px;
-  background-color: #efefef;
-`;
-
-const CancelButtonText = styled.Text`
-  font-size: 14px;
-  color: #4e4e4e;
   font-weight: bold;
   text-align: center;
 `;

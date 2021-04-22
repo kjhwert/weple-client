@@ -1,45 +1,36 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import LinearGradient from 'react-native-linear-gradient';
-import Loading from '../../components/Loading';
 
 interface IProps {
   navigation: any;
-  isAutoLogin: boolean;
 }
 
-export default ({navigation, isAutoLogin}: IProps) => {
+export default ({navigation}: IProps) => {
   return (
     <Container>
-      {isAutoLogin ? (
-        <Loading />
-      ) : (
-        <>
-          <ContainerCard>
-            <AppLogoImageWrapper>
-              <AppLogoImage source={require('../../assets/ttamna.png')} />
-            </AppLogoImageWrapper>
+      <ContainerCard>
+        <AppLogoImageWrapper>
+          <AppLogoImage source={require('../../assets/ttamna.png')} />
+        </AppLogoImageWrapper>
 
-            <LoginWrapper>
-              <LoginInfoWrapper>
-                <LoginInfoText>이미 가입하셨으면 로그인해주세요.</LoginInfoText>
-                <LoginBtn
-                  onPress={() => {
-                    navigation.navigate('login');
-                  }}>
-                  <LoginBtnText>로그인</LoginBtnText>
-                </LoginBtn>
-              </LoginInfoWrapper>
-              <StartBtn
-                onPress={() => {
-                  navigation.navigate('createAccount');
-                }}>
-                <StartText>시작하기</StartText>
-              </StartBtn>
-            </LoginWrapper>
-          </ContainerCard>
-        </>
-      )}
+        <LoginWrapper>
+          <LoginInfoWrapper>
+            <LoginInfoText>이미 가입하셨으면 로그인해주세요.</LoginInfoText>
+            <LoginBtn
+              onPress={() => {
+                navigation.navigate('login');
+              }}>
+              <LoginBtnText>로그인</LoginBtnText>
+            </LoginBtn>
+          </LoginInfoWrapper>
+          <StartBtn
+            onPress={() => {
+              navigation.navigate('createAccount');
+            }}>
+            <StartText>시작하기</StartText>
+          </StartBtn>
+        </LoginWrapper>
+      </ContainerCard>
     </Container>
   );
 };

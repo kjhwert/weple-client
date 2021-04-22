@@ -1,14 +1,8 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
-import RecordContext from '../../../module/context/RecordContext';
-import {IRecordContext} from '../../../module/type/recordContext';
-import {
-  ACTIVE_BUTTON,
-  ACTIVE_TEXT,
-  INACTIVE_BUTTON,
-  INACTIVE_TEXT,
-} from '../../../module/common';
+import {ACTIVE_BUTTON, ACTIVE_TEXT, INACTIVE_BUTTON, INACTIVE_TEXT} from '../../../module/common';
 import {ICategoryActivity} from '../../../module/type/category-activity';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
@@ -20,9 +14,7 @@ interface IStyledProps {
 }
 
 export default ({navigation, activities}: IProps) => {
-  const {setActivityCategory, recordSetting}: IRecordContext = useContext(
-    RecordContext,
-  );
+  const {settings, onChangeSettingActivity} = useContext(RecordContext2) as IRecordContext2;
   return (
     <Container>
       <ScrollContainer>
@@ -30,26 +22,17 @@ export default ({navigation, activities}: IProps) => {
           <CategoryWrapper key={activity.id}>
             <CategoryTitle>{activity.name}</CategoryTitle>
             <ActivityWrapper>
-              {activity.categoryActivity.map(
-                ({id, name, caloriesPerMinute}) => (
-                  <CategoryBtn
-                    key={id}
-                    isActive={recordSetting?.activity.id === id}
-                    onPress={() => {
-                      // @ts-ignore
-                      setActivityCategory({
-                        id,
-                        name,
-                        caloriesPerMinute,
-                      });
-                      navigation.goBack();
-                    }}>
-                    <CategoryText isActive={recordSetting?.activity.id === id}>
-                      {name}
-                    </CategoryText>
-                  </CategoryBtn>
-                ),
-              )}
+              {activity.categoryActivity.map((activity) => (
+                <CategoryBtn
+                  key={activity.id}
+                  isActive={settings.activity.id === activity.id}
+                  onPress={() => {
+                    onChangeSettingActivity(activity);
+                    navigation.goBack();
+                  }}>
+                  <CategoryText isActive={settings.activity.id === activity.id}>{activity.name}</CategoryText>
+                </CategoryBtn>
+              ))}
             </ActivityWrapper>
           </CategoryWrapper>
         ))}
@@ -88,8 +71,7 @@ const CategoryBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   border-width: 1px;
-  border-color: ${({isActive}: IStyledProps) =>
-    isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON};
+  border-color: ${({isActive}: IStyledProps) => (isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON)};
   padding: 10px;
   margin: 0 10px 10px 0;
 `;
@@ -97,6 +79,5 @@ const CategoryBtn = styled.TouchableOpacity`
 const CategoryText = styled.Text`
   font-size: 14px;
   text-align: center;
-  color: ${({isActive}: IStyledProps) =>
-    isActive ? ACTIVE_TEXT : INACTIVE_TEXT};
+  color: ${({isActive}: IStyledProps) => (isActive ? ACTIVE_TEXT : INACTIVE_TEXT)};
 `;

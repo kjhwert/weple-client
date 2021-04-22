@@ -1,11 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import RecordPresenter from './RecordPresenter';
 import {checkPermission, configure, requestPermission} from 'react-native-location';
+import AsyncStorage from '@react-native-community/async-storage';
+import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
 }
 export default ({navigation}: IProps) => {
+  const {onChangeSettingActivity} = useContext(RecordContext2) as IRecordContext2;
   const confirmUserLocation = async () => {
     const checkPermissionResult = await checkPermission({
       ios: 'whenInUse',
@@ -41,8 +44,20 @@ export default ({navigation}: IProps) => {
     }
   };
 
+  const initActivity = async () => {
+    const activity = await AsyncStorage.getItem('@activity');
+    if (activity) {
+      onChangeSettingActivity(JSON.parse(activity));
+    }
+  };
+
   useEffect(() => {
     confirmUserLocation();
+    const unsubscribe = navigation.addListener('focus', () => {
+      initActivity();
+    });
+
+    return unsubscribe;
   }, []);
 
   return <RecordPresenter navigation={navigation} />;

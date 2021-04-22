@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import StartStack from './src/navigation/StartStack';
 import {UserContextProvider} from './src/module/context/UserContext';
@@ -8,6 +8,8 @@ import {FollowContextProvider} from './src/module/context/FollowContext';
 import {FeedContextProvider} from './src/module/context/FeedContext';
 import {ProfileContextProvider} from './src/module/context/ProfileContext';
 import {RecordContextProvider} from './src/module/context/RecordContext';
+import {RecordContextProvider2} from './src/module/context/RecordContext2';
+
 export default () => {
   return (
     <NavigationContainer>
@@ -17,9 +19,9 @@ export default () => {
             <FeedContextProvider>
               <TogetherContextProvider>
                 <ProfileContextProvider>
-                  <RecordContextProvider>
+                  <RecordContextProvider2>
                     <StartStack />
-                  </RecordContextProvider>
+                  </RecordContextProvider2>
                 </ProfileContextProvider>
               </TogetherContextProvider>
             </FeedContextProvider>

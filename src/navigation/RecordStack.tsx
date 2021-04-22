@@ -8,17 +8,14 @@ import RecordActiveTypeContainer from '../screens/Record/recordSetUp/RecordActiv
 import RecordMapStyleContainer from '../screens/Record/recordStyle/RecordMapStyleContainer';
 import RecordMusicContainer from '../screens/Record/recordStyle/RecordMusicContainer';
 import RecordSetupBtn from '../components/RecordSetupBtn';
-import {Text, View} from 'react-native';
-import RecordContext from '../module/context/RecordContext';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
+import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2';
 
 const Stack = createStackNavigator();
 
 export default () => {
-  const {recordSetting}: any = useContext(RecordContext);
-  const {
-    recordSetting: {isStart},
-  }: any = useContext(RecordContext);
+  const {settings} = useContext(RecordContext2) as IRecordContext2;
   return (
     <Stack.Navigator
       screenOptions={({navigation}) => ({
@@ -38,10 +35,10 @@ export default () => {
         component={RecordContainer}
         options={({navigation}) => ({
           headerLeft: () => <View />,
-          headerRight: () => (isStart ? <View /> : <RecordSetupBtn navigation={navigation} />),
+          headerRight: () => (settings.isStart ? <View /> : <RecordSetupBtn navigation={navigation} />),
           headerTitle: () => (
-            <HeaderTitleWrapper onPress={() => !isStart && navigation.navigate('recordActiveType')}>
-              <HeaderTitle>{recordSetting.activity.name}</HeaderTitle>
+            <HeaderTitleWrapper onPress={() => !settings.isStart && navigation.navigate('recordActiveType')}>
+              <HeaderTitle>{settings.activity.name}</HeaderTitle>
               <HeaderArrowImage source={require('../assets/arrowBlack.png')} />
             </HeaderTitleWrapper>
           ),
