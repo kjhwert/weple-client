@@ -5,6 +5,7 @@ import CheckBox from '@react-native-community/checkbox';
 import {IMusicGroup, IMusics} from '../../../module/type/music';
 import RecordContext from '../../../module/context/RecordContext';
 import {IRecordContext} from '../../../module/type/recordContext';
+import {BASE_URL} from '../../../module/common';
 
 interface IProps {
   musicGroup: Array<IMusicGroup>;
@@ -23,8 +24,6 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
       musicPause();
     };
   }, []);
-
-  console.log(recordMusic);
 
   return (
     <Container>
@@ -48,7 +47,7 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
                         <MusicContentWrapper>
                           <MusicArtWorkImage
                             source={{
-                              uri: music.artwork,
+                              uri: `${BASE_URL}/${music.artwork}`,
                             }}
                             resizeMode="cover"
                           />
@@ -58,15 +57,11 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
                           </MusicTiTleArtistWrapper>
                           {playedMusic !== music.id ? (
                             <PlayBtn onPress={() => musicPlay(music)}>
-                              <PlayImage
-                                source={require('../../../assets/play_icon.png')}
-                              />
+                              <PlayImage source={require('../../../assets/play_icon.png')} />
                             </PlayBtn>
                           ) : (
                             <PauseBtn onPress={musicPause}>
-                              <PauseImage
-                                source={require('../../../assets/icon_pause.png')}
-                              />
+                              <PauseImage source={require('../../../assets/icon_pause.png')} />
                             </PauseBtn>
                           )}
                         </MusicContentWrapper>
@@ -76,16 +71,12 @@ export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
                     <MusicWrapper>
                       <CheckBox
                         value={recordMusic === null}
-                        onValueChange={() =>
-                          setRecordMusic && setRecordMusic(null)
-                        }
+                        onValueChange={() => setRecordMusic && setRecordMusic(null)}
                       />
                       <MusicContentWrapper>
                         <MusicEmptyImage />
                         <MusicTiTleArtistWrapper>
-                          <MusicTitleText>
-                            재생 가능한 음악이 없습니다.
-                          </MusicTitleText>
+                          <MusicTitleText>재생 가능한 음악이 없습니다.</MusicTitleText>
                         </MusicTiTleArtistWrapper>
                       </MusicContentWrapper>
                     </MusicWrapper>
