@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {Switch} from 'react-native';
-import RecordContext from '../../../module/context/RecordContext';
 import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
+import {FONT_SIZE_1, FONT_SIZE_2} from '../../../module/common';
 
 interface IProps {
   navigation: any;
@@ -70,14 +70,14 @@ const SetBtn = styled.TouchableOpacity`
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 14px;
+  font-size: ${FONT_SIZE_2}px;
   text-align: left;
   color: #333333;
   width: 34%;
 `;
 
 const SetUpActiveText = styled.Text`
-  font-size: 13px;
+  font-size: ${FONT_SIZE_1}px;
   text-align: right;
   color: #7f7f7f;
   width: 60%;
@@ -111,7 +111,7 @@ const AlarmSetTextWrapper = styled.View`
 
 const AlarmSetTitle = styled.Text`
   width: 100%;
-  font-size: 14px;
+  font-size: ${FONT_SIZE_2}px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -119,6 +119,6 @@ const AlarmSetTitle = styled.Text`
 
 const AlarmSetContent = styled.Text`
   width: 100%;
-  font-size: 12px;
+  font-size: ${FONT_SIZE_1}px;
   color: #7f7f7f;
 `;

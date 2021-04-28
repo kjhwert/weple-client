@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordUnits from '../../components/RecordUnits';
-import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
+import {BASE_URL, FONT_SIZE_1, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
@@ -52,7 +52,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
             <SetUpWrapper>
               <SetBtnWrapperTitle>
                 <SetUpListText>제목</SetUpListText>
-                <TextInput placeholder="제목을 입력해주세요." value={records.title} onChangeText={onChangeTitle} />
+                <TitleTextInput placeholder="제목을 입력해주세요." value={records.title} onChangeText={onChangeTitle} />
               </SetBtnWrapperTitle>
               <SetBtnWrapper>
                 <SetBtn
@@ -265,14 +265,18 @@ const SetUpTypeWrapper = styled.View`
   align-items: center;
 `;
 
+const TitleTextInput = styled.TextInput`
+  font-size: ${FONT_SIZE_2}px;
+`;
+
 const SetUpTypeText = styled.Text`
-  font-size: 13px;
+  font-size: ${FONT_SIZE_2}px;
   margin-right: 10px;
   color: #b5b5b5;
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 14px;
+  font-size: ${FONT_SIZE_2}px;
   text-align: left;
   color: #333333;
 `;

@@ -2,22 +2,14 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../components/ContainerCard';
 import UserContext from '../../module/context/UserContext';
-import AlertWrapper from '../../components/AlertWrapper';
+import {FONT_SIZE_2, FONT_SIZE_3, FONT_SIZE_4} from '../../module/common';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const {
-    login,
-    isLoginActive,
-    isLoginBtnActive,
-    alertFrame,
-    clearAlertFrame,
-    onChangeEmail,
-    onChangePassword,
-  }: any = useContext(UserContext);
+  const {login, isLoginActive, isLoginBtnActive, onChangeEmail, onChangePassword}: any = useContext(UserContext);
 
   return (
     <Container>
@@ -158,7 +150,7 @@ const ScrollWrapper = styled.ScrollView``;
 
 const LoginTitle = styled.Text`
   width: 100%;
-  font-size: 19px;
+  font-size: ${FONT_SIZE_4}px;
   font-weight: bold;
   text-align: left;
   margin-bottom: 20px;
@@ -170,7 +162,7 @@ const SignInWrapper = styled.View`
 `;
 
 const SignInTitle = styled.Text`
-  font-size: 14px;
+  font-size: ${FONT_SIZE_2}px;
   color: #6f6f6f;
   font-weight: bold;
   text-align: left;
@@ -178,7 +170,7 @@ const SignInTitle = styled.Text`
 `;
 
 const LoginInput = styled.TextInput`
-  font-size: 14px;
+  font-size: ${FONT_SIZE_3}px;
   padding: 5px 10px;
   border-bottom-width: 1px;
   border-color: ${({borderColor}: {borderColor: string}) => (borderColor ? '#007bf1' : '#babfc7')};

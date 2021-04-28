@@ -2,7 +2,15 @@ import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import UserContext from '../../module/context/UserContext';
 import {IProfileUserInfo} from '../../module/type/user';
-import {BASE_URL, timeForToday, togetherDate} from '../../module/common';
+import {
+  BASE_URL,
+  FONT_SIZE_1,
+  FONT_SIZE_2,
+  FONT_SIZE_3,
+  FONT_SIZE_4,
+  timeForToday,
+  togetherDate,
+} from '../../module/common';
 import {RefreshControl, Text} from 'react-native';
 import {IFeed} from '../../module/type/feed';
 import {ITogethers} from '../../module/type/together';
@@ -437,7 +445,7 @@ const EditBtnText = styled.Text`
 `;
 
 const ProfileNickName = styled.Text`
-  font-size: 15px;
+  font-size: ${FONT_SIZE_3}px;
   color: #333;
   font-weight: bold;
   text-align: center;
@@ -468,14 +476,14 @@ const ActiveBtn = styled.TouchableOpacity`
 `;
 
 const ActiveNumber = styled.Text`
-  font-size: 19px;
+  font-size: ${FONT_SIZE_4}px;
   color: #007bf1;
   font-weight: bold;
   text-align: center;
 `;
 
 const FollowerNumber = styled.Text`
-  font-size: 19px;
+  font-size: ${FONT_SIZE_4}px;
   color: #00bbc7;
   font-weight: bold;
   text-align: center;
@@ -489,14 +497,15 @@ const FollowingNumber = styled.Text`
 `;
 
 const ActiveText = styled.Text`
-  font-size: 12px;
+  font-size: ${FONT_SIZE_2}px;
   color: #ababab;
   font-weight: bold;
   text-align: center;
+  margin-top: 5px;
 `;
 
 const ActiveIntroduceText = styled.Text`
-  font-size: 14px;
+  font-size: ${FONT_SIZE_2}px;
   color: #989898;
   padding: 10px;
 `;
