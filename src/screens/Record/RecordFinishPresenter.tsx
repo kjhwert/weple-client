@@ -6,7 +6,8 @@ import {BASE_URL, FONT_SIZE_1, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinu
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-import {Image, Platform, TextInput} from 'react-native';
+import {Image, Platform, TextInput, View} from 'react-native';
+import {BottomTabView} from '@react-navigation/bottom-tabs';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -111,37 +112,50 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   {settings.startDate && showDateToAmPmHourMinute(settings.startDate)}에 출발
                 </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
-              <MapboxGL.MapView
-                ref={thumbnailRef}
-                style={{width: '100%', height: 200}}
-                styleURL={records.map.style}
-                localizeLabels={true}
-                zoomEnabled={false}
-                scrollEnabled={false}
-                pitchEnabled={false}
-                rotateEnabled={false}>
-                <MapboxGL.Camera zoomLevel={13} centerCoordinate={centerCoordinates} />
-                <MapboxGL.ShapeSource
-                  id="shapeSource"
-                  shape={{
-                    type: 'Feature',
-                    id: 'shapeSource',
-                    properties: {},
-                    geometry: {
-                      type: 'LineString',
-                      coordinates: records.coordinates,
-                    },
-                  }}>
-                  <MapboxGL.LineLayer
-                    id="lineLayer"
-                    style={{
-                      lineWidth: 5,
-                      lineJoin: 'bevel',
-                      lineColor: '#007bf1',
-                    }}
-                  />
-                </MapboxGL.ShapeSource>
-              </MapboxGL.MapView>
+              <View ref={thumbnailRef} style={{width: '100%', height: 200}}>
+                <Image
+                  source={require('../../assets/ttamnaLogo.png')}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    position: 'absolute',
+                    top: 5,
+                    left: 10,
+                    zIndex: 20,
+                    resizeMode: 'contain',
+                  }}
+                />
+                <MapboxGL.MapView
+                  style={{width: '100%', height: 200}}
+                  styleURL={records.map.style}
+                  localizeLabels={true}
+                  zoomEnabled={false}
+                  scrollEnabled={false}
+                  pitchEnabled={false}
+                  rotateEnabled={false}>
+                  <MapboxGL.Camera zoomLevel={13} centerCoordinate={centerCoordinates} />
+                  <MapboxGL.ShapeSource
+                    id="shapeSource"
+                    shape={{
+                      type: 'Feature',
+                      id: 'shapeSource',
+                      properties: {},
+                      geometry: {
+                        type: 'LineString',
+                        coordinates: records.coordinates,
+                      },
+                    }}>
+                    <MapboxGL.LineLayer
+                      id="lineLayer"
+                      style={{
+                        lineWidth: 5,
+                        lineJoin: 'bevel',
+                        lineColor: '#007bf1',
+                      }}
+                    />
+                  </MapboxGL.ShapeSource>
+                </MapboxGL.MapView>
+              </View>
 
               {records.images.map((image, idx: number) => (
                 <ActiveDetailWrapper key={idx}>

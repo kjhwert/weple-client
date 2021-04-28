@@ -152,7 +152,11 @@ export default ({navigation, feed}: IProps) => {
               </ActiveDetailTitleWrapper>
 
               <ActiveDetailImageWrapper>
-                <ActiveDetailMapImage source={{uri: `${BASE_URL}/${feed.thumbnail}`}} ref={thumbnailRef} />
+                <ActiveDetailMapImage
+                  source={{uri: `${BASE_URL}/${feed.thumbnail}`}}
+                  ref={thumbnailRef}
+                  style={{resizeMode: 'cover'}}
+                />
               </ActiveDetailImageWrapper>
               <ActiveDetailTextWrapper>
                 <ActiveSmallMarkWrapper>
@@ -567,7 +571,7 @@ const ActiveDetailImageWrapper = styled.View`
 
 const ActiveDetailMapImage = styled.Image`
   width: 100%;
-  height: 160px;
+  height: 200px;
 `;
 
 const MapPlayThumbnail = styled.Image`
