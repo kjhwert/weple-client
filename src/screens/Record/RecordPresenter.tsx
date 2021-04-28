@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {settings, records, onInitRecord, onChangeRecord, onFinishRecord, onTakePicture} = useContext(
+  const {settings, records, duration, onInitRecord, onChangeRecord, onFinishRecord, onTakePicture} = useContext(
     RecordContext2,
   ) as IRecordContext2;
 
@@ -63,22 +63,13 @@ export default ({navigation}: IProps) => {
             <MapboxGL.MapView style={{width: '100%', height: 300}} styleURL={MAPBOX_STYLE} localizeLabels={true}>
               {renderCamera()}
               {renderAnnotations()}
-              {/*<MapboxGL.Camera zoomLevel={15} followUserLocation={true} />*/}
-              {/*<MapboxGL.UserLocation renderMode={'normal'} />*/}
-              {/*{mapboxRecord.coordinates.length > 0 && (*/}
-              {/*  <MapboxGL.Camera*/}
-              {/*    zoomLevel={15}*/}
-              {/*    // centerCoordinate={[126.87646021075436, 37.48213497621102]}*/}
-              {/*    // centerCoordinate={mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1]}*/}
-              {/*  />*/}
-              {/*)}*/}
             </MapboxGL.MapView>
 
             <RecordUnits
               distance={records.distance}
               speed={records.speed.length > 0 ? records.speed[records.speed.length - 1] : 0}
               calorie={records.calorie}
-              duration={records.duration}
+              duration={duration}
             />
             <IconWrapper>
               <IconImageWrapper>

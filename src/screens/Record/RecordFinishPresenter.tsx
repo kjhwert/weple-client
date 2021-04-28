@@ -6,7 +6,7 @@ import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/com
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -16,9 +16,11 @@ interface IProps {
 }
 
 export default ({navigation, getAverageSpeed}: IProps) => {
-  const {thumbnailRef, settings, records, webViewRef, onCreateRecord, onChangeImage} = useContext(
+  const {thumbnailRef, duration, settings, records, webViewRef, onCreateRecord, onChangeImage} = useContext(
     RecordContext2,
   ) as IRecordContext2;
+
+  const centerCoordinates = records.coordinates[Math.floor(records.coordinates.length / 2)];
 
   return (
     <Container>
@@ -35,7 +37,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   coordinates: JSON.stringify(records.coordinates),
                   map: records.map,
                   music: records.music,
-                  images: [],
+                  images: records.images,
                 })}
               />
             </MapPlayWrapper>
@@ -83,7 +85,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
               distance={records.distance}
               speed={getAverageSpeed(records.speed)}
               calorie={records.calorie}
-              duration={records.duration}
+              duration={duration}
             />
 
             <ActiveDetailWrapper>
@@ -98,7 +100,6 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   {settings.startDate && showDateToAmPmHourMinute(settings.startDate)}에 출발
                 </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
-
               <MapboxGL.MapView
                 ref={thumbnailRef}
                 style={{width: '100%', height: 200}}
@@ -108,10 +109,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                 scrollEnabled={false}
                 pitchEnabled={false}
                 rotateEnabled={false}>
-                <MapboxGL.Camera
-                  zoomLevel={13}
-                  centerCoordinate={records.coordinates[Math.floor(records.coordinates.length / 2)]}
-                />
+                <MapboxGL.Camera zoomLevel={13} centerCoordinate={centerCoordinates} />
                 <MapboxGL.ShapeSource
                   id="shapeSource"
                   shape={{

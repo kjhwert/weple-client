@@ -1,13 +1,13 @@
 import {IMusics} from '../type/music';
 import {IMapboxRecordMap} from '../type/recordContext';
 import {BASE_URL, MAPBOX_TOKEN} from '../common';
-import {IFeedImage} from '../type/feedContext';
+import {Image} from '../context/RecordContext2';
 
 interface IWebViewJavaScriptCode {
   coordinates: string;
   music: IMusics;
   map: IMapboxRecordMap;
-  images: Array<IFeedImage>;
+  images: Array<Image>;
 }
 
 export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebViewJavaScriptCode) => {
@@ -24,8 +24,8 @@ export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebVie
   images.map((image) => {
     features.push({
       type: 'Feature',
-      geometry: {type: 'Point', coordinates: [image.lat, image.lon]},
-      url: `${BASE_URL}/${image.img}`,
+      geometry: {type: 'Point', coordinates: [image.latitude, image.longitude]},
+      url: `${BASE_URL}/${image.uri}`,
     });
   });
 

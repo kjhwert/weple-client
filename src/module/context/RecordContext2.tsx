@@ -50,7 +50,7 @@ interface Settings {
   tabBarVisible: boolean;
 }
 
-interface Image {
+export interface Image {
   latitude: number | undefined;
   longitude: number | undefined;
   uri: string;
@@ -75,7 +75,6 @@ interface Music {
 }
 
 interface Records {
-  duration: number;
   calorie: number;
   speed: Array<number>;
   distance: number;
@@ -86,7 +85,6 @@ interface Records {
 }
 
 const recordsInit = {
-  duration: 0,
   calorie: 0,
   speed: [],
   distance: 0,
@@ -130,6 +128,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
   /** record states */
   const [settings, setSettings] = useState<Settings>(settingsInit);
   const [records, setRecords] = useState<Records>(recordsInit);
+  const [duration, setDuration] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
   const {setAlertVisible}: any = useContext(AlertContext);
@@ -150,29 +149,18 @@ export const RecordContextProvider2 = ({children}: Props) => {
     return await feedApi.thumbnailCreate(image);
   };
 
-  const onCreateImages = async (feedId: number) => {
+  const onCreateImages = async () => {
     return await Promise.all(
-      records.images.map(async (image) => {
+      records.images.map(async ({fileName, type, uri, latitude: lat, longitude: lon, distance}) => {
         const data = new FormData();
         data.append('image', {
-          name: image.fileName,
-          type: image.type,
-          uri: Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
+          name: fileName,
+          type: type,
+          uri: uri,
         });
 
-        const {distance, latitude, longitude} = image;
-
-        const info = {
-          distance: distance,
-          lat: latitude,
-          lon: longitude,
-          feed: feedId,
-        };
-
-        data.append('imageInfo', JSON.stringify(info));
-
-        const {statusCode} = await feedApi.imagesCreate(data);
-        return statusCode;
+        const {data: path} = await feedApi.imagesCreate(data);
+        return {img: path, lat, lon, distance};
       }),
     );
   };
@@ -190,7 +178,6 @@ export const RecordContextProvider2 = ({children}: Props) => {
 
   const onCreateRecord = async (navigation: any) => {
     setLoading(true);
-
     /**
      * Thumbnail image upload
      * */
@@ -213,7 +200,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
     }
     const thumbnail = path;
     const {activity, startDate, endDate} = settings;
-    const {duration, calorie, distance, map, music, coordinates: coors} = records;
+    const {calorie, distance, map, music, coordinates: coors} = records;
     // const address = await getAddress(coors[0]);
     const startLatitude = coors[0][0];
     const startLongitude = coors[0][1];
@@ -234,7 +221,8 @@ export const RecordContextProvider2 = ({children}: Props) => {
       startLongitude,
     };
 
-    const {data, statusCode, message} = await feedApi.create(feedRecords);
+    const images = await onCreateImages();
+    const {statusCode, message} = await feedApi.create({...feedRecords, images});
     // 피드 업로드 먼저 하고, 이미지 업로드
     if (statusCode !== 201) {
       setLoading(false);
@@ -244,20 +232,6 @@ export const RecordContextProvider2 = ({children}: Props) => {
             type: 'warning',
             title: '등록에 실패했습니다.',
             description: message,
-          }}
-        />,
-      );
-    }
-    const result: number[] = await onCreateImages(data.id);
-    const errorResult = result.find((statusCode) => statusCode !== 201);
-    if (errorResult) {
-      setLoading(false);
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '일부 사진 업로드 중 오류가 발생했습니다.',
-            description: '',
           }}
         />,
       );
@@ -292,9 +266,10 @@ export const RecordContextProvider2 = ({children}: Props) => {
       return;
     }
 
+    const options = {storageOptions: {skipBackup: true, path: 'image'}, quality: 0.5};
     ImagePicker.launchCamera(
-      {storageOptions: {privateDirectory: true}, quality: 0.5},
-      ({didCancel, error, latitude, longitude, uri, timestamp, type, fileName}) => {
+      options,
+      async ({didCancel, error, latitude, longitude, uri, timestamp, type, fileName}) => {
         if (didCancel) {
           return;
         }
@@ -302,7 +277,9 @@ export const RecordContextProvider2 = ({children}: Props) => {
           return;
         }
         const {distance} = records;
-        const timeStringToDate = new Date(timestamp ? timestamp : '');
+        const timeStringToDate = timestamp ? new Date(timestamp) : new Date();
+        // random string generating
+        fileName = !fileName ? Math.random().toString(36).substring(2, 15) : fileName;
         const images = records.images.concat({
           latitude,
           longitude,
@@ -312,8 +289,30 @@ export const RecordContextProvider2 = ({children}: Props) => {
           type,
           fileName,
         });
+        const data = new FormData();
+        data.append('image', {
+          name: fileName,
+          type: type,
+          uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
+        });
+
+        await feedApi.imagesCreate(data);
         setRecords({...records, images});
       },
+    );
+  };
+
+  const getError = () => {
+    if (duration >= 10) return;
+    onChangeRecord();
+    return setAlertVisible(
+      <CheckAlert
+        check={{
+          type: 'warning',
+          title: 'GPS 정보를 수신할 수 없습니다.',
+          description: '잠시 후에 다시 시도해 주세요.',
+        }}
+      />,
     );
   };
 
@@ -330,34 +329,32 @@ export const RecordContextProvider2 = ({children}: Props) => {
       ]);
     }
 
-    currentSpeed = Math.floor(currentSpeed * 10) / 10;
-    const speed = records.speed.concat(currentSpeed);
     const distance = Math.floor((currentDistance + records.distance) * 1000) / 1000;
+    const speed1 = (distance * 1000) / DURATION_TIME;
+    // currentSpeed = Math.floor(currentSpeed * 10) / 10;
+    // const speed = records.speed.concat(currentSpeed);
+    const speed = records.speed.concat(speed1);
     const coordinates = records.coordinates.concat([[longitude, latitude]]);
-    let calorie = records.calorie;
-    if (records.duration % MINUTE === 0) {
-      calorie = getCalorie();
-    }
 
-    setRecords({...records, duration: records.duration + 1, speed, distance, coordinates, calorie});
+    setRecords({...records, speed, distance, coordinates});
   };
 
-  const onRecord = () => {
-    if (records.duration % DURATION_TIME !== 0) {
-      return setRecords({...records, duration: records.duration + 1});
+  const durationInterval = () => {
+    if (duration % MINUTE === 0) {
+      const calorie = getCalorie();
+      setRecords({...records, calorie});
     }
+    setDuration(duration + 1);
+  };
 
-    Geolocation.getCurrentPosition(
-      getCoordinates,
-      (err) => {
-        //TODO GPS 안잡혔을 때는 duration이 안되는데. GPS 수신이 원활하지 않습니다.
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 1000,
-      },
-    );
+  const onRecord = async () => {
+    durationInterval();
+    if (duration % DURATION_TIME !== 0) return;
+    Geolocation.getCurrentPosition(getCoordinates, getError, {
+      enableHighAccuracy: true,
+      timeout: 3000,
+      maximumAge: 1000,
+    });
   };
 
   const onChangeRecordsMusic = (music: Music) => {
@@ -378,7 +375,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
   };
 
   const onChangeSettingActivity = async (activity: Activity) => {
-    const calorie = Math.floor(records.duration / MINUTE) * activity.caloriesPerMinute;
+    const calorie = Math.floor(duration / MINUTE) * activity.caloriesPerMinute;
 
     setSettings({
       ...settings,
@@ -416,6 +413,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const clearAllState = () => {
     setSettings(settingsInit);
     setRecords(recordsInit);
+    setDuration(0);
   };
 
   const onFinishRecord = (navigation: any) => {
@@ -438,18 +436,19 @@ export const RecordContextProvider2 = ({children}: Props) => {
   };
 
   const getCalorie = () => {
-    return Math.floor(records.duration / MINUTE) * settings.activity.caloriesPerMinute;
+    return Math.floor(duration / MINUTE) * settings.activity.caloriesPerMinute;
   };
 
   useEffect(() => {
     backgroundTimer.current = onRecord;
-  }, [records, settings]);
+  }, [records, settings, duration]);
 
   return (
     <RecordContext2.Provider
       value={{
         loading,
         settings,
+        duration,
         records,
         webViewRef,
         thumbnailRef,
@@ -472,6 +471,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
 
 export interface IRecordContext2 {
   loading: boolean;
+  duration: number;
   settings: Settings;
   records: Records;
   webViewRef: any;
