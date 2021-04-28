@@ -17,6 +17,8 @@ Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
 const RecordContext2 = createContext({});
 
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
 interface Props {
   children: ReactNode;
 }
@@ -82,13 +84,15 @@ interface Records {
   map: Map;
   music: Music;
   images: Array<Image>;
+  title: string;
 }
 
 const recordsInit = {
   calorie: 0,
   speed: [],
   distance: 0,
-  coordinates: [],
+  coordinates: [[126.97842453212644, 37.566629386346264]],
+  title: '',
   map: {
     id: 1,
     name: 'NORMAL',
@@ -176,6 +180,21 @@ export const RecordContextProvider2 = ({children}: Props) => {
     ].join(' ');
   };
 
+  const onChangeTitle = (text: string) => {
+    if (text.length > 10) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '제목은 10자 이내로 작성해주세요.',
+            description: '',
+          }}
+        />,
+      );
+    }
+    setRecords({...records, title: text});
+  };
+
   const onCreateRecord = async (navigation: any) => {
     setLoading(true);
     /**
@@ -205,6 +224,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
     const startLatitude = coors[0][0];
     const startLongitude = coors[0][1];
     const coordinates = JSON.stringify(coors);
+
+    let title = records.title;
+    if (!title) {
+      const date = new Date();
+      title = `${date.getHours() >= 12 ? 'Afternoon' : 'Morning'} ${months[date.getMonth()]} ${date.getDate()}th`;
+    }
     const feedRecords = {
       startDate: `${startDate}`,
       endDate: `${endDate}`,
@@ -219,6 +244,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
       address: '',
       startLatitude,
       startLongitude,
+      title,
     };
 
     const images = await onCreateImages();
@@ -452,6 +478,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
         records,
         webViewRef,
         thumbnailRef,
+        onChangeTitle,
         onChangeRecordsMusic,
         onChangeRecordsMap,
         onChangeSettingActivity,
@@ -487,6 +514,7 @@ export interface IRecordContext2 {
   onCreateRecord: (navigation: any) => void;
   onChangeImage: (idx: number) => void;
   clearAllState: () => void;
+  onChangeTitle: (text: string) => void;
 }
 
 export default RecordContext2;

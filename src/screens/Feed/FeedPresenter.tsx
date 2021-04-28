@@ -10,6 +10,7 @@ import FeedContext from '../../module/context/FeedContext';
 import {IUserFollower} from '../../module/type/user';
 import SearchComponent from '../../components/SearchComponent';
 import Loading from '../../components/Loading';
+import FeedTitleComponent from '../../components/FeedTitleComponent';
 
 interface IProps {
   navigation: any;
@@ -191,6 +192,7 @@ export default ({navigation, events, newFollowers}: IProps) => {
                         <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
                         <RecordText>{feed.distance} 킬로미터</RecordText>
                       </RecordWrapper>
+                      <FeedTitleComponent title={feed.title} />
                     </PostImageWrapper>
 
                     <IconWrapper>

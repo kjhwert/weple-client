@@ -6,7 +6,7 @@ import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/com
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-import {Image, View} from 'react-native';
+import {Image, Platform, TextInput} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -16,9 +16,16 @@ interface IProps {
 }
 
 export default ({navigation, getAverageSpeed}: IProps) => {
-  const {thumbnailRef, duration, settings, records, webViewRef, onCreateRecord, onChangeImage} = useContext(
-    RecordContext2,
-  ) as IRecordContext2;
+  const {
+    thumbnailRef,
+    duration,
+    settings,
+    records,
+    webViewRef,
+    onCreateRecord,
+    onChangeImage,
+    onChangeTitle,
+  } = useContext(RecordContext2) as IRecordContext2;
 
   const centerCoordinates = records.coordinates[Math.floor(records.coordinates.length / 2)];
 
@@ -43,6 +50,10 @@ export default ({navigation, getAverageSpeed}: IProps) => {
             </MapPlayWrapper>
 
             <SetUpWrapper>
+              <SetBtnWrapperTitle>
+                <SetUpListText>제목</SetUpListText>
+                <TextInput placeholder="제목을 입력해주세요." value={records.title} onChangeText={onChangeTitle} />
+              </SetBtnWrapperTitle>
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
@@ -221,11 +232,31 @@ const SetBtnWrapper = styled.View`
   border-color: #eeeeee;
 `;
 
+const SetBtnWrapperTitle = styled.View`
+  display: flex;
+  width: 100%;
+  padding: ${Platform.OS === 'android' ? '5px' : '20px'} 30px;
+  border-bottom-width: 1px;
+  border-color: #eeeeee;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const SetBtn = styled.TouchableOpacity`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+`;
+
+const SetBtnView = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: blue;
 `;
 
 const SetUpTypeWrapper = styled.View`

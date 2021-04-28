@@ -8,6 +8,7 @@ export interface IEvent {
 
 export interface IFeed {
   id: number;
+  title: string;
   duration: number;
   distance: number;
   createdAt: string;

@@ -3,10 +3,11 @@ import styled from 'styled-components/native';
 import UserContext from '../../module/context/UserContext';
 import {IProfileUserInfo} from '../../module/type/user';
 import {BASE_URL, timeForToday, togetherDate} from '../../module/common';
-import {RefreshControl} from 'react-native';
+import {RefreshControl, Text} from 'react-native';
 import {IFeed} from '../../module/type/feed';
 import {ITogethers} from '../../module/type/together';
 import {getComma} from '../../components/CommonTime';
+import FeedTitleComponent from '../../components/FeedTitleComponent';
 
 interface IProps {
   navigation: any;
@@ -166,17 +167,6 @@ export default ({
                           <PostTime>{timeForToday(feed.createdAt)}</PostTime>
                         </ProfileTextWrapper>
                       </ProfileInfoWrapper>
-                      {/*{!isLoginUserFeed(feed.userId) && (*/}
-                      {/*  <FollowBtn*/}
-                      {/*    isFollow={feed.isUserFollowed}*/}
-                      {/*    onPress={() => {*/}
-                      {/*      userFollowAndReload(feed.userId);*/}
-                      {/*    }}>*/}
-                      {/*    <FollowBtnText isFollow={feed.isUserFollowed}>*/}
-                      {/*      {!feed.isUserFollowed ? '팔로우' : '팔로잉'}*/}
-                      {/*    </FollowBtnText>*/}
-                      {/*  </FollowBtn>*/}
-                      {/*)}*/}
                     </ProfileWrapper>
                     <PostImageWrapper
                       onPress={() => {
@@ -187,6 +177,7 @@ export default ({
                         <RecordImage resizeMode="cover" source={{uri: `${BASE_URL}/${feed.activityImage}`}} />
                         <RecordText>{feed.distance} 킬로미터</RecordText>
                       </RecordWrapper>
+                      <FeedTitleComponent title={feed.title} />
                     </PostImageWrapper>
 
                     <IconWrapper>

@@ -3,11 +3,10 @@ import styled from 'styled-components/native';
 import {IShowFeed} from '../../module/type/feedContext';
 import {BASE_URL, secondsToTimeFormat, showDateToAmPmHourMinute, timeForToday} from '../../module/common';
 import UserContext from '../../module/context/UserContext';
-import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
-import WebView from 'react-native-webview';
 import FeedContext from '../../module/context/FeedContext';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
+import FeedTitleComponent from '../../components/FeedTitleComponent';
 
 interface IProps {
   navigation: any;
@@ -40,6 +39,7 @@ export default ({navigation, feed}: IProps) => {
                 style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
                 onPress={navigateShare}>
                 <Image source={require('../../assets/play_icon.png')} style={{width: 40, height: 40}} />
+                <FeedTitleComponent title={feed.title} />
               </TouchableOpacity>
             </MapPlayWrapper>
 

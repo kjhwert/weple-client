@@ -10,7 +10,6 @@ import FeedRecommendContainer from '../screens/Feed/FeedRecommendContainer';
 import FriendCommentContainer from '../screens/Feed/friendProfile/friendSns/FriendCommentContainer';
 import BackBtn from '../components/BackBtn';
 import FeedEventDetailContainer from '../screens/Feed/FeedEvent/FeedEventDetailContainer';
-import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiveJoinContainer';
 import Search from '../components/Search';
 import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
 import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
