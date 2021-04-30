@@ -8,9 +8,10 @@ import CheckAlert from '../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
+  route: any;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, route}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
   const {getCreatedIndex}: any = useContext(FeedContext);
   const [newFollowers, setNewFollowers] = useState({
@@ -50,7 +51,11 @@ export default ({navigation}: IProps) => {
   useEffect(() => {
     getFollowers();
     getEvents();
-    getCreatedIndex();
+    const unsubscribe = navigation.addListener('focus', () => {
+      getCreatedIndex();
+    });
+
+    return unsubscribe;
   }, []);
 
   return eventLoading ? (

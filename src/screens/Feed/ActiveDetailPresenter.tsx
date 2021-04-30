@@ -7,6 +7,7 @@ import FeedContext from '../../module/context/FeedContext';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
 import FeedTitleComponent from '../../components/FeedTitleComponent';
+import Share from 'react-native-share';
 
 interface IProps {
   navigation: any;
@@ -27,6 +28,16 @@ export default ({navigation, feed}: IProps) => {
       format: 'jpg',
     });
     navigation.navigate('friendShare', {thumbnail});
+  };
+
+  const shareFeed = async () => {
+    try {
+      await Share.open({
+        url: `http://app.goweple.com?id=${feed.id}&share=feed&thumbnail=${feed.thumbnail}&title=${feed.title}`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -133,7 +144,7 @@ export default ({navigation, feed}: IProps) => {
                   <IconBtn>
                     <IconImage source={require('../../assets/icon_share_2.png')} />
                   </IconBtn>
-                  <IconBtn onPress={navigateShare}>
+                  <IconBtn onPress={shareFeed}>
                     <IconText>공유</IconText>
                   </IconBtn>
                 </ShareIconBtnText>

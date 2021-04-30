@@ -29,7 +29,7 @@ export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
                   <JoinTitle>{show.together.title}</JoinTitle>
                   <ShareBtn
                     onPress={() => {
-                      navigation.navigate('togetherShare');
+                      navigation.navigate('togetherShare', {together: show.together});
                     }}>
                     <ShareImage source={require('../../../assets/icon_share.png')} />
                   </ShareBtn>

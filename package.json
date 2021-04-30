@@ -29,6 +29,7 @@
     "@react-navigation/native": "^5.8.9",
     "@react-navigation/stack": "^5.12.6",
     "@types/react-native-background-timer": "^2.0.0",
+    "@types/react-native-share": "^3.3.2",
     "axios": "^0.21.0",
     "radio-buttons-react-native": "^1.0.4",
     "react": "16.13.1",

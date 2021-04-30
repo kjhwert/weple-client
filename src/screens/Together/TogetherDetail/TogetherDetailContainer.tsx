@@ -10,17 +10,16 @@ import TogetherContext from '../../../module/context/TogetherContext';
 interface IProps {
   navigation: any;
   route: {
-    params: {id: number};
+    params?: {id?: number; name?: string};
   };
 }
 
 export default ({navigation, route}: IProps) => {
-  const {setAlertVisible, setWarningAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible}: any = useContext(AlertContext);
   const {show, getShow}: any = useContext(TogetherContext);
 
   const togetherInto = async () => {
-    const id = route?.params?.id;
-    const {statusCode} = await togetherApi.togetherIn(id);
+    const {statusCode} = await togetherApi.togetherIn(show.together.id);
     if (statusCode !== 201) {
     } else {
       return setAlertVisible(
@@ -65,8 +64,7 @@ export default ({navigation, route}: IProps) => {
         }}
         canceled={() => {}}
         confirmed={async () => {
-          const id = route?.params?.id;
-          const {statusCode} = await togetherApi.togetherOut(id);
+          const {statusCode} = await togetherApi.togetherOut(show.together.id);
           if (statusCode !== 201) {
           } else {
             outOfOkAlert();

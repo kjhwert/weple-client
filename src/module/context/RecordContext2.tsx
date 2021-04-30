@@ -11,6 +11,7 @@ import {Platform} from 'react-native';
 import {feedApi} from '../api';
 import CheckAlert from '../../components/CheckAlert';
 import Geocoder from 'react-native-geocoding';
+import GpsCheckAlert from '../../components/GpsCheckAlert';
 
 Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'whenInUse'});
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
@@ -21,6 +22,14 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 
 
 interface Props {
   children: ReactNode;
+}
+
+interface Reject {
+  PERMISSION_DENIED: number;
+  POSITION_UNAVAILABLE: number;
+  TIMEOUT: number;
+  code: number;
+  message: string;
 }
 
 interface IGeoLocation {
@@ -78,7 +87,7 @@ interface Music {
 
 interface Records {
   calorie: number;
-  speed: Array<number>;
+  speed: number;
   distance: number;
   coordinates: Array<Array<number>>;
   map: Map;
@@ -89,9 +98,11 @@ interface Records {
 
 const recordsInit = {
   calorie: 0,
-  speed: [],
+  speed: 0,
   distance: 0,
-  coordinates: [[126.97842453212644, 37.566629386346264]],
+  // coordinates: [[126.97842453212644, 37.566629386346264]],
+  coordinates: [],
+  recordedDuration: [],
   title: '',
   map: {
     id: 1,
@@ -135,7 +146,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const [duration, setDuration] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
-  const {setAlertVisible}: any = useContext(AlertContext);
+  const {setAlertVisible, setAlertInvisible}: any = useContext(AlertContext);
 
   const onCreateThumbnailImage = async () => {
     const thumbnail = await captureRef(thumbnailRef, {
@@ -163,7 +174,9 @@ export const RecordContextProvider2 = ({children}: Props) => {
           uri: uri,
         });
 
-        const {data: path} = await feedApi.imagesCreate(data);
+        const {
+          data: {path},
+        } = await feedApi.imagesCreate(data);
         return {img: path, lat, lon, distance};
       }),
     );
@@ -273,6 +286,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
         }}
         checked={() => {
           navigation.navigate('recordMain');
+          navigation.navigate('feedMain');
         }}
       />,
     );
@@ -328,23 +342,25 @@ export const RecordContextProvider2 = ({children}: Props) => {
     );
   };
 
-  const getError = () => {
-    if (duration >= 10) return;
-    onChangeRecord();
-    return setAlertVisible(
-      <CheckAlert
-        check={{
-          type: 'warning',
-          title: 'GPS 정보를 수신할 수 없습니다.',
-          description: '잠시 후에 다시 시도해 주세요.',
-        }}
-      />,
-    );
+  /**
+   * GPS 오차범위 체크
+   * 오차범위는 0.0001로 추산.
+   * */
+  const isGpsError = (lat: number, lon: number) => {
+    if (records.coordinates.length === 0) return false;
+    const [longitude, latitude] = records.coordinates[records.coordinates.length - 1];
+    const latError = Math.abs(latitude - lat) < 0.0001;
+    const lonError = Math.abs(longitude - lon) < 0.0001;
+    if (latError || lonError) return true;
+    return false;
   };
 
-  const getCoordinates = ({coords: {speed: currentSpeed, latitude, longitude}}: IGeoLocation) => {
-    if (!currentSpeed || currentSpeed < 0) {
-      currentSpeed = 0;
+  const getCoordinates = ({coords: {latitude, longitude}}: IGeoLocation) => {
+    if (isGpsError(latitude, longitude)) return;
+
+    const coordinates = records.coordinates.concat([[longitude, latitude]]);
+    if (coordinates.length === 1) {
+      return setRecords({...records, coordinates});
     }
 
     let currentDistance = 0;
@@ -356,11 +372,9 @@ export const RecordContextProvider2 = ({children}: Props) => {
     }
 
     const distance = Math.floor((currentDistance + records.distance) * 1000) / 1000;
-    const speed1 = (distance * 1000) / DURATION_TIME;
+    const speed = Math.floor(((distance * 1000) / duration) * 3.6);
     // currentSpeed = Math.floor(currentSpeed * 10) / 10;
     // const speed = records.speed.concat(currentSpeed);
-    const speed = records.speed.concat(speed1);
-    const coordinates = records.coordinates.concat([[longitude, latitude]]);
 
     setRecords({...records, speed, distance, coordinates});
   };
@@ -376,10 +390,21 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const onRecord = async () => {
     durationInterval();
     if (duration % DURATION_TIME !== 0) return;
-    Geolocation.getCurrentPosition(getCoordinates, getError, {
+
+    Geolocation.getCurrentPosition(getCoordinates, (error) => {}, {
       enableHighAccuracy: true,
       timeout: 3000,
       maximumAge: 1000,
+    });
+  };
+
+  const isGpsConnected = async () => {
+    return await new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 1000,
+      });
     });
   };
 
@@ -407,11 +432,34 @@ export const RecordContextProvider2 = ({children}: Props) => {
       ...settings,
       activity,
     });
-    setRecords({...records, calorie});
+    // setRecords({...records, calorie});
     await AsyncStorage.setItem('@activity', JSON.stringify(activity));
   };
 
-  const onInitRecord = () => {
+  const onInitRecord = async () => {
+    setAlertVisible(
+      <GpsCheckAlert
+        check={{
+          type: 'check',
+          title: 'GPS 정보를 수신 중입니다.',
+          description: '잠시 기다려 주세요.',
+        }}
+      />,
+    );
+    try {
+      await isGpsConnected();
+      setAlertInvisible();
+    } catch (e) {
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: 'GPS 정보를 수신할 수 없습니다.',
+            description: '잠시 후에 다시 시도해 주세요.',
+          }}
+        />,
+      );
+    }
     interval.current = BackgroundTimer.setInterval(() => {
       backgroundTimer.current();
     }, 1000);

@@ -4,7 +4,6 @@ import {BASE_URL, secondsToTimeFormat} from '../module/common';
 import FeedContext from '../module/context/FeedContext';
 import {webViewJavaScriptCode} from '../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
-import {ShareDialog} from 'react-native-fbsdk';
 import {Platform} from 'react-native';
 import Share from 'react-native-share';
 import AlertContext from '../module/context/AlertContext';

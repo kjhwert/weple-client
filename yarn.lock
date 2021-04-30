@@ -1548,6 +1548,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-share@^3.3.2":
+  "integrity" "sha512-D/kIZvafsCFBONYZ37pekeE7/b/Zs+K0mRtT05SJ0aGZjSDnPyRmazrfyOrzOOIufEBH/vXrlb3yFkmdbCkwaA=="
+  "resolved" "https://registry.npmjs.org/@types/react-native-share/-/react-native-share-3.3.2.tgz"
+  "version" "3.3.2"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*", "@types/react-native@^0.63.2":
   "integrity" "sha512-2uyPZoHtoUVsVO55HdrRCpgwwG2zVHLttTaR9f/BThoBAQngNWuZQ0eMGmfgRHBKXmi3TmtWjbWPxohkITLlkw=="
   "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.63.35.tgz"

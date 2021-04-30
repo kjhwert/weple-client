@@ -67,7 +67,7 @@ export default ({navigation}: IProps) => {
 
             <RecordUnits
               distance={records.distance}
-              speed={records.speed.length > 0 ? records.speed[records.speed.length - 1] : 0}
+              speed={records.speed}
               calorie={records.calorie}
               duration={duration}
             />

@@ -2,21 +2,20 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordUnits from '../../components/RecordUnits';
-import {BASE_URL, FONT_SIZE_1, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
+import {BASE_URL, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-import {Image, Platform, TextInput, View} from 'react-native';
-import {BottomTabView} from '@react-navigation/bottom-tabs';
+import {Image, Platform, View} from 'react-native';
+import ViewShot from 'react-native-view-shot';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;
-  getAverageSpeed: (speed: Array<number>) => number;
 }
 
-export default ({navigation, getAverageSpeed}: IProps) => {
+export default ({navigation}: IProps) => {
   const {
     thumbnailRef,
     duration,
@@ -53,7 +52,12 @@ export default ({navigation, getAverageSpeed}: IProps) => {
             <SetUpWrapper>
               <SetBtnWrapperTitle>
                 <SetUpListText>제목</SetUpListText>
-                <TitleTextInput placeholder="제목을 입력해주세요." value={records.title} onChangeText={onChangeTitle} />
+                <TitleTextInput
+                  placeholder="제목을 입력해주세요."
+                  value={records.title}
+                  onChangeText={onChangeTitle}
+                  style={{textAlign: 'right'}}
+                />
               </SetBtnWrapperTitle>
               <SetBtnWrapper>
                 <SetBtn
@@ -95,7 +99,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
 
             <RecordUnits
               distance={records.distance}
-              speed={getAverageSpeed(records.speed)}
+              speed={records.speed}
               calorie={records.calorie}
               duration={duration}
             />
@@ -112,7 +116,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   {settings.startDate && showDateToAmPmHourMinute(settings.startDate)}에 출발
                 </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
-              <View ref={thumbnailRef} style={{width: '100%', height: 200}}>
+              <ViewShot ref={thumbnailRef} style={{width: '100%', height: 200}}>
                 <Image
                   source={require('../../assets/ttamnaLogo.png')}
                   style={{
@@ -121,7 +125,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                     position: 'absolute',
                     top: 5,
                     left: 10,
-                    zIndex: 20,
+                    zIndex: 100,
                     resizeMode: 'contain',
                   }}
                 />
@@ -155,7 +159,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                     />
                   </MapboxGL.ShapeSource>
                 </MapboxGL.MapView>
-              </View>
+              </ViewShot>
 
               {records.images.map((image, idx: number) => (
                 <ActiveDetailWrapper key={idx}>

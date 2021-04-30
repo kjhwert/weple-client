@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TogetherShareContainer from '../screens/Together/TogetherDetail/TogetherShareContainer';
 import TogetherPostIntroduceContainer from '../screens/Together/togetherPost/TogetherPostIntroduceContainer';
@@ -23,7 +23,13 @@ import SelectCategoryComponent from '../components/SelectCategoryComponent';
 
 const Stack = createStackNavigator();
 
-export default () => {
+export default ({navigation, route}: any) => {
+  useEffect(() => {
+    console.log(route);
+    if (route?.params?.name === 'togetherDetail') {
+      navigation.navigate('togetherDetail', route.params);
+    }
+  }, []);
   return (
     <Stack.Navigator
       screenOptions={({navigation, route}) => ({

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
 import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
@@ -25,9 +25,16 @@ import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMember
 
 const Stack = createStackNavigator();
 
-export default () => {
+export default ({navigation, route}: any) => {
   const {user}: any = useContext(FollowContext);
   const {show}: IFeedContext = useContext(FeedContext);
+
+  useEffect(() => {
+    console.log(route);
+    if (route?.params?.name === 'activeDetail') {
+      navigation.navigate('activeDetail', route.params);
+    }
+  }, []);
 
   return (
     <Stack.Navigator
