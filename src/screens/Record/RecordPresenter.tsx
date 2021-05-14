@@ -15,9 +15,13 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {settings, records, duration, onInitRecord, onChangeRecord, onFinishRecord, onTakePicture} = useContext(
-    RecordContext2,
-  ) as IRecordContext2;
+  const {
+    state: {settings, records, duration},
+    onInitRecord,
+    onChangeRecord,
+    onFinishRecord,
+    onTakePicture,
+  } = useContext(RecordContext2) as IRecordContext2;
 
   const getLastCoordinates = () => {
     if (records.coordinates.length > 0) {

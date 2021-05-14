@@ -81,20 +81,26 @@ interface Records {
   calorie: number;
   speed: number;
   distance: number;
-  coordinates: Array<Array<number>>;
+  coordinates: any;
   map: Map;
   music: Music;
   images: Array<Image>;
   title: string;
 }
 
+interface IState {
+  records: Records;
+  settings: Settings;
+  duration: number;
+  loading: boolean;
+}
+
+// coordinates: [[126.97842453212644, 37.566629386346264]],
 const recordsInit = {
   calorie: 0,
   speed: 0,
   distance: 0,
-  // coordinates: [[126.97842453212644, 37.566629386346264]],
   coordinates: [],
-  recordedDuration: [],
   title: '',
   map: {
     id: 1,
@@ -132,11 +138,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const webViewRef: any = useRef(null);
   const thumbnailRef: any = useRef(null);
 
-  /** record states */
-  const [settings, setSettings] = useState<Settings>(settingsInit);
-  const [records, setRecords] = useState<Records>(recordsInit);
-  const [duration, setDuration] = useState<number>(0);
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState<IState>({
+    settings: settingsInit,
+    records: recordsInit,
+    duration: 0,
+    loading: false,
+  });
 
   const {setAlertVisible, setAlertInvisible}: any = useContext(AlertContext);
 
@@ -158,7 +165,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
 
   const onCreateImages = async () => {
     return await Promise.all(
-      records.images.map(async ({fileName, type, uri, latitude: lat, longitude: lon, distance}) => {
+      state.records.images.map(async ({fileName, type, uri, latitude: lat, longitude: lon, distance}) => {
         const data = new FormData();
         data.append('image', {
           name: fileName,
@@ -174,16 +181,16 @@ export const RecordContextProvider2 = ({children}: Props) => {
     );
   };
 
-  const getAddress = async (coordinate: Array<number>) => {
-    const {results: res} = await Geocoder.from(coordinate[1], coordinate[0]);
-
-    return [
-      res[0].address_components[3].long_name,
-      res[0].address_components[2].long_name,
-      res[0].address_components[1].long_name,
-      res[0].address_components[0].long_name,
-    ].join(' ');
-  };
+  // const getAddress = async (coordinate: Array<number>) => {
+  //   const {results: res} = await Geocoder.from(coordinate[1], coordinate[0]);
+  //
+  //   return [
+  //     res[0].address_components[3].long_name,
+  //     res[0].address_components[2].long_name,
+  //     res[0].address_components[1].long_name,
+  //     res[0].address_components[0].long_name,
+  //   ].join(' ');
+  // };
 
   const onChangeTitle = (text: string) => {
     if (text.length > 10) {
@@ -197,11 +204,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
         />,
       );
     }
-    setRecords({...records, title: text});
+    setState({...state, records: {...state.records, title: text}});
   };
 
   const onCreateRecord = async (navigation: any) => {
-    setLoading(true);
+    const {duration, records, settings} = state;
+    setState({...state, loading: true});
     /**
      * Thumbnail image upload
      * */
@@ -211,7 +219,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
       data: {path},
     } = await onCreateThumbnailImage();
     if (thumbnailStatus !== 201) {
-      setLoading(false);
+      setState({...state, loading: false});
       return setAlertVisible(
         <CheckAlert
           check={{
@@ -230,7 +238,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
     const startLongitude = coors[0][1];
     const coordinates = JSON.stringify(coors);
 
-    let title = records.title;
+    let title = state.records.title;
     if (!title) {
       const date = new Date();
       title = `${date.getHours() >= 12 ? 'Afternoon' : 'Morning'} ${months[date.getMonth()]} ${date.getDate()}th`;
@@ -256,7 +264,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
     const {statusCode, message} = await feedApi.create({...feedRecords, images});
     // 피드 업로드 먼저 하고, 이미지 업로드
     if (statusCode !== 201) {
-      setLoading(false);
+      setState({...state, loading: false});
       return setAlertVisible(
         <CheckAlert
           check={{
@@ -267,7 +275,6 @@ export const RecordContextProvider2 = ({children}: Props) => {
         />,
       );
     }
-    setLoading(false);
     clearAllState();
     return setAlertVisible(
       <CheckAlert
@@ -287,17 +294,18 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const onChangeImage = (idx: number) => {
     const options = {storageOptions: {skipBackup: true, path: 'image'}};
     ImagePicker.launchImageLibrary(options, ({uri}) => {
-      let images = [...records.images];
+      let images = [...state.records.images];
       images[idx] = {...images[idx], uri};
-      setRecords({...records, images});
+      setState({...state, records: {...state.records, images}});
     });
   };
 
   const onTakePicture = () => {
-    if (!settings.isStart) {
+    if (!state.settings.isStart) {
       return;
     }
 
+    onChangeRecord();
     const options = {storageOptions: {skipBackup: true, path: 'image'}, quality: 0.5};
     ImagePicker.launchCamera(
       options,
@@ -308,11 +316,11 @@ export const RecordContextProvider2 = ({children}: Props) => {
         if (error) {
           return;
         }
-        const {distance} = records;
+        const {distance} = state.records;
         const timeStringToDate = timestamp ? new Date(timestamp) : new Date();
         // random string generating
         fileName = !fileName ? Math.random().toString(36).substring(2, 15) : fileName;
-        const images = records.images.concat({
+        const images = state.records.images.concat({
           latitude,
           longitude,
           uri,
@@ -329,7 +337,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
         });
 
         await feedApi.imagesCreate(data);
-        setRecords({...records, images});
+
+        setState({
+          ...state,
+          records: {...state.records, images},
+          settings: {...state.settings, isStart: !state.settings.isStart, tabBarVisible: !state.settings.tabBarVisible},
+        });
       },
     );
   };
@@ -339,6 +352,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
    * 오차범위는 0.0001로 추산.
    * */
   const isGpsError = (lat: number, lon: number) => {
+    const {records} = state;
     if (records.coordinates.length === 0) return false;
     const [longitude, latitude] = records.coordinates[records.coordinates.length - 1];
     const latError = Math.abs(latitude - lat) < 0.0001;
@@ -350,9 +364,11 @@ export const RecordContextProvider2 = ({children}: Props) => {
   const getCoordinates = ({coords: {latitude, longitude}}: IGeoLocation) => {
     if (isGpsError(latitude, longitude)) return;
 
+    const {records, duration} = state;
+
     const coordinates = records.coordinates.concat([[longitude, latitude]]);
     if (coordinates.length === 1) {
-      return setRecords({...records, coordinates});
+      return setState({...state, records: {...records, coordinates}});
     }
 
     let currentDistance = 0;
@@ -368,20 +384,20 @@ export const RecordContextProvider2 = ({children}: Props) => {
     // currentSpeed = Math.floor(currentSpeed * 10) / 10;
     // const speed = records.speed.concat(currentSpeed);
 
-    setRecords({...records, speed, distance, coordinates});
+    setState({...state, records: {...state.records, speed, distance, coordinates}});
   };
 
   const durationInterval = () => {
-    if (duration % MINUTE === 0) {
+    if (state.duration % MINUTE === 0) {
       const calorie = getCalorie();
-      setRecords({...records, calorie});
+      return setState({...state, records: {...state.records, calorie}, duration: state.duration + 1});
     }
-    setDuration(duration + 1);
+    setState({...state, duration: state.duration + 1});
   };
 
   const onRecord = async () => {
     durationInterval();
-    if (duration % DURATION_TIME !== 0) return;
+    if (state.duration % DURATION_TIME !== 0) return;
 
     Geolocation.getCurrentPosition(getCoordinates, (error) => {}, {
       enableHighAccuracy: true,
@@ -401,30 +417,24 @@ export const RecordContextProvider2 = ({children}: Props) => {
   };
 
   const onChangeRecordsMusic = (music: Music) => {
-    if (records.music === music) {
-      return setRecords({...records, music});
+    if (state.records.music === music) {
+      return setState({...state, records: {...state.records, music}});
     }
-    setRecords({...records, music});
+    setState({...state, records: {...state.records, music}});
     webViewRef.current.reload();
   };
 
   const onChangeRecordsMap = (map: Map) => {
-    setRecords({...records, map});
+    setState({...state, records: {...state.records, map}});
     webViewRef.current.reload();
   };
 
   const onChangeSettingAwake = () => {
-    setSettings({...settings, awake: !settings.awake});
+    setState({...state, settings: {...state.settings, awake: !state.settings.awake}});
   };
 
   const onChangeSettingActivity = async (activity: Activity) => {
-    const calorie = Math.floor(duration / MINUTE) * activity.caloriesPerMinute;
-
-    setSettings({
-      ...settings,
-      activity,
-    });
-    // setRecords({...records, calorie});
+    setState({...state, settings: {...state.settings, activity}});
     await AsyncStorage.setItem('@activity', JSON.stringify(activity));
   };
 
@@ -455,35 +465,40 @@ export const RecordContextProvider2 = ({children}: Props) => {
     interval.current = BackgroundTimer.setInterval(() => {
       backgroundTimer.current();
     }, 1000);
-    setSettings({
-      ...settings,
-      isInit: true,
-      isStart: true,
-      startDate: new Date(),
-      tabBarVisible: false,
+
+    setState({
+      ...state,
+      settings: {
+        ...state.settings,
+        isInit: true,
+        isStart: true,
+        startDate: new Date(),
+        tabBarVisible: false,
+      },
     });
   };
 
   const onChangeRecord = () => {
-    if (settings.isStart) {
+    if (state.settings.isStart) {
       BackgroundTimer.clearInterval(interval.current);
     }
-    if (!settings.isStart) {
+    if (!state.settings.isStart) {
       interval.current = BackgroundTimer.setInterval(() => {
         backgroundTimer.current();
       }, 1000);
     }
-    setSettings({...settings, isStart: !settings.isStart, tabBarVisible: !settings.tabBarVisible});
+    setState({
+      ...state,
+      settings: {...state.settings, isStart: !state.settings.isStart, tabBarVisible: !state.settings.tabBarVisible},
+    });
   };
 
   const clearAllState = () => {
-    setSettings(settingsInit);
-    setRecords(recordsInit);
-    setDuration(0);
+    setState({...state, settings: settingsInit, records: recordsInit, duration: 0, loading: false});
   };
 
   const onFinishRecord = (navigation: any) => {
-    if (records.coordinates.length === 0) {
+    if (state.records.coordinates.length === 0) {
       return setAlertVisible(
         <ConfirmAlert
           confirm={{
@@ -502,20 +517,17 @@ export const RecordContextProvider2 = ({children}: Props) => {
   };
 
   const getCalorie = () => {
-    return Math.floor(duration / MINUTE) * settings.activity.caloriesPerMinute;
+    return Math.floor(state.duration / MINUTE) * state.settings.activity.caloriesPerMinute;
   };
 
   useEffect(() => {
     backgroundTimer.current = onRecord;
-  }, [records, settings, duration]);
+  }, [state]);
 
   return (
     <RecordContext2.Provider
       value={{
-        loading,
-        settings,
-        duration,
-        records,
+        state,
         webViewRef,
         thumbnailRef,
         onChangeTitle,
@@ -537,10 +549,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
 };
 
 export interface IRecordContext2 {
-  loading: boolean;
-  duration: number;
-  settings: Settings;
-  records: Records;
+  state: {
+    loading: boolean;
+    duration: number;
+    settings: Settings;
+    records: Records;
+  };
   webViewRef: any;
   thumbnailRef: any;
   onChangeRecordsMap: (map: Map) => void;

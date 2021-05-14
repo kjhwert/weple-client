@@ -9,7 +9,9 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {loading} = useContext(RecordContext2) as IRecordContext2;
+  const {
+    state: {loading},
+  } = useContext(RecordContext2) as IRecordContext2;
 
   return loading ? (
     <Container>

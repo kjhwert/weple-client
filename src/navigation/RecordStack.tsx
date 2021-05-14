@@ -15,7 +15,9 @@ import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2'
 const Stack = createStackNavigator();
 
 export default () => {
-  const {settings} = useContext(RecordContext2) as IRecordContext2;
+  const {
+    state: {settings},
+  } = useContext(RecordContext2) as IRecordContext2;
   return (
     <Stack.Navigator
       screenOptions={({navigation}) => ({

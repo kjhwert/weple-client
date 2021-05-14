@@ -24,7 +24,9 @@ MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 export default ({navigation, mapGroup}: IProps) => {
   const {
-    records: {map},
+    state: {
+      records: {map},
+    },
     onChangeRecordsMap,
   } = useContext(RecordContext2) as IRecordContext2;
 

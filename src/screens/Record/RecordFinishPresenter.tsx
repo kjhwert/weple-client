@@ -18,16 +18,20 @@ interface IProps {
 export default ({navigation}: IProps) => {
   const {
     thumbnailRef,
-    duration,
-    settings,
-    records,
+    state: {duration, settings, records},
     webViewRef,
     onCreateRecord,
     onChangeImage,
     onChangeTitle,
   } = useContext(RecordContext2) as IRecordContext2;
 
-  const centerCoordinates = records.coordinates[Math.floor(records.coordinates.length / 2)];
+  const getCenterCoordinates = () => {
+    if (records.coordinates.length > 0) {
+      return records.coordinates[Math.floor(records.coordinates.length / 2)];
+    }
+
+    return [126.97842453212644, 37.566629386346264];
+  };
 
   return (
     <Container>
@@ -139,30 +143,32 @@ export default ({navigation}: IProps) => {
                   rotateEnabled={false}>
                   <MapboxGL.Camera
                     zoomLevel={13}
-                    centerCoordinate={centerCoordinates}
+                    centerCoordinate={getCenterCoordinates()}
                     animationMode={'moveTo'}
                     animationDuration={0}
                   />
-                  <MapboxGL.ShapeSource
-                    id="shapeSource"
-                    shape={{
-                      type: 'Feature',
-                      id: 'shapeSource',
-                      properties: {},
-                      geometry: {
-                        type: 'LineString',
-                        coordinates: records.coordinates,
-                      },
-                    }}>
-                    <MapboxGL.LineLayer
-                      id="lineLayer"
-                      style={{
-                        lineWidth: 5,
-                        lineJoin: 'bevel',
-                        lineColor: '#007bf1',
-                      }}
-                    />
-                  </MapboxGL.ShapeSource>
+                  {records.coordinates.length > 0 && (
+                    <MapboxGL.ShapeSource
+                      id="shapeSource"
+                      shape={{
+                        type: 'Feature',
+                        id: 'shapeSource',
+                        properties: {},
+                        geometry: {
+                          type: 'LineString',
+                          coordinates: records.coordinates,
+                        },
+                      }}>
+                      <MapboxGL.LineLayer
+                        id="lineLayer"
+                        style={{
+                          lineWidth: 5,
+                          lineJoin: 'bevel',
+                          lineColor: '#007bf1',
+                        }}
+                      />
+                    </MapboxGL.ShapeSource>
+                  )}
                 </MapboxGL.MapView>
               </ViewShot>
 

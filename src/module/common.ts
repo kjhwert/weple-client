@@ -3,7 +3,7 @@ import {IGps} from './type/common';
 // export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
 export const BASE_URL = 'http://www.goweple.com:3001';
 export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
-export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
+export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
 export const MAPBOX_DEFAULT_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
 export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
 

@@ -4,7 +4,7 @@ import FeedStack from '../navigation/FeedStack';
 import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
-import {Alert, Image, Linking} from 'react-native';
+import {Image, Linking} from 'react-native';
 import FeedContext from '../module/context/FeedContext';
 import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2';
 
@@ -14,7 +14,9 @@ const tabInActiveColor = '#000';
 
 export default ({navigation}: any) => {
   const {
-    settings: {tabBarVisible},
+    state: {
+      settings: {tabBarVisible},
+    },
   } = useContext(RecordContext2) as IRecordContext2;
   const {tabBarVisible: feedTabBar}: any = useContext(FeedContext);
 

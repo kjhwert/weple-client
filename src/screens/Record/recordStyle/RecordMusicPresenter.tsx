@@ -15,7 +15,9 @@ interface IProps {
 export default ({musicGroup, musicPlay, musicPause, playedMusic}: IProps) => {
   const {
     onChangeRecordsMusic,
-    records: {music: recordMusic},
+    state: {
+      records: {music: recordMusic},
+    },
   } = useContext(RecordContext2) as IRecordContext2;
   useEffect(() => {
     return () => {

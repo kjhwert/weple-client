@@ -9,7 +9,10 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const {settings, onChangeSettingAwake} = useContext(RecordContext2) as IRecordContext2;
+  const {
+    state: {settings},
+    onChangeSettingAwake,
+  } = useContext(RecordContext2) as IRecordContext2;
   return (
     <Container>
       <Card>

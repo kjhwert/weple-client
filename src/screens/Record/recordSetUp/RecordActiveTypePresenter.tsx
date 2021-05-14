@@ -14,7 +14,10 @@ interface IStyledProps {
 }
 
 export default ({navigation, activities}: IProps) => {
-  const {settings, onChangeSettingActivity} = useContext(RecordContext2) as IRecordContext2;
+  const {
+    state: {settings},
+    onChangeSettingActivity,
+  } = useContext(RecordContext2) as IRecordContext2;
   return (
     <Container>
       <ScrollContainer>
