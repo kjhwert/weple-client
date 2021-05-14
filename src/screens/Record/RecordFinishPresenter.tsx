@@ -6,7 +6,7 @@ import {BASE_URL, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-import {Image, Platform, View} from 'react-native';
+import {Image, Platform} from 'react-native';
 import ViewShot from 'react-native-view-shot';
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
@@ -137,7 +137,12 @@ export default ({navigation}: IProps) => {
                   scrollEnabled={false}
                   pitchEnabled={false}
                   rotateEnabled={false}>
-                  <MapboxGL.Camera zoomLevel={13} centerCoordinate={centerCoordinates} />
+                  <MapboxGL.Camera
+                    zoomLevel={13}
+                    centerCoordinate={centerCoordinates}
+                    animationMode={'moveTo'}
+                    animationDuration={0}
+                  />
                   <MapboxGL.ShapeSource
                     id="shapeSource"
                     shape={{

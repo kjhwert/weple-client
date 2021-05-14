@@ -180,7 +180,6 @@ export default ({navigation, feed}: IProps) => {
                   )}`}</ActiveDetailTimeText>
                 </DetailTextWrapper>
               </ActiveDetailTextWrapper>
-
               {feed.images.map((image) => (
                 <FeedImageWrapper key={image.id}>
                   <ActiveDetailImageWrapper>

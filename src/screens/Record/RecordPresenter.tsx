@@ -50,7 +50,8 @@ export default ({navigation}: IProps) => {
         zoomLevel={14}
         centerCoordinate={getLastCoordinates()}
         animationMode={'flyTo'}
-        animationDuration={0}></MapboxGL.Camera>
+        animationDuration={0}
+      />
     );
   };
 

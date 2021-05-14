@@ -11,15 +11,15 @@ export default ({navigation}: IProps) => {
   const {onChangeSettingActivity} = useContext(RecordContext2) as IRecordContext2;
   const confirmUserLocation = async () => {
     const checkPermissionResult = await checkPermission({
-      ios: 'whenInUse',
-      android: {detail: 'coarse'},
+      ios: 'always',
+      android: {detail: 'fine'},
     });
     if (!checkPermissionResult) {
       const result = await requestPermission({
         android: {
-          detail: 'coarse',
+          detail: 'fine',
         },
-        ios: 'whenInUse',
+        ios: 'always',
       });
     } else {
       await configure({

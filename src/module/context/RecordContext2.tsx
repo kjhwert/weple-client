@@ -24,14 +24,6 @@ interface Props {
   children: ReactNode;
 }
 
-interface Reject {
-  PERMISSION_DENIED: number;
-  POSITION_UNAVAILABLE: number;
-  TIMEOUT: number;
-  code: number;
-  message: string;
-}
-
 interface IGeoLocation {
   coords: {
     latitude: number;
