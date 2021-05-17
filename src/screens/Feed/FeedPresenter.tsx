@@ -117,18 +117,22 @@ export default ({navigation, events, newFollowers}: IProps) => {
               </>
             )}
 
-            <Swiper style={styles.swiperWrapper} height={150} showsButtons={false} autoplay={true}>
-              {events.map(({id, image}) => (
-                <EventWrapper
-                  key={id}
-                  onPress={() => {
-                    navigation.navigate('feedEventDetail', {id});
-                  }}>
-                  <EventImage source={{uri: `${BASE_URL}/${image}`}} style={{resizeMode: 'cover'}} />
-                </EventWrapper>
-              ))}
-            </Swiper>
-            <Line></Line>
+            {events.length > 0 && (
+              <>
+                <Swiper style={styles.swiperWrapper} height={150} showsButtons={false} autoplay={true}>
+                  {events.map(({id, image}) => (
+                    <EventWrapper
+                      key={id}
+                      onPress={() => {
+                        navigation.navigate('feedEventDetail', {id});
+                      }}>
+                      <EventImage source={{uri: `${BASE_URL}/${image}`}} style={{resizeMode: 'cover'}} />
+                    </EventWrapper>
+                  ))}
+                </Swiper>
+                <Line></Line>
+              </>
+            )}
 
             <MenuBarWrapper>
               {sorts.map(({tab, sort}, idx) => (

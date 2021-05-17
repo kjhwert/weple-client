@@ -11,11 +11,12 @@ import {
   timeForToday,
   togetherDate,
 } from '../../module/common';
-import {RefreshControl, Text} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 import {IFeed} from '../../module/type/feed';
 import {ITogethers} from '../../module/type/together';
 import {getComma} from '../../components/CommonTime';
 import FeedTitleComponent from '../../components/FeedTitleComponent';
+import Loading from '../../components/Loading';
 
 interface IProps {
   navigation: any;
@@ -102,16 +103,10 @@ export default ({
                 <ActiveIntroduceText>{user.user.description}</ActiveIntroduceText>
 
                 <PayBtnWrapper>
-                  <PaymentBtn
-                    onPress={() => {
-                      navigation.navigate('profilePay');
-                    }}>
+                  <PaymentBtn onPress={() => {}}>
                     <PayBtnText>결제내역</PayBtnText>
                   </PaymentBtn>
-                  <MembershipBtn
-                    onPress={() => {
-                      navigation.navigate('profileMembership');
-                    }}>
+                  <MembershipBtn onPress={() => {}}>
                     <PayBtnText>멤버십</PayBtnText>
                   </MembershipBtn>
                   <PointBtn
@@ -156,7 +151,11 @@ export default ({
               </ProfileActiveTitleWrapper>
             )}
 
-            {pagination.sort === 'feed' &&
+            {pagination.sort === 'feed' && feeds.length === 0 ? (
+              <View style={{marginTop: 10}}>
+                <Text>데이터가 없습니다.</Text>
+              </View>
+            ) : (
               feeds.map((feed: IFeed) => (
                 <LineWrapper key={feed.id}>
                   <PostWrapper>
@@ -237,9 +236,14 @@ export default ({
                   </PostWrapper>
                   <Line />
                 </LineWrapper>
-              ))}
+              ))
+            )}
 
-            {pagination.sort === 'together' &&
+            {pagination.sort === 'together' && togethers.length === 0 ? (
+              <View style={{marginTop: 10}}>
+                <Text>데이터가 없습니다.</Text>
+              </View>
+            ) : (
               togethers.map((together: ITogethers) => (
                 <RecruitWrapper
                   key={together.id}
@@ -262,7 +266,8 @@ export default ({
                     <Deadline>{togetherDate(together.limitDate)}</Deadline>
                   </RecruitTextWrapper>
                 </RecruitWrapper>
-              ))}
+              ))
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
