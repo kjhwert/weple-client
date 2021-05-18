@@ -4,14 +4,11 @@ import ContainerCard from '../../../components/ContainerCard';
 import CheckBox from '@react-native-community/checkbox';
 import {IMapGroup} from '../../../module/type/map';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {MAPBOX_TOKEN} from '../RecordPresenter';
 import RecordContext from '../../../module/context/RecordContext';
 import {IRecordContext} from '../../../module/type/recordContext';
-import {
-  ACTIVE_BUTTON,
-  INACTIVE_BUTTON,
-  MAPBOX_STYLE,
-} from '../../../module/common';
+import {ACTIVE_BUTTON, INACTIVE_BUTTON, MAPBOX_TOKEN} from '../../../module/common';
+import {Text} from 'react-native';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
@@ -25,11 +22,13 @@ interface IStyledMapWrapper {
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
-export default ({navigation, mapGroup, FreeMap, MembershipMap}: IProps) => {
+export default ({navigation, mapGroup}: IProps) => {
   const {
-    mapboxRecord: {map},
-    setRecordMap,
-  }: IRecordContext = useContext(RecordContext);
+    state: {
+      records: {map},
+    },
+    onChangeRecordsMap,
+  } = useContext(RecordContext2) as IRecordContext2;
 
   return (
     <Container>
@@ -40,12 +39,9 @@ export default ({navigation, mapGroup, FreeMap, MembershipMap}: IProps) => {
               <MapGroupWrapper key={id}>
                 <MapStyleTitle>{name}</MapStyleTitle>
                 <MapContainer>
-                  {maps.map(({id, style, thumbnail}, idx) => (
-                    <MapWrapper
-                      key={id}
-                      isLastChild={(idx + 1) % 3 !== 0}
-                      isActive={map.id === id}>
-                      <ActivityImage source={{uri: thumbnail}} />
+                  {maps.map(({id, style, thumbnail, name}, idx) => (
+                    <MapWrapper key={id} isLastChild={(idx + 1) % 3 !== 0}>
+                      <ActivityImage source={{uri: thumbnail}} isActive={map.id === id} />
                       <CheckBox
                         style={{
                           position: 'absolute',
@@ -56,56 +52,16 @@ export default ({navigation, mapGroup, FreeMap, MembershipMap}: IProps) => {
                         disabled={false}
                         value={map.id === id}
                         onValueChange={() => {
-                          if (setRecordMap) {
-                            setRecordMap({id, style});
-                          }
+                          onChangeRecordsMap({id, style, name});
                         }}
                         tintColors={{true: ACTIVE_BUTTON}}
                       />
+                      <Text style={{fontSize: 10, marginTop: 5}}>{name}</Text>
                     </MapWrapper>
                   ))}
                 </MapContainer>
               </MapGroupWrapper>
             ))}
-            {/*<MapStyleTitle>무료</MapStyleTitle>*/}
-            {/*<ActivityWrapper>*/}
-            {/*  {FreeMap.map((item, idx) => (*/}
-            {/*    <ActivityImageWrapper key={idx}>*/}
-            {/*      <ActivityImage onPress={() => {}} source={item.image} />*/}
-            {/*      <CheckBox*/}
-            {/*        style={{*/}
-            {/*          position: 'absolute',*/}
-            {/*          right: 8,*/}
-            {/*          top: 5,*/}
-            {/*        }}*/}
-            {/*        boxType={'circle'}*/}
-            {/*        disabled={false}*/}
-            {/*        value={false}*/}
-            {/*        onValueChange={() => {}}*/}
-            {/*      />*/}
-            {/*    </ActivityImageWrapper>*/}
-            {/*  ))}*/}
-            {/*</ActivityWrapper>*/}
-
-            {/*<MapStyleTitle>멤버 전용</MapStyleTitle>*/}
-            {/*<ActivityWrapper>*/}
-            {/*  {MembershipMap.map((item, idx) => (*/}
-            {/*    <ActivityImageWrapper key={idx}>*/}
-            {/*      <ActivityImage onPress={() => {}} source={item.image} />*/}
-            {/*      <CheckBox*/}
-            {/*        style={{*/}
-            {/*          position: 'absolute',*/}
-            {/*          right: 8,*/}
-            {/*          top: 5,*/}
-            {/*        }}*/}
-            {/*        boxType={'circle'}*/}
-            {/*        disabled={false}*/}
-            {/*        value={false}*/}
-            {/*        onValueChange={() => {}}*/}
-            {/*      />*/}
-            {/*    </ActivityImageWrapper>*/}
-            {/*  ))}*/}
-            {/*</ActivityWrapper>*/}
           </ContainerCard>
         </ScrollWrapper>
       </ScrollContainer>
@@ -135,15 +91,6 @@ const MapStyleTitle = styled.Text`
   text-align: left;
 `;
 
-const ActivityWrapper = styled.View`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  padding-top: 10px;
-`;
-
 const MapGroupWrapper = styled.View`
   width: 100%;
 `;
@@ -161,28 +108,14 @@ const MapWrapper = styled.View`
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
-  border-width: 1px;
-  border-color: ${({isActive}: IStyledMapWrapper) =>
-    isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON};
   width: 32%;
   margin-bottom: 20px;
-  margin-right: ${({isLastChild}: IStyledMapWrapper) =>
-    isLastChild === true ? 5 : 0}px;
-`;
-
-const ActivityImageWrapper = styled.TouchableOpacity`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  border-width: 1px;
-  border-color: #c1c1c1;
-  width: 32%;
-  margin-bottom: 20px;
+  margin-right: ${({isLastChild}: IStyledMapWrapper) => (isLastChild === true ? 5 : 0)}px;
 `;
 
 const ActivityImage = styled.Image`
   width: 100%;
   height: 100px;
+  border-width: 1px;
+  border-color: ${({isActive}: IStyledMapWrapper) => (isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON)};
 `;

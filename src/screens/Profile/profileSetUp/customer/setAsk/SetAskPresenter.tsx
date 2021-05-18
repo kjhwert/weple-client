@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {StartNextBtn} from '../../../../../components/CommonBtn';
 import {getTotalTime} from '../../../../../components/CommonTime';
+import {Text, View} from 'react-native';
 
 interface IProps {
   navigation: any;
@@ -14,24 +15,30 @@ export default ({navigation, inquiryList}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {inquiryList.map((item, idx) => (
-              <AskWrapper key={idx}>
-                <AskTextWrapper>
-                  <AskTextBtn
-                    onPress={() => {
-                      item.requestStatus
-                        ? navigation.navigate('setAnswerDetail', {data: item})
-                        : navigation.navigate('setAskDetail', {data: item});
-                    }}>
-                    <AskText>{item.requestTitle}</AskText>
-                  </AskTextBtn>
-                  <AskDateText>{getTotalTime(item.requestDate)}</AskDateText>
-                </AskTextWrapper>
-                <FollowBtn backgroundColor={item.requestStatus}>
-                  <FollowBtnText>{item.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
-                </FollowBtn>
-              </AskWrapper>
-            ))}
+            {inquiryList.length === 0 ? (
+              <View style={{marginTop: 10}}>
+                <Text>데이터가 없습니다.</Text>
+              </View>
+            ) : (
+              inquiryList.map((item, idx) => (
+                <AskWrapper key={idx}>
+                  <AskTextWrapper>
+                    <AskTextBtn
+                      onPress={() => {
+                        item.requestStatus
+                          ? navigation.navigate('setAnswerDetail', {data: item})
+                          : navigation.navigate('setAskDetail', {data: item});
+                      }}>
+                      <AskText>{item.requestTitle}</AskText>
+                    </AskTextBtn>
+                    <AskDateText>{getTotalTime(item.requestDate)}</AskDateText>
+                  </AskTextWrapper>
+                  <FollowBtn backgroundColor={item.requestStatus}>
+                    <FollowBtnText>{item.requestStatus ? '답변완료' : '미답변'}</FollowBtnText>
+                  </FollowBtn>
+                </AskWrapper>
+              ))
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>

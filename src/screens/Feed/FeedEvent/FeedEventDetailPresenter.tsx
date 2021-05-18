@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {IEventTypes} from '../../../module/type/event';
+import {BASE_URL} from '../../../module/common';
 
 interface IProps {
   navigation: any;
+  event: IEventTypes;
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, event}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
@@ -13,15 +16,12 @@ export default ({navigation}: IProps) => {
           <ContainerCard>
             <EventWrapper>
               <EventTextWrapper>
-                <EventTitle>이벤트명입니다.</EventTitle>
-                <EventContent>
-                  이벤트에 대한 설명입니다.이벤트에 대한 설명입니다.
-                </EventContent>
-                <EventDate>2020-11-19 ~ 2020-12-30</EventDate>
+                <EventTitle>{event.title}</EventTitle>
+                <EventContent>{event.description}</EventContent>
               </EventTextWrapper>
             </EventWrapper>
             <EventImageWrapper>
-              <EventImage source={require('../../../assets/event_1.jpg')} />
+              <EventImage source={{uri: `${BASE_URL}/${event.image}`}} />
             </EventImageWrapper>
           </ContainerCard>
         </ScrollWrapper>

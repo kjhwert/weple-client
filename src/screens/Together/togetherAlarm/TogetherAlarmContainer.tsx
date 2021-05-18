@@ -1,33 +1,6 @@
 import React from 'react';
-import TogetherAlarmPresenter from './TogetherAlarmPresenter';
+import AlertComponent from '../../../components/AlertComponent';
 
-const alarmData = [
-  {
-    id: 0,
-    title: '벤자민님이 게시글을 올렸습니다.',
-    date: '2019.02.01 10:10',
-    isNew: true,
-  },
-  {
-    id: 1,
-    title: '벤님이 게시글을 올렸습니다.',
-    date: '2019.02.01 10:10',
-    isNew: true,
-  },
-  {
-    id: 2,
-    title: '자민님이 게시글을 올렸습니다.',
-    date: '2019.02.01 10:10',
-    isNew: false,
-  },
-];
-
-interface IProps {
-  navigation: any;
-}
-
-export default ({navigation}: IProps) => {
-  return (
-    <TogetherAlarmPresenter navigation={navigation} alarmData={alarmData} />
-  );
+export default () => {
+  return <AlertComponent />;
 };

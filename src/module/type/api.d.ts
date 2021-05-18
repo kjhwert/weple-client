@@ -35,6 +35,7 @@ export interface IUserApiProfile {
 export interface IServiceApiInquiry {
   requestTitle: string;
   requestDescription: string;
+  requestType: string;
 }
 
 export interface IUserApiCategory {
@@ -79,6 +80,13 @@ export interface IUtilityApiEvents {
   page: number;
 }
 
+interface Image {
+  img: string;
+  lat: number | undefined;
+  lon: number | undefined;
+  distance: number;
+}
+
 export interface IFeedCreate {
   activity: number;
   startDate: string;
@@ -90,6 +98,7 @@ export interface IFeedCreate {
   music: number;
   coordinates: string;
   address: string;
+  images: Array<Image>;
 }
 
 export interface IFeedIndex {
@@ -115,6 +124,6 @@ export interface IFeedPagination {
 }
 
 export interface IFeedCreateComment {
-  feed: number;
+  feedId: number;
   description: string;
 }

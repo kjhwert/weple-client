@@ -39,6 +39,11 @@ export default ({navigation}: IProps) => {
   };
 
   const hasNickName = async () => {
+    const limitLength = userNick.data.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g, '$&$1$2').length;
+    if (limitLength > 30) {
+      setAlertFrame({showAlert: true, usable: false});
+      return;
+    }
     if (userNick.data.length <= 0 || userNick.data.indexOf(' ') === 0) {
       setAlertFrame({showAlert: true, usable: false});
       return;

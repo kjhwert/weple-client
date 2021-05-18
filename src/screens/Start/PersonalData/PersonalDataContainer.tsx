@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import PersonalDataPresenter from './PersonalDataPresenter';
 import {Platform} from 'react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
+import {checkPermission, configure, requestPermission} from 'react-native-location';
 
 const slideData = [
   {
@@ -41,27 +42,6 @@ interface IProps {
 }
 
 export default ({navigation}: IProps) => {
-  const confirmPermission = async () => {
-    await confirmUserLocation();
-    await confirmCameraAccess();
-  };
-
-  const confirmUserLocation = async () => {
-    if (Platform.OS === 'ios') {
-      await request(PERMISSIONS.IOS.LOCATION_ALWAYS).then((result) => {
-        if (result === 'granted') {
-        }
-      });
-    }
-
-    if (Platform.OS === 'android') {
-      await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
-        if (result === 'granted') {
-        }
-      });
-    }
-  };
-
   const confirmCameraAccess = async () => {
     if (Platform.OS === 'ios') {
       await request(PERMISSIONS.IOS.CAMERA).then((result) => {
@@ -78,9 +58,47 @@ export default ({navigation}: IProps) => {
     }
   };
 
-  useEffect(() => {
-    confirmPermission();
-  }, []);
+  const confirmUserLocation = async () => {
+    const checkPermissionResult = await checkPermission({
+      ios: 'whenInUse',
+      android: {detail: 'coarse'},
+    });
+    if (!checkPermissionResult) {
+      const result = await requestPermission({
+        android: {
+          detail: 'coarse',
+        },
+        ios: 'whenInUse',
+      });
+    } else {
+      await configure({
+        distanceFilter: 0, // Meters
+        desiredAccuracy: {
+          ios: 'best',
+          android: 'highAccuracy',
+        },
+        // Android only
+        androidProvider: 'auto',
+        interval: 5000, // Milliseconds
+        fastestInterval: 5000, // Milliseconds
+        maxWaitTime: 5000, // Milliseconds
+        // iOS Only
+        activityType: 'other',
+        allowsBackgroundLocationUpdates: false,
+        headingFilter: 1, // Degrees
+        headingOrientation: 'portrait',
+        pausesLocationUpdatesAutomatically: false,
+        showsBackgroundLocationIndicator: false,
+      });
+    }
+  };
 
-  return <PersonalDataPresenter navigation={navigation} slideData={slideData} />;
+  return (
+    <PersonalDataPresenter
+      navigation={navigation}
+      slideData={slideData}
+      confirmCameraAccess={confirmCameraAccess}
+      confirmUserLocation={confirmUserLocation}
+    />
+  );
 };

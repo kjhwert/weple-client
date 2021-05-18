@@ -1,9 +1,17 @@
 import {IGps} from './type/common';
 
-export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
+// export const BASE_URL = 'http://ttamna-api.hlabpartner.com';
+export const BASE_URL = 'http://www.goweple.com:3001';
 export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNvYWh0Nzc1ZXhyIn0.plvnGOmcjL1bMP2P7vuSTg';
-export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckio4u2e702zs17sgpsbw6n2i';
+export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
+export const MAPBOX_DEFAULT_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
 export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
+export const APP_VERSION = 'v0.8.12';
+
+export const FONT_SIZE_1 = 14;
+export const FONT_SIZE_2 = 16;
+export const FONT_SIZE_3 = 18;
+export const FONT_SIZE_4 = 20;
 
 export const ACTIVE_BUTTON = '#007bf1';
 export const ACTIVE_TEXT = '#007bf1';
@@ -12,7 +20,7 @@ export const INACTIVE_BUTTON = '#bfbfbf';
 export const INACTIVE_TEXT = '#6f6f6f';
 
 export const MINUTE = 60;
-export const DURATION_TIME = 5;
+export const DURATION_TIME = 2;
 
 export const getDistanceWithSpeedAndTime = (speed: number, time: number) => {
   /**
@@ -126,4 +134,11 @@ export const timeForToday = (value: string) => {
   }
 
   return `${Math.floor(betweenTimeDay / 365)}년전`;
+};
+
+export const timeDifferentFromNow = (value: Date) => {
+  const today = new Date();
+  const timeValue = new Date(value);
+
+  return Math.floor((timeValue.getTime() - today.getTime()) / 1000 / 60);
 };

@@ -4,7 +4,7 @@ import {utilitiesApi} from '../../../module/api';
 import Loading from '../../../components/Loading';
 import RNTrackPlayer from 'react-native-track-player';
 import {IMusicGroup, IMusics} from '../../../module/type/music';
-import {MUSIC_PATH} from '../../../module/common';
+import {BASE_URL, MUSIC_PATH} from '../../../module/common';
 
 export default () => {
   const [musicGroup, setMusicGroup] = useState<Array<IMusicGroup>>([]);
@@ -31,6 +31,7 @@ export default () => {
     const music = {
       ...track,
       id: track.id.toString(),
+      url: `${BASE_URL}/${track.url}`,
     };
     setPlayedMusic(track.id);
     await RNTrackPlayer.add(music);

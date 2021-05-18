@@ -4,7 +4,7 @@ import {BASE_URL, timeForToday} from '../../../module/common';
 import UserContext from '../../../module/context/UserContext';
 import {IFeed} from '../../../module/type/feed';
 import {IFeedPagination} from '../../../module/type/api';
-import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, Text} from 'react-native';
 
 interface IProps {
   navigation: any;
@@ -49,6 +49,8 @@ export default ({
                 <SortImage source={require('../../../assets/sort_icon.png')} />
               </SortBtn>
             </ActiveSelectTitleWrapper>
+
+            {index.length === 0 && <Text style={{marginTop: 10}}>찾으시는 정보가 없습니다.</Text>}
 
             {index.map((feed) => (
               <PostWrapper key={feed.id}>

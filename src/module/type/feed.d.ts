@@ -8,6 +8,7 @@ export interface IEvent {
 
 export interface IFeed {
   id: number;
+  title: string;
   duration: number;
   distance: number;
   createdAt: string;
@@ -28,11 +29,19 @@ export interface IFeed {
   activityImage: string;
 }
 
+export interface IUserStatistics {
+  activityName: string;
+  calorie: string;
+  distance: number;
+  duration: string;
+}
+
 export interface IFeedComments {
   id: number;
   description: string;
   createdAt: string;
+  userId: number;
   userName: string;
   userImage: string;
-  isLoginUserWrote: boolean;
+  isLoginUserWrote: string;
 }

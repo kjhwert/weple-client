@@ -1,24 +1,37 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
-import RecordContext from '../../module/context/RecordContext';
 import RecordUnits from '../../components/RecordUnits';
-import {BASE_URL, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
+import {BASE_URL, FONT_SIZE_2, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
-import {Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
+import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
+import {Image, Platform} from 'react-native';
+import ViewShot from 'react-native-view-shot';
+import Loading from '../../components/Loading';
+import CheckAlert from '../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
-  getAverageSpeed: (speed: Array<number>) => number;
 }
 
-export default ({navigation, getAverageSpeed}: IProps) => {
-  const {recordSetting, mapboxRecord, record, webViewRef, createFeed, changeImage, thumbnailRef}: any = useContext(
-    RecordContext,
-  );
+export default ({navigation}: IProps) => {
+  const {
+    thumbnailRef,
+    state: {duration, settings, records},
+    webViewRef,
+    onCreateRecord,
+    onChangeImage,
+    onChangeTitle,
+  } = useContext(RecordContext2) as IRecordContext2;
+
+  const getCenterCoordinates = () => {
+    if (records.coordinates.length > 0) {
+      return records.coordinates[Math.floor(records.coordinates.length / 2)];
+    }
+
+    return [126.97842453212644, 37.566629386346264];
+  };
 
   return (
     <Container>
@@ -27,26 +40,40 @@ export default ({navigation, getAverageSpeed}: IProps) => {
           <Card>
             <MapPlayWrapper>
               <WebView
+                style={{opacity: 0.99, overflow: 'hidden'}}
                 ref={(ref) => (webViewRef.current = ref)}
                 source={{
                   uri: `${BASE_URL}/public/map/test.html`,
                 }}
                 injectedJavaScript={webViewJavaScriptCode({
-                  coordinates: JSON.stringify(mapboxRecord.coordinates),
-                  map: mapboxRecord.map,
-                  music: mapboxRecord.music,
+                  coordinates: JSON.stringify(records.coordinates),
+                  map: records.map,
+                  music: records.music,
+                  images: records.images,
                 })}
               />
             </MapPlayWrapper>
 
             <SetUpWrapper>
+              <SetBtnWrapperTitle>
+                <SetUpListText>제목</SetUpListText>
+                <TitleTextInput
+                  placeholder="제목을 입력해주세요."
+                  value={records.title}
+                  onChangeText={onChangeTitle}
+                  style={{textAlign: 'right'}}
+                />
+              </SetBtnWrapperTitle>
               <SetBtnWrapper>
                 <SetBtn
                   onPress={() => {
                     navigation.navigate('recordMapStyle');
                   }}>
                   <SetUpListText>지도 스타일 변경</SetUpListText>
-                  <MoreImage source={require('../../assets/set_more.png')} />
+                  <SetUpTypeWrapper>
+                    <SetUpTypeText>{records.map.name}</SetUpTypeText>
+                    <MoreImage source={require('../../assets/set_more.png')} />
+                  </SetUpTypeWrapper>
                 </SetBtn>
               </SetBtnWrapper>
               <SetBtnWrapper>
@@ -56,7 +83,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   }}>
                   <SetUpListText>활동</SetUpListText>
                   <SetUpTypeWrapper>
-                    <SetUpTypeText>{recordSetting.activity.name}</SetUpTypeText>
+                    <SetUpTypeText>{settings.activity.name}</SetUpTypeText>
                     <MoreImage source={require('../../assets/set_more.png')} />
                   </SetUpTypeWrapper>
                 </SetBtn>
@@ -68,7 +95,7 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   }}>
                   <SetUpListText>음악선택</SetUpListText>
                   <SetUpTypeWrapper>
-                    <SetUpTypeText>{mapboxRecord.music.title}</SetUpTypeText>
+                    <SetUpTypeText>{records.music.title}</SetUpTypeText>
                     <MoreImage source={require('../../assets/set_more.png')} />
                   </SetUpTypeWrapper>
                 </SetBtn>
@@ -76,14 +103,14 @@ export default ({navigation, getAverageSpeed}: IProps) => {
             </SetUpWrapper>
 
             <RecordUnits
-              distance={mapboxRecord.distance}
-              speed={getAverageSpeed(mapboxRecord.speed)}
-              calorie={record.calorie}
-              duration={record.duration}
+              distance={records.distance}
+              speed={records.speed}
+              calorie={records.calorie}
+              duration={duration}
             />
 
             <ActiveDetailWrapper>
-              <ActiveVerticalLine></ActiveVerticalLine>
+              <ActiveVerticalLine />
               <ActiveDetailTitleWrapper>
                 <ActiveMarkWrapper>
                   <ActiveStartMark>
@@ -91,75 +118,83 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   </ActiveStartMark>
                 </ActiveMarkWrapper>
                 <ActiveDetailTitle>
-                  {recordSetting.startDate && showDateToAmPmHourMinute(recordSetting.startDate)}에 출발
+                  {settings.startDate && showDateToAmPmHourMinute(settings.startDate)}에 출발
                 </ActiveDetailTitle>
               </ActiveDetailTitleWrapper>
-
-              <MapboxGL.MapView
-                ref={thumbnailRef}
-                style={{width: '100%', height: 200}}
-                styleURL={mapboxRecord.map.style}
-                localizeLabels={true}
-                zoomEnabled={false}
-                scrollEnabled={false}
-                pitchEnabled={false}
-                rotateEnabled={false}>
-                <MapboxGL.Camera
-                  zoomLevel={13}
-                  centerCoordinate={mapboxRecord.coordinates[Math.floor(mapboxRecord.coordinates.length / 2)]}
+              <ViewShot ref={thumbnailRef} style={{width: '100%', height: 200}}>
+                <Image
+                  source={require('../../assets/ttamnaLogo.png')}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    position: 'absolute',
+                    top: 5,
+                    left: 10,
+                    zIndex: 100,
+                    resizeMode: 'contain',
+                  }}
                 />
-                <MapboxGL.ShapeSource
-                  id="shapeSource"
-                  shape={{
-                    type: 'Feature',
-                    id: 'shapeSource',
-                    properties: {},
-                    geometry: {
-                      type: 'LineString',
-                      coordinates: mapboxRecord.coordinates,
-                    },
-                  }}>
-                  <MapboxGL.LineLayer
-                    id="lineLayer"
-                    style={{
-                      lineWidth: 5,
-                      lineJoin: 'bevel',
-                      lineColor: '#fff',
-                    }}
+                <MapboxGL.MapView
+                  style={{width: '100%', height: 200}}
+                  styleURL={records.map.style}
+                  localizeLabels={true}
+                  zoomEnabled={false}
+                  scrollEnabled={false}
+                  pitchEnabled={false}
+                  rotateEnabled={false}>
+                  <MapboxGL.Camera
+                    zoomLevel={13}
+                    centerCoordinate={getCenterCoordinates()}
+                    animationMode={'moveTo'}
+                    animationDuration={0}
                   />
-                </MapboxGL.ShapeSource>
-              </MapboxGL.MapView>
+                  {records.coordinates.length > 0 && (
+                    <MapboxGL.ShapeSource
+                      id="shapeSource"
+                      shape={{
+                        type: 'Feature',
+                        id: 'shapeSource',
+                        properties: {},
+                        geometry: {
+                          type: 'LineString',
+                          coordinates: [...records.coordinates],
+                        },
+                      }}>
+                      <MapboxGL.LineLayer
+                        id="lineLayer"
+                        style={{lineWidth: 5, lineJoin: 'bevel', lineColor: '#007bf1'}}
+                      />
+                    </MapboxGL.ShapeSource>
+                  )}
+                </MapboxGL.MapView>
+              </ViewShot>
 
-              {mapboxRecord.images.map((image: any, idx: number) => (
-                <ActiveDetailWrapper key={idx}>
-                  <ActiveDetailImageWrapper
-                    onPress={() => {
-                      changeImage(idx);
-                    }}>
-                    <ActiveDetailImage source={{uri: image.uri}} resizeMode="contain" style={{aspectRatio: 1}} />
-                    <Image
-                      source={require('../../assets/edit_icon.png')}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}
-                    />
-                  </ActiveDetailImageWrapper>
-                  <ActiveDetailTextWrapper>
-                    <ActiveSmallMarkWrapper>
-                      <ActiveSmallMark></ActiveSmallMark>
-                      <ActiveSmallestMark></ActiveSmallestMark>
-                    </ActiveSmallMarkWrapper>
-                    <DetailTextWrapper>
-                      <ActiveDetailTimeText>
-                        {mapboxRecord.distance}km 이동 후 {image.timestamp && showDateToAmPmHourMinute(image.timestamp)}
-                      </ActiveDetailTimeText>
-                    </DetailTextWrapper>
-                  </ActiveDetailTextWrapper>
-                </ActiveDetailWrapper>
-              ))}
+              {records.images.length > 0 &&
+                records.images.map((image, idx: number) => (
+                  <ActiveDetailWrapper key={idx}>
+                    <ActiveDetailImageWrapper
+                      onPress={() => {
+                        onChangeImage(idx);
+                      }}>
+                      <ActiveDetailImage source={{uri: image.uri}} resizeMode="contain" style={{aspectRatio: 1}} />
+                      <Image
+                        source={require('../../assets/edit_icon.png')}
+                        style={{width: 40, height: 40, position: 'absolute', alignSelf: 'center'}}
+                      />
+                    </ActiveDetailImageWrapper>
+                    <ActiveDetailTextWrapper>
+                      <ActiveSmallMarkWrapper>
+                        <ActiveSmallMark />
+                        <ActiveSmallestMark />
+                      </ActiveSmallMarkWrapper>
+                      <DetailTextWrapper>
+                        <ActiveDetailTimeText>
+                          {records.distance}km 이동 후 {image.timestamp && showDateToAmPmHourMinute(image.timestamp)}
+                        </ActiveDetailTimeText>
+                      </DetailTextWrapper>
+                    </ActiveDetailTextWrapper>
+                  </ActiveDetailWrapper>
+                ))}
               <ActiveDetailFinishTitleWrapper>
                 <ActiveMarkFinishWrapper>
                   <ActiveFinishMark>
@@ -167,11 +202,11 @@ export default ({navigation, getAverageSpeed}: IProps) => {
                   </ActiveFinishMark>
                 </ActiveMarkFinishWrapper>
                 <ActiveDetailFinishTitle>
-                  {recordSetting.endDate && showDateToAmPmHourMinute(recordSetting.endDate)}에 끝마쳤습니다.
+                  {settings.endDate && showDateToAmPmHourMinute(settings.endDate)}에 끝마쳤습니다.
                 </ActiveDetailFinishTitle>
               </ActiveDetailFinishTitleWrapper>
             </ActiveDetailWrapper>
-            <NextBtn onPress={() => createFeed(navigation)}>
+            <NextBtn onPress={() => onCreateRecord(navigation)}>
               <NextText>게시하기</NextText>
             </NextBtn>
           </Card>
@@ -219,11 +254,31 @@ const SetBtnWrapper = styled.View`
   border-color: #eeeeee;
 `;
 
+const SetBtnWrapperTitle = styled.View`
+  display: flex;
+  width: 100%;
+  padding: ${Platform.OS === 'android' ? '5px' : '20px'} 30px;
+  border-bottom-width: 1px;
+  border-color: #eeeeee;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const SetBtn = styled.TouchableOpacity`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+`;
+
+const SetBtnView = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: blue;
 `;
 
 const SetUpTypeWrapper = styled.View`
@@ -232,14 +287,18 @@ const SetUpTypeWrapper = styled.View`
   align-items: center;
 `;
 
+const TitleTextInput = styled.TextInput`
+  font-size: ${FONT_SIZE_2}px;
+`;
+
 const SetUpTypeText = styled.Text`
-  font-size: 12px;
+  font-size: ${FONT_SIZE_2}px;
   margin-right: 10px;
   color: #b5b5b5;
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 13px;
+  font-size: ${FONT_SIZE_2}px;
   text-align: left;
   color: #333333;
 `;

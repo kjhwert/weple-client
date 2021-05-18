@@ -1,35 +1,41 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-interface IProps {
-  isNew: boolean;
-}
+const alerts = [];
 
-export default ({navigation, alarmData}: IProps) => {
+export default () => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {alarmData.map((item, idx) => (
-              <AlarmWrapper key={idx}>
-                <AlarmMarkWrapper>
-                  <AlarmMark isNew={item.isNew}></AlarmMark>
-                </AlarmMarkWrapper>
-                <AlarmBtnWrapper>
-                  <AlarmBtn onPress={() => {}}>
-                    <AlarmTitleText>{item.title}</AlarmTitleText>
-                  </AlarmBtn>
-                  <AlarmDateText>{item.date}</AlarmDateText>
-                </AlarmBtnWrapper>
-              </AlarmWrapper>
-            ))}
+            {alerts.length > 0 ? (
+              alerts.map((item, idx) => (
+                <AlarmWrapper key={idx}>
+                  <AlarmMarkWrapper>
+                    <AlarmMark isNew={item.isNew}></AlarmMark>
+                  </AlarmMarkWrapper>
+                  <AlarmBtnWrapper>
+                    <AlarmBtn onPress={() => {}}>
+                      <AlarmTitleText>{item.title}</AlarmTitleText>
+                    </AlarmBtn>
+                    <AlarmDateText>{item.date}</AlarmDateText>
+                  </AlarmBtnWrapper>
+                </AlarmWrapper>
+              ))
+            ) : (
+              <NoAlertText>알림이 없습니다.</NoAlertText>
+            )}
           </Card>
         </ScrollWrapper>
       </ScrollContainer>
     </Container>
   );
 };
+
+const NoAlertText = styled.Text`
+  margin-top: 10px;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -70,7 +76,7 @@ const AlarmMark = styled.View`
   width: 8px;
   height: 8px;
   border-radius: 50px;
-  background-color: ${(props: IProps) => (props.isNew ? '#ff0d0d' : '#b5b5b5')};
+  background-color: ${({isNew}: {isNew: boolean}) => (isNew ? '#ff0d0d' : '#b5b5b5')};
 `;
 
 const AlarmBtnWrapper = styled.View`

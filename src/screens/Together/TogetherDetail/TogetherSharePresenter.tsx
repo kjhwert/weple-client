@@ -1,11 +1,27 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import Share from 'react-native-share';
+import {ITogether} from '../../../module/type/together';
 
 interface IProps {
   navigation: any;
+  route: {
+    params: {
+      together: ITogether;
+    };
+  };
 }
 
-export default ({navigation}: IProps) => {
+export default ({navigation, route}: IProps) => {
+  const {id, thumbnail, title} = route.params.together;
+  const share = async () => {
+    try {
+      await Share.open({url: `http://app.goweple.com?id=${id}&share=together&thumbnail=${thumbnail}&title=${title}`});
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Container>
       <ScrollContainer>
@@ -18,15 +34,15 @@ export default ({navigation}: IProps) => {
             </PostImageWrapper>
 
             <SnsIconWrapper>
-              <KakaoIconBtn onPress={() => {}}>
+              <KakaoIconBtn onPress={share}>
                 <LogoImage source={require('../../../assets/logo_kakao.jpg')} />
                 <KakaoIconText>카카오톡 공유하기</KakaoIconText>
               </KakaoIconBtn>
-              <FaceBookIconBtn onPress={() => {}}>
+              <FaceBookIconBtn onPress={share}>
                 <LogoImage source={require('../../../assets/logo_facebook.png')} />
                 <FaceBookIconText>페이스북 공유하기</FaceBookIconText>
               </FaceBookIconBtn>
-              <InstagramIconBtn onPress={() => {}}>
+              <InstagramIconBtn onPress={share}>
                 <LogoImage source={require('../../../assets/logo_instagram.png')} />
                 <InstagramIconText>인스타그램 공유하기</InstagramIconText>
               </InstagramIconBtn>

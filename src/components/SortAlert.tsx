@@ -5,15 +5,16 @@ import RadioButtonRN from 'radio-buttons-react-native';
 
 interface IProps {
   sortType: any;
-  checked?: () => void;
+  checked?: (props: {label: string; value: string}) => void;
+  initial: number;
 }
 
-export default ({sortType, checked}: IProps) => {
+export default ({sortType, checked, initial}: IProps) => {
   const {setAlertInvisible}: any = useContext(AlertContext);
   const [sortData, setSortData] = useState(sortType);
-
+  const [state, setState] = useState(sortData[initial]);
   const checkOnPressed = () => {
-    checked && checked();
+    checked && checked(state);
     setAlertInvisible();
   };
 
@@ -31,6 +32,8 @@ export default ({sortType, checked}: IProps) => {
             padding: 3,
           }}
           data={sortData}
+          initial={initial + 1}
+          selectedBtn={(e) => setState(e)}
         />
       </Wrapper>
       <CheckButton onPress={checkOnPressed}>

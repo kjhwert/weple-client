@@ -6,6 +6,7 @@ export interface IFeedContext {
 
 export interface IShowFeed {
   id: number;
+  title: string;
   duration: number;
   distance: number;
   coordinates: string;
@@ -37,4 +38,5 @@ export interface IFeedImage {
   lat: number;
   lon: number;
   distance: number;
+  createdAt: string;
 }

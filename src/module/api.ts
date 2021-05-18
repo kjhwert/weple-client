@@ -14,12 +14,10 @@ import {
   ITogetherApiOpneRoom,
   ITogetherCreateComment,
   IFeedCreate,
-  IFeedIndex,
   IFeedCreateComment,
   IUtilityApiEvents,
   IFeedPagination,
 } from './type/api';
-import {IFeedComments} from './type/feed';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -62,7 +60,7 @@ export const userApi = {
   hasNickName: (nickName: string) => apiRequest(api.get(`/user/hasNickName?nickname=${nickName}`)),
   passwordForget: (passwordForget: IUserApiPwForget) => apiRequest(api.post('/user/password-forget', passwordForget)),
   passwordChange: (passwordChange: IUserApiPwChange) => apiRequest(api.post('/user/password-change', passwordChange)),
-  getProfile: (id: string) => apiRequest(api.get('/user/' + id)),
+  getProfile: (userId: number) => apiRequest(api.get(`/user/${userId}`)),
   putProfile: (putProfile: IUserApiProfile) => apiRequest(api.put('/user/', putProfile)),
   userImage: (file: string) =>
     apiRequest(
@@ -75,18 +73,21 @@ export const userApi = {
   getCategory: () => apiRequest(api.get('/user/categories')),
   putCategory: (category: IUserApiCategory) => apiRequest(api.put('/user/categories', category)),
   dropOut: () => apiRequest(api.delete('/user')),
-  getFollowCount: () => apiRequest(api.get('/user/follow/count')),
+  getFollowCount: (userId: number) => apiRequest(api.get(`/user/${userId}/follow/count`)),
   getNewFollowers: () => apiRequest(api.get('/user/follow')),
-  getUserFollowing: () => apiRequest(api.get('/user/follow/following')),
-  getUserFollower: () => apiRequest(api.get('/user/follow/follower')),
-  follow: (userId: number) => apiRequest(api.put(`/user/follow/${userId}/follow`)),
+  getUserFollowing: (userId: number) => apiRequest(api.get(`/user/${userId}/follow/following`)),
+  getUserFollower: (userId: number) => apiRequest(api.get(`/user/${userId}/follow/follower`)),
+  follow: (userId: number) => apiRequest(api.put(`/user/${userId}/follow`)),
+  getNotification: () => apiRequest(api.get(`/user/notification`)),
+  updateNotification: () => apiRequest(api.put(`/user/notification`)),
+  registerUserToken: (deviceToken: string) => apiRequest(api.put(`/user/fcm`, {deviceToken})),
 };
 
 export const serviceApi = {
   noticeList: (page: string) => apiRequest(api.get('/notice?page=' + page)),
   notice: (id: string) => apiRequest(api.get('/notice/' + id)),
   eventList: (page: string) => apiRequest(api.get('/event?page=' + page)),
-  event: (id: string) => apiRequest(api.get('/event/' + id)),
+  event: (id: number) => apiRequest(api.get('/event/' + id)),
   getInquiry: () => apiRequest(api.get('/inquiry')),
   setInquiry: (ask: IServiceApiInquiry) => apiRequest(api.post('/inquiry', ask)),
   faq: () => apiRequest(api.get('/faq')),
@@ -99,20 +100,23 @@ export const togetherApi = {
   userOpenDetail: (id: number) => apiRequest(api.get('/together/' + id)),
   putTogetherDetail: (id: number, modify: ITogetherApiModify) => apiRequest(api.put('/together/' + id, modify)),
   deleteTogetherDetail: (id: number) => apiRequest(api.delete('/together/' + id)),
-  togetherMember: (id: number) => apiRequest(api.get('/together/' + id + '/user')),
+  togetherMember: (togetherId: number) => apiRequest(api.get(`/together/${togetherId}/user`)),
   userOpenRoom: (room: ITogetherApiOpneRoom) => apiRequest(api.post('/together', room)),
   locationList: (latitude: number, longitude: number, page: number) =>
     apiRequest(api.get('/together/location?latitude=' + latitude + '&longitude=' + longitude + '&page=' + page)),
   followerList: (page: number) => apiRequest(api.get('/together/follower?page=' + page)),
   endSoonList: (page: number) => apiRequest(api.get('/together/end-soon?page=' + page)),
+  searchList: (page: number, title: string) => apiRequest(api.get(`/together/search?page=${page}&title=${title}`)),
+  searchMap: (title: string) => apiRequest(api.get(`/together/search?page=&title=${title}`)),
   getComment: (togetherId: number) => apiRequest(api.get('/together/' + togetherId + '/comment/')),
   createComment: (togetherId: number, data: ITogetherCreateComment) =>
     apiRequest(api.post('/together/' + togetherId + '/comment/', data)),
-  putComment: (commentId: number, description: any) =>
-    apiRequest(api.put('/together/comment/' + commentId, description)),
-  deleteComment: (commentId: number) => apiRequest(api.delete('/together/comment/' + commentId)),
   togetherIn: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-in')),
   togetherOut: (togetherId: number) => apiRequest(api.post('/together/' + togetherId + '/together-out')),
+  updateComment: (id: number, description: string) => apiRequest(api.put(`/together/comment/${id}`, {description})),
+  destroyComment: (id: number) => apiRequest(api.delete(`/together/comment/${id}`)),
+  getProfileTogethers: (page: number, userId: number) =>
+    apiRequest(api.get(`/together/profile/${userId}?page=${page}`)),
 };
 
 export const feedApi = {
@@ -151,11 +155,15 @@ export const feedApi = {
   showLikeUsers: (feedId: number) => apiRequest(api.get(`/feed/${feedId}/like`)),
   feedLike: (feedId: number) => apiRequest(api.post(`/feed/like`, {feedId})),
   feedDisLike: (feedId: number) => apiRequest(api.post(`/feed/dis-like`, {feedId})),
-  createComment: (data: IFeedCreateComment) => apiRequest(api.post(`/feed/comment`, data)),
+  createComment: ({feedId, description}: IFeedCreateComment) =>
+    apiRequest(api.post(`/feed/${feedId}/comment`, {description})),
   updateComment: (id: number, description: string) => apiRequest(api.put(`/feed/comment/${id}`, {description})),
   destroyComment: (id: number) => apiRequest(api.delete(`/feed/comment/${id}`)),
 
-  getMyfeed: (id: string, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page + '&userId=' + id)),
+  getMyFeed: (id: number, page: number) => apiRequest(api.get('/feed/user/' + id + '?page=' + page)),
   getLikefeed: (page: number, sort: string, order: string) =>
-    apiRequest(api.get('/feed?page=' + page + '&sort=' + sort + '&order=' + order)),
+    apiRequest(api.get(`/feed?page=${page}&sort=${sort}&order=${order}&nickName=`)),
+  getProfileFeeds: (page: number, order: 'likeCount' | 'createdAt', userId: number) =>
+    apiRequest(api.get(`/feed/profile/${userId}?page=${page}&order=${order}`)),
+  userStatistics: (userId: number) => apiRequest(api.get(`/feed/user/${userId}/statistics`)),
 };

@@ -9,13 +9,25 @@ interface IProps {
   navigation: any;
   askData: any;
   onChangeAskData: Function;
-  onCheckType: Function;
+  onCheckType: (label) => void;
   askDataRegister: Function;
   isActive: any;
   typeData: any;
+  onChangeTitle: (e: string) => void;
+  onChangeDescription: (e: string) => void;
 }
 
-export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegister, isActive, typeData}: IProps) => {
+export default ({
+  navigation,
+  askData,
+  onChangeAskData,
+  onCheckType,
+  askDataRegister,
+  isActive,
+  typeData,
+  onChangeTitle,
+  onChangeDescription,
+}: IProps) => {
   const pickerRef = useRef();
 
   return (
@@ -38,25 +50,17 @@ export default ({navigation, askData, onChangeAskData, onCheckType, askDataRegis
           }}
         />
         <TouchableOpacity style={styles.appButtonContainer} onPress={() => pickerRef.current.show()}>
-          <Text style={styles.appButtonText}>
-            {typeData.find((element) => element.value == askData.requestType)?.label}
-          </Text>
+          <Text style={styles.appButtonText}>{askData.requestLabel}</Text>
           <Image source={require('../../../../../assets/icon_selected.png')} style={styles.moreIconImage} />
         </TouchableOpacity>
         <AskWriteWrapper>
-          <AskTitleInput
-            placeholder="문의 제목을 입력해주세요."
-            name="requestTitle"
-            onChange={onChangeAskData}
-            maxLength={100}
-          />
+          <AskTitleInput placeholder="문의 제목을 입력해주세요." onChangeText={onChangeTitle} maxLength={100} />
           <AskInput
             placeholder="산업안전보건법에 따라 고객응대근로자 보호조치가 시행 중이며, 모든
             문의 내용은 기록으로 남습니다."
             multiline={true}
             textAlignVertical={'top'}
-            name="requestDescription"
-            onChange={onChangeAskData}
+            onChangeText={onChangeDescription}
           />
         </AskWriteWrapper>
       </ContainerCard>

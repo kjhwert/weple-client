@@ -1,51 +1,25 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import TogetherDetailPresenter from './TogetherDetailPresenter';
 import {togetherApi} from '../../../module/api';
 import AlertContext from '../../../module/context/AlertContext';
 import CheckAlert from '../../../components/CheckAlert';
 import ConfirmAlert from '../../../components/ConfirmAlert';
+import Loading from '../../../components/Loading';
+import TogetherContext from '../../../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
-  route: any;
+  route: {
+    params?: {id?: number; name?: string};
+  };
 }
 
 export default ({navigation, route}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
-
-  const [listDetail, setListDetail] = useState({
-    userCount: 0,
-    together: {
-      id: 0,
-      title: '',
-      Place: '',
-      price: '',
-      limitDate: '',
-      description: '',
-      recommend: '',
-      notice: '',
-      address: '',
-      thumbnail: '',
-      commentNickName: null,
-      commentImage: null,
-      commentDescription: null,
-      isUserJoined: '0',
-    },
-    commentCount: 0,
-  });
-
-  const getTogethertDetail = async () => {
-    const id = route.params?.id;
-    const {data, statusCode} = await togetherApi.userOpenDetail(id);
-    if (statusCode !== 200) {
-    } else {
-      setListDetail(data);
-    }
-  };
+  const {show, getShow}: any = useContext(TogetherContext);
 
   const togetherInto = async () => {
-    const id = route?.params?.id;
-    const {statusCode} = await togetherApi.togetherIn(id);
+    const {statusCode} = await togetherApi.togetherIn(show.together.id);
     if (statusCode !== 201) {
     } else {
       return setAlertVisible(
@@ -90,8 +64,7 @@ export default ({navigation, route}: IProps) => {
         }}
         canceled={() => {}}
         confirmed={async () => {
-          const id = route?.params?.id;
-          const {statusCode} = await togetherApi.togetherOut(id);
+          const {statusCode} = await togetherApi.togetherOut(show.together.id);
           if (statusCode !== 201) {
           } else {
             outOfOkAlert();
@@ -102,17 +75,15 @@ export default ({navigation, route}: IProps) => {
   };
 
   useEffect(() => {
-    getTogethertDetail();
-  }, []);
+    getShow(route.params.id);
+  }, [route]);
 
-  useEffect(() => {
-    if (route.params?.refresh) getTogethertDetail();
-  }, [route.params?.refresh]);
-
-  return (
+  return !show ? (
+    <Loading />
+  ) : (
     <TogetherDetailPresenter
       navigation={navigation}
-      listDetail={listDetail}
+      show={show}
       togetherInto={togetherInto}
       togetherOutOf={togetherOutOf}
     />

@@ -77,6 +77,22 @@ export default ({navigation, route}: IProps) => {
     });
   };
 
+  const onChangeTitle = (e: string) => {
+    setListDetail({...listDetail, title: e});
+  };
+
+  const onChangeDescription = (e: string) => {
+    setListDetail({...listDetail, description: e});
+  };
+
+  const onChangeRecommend = (e: string) => {
+    setListDetail({...listDetail, recommend: e});
+  };
+
+  const onChangeNotice = (e: string) => {
+    setListDetail({...listDetail, notice: e});
+  };
+
   const modifyTogetherData = async () => {
     const modifyData = {
       title: listDetail.title,
@@ -105,7 +121,7 @@ export default ({navigation, route}: IProps) => {
             description: '',
           }}
           checked={() => {
-            navigation.navigate('togetherMyDetail', {refresh: true});
+            navigation.navigate('togetherDetail', {refresh: true});
           }}
         />,
       );
@@ -254,6 +270,10 @@ export default ({navigation, route}: IProps) => {
       activeFlag={activeFlag}
       isActive={isActive}
       blankValidation={blankValidation}
+      onChangeTitle={onChangeTitle}
+      onChangeDescription={onChangeDescription}
+      onChangeRecommend={onChangeRecommend}
+      onChangeNotice={onChangeNotice}
     />
   );
 };

@@ -2,15 +2,17 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {getComma, getTotalTime} from '../../../components/CommonTime';
 import TogetherContext from '../../../module/context/TogetherContext';
+import {IShowTogether} from '../../../module/type/together';
+import {timeDifferentFromNow} from '../../../module/common';
 
 interface IProps {
   navigation: any;
-  listDetail: any;
+  show: IShowTogether;
   togetherInto: Function;
   togetherOutOf: Function;
 }
 
-export default ({navigation, listDetail, togetherInto, togetherOutOf}: IProps) => {
+export default ({navigation, show, togetherInto, togetherOutOf}: IProps) => {
   const {getTogetherThumbnail, getTogetherProfile}: any = useContext(TogetherContext);
 
   return (
@@ -18,16 +20,16 @@ export default ({navigation, listDetail, togetherInto, togetherOutOf}: IProps) =
       <ScrollContainer>
         <ScrollWrapper>
           <JoinImageWrapper>
-            <JoinImage source={getTogetherThumbnail(listDetail.together.thumbnail)} />
+            <JoinImage source={getTogetherThumbnail(show.together.thumbnail)} />
           </JoinImageWrapper>
           <ContainerCard>
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <JoinTitle>{listDetail.together.title}</JoinTitle>
+                  <JoinTitle>{show.together.title}</JoinTitle>
                   <ShareBtn
                     onPress={() => {
-                      navigation.navigate('togetherShare');
+                      navigation.navigate('togetherShare', {together: show.together});
                     }}>
                     <ShareImage source={require('../../../assets/icon_share.png')} />
                   </ShareBtn>
@@ -36,69 +38,93 @@ export default ({navigation, listDetail, togetherInto, togetherOutOf}: IProps) =
                   <JoinInfoTitle>현재 참여인원</JoinInfoTitle>
                   <JoinInfoContentBtn
                     onPress={() => {
-                      navigation.navigate('togetherMember', {togertherId: listDetail.together.id});
+                      navigation.navigate('togetherMember', {togetherId: show.together.id});
                     }}>
-                    <JoinInfoNumber>{listDetail.userCount}명</JoinInfoNumber>
+                    <JoinInfoNumber>{show.userCount}명</JoinInfoNumber>
                     <JoinInfoMoreImage source={require('../../../assets/more.png')} />
                   </JoinInfoContentBtn>
                   <JoinInfoTitle>참가비</JoinInfoTitle>
-                  <JoinInfoContent>{getComma(listDetail.together.togetherPrice)}원</JoinInfoContent>
+                  <JoinInfoContent>{getComma(show.together.togetherPrice)}원</JoinInfoContent>
                   <JoinInfoTitle>지역</JoinInfoTitle>
-                  <JoinInfoContent>{listDetail.together.address}</JoinInfoContent>
+                  <JoinInfoContent>{show.together.address}</JoinInfoContent>
                   <JoinInfoTitle>모임일시</JoinInfoTitle>
-                  <JoinInfoContent>{getTotalTime(listDetail.together.togetherDate)}</JoinInfoContent>
+                  <JoinInfoContent>{getTotalTime(show.together.togetherDate)}</JoinInfoContent>
                   <JoinInfoTitle>모임위치</JoinInfoTitle>
-                  <JoinInfoContent>{listDetail.together.togetherPlace}</JoinInfoContent>
+                  <JoinInfoContent>{show.together.togetherPlace}</JoinInfoContent>
                 </JoinTextWrapper>
               </JoinInfoWrapper>
               <JoinContentWrapper>
                 <JoinContentTitle>모임하기 설명</JoinContentTitle>
                 <ContentWrap>
-                  <JoinContent>{listDetail.together.description}</JoinContent>
+                  <JoinContent>{show.together.description}</JoinContent>
                 </ContentWrap>
                 <JoinContentTitle>이런 분들께 추천합니다.</JoinContentTitle>
                 <ContentWrap>
-                  <JoinContent>{listDetail.together.recommend}</JoinContent>
+                  <JoinContent>{show.together.recommend}</JoinContent>
                 </ContentWrap>
                 <JoinContentTitle>공지사항</JoinContentTitle>
                 <ContentWrap>
-                  <JoinContent>{listDetail.together.notice}</JoinContent>
+                  <JoinContent>{show.together.notice}</JoinContent>
                 </ContentWrap>
               </JoinContentWrapper>
-              <FollowWrapper>
-                <ProfileImage source={getTogetherProfile(listDetail.together.commentImage)} />
-                <FollowTextWrapper>
-                  <FollowNameBtn onPress={() => {}}>
-                    <FollowName>{listDetail.together.commentNickName}</FollowName>
-                  </FollowNameBtn>
-                  <CommentText>{listDetail.together.commentDescription}</CommentText>
+              {show.together.commentNickName ? (
+                <FollowWrapper>
+                  <ProfileImage source={getTogetherProfile(show.together.commentImage)} />
+                  <FollowTextWrapper>
+                    <FollowNameBtn onPress={() => {}}>
+                      <FollowName>{show.together.commentNickName}</FollowName>
+                    </FollowNameBtn>
+                    <CommentText>{show.together.commentDescription}</CommentText>
+                    <AllCommentBtn
+                      onPress={() => {
+                        navigation.navigate('togetherComment', {id: show.together.id});
+                      }}>
+                      <AllCommentText>{show.commentCount}개의 댓글 모두 보기</AllCommentText>
+                    </AllCommentBtn>
+                  </FollowTextWrapper>
+                </FollowWrapper>
+              ) : (
+                <FollowWrapper>
                   <AllCommentBtn
                     onPress={() => {
-                      navigation.navigate('togetherComment', {id: listDetail.together.id});
+                      navigation.navigate('togetherComment', {id: show.together.id});
                     }}>
-                    <AllCommentText>{listDetail.commentCount}개의 댓글 모두 보기</AllCommentText>
+                    <AllCommentText>댓글 달기</AllCommentText>
                   </AllCommentBtn>
-                </FollowTextWrapper>
-              </FollowWrapper>
-              {listDetail.together.isUserJoined === '0' ? (
-                <JoinBtnWrapper>
-                  <JoinButton
-                    onPress={() => {
-                      togetherInto();
-                    }}>
-                    <JoinText>모임 참여하기</JoinText>
-                  </JoinButton>
-                </JoinBtnWrapper>
-              ) : (
-                <CancelBtnWrapper>
-                  <CancelButton
-                    onPress={() => {
-                      togetherOutOf();
-                    }}>
-                    <CancelText>모임 나가기</CancelText>
-                  </CancelButton>
-                </CancelBtnWrapper>
+                </FollowWrapper>
               )}
+              {show.together.isUsersTogether && (
+                <ModifyBtnWrapper>
+                  <ModifyButton
+                    onPress={() => {
+                      navigation.navigate('togetherModify', {id: show.together.id});
+                    }}>
+                    <ModifyText>수정하기</ModifyText>
+                  </ModifyButton>
+                </ModifyBtnWrapper>
+              )}
+              {!show.together.isUsersTogether &&
+                (!show.together.isUserJoined ? (
+                  <JoinBtnWrapper>
+                    <JoinButton
+                      onPress={() => {
+                        togetherInto();
+                      }}>
+                      <JoinText>모임 참여하기</JoinText>
+                    </JoinButton>
+                  </JoinBtnWrapper>
+                ) : (
+                  timeDifferentFromNow(show.together.togetherDate) > 180 && (
+                    <CancelBtnWrapper>
+                      <CancelButton
+                        onPress={() => {
+                          togetherOutOf();
+                        }}>
+                        <CancelText>모임 나가기</CancelText>
+                      </CancelButton>
+                    </CancelBtnWrapper>
+                  )
+                ))}
             </JoinWrapper>
           </ContainerCard>
         </ScrollWrapper>
@@ -360,6 +386,29 @@ const CancelButton = styled.TouchableOpacity`
 `;
 
 const CancelText = styled.Text`
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const ModifyBtnWrapper = styled.View`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModifyButton = styled.TouchableOpacity`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: #007bf1;
+`;
+
+const ModifyText = styled.Text`
   color: #fff;
   font-size: 15px;
   font-weight: bold;

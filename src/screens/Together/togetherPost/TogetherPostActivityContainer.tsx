@@ -14,16 +14,7 @@ export default ({navigation}: IProps) => {
 
   const [toggleCheckBox, setToggleCheckBox] = useState('');
   const [isActive, setIsActive] = useState(false);
-  const [feedActiveList, setFeedActiveList] = useState([
-    {
-      id: 0,
-      thumbnail: '',
-      distance: 0,
-      address: '',
-      activityName: '',
-      activityColor: '',
-    },
-  ]);
+  const [feedActiveList, setFeedActiveList] = useState([]);
   const [togetherPaging, setTogetherPaging] = useState({
     id: 0,
     hasNextPage: true,
@@ -47,7 +38,7 @@ export default ({navigation}: IProps) => {
   const getMyFeed = async (myFeedPaging) => {
     const page = myFeedPaging ? myFeedPaging.page : 1;
     const id = await getUserId();
-    const {data, statusCode} = await feedApi.getMyfeed(id, page);
+    const {data, statusCode} = await feedApi.getMyFeed(id, page);
     if (statusCode !== 200) {
     } else {
       const newActive = data.map((item) => ({

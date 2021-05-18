@@ -1,33 +1,45 @@
 import React, {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {Database} from '../Database';
 import {
   IIntervalRecord,
   IMapboxRecord,
   IMapboxRecordMap,
   IRecordSetting,
   ISetActivityCategory,
-  ISqliteCallBack,
 } from '../type/recordContext';
 import {DURATION_TIME, getDistanceBetweenTwoGPS, GOOGLE_MAPS_GEOCODING_API_TOKEN, MINUTE} from '../common';
 import ImagePicker from 'react-native-image-picker';
 import {IMusics} from '../type/music';
 import {feedApi} from '../api';
-import {checkPermission, configure, getLatestLocation, requestPermission} from 'react-native-location';
 import AlertContext from './AlertContext';
 import ConfirmAlert from '../../components/ConfirmAlert';
 import CheckAlert from '../../components/CheckAlert';
 import {Platform} from 'react-native';
 import {captureRef} from 'react-native-view-shot';
-import {PERMISSIONS, request} from 'react-native-permissions';
 import Geocoder from 'react-native-geocoding';
+import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-community/async-storage';
+
+Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'whenInUse'});
 
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
 const RecordContext = createContext({});
-const sqlite = Database.getInstance();
 
 interface IProps {
   children: ReactNode;
+}
+
+export interface IGeoLocation {
+  coords: {
+    latitude: number;
+    longitude: number;
+    altitude: number | null;
+    accuracy: number;
+    altitudeAccuracy: number | null;
+    heading: number | null;
+    speed: number | null;
+  };
+  timestamp: number;
 }
 
 const alertManagerInitialState = {
@@ -38,19 +50,6 @@ const alertManagerInitialState = {
 };
 
 const tabBarVisibleInitialState = true;
-
-const recordSettingInitialState = {
-  isInit: false,
-  isStart: false,
-  awake: true,
-  activity: {
-    id: 1,
-    name: '싸이클링',
-    caloriesPerMinute: 7,
-  },
-  startDate: null,
-  endDate: null,
-};
 
 const recordInitialState = {
   duration: 0,
@@ -76,12 +75,25 @@ const mapboxRecordInitialState = {
   },
   images: [],
 };
+const recordSettingInitialState = {
+  isInit: false,
+  isStart: false,
+  awake: true,
+  startDate: null,
+  endDate: null,
+  activity: {
+    id: 1,
+    name: '싸이클링',
+    caloriesPerMinute: 7,
+  },
+};
 
 export const RecordContextProvider = ({children}: IProps) => {
   const {setAlertVisible}: any = useContext(AlertContext);
   const [alertManager, setAlertManager] = useState(alertManagerInitialState);
   const [tabBarVisible, setTabBarVisible] = useState(tabBarVisibleInitialState);
   const [recordSetting, setRecordSetting] = useState<IRecordSetting>(recordSettingInitialState);
+
   const timer: any = useRef(null);
   const webViewRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -97,7 +109,6 @@ export const RecordContextProvider = ({children}: IProps) => {
     setRecordSetting(recordSettingInitialState);
     setRecord(recordInitialState);
     setMapboxRecord(mapboxRecordInitialState);
-    sqlite.deleteRecord();
   };
 
   const onChangeCreateAlert = () => {
@@ -105,6 +116,13 @@ export const RecordContextProvider = ({children}: IProps) => {
       ...alertManager,
       created: !alertManager.created,
     });
+  };
+
+  const getActivityStorage = async () => {
+    const activity = await AsyncStorage.getItem('@activity');
+    if (activity) {
+      setRecordSetting({...recordSetting, activity: JSON.parse(activity)});
+    }
   };
 
   const onChangeActivityUnSelectedAlert = () => {
@@ -127,7 +145,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     }
 
     ImagePicker.launchCamera(
-      {storageOptions: {privateDirectory: true}},
+      {storageOptions: {privateDirectory: true}, quality: 0.5},
       ({didCancel, error, latitude, longitude, uri, timestamp, type, fileName}) => {
         if (didCancel) {
           return;
@@ -151,48 +169,48 @@ export const RecordContextProvider = ({children}: IProps) => {
     );
   };
 
-  const uploadThumbnailImage = async () => {
-    const thumbnail = await captureRef(thumbnailRef, {
-      format: 'jpg',
-      quality: 0.8,
-    });
+  // const uploadThumbnailImage = async () => {
+  //   const thumbnail = await captureRef(thumbnailRef, {
+  //     format: 'jpg',
+  //     quality: 0.5,
+  //   });
+  //
+  //   const image = new FormData();
+  //   image.append('image', {
+  //     name: 'thumbnail.jpg',
+  //     type: 'image/jpg',
+  //     uri: Platform.OS === 'android' ? thumbnail : thumbnail.replace('file://', ''),
+  //   });
+  //
+  //   return await feedApi.thumbnailCreate(image);
+  // };
 
-    const image = new FormData();
-    image.append('image', {
-      name: 'thumbnail.jpg',
-      type: 'image/jpg',
-      uri: Platform.OS === 'android' ? thumbnail : thumbnail.replace('file://', ''),
-    });
-
-    return await feedApi.thumbnailCreate(image);
-  };
-
-  const uploadImages = async (feedId: number) => {
-    return await Promise.all(
-      mapboxRecord.images.map(async (image) => {
-        const data = new FormData();
-        data.append('image', {
-          name: image.fileName,
-          type: image.type,
-          uri: Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
-        });
-
-        const {distance, latitude, longitude} = image;
-
-        const info = {
-          distance: distance,
-          lat: latitude,
-          lon: longitude,
-          feed: feedId,
-        };
-
-        data.append('imageInfo', JSON.stringify(info));
-
-        const {statusCode} = await feedApi.imagesCreate(data);
-        return statusCode;
-      }),
-    );
-  };
+  // const uploadImages = async (feedId: number) => {
+  //   return await Promise.all(
+  //     mapboxRecord.images.map(async (image) => {
+  //       const data = new FormData();
+  //       data.append('image', {
+  //         name: image.fileName,
+  //         type: image.type,
+  //         uri: Platform.OS === 'android' ? image.uri : image.uri.replace('file://', ''),
+  //       });
+  //
+  //       const {distance, latitude, longitude} = image;
+  //
+  //       const info = {
+  //         distance: distance,
+  //         lat: latitude,
+  //         lon: longitude,
+  //         feed: feedId,
+  //       };
+  //
+  //       data.append('imageInfo', JSON.stringify(info));
+  //
+  //       const {statusCode} = await feedApi.imagesCreate(data);
+  //       return statusCode;
+  //     }),
+  //   );
+  // };
 
   const changeImage = (idx: number) => {
     const options = {storageOptions: {skipBackup: true, path: 'image'}};
@@ -218,7 +236,7 @@ export const RecordContextProvider = ({children}: IProps) => {
     webViewRef.current.reload();
   };
 
-  const setActivityCategory = ({id, name, caloriesPerMinute}: ISetActivityCategory) => {
+  const setActivityCategory = async ({id, name, caloriesPerMinute}: ISetActivityCategory) => {
     const calorie = Math.floor(record.duration / MINUTE) * caloriesPerMinute;
 
     setRecordSetting({
@@ -226,6 +244,7 @@ export const RecordContextProvider = ({children}: IProps) => {
       activity: {id, name, caloriesPerMinute},
     });
     setRecord({...record, calorie});
+    await AsyncStorage.setItem('@activity', JSON.stringify({id, name, caloriesPerMinute}));
   };
 
   const toggleAwakeSwitch = () => {
@@ -243,10 +262,12 @@ export const RecordContextProvider = ({children}: IProps) => {
   };
 
   const onStartRecord = () => {
+    setTabBarVisible(false);
     setRecordSetting({...recordSetting, isInit: true, isStart: true});
   };
 
   const onPauseRecord = () => {
+    setTabBarVisible(true);
     setRecordSetting({...recordSetting, isInit: true, isStart: false});
   };
 
@@ -277,16 +298,6 @@ export const RecordContextProvider = ({children}: IProps) => {
     navigation.navigate('recordFinish');
   };
 
-  const getRecords = () => {
-    sqlite.getRecords((data: Array<ISqliteCallBack>) => {
-      if (data.length === 0) {
-        setAlertManager({...alertManager, recordsIsStored: false});
-      }
-      const records = data.map(({records}) => JSON.parse(records));
-      setMapboxRecord({...mapboxRecord, records, isRecordsUpdate: true});
-    });
-  };
-
   /**
    * interval event
    * */
@@ -295,16 +306,13 @@ export const RecordContextProvider = ({children}: IProps) => {
     await getUserLocation();
   };
 
-  const getUserLocation = async () => {
-    if (record.duration % DURATION_TIME !== 0) return;
-    const {latitude, longitude, speed: locationSpeed}: any = await getLatestLocation();
-
-    //TODO Distance 데이터가 오차율이 큼.
+  const getCoordinates = async ({coords: {speed: geoSpeed, latitude, longitude}}: IGeoLocation) => {
     const {distance: recordedDistance} = mapboxRecord;
 
-    if (!locationSpeed || locationSpeed < 0) return;
-
-    const currentSpeed = Math.floor(locationSpeed * 10) / 10;
+    if (geoSpeed === null) {
+      geoSpeed = 0;
+    }
+    const currentSpeed = Math.floor(geoSpeed * 10) / 10;
 
     // const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
     let currentDistance = 0;
@@ -314,17 +322,53 @@ export const RecordContextProvider = ({children}: IProps) => {
         [longitude, latitude],
       ]);
     }
-    const distance = Math.floor(currentDistance * 1000) / 10 + recordedDistance;
+    const distance = Math.floor((currentDistance + recordedDistance) * 1000) / 1000;
     const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
 
     const speed = mapboxRecord.speed.concat(currentSpeed);
     setMapboxRecord({
       ...mapboxRecord,
+
       coordinates,
       distance,
       speed,
     });
-    // sqlite.insertRecord([longitude, latitude]);
+  };
+
+  const getUserLocation = async () => {
+    if (record.duration % DURATION_TIME !== 0) return;
+    await Geolocation.getCurrentPosition(
+      (res) => getCoordinates(res),
+      (err) => console.log(err),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+
+    return;
+    // const {latitude, longitude, speed: locationSpeed}: any = await getLatestLocation();
+    //
+    // const {distance: recordedDistance} = mapboxRecord;
+    // // if (!locationSpeed || locationSpeed < 0) return;
+    //
+    // const currentSpeed = Math.floor(locationSpeed * 10) / 10;
+    //
+    // // const distance = getDistanceWithSpeedAndTime(currentSpeed, DURATION_TIME) + recordedDistance;
+    // let currentDistance = 0;
+    // if (mapboxRecord.coordinates.length > 0) {
+    //   currentDistance = getDistanceBetweenTwoGPS([
+    //     mapboxRecord.coordinates[mapboxRecord.coordinates.length - 1],
+    //     [longitude, latitude],
+    //   ]);
+    // }
+    // const distance = Math.floor((currentDistance + recordedDistance) * 1000) / 1000;
+    // const coordinates = mapboxRecord.coordinates.concat([[longitude, latitude]]);
+    //
+    // const speed = mapboxRecord.speed.concat(currentSpeed);
+    // setMapboxRecord({
+    //   ...mapboxRecord,
+    //   coordinates,
+    //   distance,
+    //   speed,
+    // });
   };
 
   const onDurationAndCalorieUpdate = () => {
@@ -339,161 +383,110 @@ export const RecordContextProvider = ({children}: IProps) => {
     setRecord({...record, duration});
   };
 
-  const getAddress = async (records: Array<number>) => {
-    const {results: res} = await Geocoder.from(records[1], records[0]);
-
-    return [
-      res[0].address_components[3].long_name,
-      res[0].address_components[2].long_name,
-      res[0].address_components[1].long_name,
-      res[0].address_components[0].long_name,
-    ].join(' ');
-  };
+  // const getAddress = async (records: Array<number>) => {
+  //   const {results: res} = await Geocoder.from(records[1], records[0]);
+  //
+  //   return [
+  //     res[0].address_components[3].long_name,
+  //     res[0].address_components[2].long_name,
+  //     res[0].address_components[1].long_name,
+  //     res[0].address_components[0].long_name,
+  //   ].join(' ');
+  // };
 
   const createFeed = async (navigation: any) => {
-    setFinishLoading(true);
-
-    /**
-     * Thumbnail image upload
-     * */
-    const {
-      statusCode: thumbnailStatus,
-      message: thumbnailMessage,
-      data: {path},
-    } = await uploadThumbnailImage();
-    if (thumbnailStatus !== 201) {
-      setFinishLoading(false);
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '등록에 실패했습니다.',
-            description: thumbnailMessage,
-          }}
-        />,
-      );
-    }
-    const thumbnail = path;
-    const {activity, startDate, endDate} = recordSetting;
-    const {duration, calorie} = record;
-    const {distance, map, music, coordinates: records} = mapboxRecord;
-    const address = await getAddress(records[0]);
-    const startLatitude = records[0][0];
-    const startLongitude = records[0][1];
-    const coordinates = JSON.stringify(records);
-    const feedRecords = {
-      startDate: `${startDate}`,
-      endDate: `${endDate}`,
-      duration,
-      calorie,
-      distance,
-      map: map.id,
-      music: music.id,
-      activity: activity.id,
-      coordinates,
-      thumbnail,
-      address,
-      startLatitude,
-      startLongitude,
-    };
-
-    const {data, statusCode, message} = await feedApi.create(feedRecords);
-    // 피드 업로드 먼저 하고, 이미지 업로드
-    if (statusCode !== 201) {
-      setFinishLoading(false);
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '등록에 실패했습니다.',
-            description: message,
-          }}
-        />,
-      );
-    }
-    const result: number[] = await uploadImages(data.id);
-    const errorResult = result.find((statusCode) => statusCode !== 201);
-    if (errorResult) {
-      setFinishLoading(false);
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '일부 사진 업로드 중 오류가 발생했습니다.',
-            description: '',
-          }}
-        />,
-      );
-    }
-
-    setFinishLoading(false);
-    return setAlertVisible(
-      <CheckAlert
-        check={{
-          type: 'check',
-          title: '등록되었습니다.',
-          description: '',
-        }}
-        checked={() => {
-          clearAllState();
-          navigation.navigate('recordMain');
-        }}
-      />,
-    );
-  };
-
-  const userCameraPermission = async () => {
-    try {
-      if (Platform.OS === 'android') {
-        const camera = await request(PERMISSIONS.ANDROID.CAMERA);
-        console.log('android: ', camera);
-      }
-      if (Platform.OS === 'android') {
-        const camera = await request(PERMISSIONS.IOS.CAMERA);
-        console.log('ios: ', camera);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  //TODO 얘 위치 옮겨야함
-  const userLocatePermission = async () => {
-    const checkPermissionResult = await checkPermission({
-      ios: 'whenInUse',
-      android: {detail: 'coarse'},
-    });
-    if (!checkPermissionResult) {
-      const result = await requestPermission({
-        android: {
-          detail: 'coarse',
-        },
-        ios: 'whenInUse',
-      });
-    } else {
-      await configure({
-        distanceFilter: 0, // Meters
-        desiredAccuracy: {
-          ios: 'best',
-          android: 'highAccuracy',
-        },
-        // Android only
-        androidProvider: 'auto',
-        interval: 5000, // Milliseconds
-        fastestInterval: 5000, // Milliseconds
-        maxWaitTime: 5000, // Milliseconds
-        // iOS Only
-        activityType: 'other',
-        allowsBackgroundLocationUpdates: false,
-        headingFilter: 1, // Degrees
-        headingOrientation: 'portrait',
-        pausesLocationUpdatesAutomatically: false,
-        showsBackgroundLocationIndicator: false,
-      });
-    }
+    // setFinishLoading(true);
+    //
+    // /**
+    //  * Thumbnail image upload
+    //  * */
+    // const {
+    //   statusCode: thumbnailStatus,
+    //   message: thumbnailMessage,
+    //   data: {path},
+    // } = await uploadThumbnailImage();
+    // if (thumbnailStatus !== 201) {
+    //   setFinishLoading(false);
+    //   return setAlertVisible(
+    //     <CheckAlert
+    //       check={{
+    //         type: 'warning',
+    //         title: '등록에 실패했습니다.',
+    //         description: thumbnailMessage,
+    //       }}
+    //     />,
+    //   );
+    // }
+    // const thumbnail = path;
+    // const {activity, startDate, endDate} = recordSetting;
+    // const {duration, calorie} = record;
+    // const {distance, map, music, coordinates: records} = mapboxRecord;
+    // // const address = await getAddress(records[0]);
+    // // const startLatitude = records[0][0];
+    // // const startLongitude = records[0][1];
+    // const coordinates = JSON.stringify(records);
+    // const feedRecords = {
+    //   startDate: `${startDate}`,
+    //   endDate: `${endDate}`,
+    //   duration,
+    //   calorie,
+    //   distance,
+    //   map: map.id,
+    //   music: music.id,
+    //   activity: activity.id,
+    //   coordinates,
+    //   thumbnail,
+    //   address,
+    //   startLatitude,
+    //   startLongitude,
+    // };
+    //
+    // const {data, statusCode, message} = await feedApi.create(feedRecords);
+    // // 피드 업로드 먼저 하고, 이미지 업로드
+    // if (statusCode !== 201) {
+    //   setFinishLoading(false);
+    //   return setAlertVisible(
+    //     <CheckAlert
+    //       check={{
+    //         type: 'warning',
+    //         title: '등록에 실패했습니다.',
+    //         description: message,
+    //       }}
+    //     />,
+    //   );
+    // }
+    // const result: number[] = await uploadImages(data.id);
+    // const errorResult = result.find((statusCode) => statusCode !== 201);
+    // if (errorResult) {
+    //   setFinishLoading(false);
+    //   return setAlertVisible(
+    //     <CheckAlert
+    //       check={{
+    //         type: 'warning',
+    //         title: '일부 사진 업로드 중 오류가 발생했습니다.',
+    //         description: '',
+    //       }}
+    //     />,
+    //   );
+    // }
+    // setFinishLoading(false);
+    // clearAllState();
+    // return setAlertVisible(
+    //   <CheckAlert
+    //     check={{
+    //       type: 'check',
+    //       title: '등록되었습니다.',
+    //       description: '',
+    //     }}
+    //     checked={() => {
+    //       navigation.navigate('recordMain');
+    //     }}
+    //   />,
+    // );
   };
 
   useEffect(() => {
-    userLocatePermission();
+    getActivityStorage();
     if (recordSetting.isStart) {
       timer.current = setInterval(() => updateRecordOnInterval(), 1000);
     }
@@ -501,7 +494,9 @@ export const RecordContextProvider = ({children}: IProps) => {
       clearInterval(timer.current);
     };
   }, [
-    recordSetting,
+    recordSetting.isInit,
+    recordSetting.isStart,
+    recordSetting.awake,
     record,
     mapboxRecord.distance,
     mapboxRecord.speed,
@@ -521,6 +516,7 @@ export const RecordContextProvider = ({children}: IProps) => {
         tabBarVisible,
         alertManager,
         thumbnailRef,
+        finishLoading,
         initializeRecordStart,
         onPauseRecord,
         onStartRecord,

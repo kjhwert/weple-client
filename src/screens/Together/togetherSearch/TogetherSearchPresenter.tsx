@@ -1,58 +1,146 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
+import {BASE_URL, MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN, togetherDate} from '../../../module/common';
+import TogetherContext from '../../../module/context/TogetherContext';
+import {ITogethers} from '../../../module/type/together';
+import Loading from '../../../components/Loading';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import {Dimensions, Image} from 'react-native';
+import {getComma} from '../../../components/CommonTime';
+
+MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;
 }
 
-export default ({navigation, openClub}: IProps) => {
+export default ({navigation}: IProps) => {
+  const {listIndex, searchIndex, mapIndex, listMoreIndex, searchLoading, searchPagination}: any = useContext(
+    TogetherContext,
+  );
+
+  const [selected, setSelected] = useState<ITogethers | null>(null);
+  const [isMapview, setIsMapview] = useState(false);
+
+  const changeMapviewStatus = async () => {
+    if (isMapview) {
+      await listIndex();
+    }
+    if (!isMapview) {
+      await mapIndex();
+    }
+
+    setIsMapview(!isMapview);
+  };
+
   return (
     <Container>
       <ScrollContainer>
-        <ScrollWrapper>
-          <ContainerCard>
-            <Wrapper>
-              <ActiveSelectTitleWrapper>
-                <CategoryTogetherBtn onPress={() => {}}>
-                  <CategoryTogetherImage source={require('../../../assets/icon_category.png')} />
-                  <CategoryTogetherText>카테고리</CategoryTogetherText>
-                </CategoryTogetherBtn>
-                <LocationBtn
-                  onPress={() => {
-                    navigation.navigate('togetherMain');
-                  }}>
-                  <LocationImage source={require('../../../assets/icon_location.png')} />
-                </LocationBtn>
-              </ActiveSelectTitleWrapper>
-            </Wrapper>
-
-            {openClub.map((item, idx) => (
-              <RecruitWrapper key={idx}>
-                <RecruitImageWrapper
-                  onPress={() => {
-                    navigation.navigate('togetherDetail');
-                  }}>
-                  <RecruitImage source={item.image} />
-                  <RecordWrapper>
-                    <RecordImage source={item.iconImage} />
-                    <RecordText>{item.distance}KM</RecordText>
-                  </RecordWrapper>
-                </RecruitImageWrapper>
-                <RecruitTextWrapper>
-                  <RecruitTitleBtn
-                    onPress={() => {
-                      navigation.navigate('togetherDetail');
+        <Wrapper>
+          <ActiveSelectTitleWrapper>
+            <CategoryTogetherBtn
+              onPress={() => {
+                navigation.navigate('togetherSearchCategories');
+              }}>
+              <CategoryTogetherImage source={require('../../../assets/icon_category.png')} />
+              <CategoryTogetherText>카테고리</CategoryTogetherText>
+            </CategoryTogetherBtn>
+            <LocationBtn onPress={changeMapviewStatus}>
+              <LocationImage
+                source={
+                  isMapview ? require('../../../assets/icon_list.png') : require('../../../assets/icon_location.png')
+                }
+              />
+            </LocationBtn>
+          </ActiveSelectTitleWrapper>
+        </Wrapper>
+        <ContainerCard>
+          {searchLoading ? (
+            <Loading />
+          ) : isMapview ? (
+            <>
+              <MapboxGL.MapView
+                style={{width: '100%', height: '100%'}}
+                styleURL={MAPBOX_DEFAULT_STYLE}
+                zoomEnabled={false}
+                scrollEnabled={false}
+                rotateEnabled={false}>
+                <MapboxGL.Camera zoomLevel={12} centerCoordinate={[searchPagination.lon, searchPagination.lat]} />
+                {searchIndex.map((together: ITogethers) => (
+                  <MapboxGL.PointAnnotation
+                    key={together.id}
+                    id={`${together.id}`}
+                    coordinate={[together.lat, together.lon]}
+                    onSelected={() => {
+                      setSelected(together);
                     }}>
-                    <RecruitTitle>{item.title}</RecruitTitle>
-                  </RecruitTitleBtn>
-                  <RecruitAddress>{item.address}</RecruitAddress>
-                  <EntryFee>참가비 {item.pay}원</EntryFee>
-                  <Deadline>모집마감 {item.endTime}시간 전</Deadline>
-                </RecruitTextWrapper>
-              </RecruitWrapper>
-            ))}
-          </ContainerCard>
-        </ScrollWrapper>
+                    {/*<MapboxMarkWrapper color={together.activityColor}>*/}
+                    {/*  <Image source={{uri: `${BASE_URL}/${together.activityImage}`}} style={{width: 20, height: 20}} />*/}
+                    {/*</MapboxMarkWrapper>*/}
+                  </MapboxGL.PointAnnotation>
+                ))}
+              </MapboxGL.MapView>
+              {selected && (
+                <SelectedWrapper
+                  onPress={() => {
+                    navigation.navigate('togetherDetail', {id: selected.id});
+                  }}>
+                  <RecruitImageWrapper>
+                    <RecruitImage source={{uri: `${BASE_URL}/${selected.thumbnail}`}} />
+                    <RecordWrapper backgroundColor={selected.activityColor}>
+                      <RecordImage source={{uri: `${BASE_URL}/${selected.activityImage}`}} />
+                      <RecordText>{selected.distance}KM</RecordText>
+                    </RecordWrapper>
+                  </RecruitImageWrapper>
+                  <RecruitTextWrapper>
+                    <RecruitTitleBtn>
+                      <RecruitTitle>{selected.title}</RecruitTitle>
+                    </RecruitTitleBtn>
+                    <RecruitAddress>{selected.place}</RecruitAddress>
+                    <EntryFee>참가비 {getComma(selected.price)}원</EntryFee>
+                    <Deadline>{togetherDate(selected.limitDate)}</Deadline>
+                  </RecruitTextWrapper>
+                </SelectedWrapper>
+              )}
+            </>
+          ) : (
+            <ScrollWrapper>
+              {searchIndex.map(
+                ({
+                  id,
+                  activityImage,
+                  activityColor,
+                  thumbnail,
+                  distance,
+                  title,
+                  address,
+                  price,
+                  limitDate,
+                }: ITogethers) => (
+                  <RecruitWrapper
+                    key={id}
+                    onPress={() => {
+                      navigation.navigate('togetherDetail', {id});
+                    }}>
+                    <RecruitImageWrapper>
+                      <RecruitImage source={{uri: `${BASE_URL}/${thumbnail}`}} />
+                      <RecordWrapper backgroundColor={activityColor}>
+                        <RecordImage source={{uri: `${BASE_URL}/${activityImage}`}} />
+                        <RecordText>{distance}KM</RecordText>
+                      </RecordWrapper>
+                    </RecruitImageWrapper>
+                    <RecruitTextWrapper>
+                      <RecruitTitle>{title}</RecruitTitle>
+                      <RecruitAddress>{address}</RecruitAddress>
+                      <EntryFee>참가비 {price}원</EntryFee>
+                      <Deadline>{togetherDate(limitDate)}</Deadline>
+                    </RecruitTextWrapper>
+                  </RecruitWrapper>
+                ),
+              )}
+            </ScrollWrapper>
+          )}
+        </ContainerCard>
       </ScrollContainer>
     </Container>
   );
@@ -67,7 +155,27 @@ const ScrollContainer = styled.View`
   background-color: #fff;
 `;
 
+const SelectedWrapper = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+`;
+
 const ScrollWrapper = styled.ScrollView``;
+
+const MapboxMarkWrapper = styled.View`
+  border-radius: 50px;
+  background-color: ${({color}: {color: string}) => color};
+  width: 33px;
+  height: 33px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ContainerCard = styled.View`
   width: 100%;
@@ -126,7 +234,7 @@ const LocationImage = styled.Image`
   height: 20px;
 `;
 
-const RecruitWrapper = styled.View`
+const RecruitWrapper = styled.TouchableOpacity`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -137,7 +245,7 @@ const RecruitWrapper = styled.View`
   border-color: #eee;
 `;
 
-const RecruitImageWrapper = styled.TouchableOpacity`
+const RecruitImageWrapper = styled.View`
   display: flex;
   width: 45%;
   border-width: 1px;
@@ -153,13 +261,13 @@ const RecruitImage = styled.Image`
 const RecordWrapper = styled.View`
   display: flex;
   flex-flow: row;
-  width: 65%;
   align-items: center;
   justify-content: center;
-  background-color: #007bf1;
+  background-color: ${({backgroundColor}: {backgroundColor: string}) =>
+    backgroundColor ? backgroundColor : '#bcbcbc'};
   position: absolute;
   margin-top: 10px;
-  padding: 2px;
+  padding: 5px 10px;
 `;
 
 const RecordText = styled.Text`
@@ -170,8 +278,8 @@ const RecordText = styled.Text`
 `;
 
 const RecordImage = styled.Image`
-  width: 22px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   margin-right: 10px;
   align-items: center;
   justify-content: center;

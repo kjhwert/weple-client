@@ -1,18 +1,31 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import RecordFinishPresenter from './RecordFinishPresenter';
+import Loading from '../../components/Loading';
+import styled from 'styled-components/native';
+import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const getAverageSpeed = (speed: Array<number>) => {
-    if (speed.length === 0) {
-      return 0;
-    }
-    const sumSpeed = speed.reduce((prev, next) => prev + next, 0);
-    return Math.floor((sumSpeed / speed.length) * 10) / 10;
-  };
+  const {
+    state: {loading},
+  } = useContext(RecordContext2) as IRecordContext2;
 
-  return <RecordFinishPresenter navigation={navigation} getAverageSpeed={getAverageSpeed} />;
+  return loading ? (
+    <Container>
+      <Loading />
+    </Container>
+  ) : (
+    <RecordFinishPresenter navigation={navigation} />
+  );
 };
+
+const Container = styled.View`
+  flex: 1;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

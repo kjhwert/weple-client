@@ -1,17 +1,15 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
 import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
 import FriendActiveContainer from '../screens/Feed/friendProfile/FriendActiveContainer';
 import ActiveDetailContainer from '../screens/Feed/ActiveDetailContainer';
-import FriendFollowingContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowingContainer';
 import FeedContainer from '../screens/Feed/FeedContainer';
 import Notification from '../components/Notification';
 import FeedRecommendContainer from '../screens/Feed/FeedRecommendContainer';
 import FriendCommentContainer from '../screens/Feed/friendProfile/friendSns/FriendCommentContainer';
 import BackBtn from '../components/BackBtn';
 import FeedEventDetailContainer from '../screens/Feed/FeedEvent/FeedEventDetailContainer';
-import FriendActiveJoinContainer from '../screens/Feed/friendProfile/FriendActiveJoinContainer';
 import Search from '../components/Search';
 import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
 import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
@@ -19,11 +17,24 @@ import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/Fri
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
 import FeedContext from '../module/context/FeedContext';
 import {IFeedContext} from '../module/type/feedContext';
+import FollowContext from '../module/context/FollowContext';
+import WhiteBackBtn from '../components/WhiteBackBtn';
+import NotificationWhite from '../components/NotificationWhite';
+import ProfileActiveStatisticContainer from '../screens/Profile/profilePay/ProfileActiveStatisticContainer';
+import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMemberContainer';
 
 const Stack = createStackNavigator();
 
-export default () => {
+export default ({navigation, route}: any) => {
+  const {user}: any = useContext(FollowContext);
   const {show}: IFeedContext = useContext(FeedContext);
+
+  useEffect(() => {
+    console.log(route);
+    if (route?.params?.name === 'activeDetail') {
+      navigation.navigate('activeDetail', route.params);
+    }
+  }, []);
 
   return (
     <Stack.Navigator
@@ -87,10 +98,10 @@ export default () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '프로필',
+          headerTitle: '활동 통계',
         }}
-        name="friendActiveJoin"
-        component={FriendActiveJoinContainer}
+        name="ProfileActiveStatistic"
+        component={ProfileActiveStatisticContainer}
       />
       <Stack.Screen
         options={{
@@ -102,11 +113,17 @@ export default () => {
       <Stack.Screen
         name="friendFollower"
         options={{
-          headerTitle: '팔로우',
+          headerTitle: user.nickName,
         }}
         component={FriendFollowerContainer}
       />
-      <Stack.Screen name="friendFollowing" component={FriendFollowingContainer} />
+      <Stack.Screen
+        name="feedFollowerMember"
+        options={{
+          headerTitle: user.nickName,
+        }}
+        component={FollowerMemberContainer}
+      />
       <Stack.Screen
         options={{
           headerTitle: '좋아하는 사람들',
@@ -115,9 +132,13 @@ export default () => {
         component={FriendLikeContainer}
       />
       <Stack.Screen
-        options={{
-          headerTitle: '공유하기',
-        }}
+        options={({navigation, route}) => ({
+          headerTitle: `${show ? show.userNickName : ''}님의 활동`,
+          headerTintColor: 'white',
+          headerStyle: {backgroundColor: 'black'},
+          headerLeft: () => <WhiteBackBtn navigation={navigation} />,
+          headerRight: () => <NotificationWhite navigation={navigation} route={route} />,
+        })}
         name="friendShare"
         component={FeedShareContainer}
       />

@@ -1,10 +1,16 @@
 import React from 'react';
-import FeedSharePresenter from './FeedSharePresenter';
+import RecordPlayComponent from '../../../../components/RecordPlayComponent';
+import {IShowFeed} from '../../../../module/type/feedContext';
 
 interface IProps {
   navigation: any;
+  route: {
+    params: {
+      feed: IShowFeed;
+    };
+  };
 }
 
-export default ({navigation}: IProps) => {
-  return <FeedSharePresenter navigation={navigation} />;
+export default (props: IProps) => {
+  return <RecordPlayComponent {...props} />;
 };

@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 export default () => {
   return (
     <Container>
-      <LoadingText>loading...</LoadingText>
+      <LoadingImage source={require('../assets/loading.gif')} />
     </Container>
   );
 };
@@ -14,6 +14,11 @@ const Container = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const LoadingImage = styled.Image`
+  width: 30px;
+  height: 30px;
 `;
 
 const LoadingText = styled.Text``;

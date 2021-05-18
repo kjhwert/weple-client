@@ -14,6 +14,10 @@ interface IProps {
   modifyTogetherData: Function;
   deleteTogetherData: Function;
   blankValidation: Function;
+  onChangeTitle: (e: string) => void;
+  onChangeDescription: (e: string) => void;
+  onChangeRecommend: (e: string) => void;
+  onChangeNotice: (e: string) => void;
 }
 
 export default ({
@@ -25,6 +29,10 @@ export default ({
   activeFlag,
   isActive,
   blankValidation,
+  onChangeTitle,
+  onChangeDescription,
+  onChangeRecommend,
+  onChangeNotice,
 }: IProps) => {
   const {getTogetherThumbnail}: any = useContext(TogetherContext);
 
@@ -39,12 +47,20 @@ export default ({
             <JoinWrapper>
               <JoinInfoWrapper>
                 <JoinTitleWrapper>
-                  <TextTitleBox
-                    name="title"
-                    value={listDetail.title}
-                    onChange={onChangeTogether}
-                    activeFlag={activeFlag.titleFlag}
-                  />
+                  <InputBoxWrapper>
+                    <InputDataBox
+                      onChangeText={onChangeTitle}
+                      autoFocus={true}
+                      multiline={true}
+                      value={listDetail.title}
+                    />
+                  </InputBoxWrapper>
+                  {/*<TextTitleBox*/}
+                  {/*  name="title"*/}
+                  {/*  value={listDetail.title}*/}
+                  {/*  onChange={onChangeTogether}*/}
+                  {/*  activeFlag={activeFlag.titleFlag}*/}
+                  {/*/>*/}
                 </JoinTitleWrapper>
                 <JoinTextWrapper>
                   <JoinInfoTitle>최대 참여인원</JoinInfoTitle>
@@ -63,27 +79,45 @@ export default ({
               </JoinInfoWrapper>
               <ModifyContentWrapper>
                 <ModifyTitle>모임하기 설명</ModifyTitle>
-                <TextBox
-                  name="description"
-                  value={listDetail.description}
-                  onChange={onChangeTogether}
-                  activeFlag={activeFlag.descriptionFlag}
-                />
+                <InputBoxWrapper>
+                  <TextBoxData
+                    value={listDetail.description}
+                    onChangeText={onChangeDescription}
+                    multiline={true}
+                    textAlignVertical={'top'}
+                  />
+                </InputBoxWrapper>
+                {/*<TextBox*/}
+                {/*  name="description"*/}
+                {/*  value={listDetail.description}*/}
+                {/*  onChange={onChangeTogether}*/}
+                {/*  activeFlag={activeFlag.descriptionFlag}*/}
+                {/*/>*/}
                 <ModifyTitle>이런 분들께 추천합니다.</ModifyTitle>
-                <TextBox
-                  name="recommend"
-                  value={listDetail.recommend}
-                  onChange={onChangeTogether}
-                  activeFlag={activeFlag.recommendFlag}
-                />
+                <InputBoxWrapper>
+                  <TextBoxData
+                    value={listDetail.recommend}
+                    onChangeText={onChangeRecommend}
+                    multiline={true}
+                    textAlignVertical={'top'}
+                  />
+                </InputBoxWrapper>
+                {/*<TextBox*/}
+                {/*  name="recommend"*/}
+                {/*  value={listDetail.recommend}*/}
+                {/*  onChange={onChangeTogether}*/}
+                {/*  activeFlag={activeFlag.recommendFlag}*/}
+                {/*/>*/}
                 <NoticeWrap>
                   <ModifyTitle>공지사항</ModifyTitle>
-                  <TextBox
-                    name="notice"
-                    value={listDetail.notice}
-                    onChange={onChangeTogether}
-                    activeFlag={activeFlag.noticeFlag}
-                  />
+                  <InputBoxWrapper>
+                    <TextBoxData
+                      value={listDetail.notice}
+                      onChangeText={onChangeNotice}
+                      multiline={true}
+                      textAlignVertical={'top'}
+                    />
+                  </InputBoxWrapper>
                 </NoticeWrap>
               </ModifyContentWrapper>
               <ButtonWrap>
@@ -107,6 +141,41 @@ export default ({
     </Container>
   );
 };
+
+const TextBoxTitle = styled.Text`
+  font-size: 12px;
+  color: #6f6f6f;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const TextBoxData = styled.TextInput`
+  width: 100%;
+  height: 150px;
+  max-height: 150px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-width: 1px;
+  border-color: #acacac;
+  font-size: 15px;
+  color: #6f6f6f;
+`;
+
+const InputDataBox = styled.TextInput`
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border-width: 1px;
+  border-color: #acacac;
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+`;
+
+const InputBoxWrapper = styled.View`
+  display: flex;
+  width: 100%;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -212,6 +281,7 @@ const ModifyTitle = styled.Text`
   font-weight: bold;
   color: #2e2e2e;
   text-align: left;
+  margin-bottom: 5px;
 `;
 
 const NoticeWrap = styled.View`

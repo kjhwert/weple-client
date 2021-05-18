@@ -3,12 +3,12 @@ import styled from 'styled-components/native';
 import {IFeedComments} from '../../../../module/type/feed';
 import {ACTIVE_BUTTON, ACTIVE_TEXT, BASE_URL, INACTIVE_BUTTON} from '../../../../module/common';
 import UserContext from '../../../../module/context/UserContext';
-import {IFeedCreateComment} from '../../../../module/type/api';
 import {Text} from 'react-native';
 
 interface IProps {
+  navigation: any;
   comments: Array<IFeedComments>;
-  userComment: IFeedCreateComment;
+  description: string;
   onChangeDescription: (e: string) => void;
   finishComments: () => void;
   setModifyAlertVisible: (comment: IFeedComments) => void;
@@ -22,10 +22,11 @@ interface IProps {
 }
 
 export default ({
+  navigation,
   comments,
   onChangeDescription,
-  userComment,
   finishComments,
+  description,
   setModifyAlertVisible,
   commentStatus,
   onUpdateDescription,
@@ -34,23 +35,26 @@ export default ({
   const {
     loginUser: {image},
   }: any = useContext(UserContext);
+
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
             {comments.map((comment) => (
-              <MemberWrapper key={comment.id}>
-                <ProfileImageWrapper onPress={() => {}}>
+              <MemberWrapper
+                key={comment.id}
+                onPress={() => {
+                  navigation.navigate('friendActive', {id: comment.userId});
+                }}>
+                <ProfileImageWrapper>
                   <ProfileImage
                     source={{
                       uri: `${BASE_URL}/${comment.userImage ? comment.userImage : 'public/user/no_profile.png'}`,
                     }}
                   />
                   <MemberTextWrapper>
-                    <MemberNameBtn>
-                      <MemberText>{comment.userName}</MemberText>
-                    </MemberNameBtn>
+                    <MemberText>{comment.userName}</MemberText>
                     {commentStatus.isModifiable && commentStatus.id === comment.id ? (
                       <CommentText
                         value={commentStatus.description}
@@ -58,14 +62,12 @@ export default ({
                         onChangeText={onUpdateDescription}
                       />
                     ) : (
-                      <CommentText editable={false} multiline={true} modifiable={false}>
-                        {comment.description}
-                      </CommentText>
+                      <CommentText editable={false} multiline={true} modifiable={false} value={comment.description} />
                     )}
                   </MemberTextWrapper>
                 </ProfileImageWrapper>
 
-                {comment.isLoginUserWrote ? (
+                {comment.isLoginUserWrote === '1' ? (
                   commentStatus.isModifiable && commentStatus.id === comment.id ? (
                     <DotMoreBtn
                       onPress={() => {
@@ -96,8 +98,9 @@ export default ({
           />
           <WriteComment
             placeholder="코멘트를 달아보세요"
-            value={userComment.description}
+            value={description}
             onChangeText={onChangeDescription}
+            clearButtonMode="always"
           />
           <WriteCommentButton onPress={finishComments}>
             <WriteCommentButtonText>전송</WriteCommentButtonText>
@@ -161,7 +164,7 @@ const Card = styled.View`
   background-color: #fff;
 `;
 
-const MemberWrapper = styled.View`
+const MemberWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -171,7 +174,7 @@ const MemberWrapper = styled.View`
   border-color: #eee;
 `;
 
-const ProfileImageWrapper = styled.TouchableOpacity`
+const ProfileImageWrapper = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -188,20 +191,17 @@ const ProfileImage = styled.Image`
 const MemberTextWrapper = styled.View`
   display: flex;
   align-items: center;
-  width: 65%;
+  width: 70%;
   height: 100%;
   margin-right: 5px;
-`;
-
-const MemberNameBtn = styled.TouchableOpacity`
-  width: 100%;
 `;
 
 const MemberText = styled.Text`
   font-size: 13px;
   font-weight: bold;
   color: #333;
-  padding-bottom: 5px;
+  width: 100%;
+  margin-bottom: -5px;
 `;
 
 const CommentText = styled.TextInput`
@@ -210,6 +210,7 @@ const CommentText = styled.TextInput`
   color: #333;
   border-width: ${({modifiable}: {modifiable: boolean}) => (modifiable ? '1px' : '0px')};
   border-color: ${ACTIVE_TEXT};
+  padding: 0;
 `;
 
 const DotMoreBtn = styled.TouchableOpacity`

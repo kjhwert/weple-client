@@ -2,37 +2,17 @@ import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import ContainerCard from '../../components/ContainerCard';
 import UserContext from '../../module/context/UserContext';
-import AlertWrapper from '../../components/AlertWrapper';
+import {FONT_SIZE_2, FONT_SIZE_3, FONT_SIZE_4} from '../../module/common';
 
 interface IProps {
   navigation: any;
-  alertFrame: any;
-  clearAlertFrame: Function;
 }
 
 export default ({navigation}: IProps) => {
-  const {onChangeLogin, login, isLoginActive, isLoginBtnActive, alertFrame, clearAlertFrame}: any = useContext(
-    UserContext,
-  );
+  const {login, isLoginActive, isLoginBtnActive, onChangeEmail, onChangePassword}: any = useContext(UserContext);
 
   return (
     <Container>
-      {alertFrame.showAlert && (
-        <AlertWrapper>
-          <AlertImageWrapper>
-            <AlertImage source={require('../../assets/alertWarn_icon.png')} />
-          </AlertImageWrapper>
-          <AlertTitleText>{alertFrame.message}</AlertTitleText>
-          <AlertContentText>{'다시 입력하세요.'}</AlertContentText>
-          <ConfirmButton
-            onPress={() => {
-              clearAlertFrame();
-            }}>
-            <ConfirmButtonText>확인</ConfirmButtonText>
-          </ConfirmButton>
-        </AlertWrapper>
-      )}
-
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
@@ -41,10 +21,9 @@ export default ({navigation}: IProps) => {
               <SignInTitle>이메일</SignInTitle>
               <LoginInput
                 placeholder="이메일을 입력하세요."
-                name="email"
                 autoCapitalize="none"
                 autoFocus={true}
-                onChange={onChangeLogin}
+                onChangeText={onChangeEmail}
                 borderColor={isLoginActive.emailFlag}
               />
               <PasswordSearchWrapper>
@@ -52,10 +31,9 @@ export default ({navigation}: IProps) => {
                   <SignInTitle>비밀번호</SignInTitle>
                   <LoginInput
                     placeholder="비밀번호를 입력하세요."
-                    name="password"
                     autoCapitalize="none"
                     secureTextEntry={true}
-                    onChange={onChangeLogin}
+                    onChangeText={onChangePassword}
                     borderColor={isLoginActive.passwordFlag}
                   />
                 </PasswordWrapper>
@@ -66,11 +44,7 @@ export default ({navigation}: IProps) => {
                   <PasswordText>잊으셨나요?</PasswordText>
                 </PasswordBtn>
               </PasswordSearchWrapper>
-              <LoginButton
-                backgroundColor={isLoginBtnActive}
-                onPress={async () => {
-                  (await login()) ? navigation.navigate('bottomTab') : {};
-                }}>
+              <LoginButton backgroundColor={isLoginBtnActive} onPress={() => login(navigation)}>
                 <LoginText>로그인</LoginText>
               </LoginButton>
             </SignInWrapper>
@@ -176,7 +150,7 @@ const ScrollWrapper = styled.ScrollView``;
 
 const LoginTitle = styled.Text`
   width: 100%;
-  font-size: 19px;
+  font-size: ${FONT_SIZE_4}px;
   font-weight: bold;
   text-align: left;
   margin-bottom: 20px;
@@ -188,7 +162,7 @@ const SignInWrapper = styled.View`
 `;
 
 const SignInTitle = styled.Text`
-  font-size: 12px;
+  font-size: ${FONT_SIZE_2}px;
   color: #6f6f6f;
   font-weight: bold;
   text-align: left;
@@ -196,6 +170,7 @@ const SignInTitle = styled.Text`
 `;
 
 const LoginInput = styled.TextInput`
+  font-size: ${FONT_SIZE_3}px;
   padding: 5px 10px;
   border-bottom-width: 1px;
   border-color: ${({borderColor}: {borderColor: string}) => (borderColor ? '#007bf1' : '#babfc7')};
@@ -224,6 +199,7 @@ const PasswordBtn = styled.TouchableOpacity`
   position: absolute;
   right: 0;
   bottom: 30px;
+  z-index: 20;
 `;
 
 const PasswordText = styled.Text`

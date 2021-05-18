@@ -3,29 +3,40 @@ import styled from 'styled-components/native';
 import FeedContext from '../module/context/FeedContext';
 import AlertContext from '../module/context/AlertContext';
 import CheckAlert from './CheckAlert';
+import TogetherContext from '../module/context/TogetherContext';
 
 interface IProps {
   navigation: any;
+  stack: string;
 }
 
-export default ({navigation}: IProps) => {
-  const {changeSearchVisible}: any = useContext(FeedContext);
-  const {setAlertVisible}: any = useContext(AlertContext);
+export default ({navigation, stack}: IProps) => {
+  const {changeSearchVisible: feedChangeStatus}: any = useContext(FeedContext);
+  const {changeSearchVisible: togetherChangeStatus, changeSearchTitle}: any = useContext(TogetherContext);
+  const {setWarningAlertVisible}: any = useContext(AlertContext);
   const [searchText, setSearchText] = useState('');
 
   const onSubmit = () => {
     if (searchText.length === 0) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: '검색어를 입력해주세요.',
-            description: '',
-          }}
-        />,
-      );
+      return setWarningAlertVisible('검색어를 입력해주세요.', '');
     }
-    navigation.navigate('feedSearch', {searchText});
+
+    switch (stack) {
+      case 'feed':
+        return navigation.navigate('feedSearch', {searchText});
+      case 'together':
+        changeSearchTitle(searchText);
+        return navigation.navigate('togetherSearch');
+    }
+  };
+
+  const changeSearchStatus = () => {
+    switch (stack) {
+      case 'feed':
+        return feedChangeStatus();
+      case 'together':
+        return togetherChangeStatus();
+    }
   };
 
   const onChangeSearchText = (text: string) => {
@@ -33,7 +44,7 @@ export default ({navigation}: IProps) => {
   };
 
   return (
-    <Container onPress={changeSearchVisible}>
+    <Container onPress={changeSearchStatus}>
       <Wrapper>
         <SearchInput
           placeholder="검색어 입력"
@@ -41,7 +52,7 @@ export default ({navigation}: IProps) => {
           value={searchText}
           onChangeText={onChangeSearchText}
         />
-        <SearchBtn onPress={changeSearchVisible}>
+        <SearchBtn onPress={changeSearchStatus}>
           <SearchImage source={require('../assets/icon_close.png')} />
         </SearchBtn>
       </Wrapper>

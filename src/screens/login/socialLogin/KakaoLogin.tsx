@@ -34,7 +34,7 @@ export default ({navigation}: IProps) => {
     KakaoLogins.login([KAKAO_AUTH_TYPES.Talk, KAKAO_AUTH_TYPES.Account])
       .then((result) => {
         setToken(result.accessToken);
-
+        console.log(result);
         logCallback(`Login Finished:${JSON.stringify(result)}`, setLoginLoading(false));
         getProfile();
       })
@@ -49,22 +49,21 @@ export default ({navigation}: IProps) => {
       });
   };
 
-  const getProfile = () => {
+  const getProfile = async () => {
     logCallback('Get Profile Start', setProfileLoading(true));
-    KakaoLogins.getProfile()
-      .then((result) => {
-        setProfile(result);
-        if (result.email == null || result.email.length <= 0) {
-          navigation.navigate('createAccount');
-          return;
-        }
-        logCallback(`Get Profile Finished:${JSON.stringify(result)}`, setProfileLoading(false));
-        socialLogin(result.email, result.id) ? navigation.navigate('bottomTab') : navigation.navigate('login');
-      })
-      .catch((err) => {
-        logCallback(`Get Profile Failed:${err.code} ${err.message}`, setProfileLoading(false));
-        navigation.navigate('login');
-      });
+    try {
+      const result = await KakaoLogins.getProfile();
+      setProfile(result);
+      if (result.email == null || result.email.length <= 0) {
+        navigation.navigate('createAccount');
+        return;
+      }
+      logCallback(`Get Profile Finished:${JSON.stringify(result)}`, setProfileLoading(false));
+      (await socialLogin(result.email, result.id)) ? navigation.navigate('bottomTab') : navigation.navigate('login');
+    } catch (err) {
+      logCallback(`Get Profile Failed:${err.code} ${err.message}`, setProfileLoading(false));
+      navigation.navigate('login');
+    }
   };
 
   useEffect(() => {

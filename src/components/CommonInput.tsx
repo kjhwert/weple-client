@@ -280,6 +280,7 @@ export const PwChangeInput = ({title = '', placeholder = '', name = '', onChange
         onChange={onChange}
         borderColor={borderColor}
         value={value}
+        secureTextEntry={true}
       />
     </PwChangeInputWrapper>
   );

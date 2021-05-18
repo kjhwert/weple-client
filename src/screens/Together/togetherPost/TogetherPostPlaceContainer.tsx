@@ -36,8 +36,8 @@ export default ({navigation}: IProps) => {
   };
 
   const maxMemberValidation = () => {
-    // 숫자 체크
-    if (!/^[0-9]*$/.test(createRoom.maxMember)) {
+    const {maxMember} = createRoom;
+    if (!/^[0-9]*$/.test(maxMember)) {
       setActiveFlag({...activeFlag, maxMemberFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -51,14 +51,30 @@ export default ({navigation}: IProps) => {
       );
       return false;
     }
+
+    if (maxMember < 2 || maxMember > 500) {
+      setActiveFlag({...activeFlag, maxMemberFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '인원 제한',
+            description: '최소 2명, 최대 500명까지 설정할 수 있습니다.',
+          }}
+          checked={() => {}}
+        />,
+      );
+      return false;
+    }
     return true;
   };
 
   const togetherPriceValidation = () => {
-    if (!createRoom.togetherPrice || createRoom.togetherPrice === 0) {
+    const {togetherPrice} = createRoom;
+    if (!togetherPrice || togetherPrice === 0) {
       return true;
     }
-    if (!/^[0-9]*$/.test(createRoom.togetherPrice)) {
+    if (!/^[0-9]*$/.test(togetherPrice)) {
       setActiveFlag({...activeFlag, togetherPriceFlag: -1});
       setAlertVisible(
         <CheckAlert
@@ -66,6 +82,21 @@ export default ({navigation}: IProps) => {
             type: 'warning',
             title: '참가비는 숫자로 입력하세요.',
             description: '',
+          }}
+          checked={() => {}}
+        />,
+      );
+      return false;
+    }
+
+    if (togetherPrice > 1000000) {
+      setActiveFlag({...activeFlag, togetherPriceFlag: -1});
+      setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '참가비 제한',
+            description: '참가비는 1,000,000원을 넘을 수 없습니다.',
           }}
           checked={() => {}}
         />,

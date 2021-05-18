@@ -132,7 +132,7 @@ const ModifyBtnText = styled.Text`
   text-align: center;
 `;
 
-export const CategoryBtn = ({text = '', onPress = null, isSelect = false}) => {
+export const CategoryBtn = ({text = '', onPress = () => {}, isSelect = false}) => {
   return (
     <Category onPress={onPress} isSelect={isSelect}>
       <CategoryText isSelect={isSelect}>{text}</CategoryText>

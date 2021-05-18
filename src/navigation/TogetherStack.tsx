@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TogetherShareContainer from '../screens/Together/TogetherDetail/TogetherShareContainer';
 import TogetherPostIntroduceContainer from '../screens/Together/togetherPost/TogetherPostIntroduceContainer';
@@ -19,10 +19,17 @@ import TogetherPostActivityContainer from '../screens/Together/togetherPost/Toge
 import TogetherMyDetailContainer from '../screens/Together/TogetherDetail/TogetherMyDetailContainer';
 import TogetherDetailContainer from '../screens/Together/TogetherDetail/TogetherDetailContainer';
 import TogetherMyTotalListContainer from '../screens/Together/TogetherDetail/TogetherMyTotalListContainer';
+import SelectCategoryComponent from '../components/SelectCategoryComponent';
 
 const Stack = createStackNavigator();
 
-export default () => {
+export default ({navigation, route}: any) => {
+  useEffect(() => {
+    console.log(route);
+    if (route?.params?.name === 'togetherDetail') {
+      navigation.navigate('togetherDetail', route.params);
+    }
+  }, []);
   return (
     <Stack.Navigator
       screenOptions={({navigation, route}) => ({
@@ -52,6 +59,13 @@ export default () => {
         }}
         name="togetherSearch"
         component={TogetherSearchContainer}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '카테고리 선택',
+        }}
+        name="togetherSearchCategories"
+        component={SelectCategoryComponent}
       />
       <Stack.Screen
         options={{

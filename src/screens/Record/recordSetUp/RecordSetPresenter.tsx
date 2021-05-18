@@ -1,14 +1,18 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import {Switch} from 'react-native';
-import RecordContext from '../../../module/context/RecordContext';
+import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
+import {FONT_SIZE_1, FONT_SIZE_2} from '../../../module/common';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
-  const {recordSetting, toggleAwakeSwitch}: any = useContext(RecordContext);
+  const {
+    state: {settings},
+    onChangeSettingAwake,
+  } = useContext(RecordContext2) as IRecordContext2;
   return (
     <Container>
       <Card>
@@ -18,11 +22,7 @@ export default ({navigation}: IProps) => {
               navigation.navigate('recordActiveType');
             }}>
             <SetUpListText>활동</SetUpListText>
-            <SetUpActiveText>
-              {!recordSetting.activity.name
-                ? '활동을 선택하세요'
-                : recordSetting.activity.name}
-            </SetUpActiveText>
+            <SetUpActiveText>{!settings.activity.name ? '활동을 선택하세요' : settings.activity.name}</SetUpActiveText>
             <MoreImage source={require('../../../assets/set_more.png')} />
           </SetBtn>
         </SetBtnWrapper>
@@ -30,18 +30,14 @@ export default ({navigation}: IProps) => {
         <AlarmSetWrapper>
           <AlarmSetTextWrapper>
             <AlarmSetTitle>화면 계속 켜두기</AlarmSetTitle>
-            <AlarmSetContent>
-              기록하는 중 화면이 꺼지는 것을 방지합니다.
-            </AlarmSetContent>
+            <AlarmSetContent>기록하는 중 화면이 꺼지는 것을 방지합니다.</AlarmSetContent>
           </AlarmSetTextWrapper>
           <Switch
             trackColor={{false: '#c1c1c1', true: '#007bf1'}}
-            thumbColor={recordSetting.awake ? '#fff' : '#f4f3f4'}
+            thumbColor={settings.awake ? '#fff' : '#f4f3f4'}
             ios_backgroundColor="#c1c1c1"
-            onValueChange={() => {
-              toggleAwakeSwitch();
-            }}
-            value={recordSetting.awake}
+            onValueChange={onChangeSettingAwake}
+            value={settings.awake}
           />
         </AlarmSetWrapper>
       </Card>
@@ -77,14 +73,14 @@ const SetBtn = styled.TouchableOpacity`
 `;
 
 const SetUpListText = styled.Text`
-  font-size: 13px;
+  font-size: ${FONT_SIZE_2}px;
   text-align: left;
   color: #333333;
   width: 34%;
 `;
 
 const SetUpActiveText = styled.Text`
-  font-size: 11px;
+  font-size: ${FONT_SIZE_1}px;
   text-align: right;
   color: #7f7f7f;
   width: 60%;
@@ -118,7 +114,7 @@ const AlarmSetTextWrapper = styled.View`
 
 const AlarmSetTitle = styled.Text`
   width: 100%;
-  font-size: 13px;
+  font-size: ${FONT_SIZE_2}px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -126,6 +122,6 @@ const AlarmSetTitle = styled.Text`
 
 const AlarmSetContent = styled.Text`
   width: 100%;
-  font-size: 11px;
+  font-size: ${FONT_SIZE_1}px;
   color: #7f7f7f;
 `;

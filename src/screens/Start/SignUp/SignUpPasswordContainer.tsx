@@ -57,6 +57,20 @@ export default ({navigation}: IProps) => {
       );
     }
 
+    if (!isAcceptablePassword(userPassword.password1)) {
+      setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
+      return setAlertVisible(
+        <CheckAlert
+          check={{
+            type: 'warning',
+            title: '비밀번호 설정 제한',
+            description: '숫자, 특수문자를 포함한 8~20로 설정해주세요.',
+          }}
+          checked={() => {}}
+        />,
+      );
+    }
+
     if (/\s/g.test(userPassword.password1)) {
       setUserPassword({...userPassword, activeFlag1: -1, activeFlag2: -1});
       return setAlertVisible(
@@ -71,6 +85,14 @@ export default ({navigation}: IProps) => {
       );
     }
     return true;
+  };
+
+  /**
+   * 6 ~ 20 영문, 최소 1개의 숫자 혹은 특수문자 포함
+   * */
+  const isAcceptablePassword = (password: string) => {
+    const regExp = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/;
+    return regExp.test(password);
   };
 
   const createUserPassword = () => {

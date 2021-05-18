@@ -1,49 +1,40 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import TogetherContext from '../../../module/context/TogetherContext';
+import {ITogetherUsersStatistics} from '../../../module/type/together';
+import {BASE_URL} from '../../../module/common';
 
 interface IProps {
-  togetherMemberData: any;
+  users: Array<ITogetherUsersStatistics>;
 }
 
-export default ({togetherMemberData}: IProps) => {
-  const {getTogetherProfile}: any = useContext(TogetherContext);
-
+export default ({users}: IProps) => {
   return (
     <Container>
       <ScrollContainer>
         <ScrollWrapper>
           <Card>
-            {togetherMemberData.length > 0 ? (
+            {users.length > 0 ? (
               <>
-                {togetherMemberData.map((item, idx) => (
-                  <MemberWrapper key={idx}>
+                {users.map((user) => (
+                  <MemberWrapper key={user.userId}>
                     <ProfileImageWrap>
-                      <ProfileImage source={getTogetherProfile(item.userImage)} />
+                      <ProfileImage
+                        source={{uri: `${BASE_URL}/${user.userImage ? user.userImage : 'public/user/no_profile.png'}`}}
+                      />
                     </ProfileImageWrap>
                     <MemberRecordWrapper>
                       <MemberNameBtn onPress={() => {}}>
-                        <MemberName>{item.userNickName}</MemberName>
+                        <MemberName>{user.userNickName}</MemberName>
                       </MemberNameBtn>
                       <RecordWrapper>
-                        <BestRecordWrap>
-                          <ImageColor1>
-                            <BestImage source={require('../../../assets/active_cycle.png')} />
-                          </ImageColor1>
-                          <BestRecordText>500 km</BestRecordText>
-                        </BestRecordWrap>
-                        <BestRecordWrap>
-                          <ImageColor2>
-                            <BestImage source={require('../../../assets/active_cycle.png')} />
-                          </ImageColor2>
-                          <BestRecordText>300 km</BestRecordText>
-                        </BestRecordWrap>
-                        <BestRecordWrap>
-                          <ImageColor3>
-                            <BestImage source={require('../../../assets/active_cycle.png')} />
-                          </ImageColor3>
-                          <BestRecordText>100 km</BestRecordText>
-                        </BestRecordWrap>
+                        {user.activities.map((activity, idx) => (
+                          <BestRecordWrap key={idx}>
+                            <ImageColor1 color={activity.activityColor}>
+                              <BestImage source={{uri: `${BASE_URL}/${activity.activityImage}`}} />
+                            </ImageColor1>
+                            <BestRecordText>{activity.distance} km</BestRecordText>
+                          </BestRecordWrap>
+                        ))}
                       </RecordWrapper>
                     </MemberRecordWrapper>
                   </MemberWrapper>
@@ -134,38 +125,18 @@ const BestRecordWrap = styled.View`
 `;
 
 const ImageColor1 = styled.View`
-  width: 25px;
-  height: 10px;
-  padding: 10px 0px;
+  width: 30px;
+  height: 20px;
+  padding: 2px;
   border-radius: 5px;
-  background-color: #007bf1;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ImageColor2 = styled.View`
-  width: 25px;
-  height: 10px;
-  padding: 10px 0px;
-  border-radius: 5px;
-  background-color: #8784ff;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ImageColor3 = styled.View`
-  width: 25px;
-  height: 10px;
-  padding: 10px 0px;
-  border-radius: 5px;
-  background-color: #00bbc7;
+  background-color: ${({color}: {color: string}) => (color ? color : '#007bf1')};
   align-items: center;
   justify-content: center;
 `;
 
 const BestImage = styled.Image`
   width: 15px;
-  height: 13px;
+  height: 15px;
 `;
 
 const BestRecordText = styled.Text`
@@ -178,7 +149,6 @@ const BestRecordText = styled.Text`
 
 const MemberInfoWrap = styled.View`
   width: 100%;
-  height: 200px;
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -189,4 +159,5 @@ const MemberInfoText = styled.Text`
   font-size: 15px;
   color: #333333;
   font-weight: bold;
+  margin-top: 10px;
 `;

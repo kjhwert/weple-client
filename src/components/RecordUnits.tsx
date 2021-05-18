@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {secondsToHms} from '../module/common';
+import {FONT_SIZE_2, FONT_SIZE_4, secondsToHms} from '../module/common';
 import TimeTohms from './TimeTohms';
 
 interface IProps {
@@ -82,18 +82,18 @@ const RecordDurationWrapper = styled.View`
 `;
 
 const RecordNumber = styled.Text`
-  font-size: 18px;
+  font-size: ${FONT_SIZE_4}px;
   color: #2f2f2f;
   font-weight: bold;
   text-align: center;
 `;
 
 const UnitNumber = styled.Text`
-  font-size: 12px;
+  font-size: ${FONT_SIZE_2}px;
 `;
 
 const RecordUnitText = styled.Text`
-  font-size: 12px;
+  font-size: ${FONT_SIZE_2}px;
   color: #ababab;
   font-weight: bold;
   text-align: center;
