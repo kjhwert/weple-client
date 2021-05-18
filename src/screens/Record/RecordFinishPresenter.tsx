@@ -40,7 +40,7 @@ export default ({navigation}: IProps) => {
           <Card>
             <MapPlayWrapper>
               <WebView
-                style={{opacity: 0.99, overflow: 'hidden'}}
+                style={{opacity: 0.99}}
                 ref={(ref) => (webViewRef.current = ref)}
                 source={{
                   uri: `${BASE_URL}/public/map/test.html`,
@@ -237,6 +237,7 @@ const Card = styled.View`
 const MapPlayWrapper = styled.View`
   width: 100%;
   height: 200px;
+  overflow: hidden;
 `;
 
 const SetUpWrapper = styled.View`

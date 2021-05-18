@@ -37,7 +37,7 @@ export default ({route}: IProps) => {
         <ScrollWrapper>
           <MapPlayWrapper>
             <WebView
-              style={{opacity: 0.99, overflow: 'hidden'}}
+              style={{opacity: 0.99}}
               ref={(ref) => (webViewRef.current = ref)}
               source={{
                 uri: `${BASE_URL}/public/map/test.html`,
@@ -96,6 +96,7 @@ export default ({route}: IProps) => {
 const MapPlayWrapper = styled.View`
   width: 100%;
   height: 200px;
+  overflow: hidden;
 `;
 
 const ActiveText = styled.Text`
