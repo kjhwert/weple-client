@@ -6,6 +6,7 @@ export const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2pod2VydCIsImEiOiJja2g0M2s5Mm8wYXU4MnNv
 export const MAPBOX_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
 export const MAPBOX_DEFAULT_STYLE = 'mapbox://styles/kjhwert/ckinuio2v2slu18pcvazoehxx';
 export const GOOGLE_MAPS_GEOCODING_API_TOKEN = 'AIzaSyBBsD_9g607xaTvt7khh8P8wl4eEPdTl14';
+export const APP_VERSION = 'v0.8.12';
 
 export const FONT_SIZE_1 = 14;
 export const FONT_SIZE_2 = 16;

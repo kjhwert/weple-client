@@ -1,16 +1,14 @@
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
-import {BASE_URL, togetherDate} from '../../module/common';
+import {togetherDate} from '../../module/common';
 import {getComma} from '../../components/CommonTime';
 import TogetherContext from '../../module/context/TogetherContext';
-import {ITogethers, IUserTogethers} from '../../module/type/together';
-import {Image, NativeScrollEvent, NativeSyntheticEvent, Platform, RefreshControl, Text, View} from 'react-native';
-import {MAPBOX_DEFAULT_STYLE, MAPBOX_TOKEN} from '../../module/common';
+import {ITogethers} from '../../module/type/together';
+import {NativeScrollEvent, NativeSyntheticEvent, RefreshControl, Text, View} from 'react-native';
+import {MAPBOX_DEFAULT_STYLE} from '../../module/common';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import SearchComponent from '../../components/SearchComponent';
 import Loading from '../../components/Loading';
-
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;

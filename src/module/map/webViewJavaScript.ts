@@ -21,18 +21,22 @@ export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebVie
     },
   ];
 
-  images.map((image) => {
-    features.push({
-      type: 'Feature',
-      geometry: {type: 'Point', coordinates: [image.latitude, image.longitude]},
-      url: `${BASE_URL}/${image.uri}`,
+  if (images.length > 0) {
+    images.map((image) => {
+      features.push({
+        type: 'Feature',
+        geometry: {type: 'Point', coordinates: [image.latitude, image.longitude]},
+        url: `${BASE_URL}/${image.uri}`,
+      });
     });
-  });
+  }
+
+  console.log(coordinates);
 
   return `
     (function () {
           var coordinates = ${coordinates};
-          var audioSource = '${music?.url}';
+          var audioSource = '${music.url}';
           var mapStyle = '${map.style}';
       
           mapboxgl.accessToken = '${MAPBOX_TOKEN}';

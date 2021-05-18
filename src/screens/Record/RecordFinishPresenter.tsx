@@ -1,15 +1,15 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordUnits from '../../components/RecordUnits';
-import {BASE_URL, FONT_SIZE_2, MAPBOX_TOKEN, showDateToAmPmHourMinute} from '../../module/common';
+import {BASE_URL, FONT_SIZE_2, showDateToAmPmHourMinute} from '../../module/common';
 import {webViewJavaScriptCode} from '../../module/map/webViewJavaScript';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
 import {Image, Platform} from 'react-native';
 import ViewShot from 'react-native-view-shot';
-
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
+import Loading from '../../components/Loading';
+import CheckAlert from '../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
@@ -40,6 +40,7 @@ export default ({navigation}: IProps) => {
           <Card>
             <MapPlayWrapper>
               <WebView
+                style={{opacity: 0.99, overflow: 'hidden'}}
                 ref={(ref) => (webViewRef.current = ref)}
                 source={{
                   uri: `${BASE_URL}/public/map/test.html`,
@@ -109,7 +110,7 @@ export default ({navigation}: IProps) => {
             />
 
             <ActiveDetailWrapper>
-              <ActiveVerticalLine></ActiveVerticalLine>
+              <ActiveVerticalLine />
               <ActiveDetailTitleWrapper>
                 <ActiveMarkWrapper>
                   <ActiveStartMark>
@@ -156,52 +157,44 @@ export default ({navigation}: IProps) => {
                         properties: {},
                         geometry: {
                           type: 'LineString',
-                          coordinates: records.coordinates,
+                          coordinates: [...records.coordinates],
                         },
                       }}>
                       <MapboxGL.LineLayer
                         id="lineLayer"
-                        style={{
-                          lineWidth: 5,
-                          lineJoin: 'bevel',
-                          lineColor: '#007bf1',
-                        }}
+                        style={{lineWidth: 5, lineJoin: 'bevel', lineColor: '#007bf1'}}
                       />
                     </MapboxGL.ShapeSource>
                   )}
                 </MapboxGL.MapView>
               </ViewShot>
 
-              {records.images.map((image, idx: number) => (
-                <ActiveDetailWrapper key={idx}>
-                  <ActiveDetailImageWrapper
-                    onPress={() => {
-                      onChangeImage(idx);
-                    }}>
-                    <ActiveDetailImage source={{uri: image.uri}} resizeMode="contain" style={{aspectRatio: 1}} />
-                    <Image
-                      source={require('../../assets/edit_icon.png')}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}
-                    />
-                  </ActiveDetailImageWrapper>
-                  <ActiveDetailTextWrapper>
-                    <ActiveSmallMarkWrapper>
-                      <ActiveSmallMark></ActiveSmallMark>
-                      <ActiveSmallestMark></ActiveSmallestMark>
-                    </ActiveSmallMarkWrapper>
-                    <DetailTextWrapper>
-                      <ActiveDetailTimeText>
-                        {records.distance}km 이동 후 {image.timestamp && showDateToAmPmHourMinute(image.timestamp)}
-                      </ActiveDetailTimeText>
-                    </DetailTextWrapper>
-                  </ActiveDetailTextWrapper>
-                </ActiveDetailWrapper>
-              ))}
+              {records.images.length > 0 &&
+                records.images.map((image, idx: number) => (
+                  <ActiveDetailWrapper key={idx}>
+                    <ActiveDetailImageWrapper
+                      onPress={() => {
+                        onChangeImage(idx);
+                      }}>
+                      <ActiveDetailImage source={{uri: image.uri}} resizeMode="contain" style={{aspectRatio: 1}} />
+                      <Image
+                        source={require('../../assets/edit_icon.png')}
+                        style={{width: 40, height: 40, position: 'absolute', alignSelf: 'center'}}
+                      />
+                    </ActiveDetailImageWrapper>
+                    <ActiveDetailTextWrapper>
+                      <ActiveSmallMarkWrapper>
+                        <ActiveSmallMark />
+                        <ActiveSmallestMark />
+                      </ActiveSmallMarkWrapper>
+                      <DetailTextWrapper>
+                        <ActiveDetailTimeText>
+                          {records.distance}km 이동 후 {image.timestamp && showDateToAmPmHourMinute(image.timestamp)}
+                        </ActiveDetailTimeText>
+                      </DetailTextWrapper>
+                    </ActiveDetailTextWrapper>
+                  </ActiveDetailWrapper>
+                ))}
               <ActiveDetailFinishTitleWrapper>
                 <ActiveMarkFinishWrapper>
                   <ActiveFinishMark>

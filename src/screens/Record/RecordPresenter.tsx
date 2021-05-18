@@ -4,11 +4,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import KeepAwake from 'react-native-keep-awake';
 import RecordUnits from '../../components/RecordUnits';
-import {MAPBOX_STYLE, MAPBOX_TOKEN} from '../../module/common';
+import {MAPBOX_STYLE} from '../../module/common';
 import {View} from 'react-native';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
-
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 interface IProps {
   navigation: any;

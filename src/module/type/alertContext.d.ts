@@ -4,6 +4,7 @@ interface IAlertContext {
   onAlertCancel?: () => void;
   setConfirmAlert?: (data: IAlertConfirm) => void;
   setCheckAlert?: (data: IAlertCheck) => void;
+  setWarningAlertVisible: (title: string, description: string) => void;
 }
 
 interface IAlertCheck {

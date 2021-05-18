@@ -6,15 +6,13 @@ import {webViewJavaScriptCode} from '../module/map/webViewJavaScript';
 import WebView from 'react-native-webview';
 import {Platform} from 'react-native';
 import Share from 'react-native-share';
-import AlertContext from '../module/context/AlertContext';
 
 interface IProps {
   navigation: any;
   route: any;
 }
 
-export default ({navigation, route}: IProps) => {
-  const {setWarningAlertVisible}: any = useContext(AlertContext);
+export default ({route}: IProps) => {
   const {show, changeTabBarInvisible, changeTabBarVisible}: any = useContext(FeedContext);
   const webViewRef = useRef<any>(null);
   const photoUri = route.params.thumbnail;
@@ -39,6 +37,7 @@ export default ({navigation, route}: IProps) => {
         <ScrollWrapper>
           <MapPlayWrapper>
             <WebView
+              style={{opacity: 0.99, overflow: 'hidden'}}
               ref={(ref) => (webViewRef.current = ref)}
               source={{
                 uri: `${BASE_URL}/public/map/test.html`,
@@ -49,6 +48,7 @@ export default ({navigation, route}: IProps) => {
                 music: {id: show.musicId, url: show.musicUrl},
                 images: show.images,
               })}
+              androidHardwareAccelerationDisabled={true}
             />
           </MapPlayWrapper>
           <Card>

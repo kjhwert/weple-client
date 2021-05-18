@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {Text, View} from 'react-native';
+import {APP_VERSION, INACTIVE_TEXT} from '../../module/common';
 
 interface IProps {
   navigation: any;
@@ -29,6 +31,9 @@ export default ({navigation}: IProps) => {
             }}>
             <StartText>시작하기</StartText>
           </StartBtn>
+          <View style={{width: '100%', marginTop: 10}}>
+            <Text style={{color: INACTIVE_TEXT, textAlign: 'center'}}>{APP_VERSION}</Text>
+          </View>
         </LoginWrapper>
       </ContainerCard>
     </Container>
