@@ -1,11 +1,11 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeedStack from '../navigation/FeedStack';
 import TogetherStack from '../navigation/TogetherStack';
 import RecordStack from '../navigation/RecordStack';
 import ProfileStack from '../navigation/ProfileStack';
 import {Image, Linking} from 'react-native';
-import FeedContext from '../module/context/FeedContext';
+import FeedContext, {IFeedContext} from '../module/context/FeedContext';
 import RecordContext2, {IRecordContext2} from '../module/context/RecordContext2';
 
 const Tab = createBottomTabNavigator();
@@ -18,7 +18,7 @@ export default ({navigation}: any) => {
       settings: {tabBarVisible},
     },
   } = useContext(RecordContext2) as IRecordContext2;
-  const {tabBarVisible: feedTabBar}: any = useContext(FeedContext);
+  const {tabBarVisible: feedTabBar} = useContext(FeedContext) as IFeedContext;
 
   useEffect(() => {
     const getUrl = async () => {
@@ -34,7 +34,7 @@ export default ({navigation}: any) => {
 
       if (initUrl.includes('feed')) {
         const path = initUrl.split('/');
-        navigation.navigate('feed', {id: path[path.length - 1], name: 'activeDetail'});
+        navigation.navigate('activeDetail', {id: path[path.length - 1]});
       }
     };
 

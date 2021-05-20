@@ -150,7 +150,7 @@ export default () => {
       <Stack.Screen
         options={({route, navigation}) => ({
           headerTitle: () => <Text style={{textAlign: 'center'}}>닉네임 설정하기</Text>,
-          headerLeft: () => <SocialBackBtn navigation={navigation} route={route} />,
+          headerLeft: () => <SocialBackBtn navigation={navigation} />,
         })}
         name="socialNickname"
         component={SocialNicknameContainer}

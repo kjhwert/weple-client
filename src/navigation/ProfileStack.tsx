@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProfileSetupBtn from '../components/ProfileSetupBtn';
 import BackBtn from '../components/BackBtn';

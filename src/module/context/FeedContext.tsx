@@ -18,7 +18,7 @@ interface IProps {
 export const FeedContextProvider = ({children}: IProps) => {
   const {setWarningAlertVisible}: any = useContext(AlertContext);
   const {userFollow}: any = useContext(UserContext);
-  const [tabBarVisible, setTabBarVisible] = useState(true);
+  const [tabBarVisible, setTabBarVisible] = useState<boolean>(true);
   const [pagination, setPagination] = useState<IFeedPagination>({
     page: 1,
     order: 'DESC',
@@ -29,10 +29,10 @@ export const FeedContextProvider = ({children}: IProps) => {
   });
   const [sort, setSort] = useState<'createdAt' | 'location' | 'likeCount'>('createdAt');
   const [index, setIndex] = useState<Array<IFeed>>([]);
-  const [indexLoading, setIndexLoading] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
+  const [indexLoading, setIndexLoading] = useState<boolean>(false);
+  const [searchVisible, setSearchVisible] = useState<boolean>(false);
   const [show, setShow] = useState<IShowFeed | null>(null);
-  const [showLoading, setShowLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
 
   const changeTabBarVisible = () => {
     setTabBarVisible(true);
@@ -193,7 +193,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     setIndexLoading(true);
     await Geolocation.getCurrentPosition(
       (res) => getCoordinates(res),
-      (err) => setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.'),
+      (_) => setWarningAlertVisible('내 위치를 가져오는데 실패했습니다.', '잠시 후에 다시 시도해주세요.'),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
@@ -354,6 +354,7 @@ export const FeedContextProvider = ({children}: IProps) => {
     });
     setIndex(newIndex);
   };
+
   return (
     <FeedContext.Provider
       value={{
@@ -386,5 +387,10 @@ export const FeedContextProvider = ({children}: IProps) => {
     </FeedContext.Provider>
   );
 };
+
+export interface IFeedContext {
+  tabBarVisible: boolean;
+  show: IShowFeed;
+}
 
 export default FeedContext;

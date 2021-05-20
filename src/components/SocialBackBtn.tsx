@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export default ({navigation}) => {
+export default ({navigation}: any) => {
   return (
     <Container
       onPress={() => {

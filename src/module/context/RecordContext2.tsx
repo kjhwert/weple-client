@@ -13,12 +13,35 @@ import CheckAlert from '../../components/CheckAlert';
 import Geocoder from 'react-native-geocoding';
 import GpsCheckAlert from '../../components/GpsCheckAlert';
 
-Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'whenInUse'});
+Geolocation.setRNConfiguration({skipPermissionRequests: false, authorizationLevel: 'always'});
 Geocoder.init(GOOGLE_MAPS_GEOCODING_API_TOKEN, {language: 'ko'});
 
 const RecordContext2 = createContext({});
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+export interface IRecordContext2 {
+  state: {
+    loading: boolean;
+    duration: number;
+    settings: Settings;
+    records: Records;
+  };
+  webViewRef: any;
+  thumbnailRef: any;
+  onChangeRecordsMap: (map: Map) => void;
+  onChangeRecordsMusic: (music: Music) => void;
+  onInitRecord: () => void;
+  onChangeRecord: () => void;
+  onFinishRecord: (navigation: any) => void;
+  onChangeSettingActivity: (activity: Activity) => void;
+  onChangeSettingAwake: () => void;
+  onTakePicture: () => void;
+  onCreateRecord: (navigation: any) => void;
+  onChangeImage: (idx: number) => void;
+  clearAllState: () => void;
+  onChangeTitle: (text: string) => void;
+}
 
 interface Props {
   children: ReactNode;
@@ -399,7 +422,7 @@ export const RecordContextProvider2 = ({children}: Props) => {
     durationInterval();
     if (state.duration % DURATION_TIME !== 0) return;
 
-    Geolocation.getCurrentPosition(getCoordinates, (error) => {}, {
+    Geolocation.getCurrentPosition(getCoordinates, (_) => {}, {
       enableHighAccuracy: true,
       timeout: 3000,
       maximumAge: 1000,
@@ -548,28 +571,5 @@ export const RecordContextProvider2 = ({children}: Props) => {
     </RecordContext2.Provider>
   );
 };
-
-export interface IRecordContext2 {
-  state: {
-    loading: boolean;
-    duration: number;
-    settings: Settings;
-    records: Records;
-  };
-  webViewRef: any;
-  thumbnailRef: any;
-  onChangeRecordsMap: (map: Map) => void;
-  onChangeRecordsMusic: (music: Music) => void;
-  onInitRecord: () => void;
-  onChangeRecord: () => void;
-  onFinishRecord: (navigation: any) => void;
-  onChangeSettingActivity: (activity: Activity) => void;
-  onChangeSettingAwake: () => void;
-  onTakePicture: () => void;
-  onCreateRecord: (navigation: any) => void;
-  onChangeImage: (idx: number) => void;
-  clearAllState: () => void;
-  onChangeTitle: (text: string) => void;
-}
 
 export default RecordContext2;

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import FeedShareContainer from '../screens/Feed/friendProfile/friendSns/FeedShareContainer';
 import FeedAlarmContainer from '../screens/Feed/feedAlarm/FeedAlarmContainer';
@@ -15,8 +15,7 @@ import FeedPopularityContainer from '../screens/Feed/FeedPopularityContainer';
 import FeedSearchContainer from '../screens/Feed/feedSearch/FeedSearchContainer';
 import FriendFollowerContainer from '../screens/Feed/friendProfile/friendSns/FriendFollowerContainer';
 import FriendLikeContainer from '../screens/Feed/friendProfile/friendSns/FriendLikeContainer';
-import FeedContext from '../module/context/FeedContext';
-import {IFeedContext} from '../module/type/feedContext';
+import FeedContext, {IFeedContext} from '../module/context/FeedContext';
 import FollowContext from '../module/context/FollowContext';
 import WhiteBackBtn from '../components/WhiteBackBtn';
 import NotificationWhite from '../components/NotificationWhite';
@@ -25,16 +24,9 @@ import FollowerMemberContainer from '../screens/Profile/snsMember/FollowerMember
 
 const Stack = createStackNavigator();
 
-export default ({navigation, route}: any) => {
+export default () => {
   const {user}: any = useContext(FollowContext);
-  const {show}: IFeedContext = useContext(FeedContext);
-
-  useEffect(() => {
-    console.log(route);
-    if (route?.params?.name === 'activeDetail') {
-      navigation.navigate('activeDetail', route.params);
-    }
-  }, []);
+  const {show} = useContext(FeedContext) as IFeedContext;
 
   return (
     <Stack.Navigator
