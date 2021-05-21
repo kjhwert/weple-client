@@ -140,36 +140,38 @@ export default ({navigation}: IProps) => {
                   scrollEnabled={false}
                   pitchEnabled={false}
                   rotateEnabled={false}>
-                  <MapboxGL.Camera
-                    bounds={{
-                      ne: records.coordinates[0],
-                      sw: records.coordinates[records.coordinates.length - 1],
-                      paddingRight: 30,
-                      paddingBottom: 30,
-                      paddingLeft: 30,
-                      paddingTop: 30,
-                    }}
-                    animationMode={'moveTo'}
-                    animationDuration={0}
-                    followUserLocation={false}
-                  />
                   {records.coordinates.length > 0 && (
-                    <MapboxGL.ShapeSource
-                      id="shapeSource"
-                      shape={{
-                        type: 'Feature',
-                        id: 'shapeSource',
-                        properties: {},
-                        geometry: {
-                          type: 'LineString',
-                          coordinates: [...records.coordinates],
-                        },
-                      }}>
-                      <MapboxGL.LineLayer
-                        id="lineLayer"
-                        style={{lineWidth: 5, lineJoin: 'bevel', lineColor: '#007bf1'}}
+                    <>
+                      <MapboxGL.Camera
+                        bounds={{
+                          ne: records.coordinates[0],
+                          sw: records.coordinates[records.coordinates.length - 1],
+                          paddingRight: 30,
+                          paddingBottom: 30,
+                          paddingLeft: 30,
+                          paddingTop: 30,
+                        }}
+                        animationMode={'moveTo'}
+                        animationDuration={0}
+                        followUserLocation={false}
                       />
-                    </MapboxGL.ShapeSource>
+                      <MapboxGL.ShapeSource
+                        id="shapeSource"
+                        shape={{
+                          type: 'Feature',
+                          id: 'shapeSource',
+                          properties: {},
+                          geometry: {
+                            type: 'LineString',
+                            coordinates: [...records.coordinates],
+                          },
+                        }}>
+                        <MapboxGL.LineLayer
+                          id="lineLayer"
+                          style={{lineWidth: 5, lineJoin: 'bevel', lineColor: '#007bf1'}}
+                        />
+                      </MapboxGL.ShapeSource>
+                    </>
                   )}
                 </MapboxGL.MapView>
               </ViewShot>

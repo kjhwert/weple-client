@@ -104,7 +104,7 @@ interface Records {
   calorie: number;
   speed: number;
   distance: number;
-  coordinates: any;
+  coordinates: Array<Array<number>>;
   map: Map;
   music: Music;
   images: Array<Image>;
