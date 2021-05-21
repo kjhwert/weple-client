@@ -1,11 +1,10 @@
-import {IMusics} from '../type/music';
 import {IMapboxRecordMap} from '../type/recordContext';
 import {BASE_URL, MAPBOX_TOKEN} from '../common';
 import {Image} from '../context/RecordContext2';
 
 interface IWebViewJavaScriptCode {
   coordinates: string;
-  music: IMusics;
+  music: {url: string};
   map: IMapboxRecordMap;
   images: Array<Image>;
 }
@@ -31,12 +30,10 @@ export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebVie
     });
   }
 
-  console.log(coordinates);
-
   return `
     (function () {
           var coordinates = ${coordinates};
-          var audioSource = '${music.url}';
+          var audioSource = '${BASE_URL}/${music.url}';
           var mapStyle = '${map.style}';
       
           mapboxgl.accessToken = '${MAPBOX_TOKEN}';

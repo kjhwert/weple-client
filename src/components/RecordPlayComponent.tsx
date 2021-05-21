@@ -45,10 +45,9 @@ export default ({route}: IProps) => {
               injectedJavaScript={webViewJavaScriptCode({
                 coordinates: show.coordinates,
                 map: {id: show.mapId, style: show.mapStyle},
-                music: {id: show.musicId, url: show.musicUrl},
+                music: {url: show.musicUrl},
                 images: show.images,
               })}
-              androidHardwareAccelerationDisabled={true}
             />
           </MapPlayWrapper>
           <Card>
