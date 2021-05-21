@@ -1,8 +1,9 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/native';
-import {Switch} from 'react-native';
+import {Switch, Text, TouchableOpacity} from 'react-native';
 import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
-import {FONT_SIZE_1, FONT_SIZE_2} from '../../../module/common';
+import {ACTIVE_TEXT, FONT_SIZE_1, FONT_SIZE_2} from '../../../module/common';
+import {openSettings} from 'react-native-permissions';
 
 interface IProps {
   navigation: any;
@@ -39,6 +40,21 @@ export default ({navigation}: IProps) => {
             onValueChange={onChangeSettingAwake}
             value={settings.awake}
           />
+        </AlarmSetWrapper>
+
+        <AlarmSetWrapper>
+          <AlarmSetTextWrapper>
+            <AlarmSetTitle>백그라운드 기록하기</AlarmSetTitle>
+            <AlarmSetContent>
+              기록 중 다른 앱을 사용할 수 있도록 허용합니다. 위치 권한을 '항상 허용'으로 설정해주세요.
+            </AlarmSetContent>
+          </AlarmSetTextWrapper>
+          <TouchableOpacity
+            onPress={async () => {
+              await openSettings();
+            }}>
+            <Text style={{color: ACTIVE_TEXT}}>설정</Text>
+          </TouchableOpacity>
         </AlarmSetWrapper>
       </Card>
     </Container>

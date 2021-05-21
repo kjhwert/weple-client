@@ -122,7 +122,6 @@ const recordsInit = {
   calorie: 0,
   speed: 0,
   distance: 0,
-  // coordinates: [[126.97842453212644, 37.566629386346264]],
   coordinates: [],
   title: '',
   map: {

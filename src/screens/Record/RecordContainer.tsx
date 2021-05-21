@@ -12,12 +12,13 @@ export default ({navigation}: IProps) => {
   const confirmUserLocation = async () => {
     const checkPermissionResult = await checkPermission({
       ios: 'always',
-      android: {detail: 'fine'},
+      android: {detail: 'coarse'},
     });
+
     if (!checkPermissionResult) {
-      const result = await requestPermission({
+      await requestPermission({
         android: {
-          detail: 'fine',
+          detail: 'coarse',
         },
         ios: 'always',
       });

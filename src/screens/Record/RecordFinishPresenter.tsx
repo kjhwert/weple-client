@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import WebView from 'react-native-webview';
 import RecordUnits from '../../components/RecordUnits';
@@ -8,8 +8,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
 import {Image, Platform} from 'react-native';
 import ViewShot from 'react-native-view-shot';
-import Loading from '../../components/Loading';
-import CheckAlert from '../../components/CheckAlert';
 
 interface IProps {
   navigation: any;
@@ -143,10 +141,17 @@ export default ({navigation}: IProps) => {
                   pitchEnabled={false}
                   rotateEnabled={false}>
                   <MapboxGL.Camera
-                    zoomLevel={13}
-                    centerCoordinate={getCenterCoordinates()}
+                    bounds={{
+                      ne: records.coordinates[0],
+                      sw: records.coordinates[records.coordinates.length - 1],
+                      paddingRight: 30,
+                      paddingBottom: 30,
+                      paddingLeft: 30,
+                      paddingTop: 30,
+                    }}
                     animationMode={'moveTo'}
                     animationDuration={0}
+                    followUserLocation={false}
                   />
                   {records.coordinates.length > 0 && (
                     <MapboxGL.ShapeSource
