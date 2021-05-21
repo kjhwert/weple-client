@@ -47,6 +47,14 @@ export default ({navigation}: IProps) => {
   };
 
   const renderCamera = () => {
+    if (!settings.isStart) {
+      return (
+        <>
+          <MapboxGL.UserLocation />
+          <MapboxGL.Camera zoomLevel={14} animationMode={'flyTo'} animationDuration={0} followUserLocation={true} />
+        </>
+      );
+    }
     return (
       <MapboxGL.Camera
         zoomLevel={14}
