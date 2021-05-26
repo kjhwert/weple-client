@@ -10,6 +10,24 @@ interface IWebViewJavaScriptCode {
 }
 
 export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebViewJavaScriptCode) => {
+  const coors: Array<Array<number>> = JSON.parse(coordinates);
+  const getNorthEastCoordinates = () => {
+    return coors.reduce(([preLat, preLon], [curLat, curLon]) => {
+      const maxLat = preLat > curLat ? preLat : curLat;
+      const maxLon = preLon > curLon ? preLon : curLon;
+
+      return [maxLat, maxLon];
+    });
+  };
+
+  const getSouthWestCoordinates = () => {
+    return coors.reduce(([preLat, preLon], [curLat, curLon]) => {
+      const minLat = preLat < curLat ? preLat : curLat;
+      const minLon = preLon < curLon ? preLon : curLon;
+
+      return [minLat, minLon];
+    });
+  };
   const features = [
     {
       type: 'Feature',
@@ -138,9 +156,8 @@ export const webViewJavaScriptCode = ({coordinates, music, map, images}: IWebVie
                       /** End Animation */
                       if (iPoint.geometry.coordinates === coordinates[coordinates.length - 1]) {
                           var bounds = [
-                            coordinates[0],
-                            coordinates[Math.floor(coordinates.length / 2)],
-                            coordinates[coordinates.length - 1]
+                            ${getNorthEastCoordinates()},
+                            ${getSouthWestCoordinates()}
                           ];
                           map.fitBounds(bounds);
                           audio.pause();

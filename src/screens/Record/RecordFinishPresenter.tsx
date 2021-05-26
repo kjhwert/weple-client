@@ -21,15 +21,9 @@ export default ({navigation}: IProps) => {
     onCreateRecord,
     onChangeImage,
     onChangeTitle,
+    getNorthEastCoordinates,
+    getSouthWestCoordinates,
   } = useContext(RecordContext2) as IRecordContext2;
-
-  const getCenterCoordinates = () => {
-    if (records.coordinates.length > 0) {
-      return records.coordinates[Math.floor(records.coordinates.length / 2)];
-    }
-
-    return [126.97842453212644, 37.566629386346264];
-  };
 
   return (
     <Container>
@@ -144,12 +138,12 @@ export default ({navigation}: IProps) => {
                     <>
                       <MapboxGL.Camera
                         bounds={{
-                          ne: records.coordinates[0],
-                          sw: records.coordinates[records.coordinates.length - 1],
-                          paddingRight: 30,
-                          paddingBottom: 30,
-                          paddingLeft: 30,
-                          paddingTop: 30,
+                          ne: getNorthEastCoordinates(),
+                          sw: getSouthWestCoordinates(),
+                          paddingRight: 20,
+                          paddingBottom: 20,
+                          paddingLeft: 20,
+                          paddingTop: 20,
                         }}
                         animationMode={'moveTo'}
                         animationDuration={0}

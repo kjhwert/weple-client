@@ -15,14 +15,22 @@ interface IProps {
 export default ({route}: IProps) => {
   const {show, changeTabBarInvisible, changeTabBarVisible}: any = useContext(FeedContext);
   const webViewRef = useRef<any>(null);
-  const photoUri = route.params.thumbnail;
+  // const photoUri = route.params.thumbnail;
 
   const share = async () => {
     try {
-      await Share.open({url: Platform.OS === 'android' ? photoUri : photoUri.replace('file://', '')});
+      await Share.open({
+        url: `http://app.goweple.com?id=${show.id}&share=feed&thumbnail=${show.thumbnail}&title=${show.title}`,
+      });
     } catch (e) {
       console.log(e);
     }
+
+    // try {
+    //   await Share.open({url: Platform.OS === 'android' ? photoUri : photoUri.replace('file://', '')});
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   useEffect(() => {

@@ -41,6 +41,8 @@ export interface IRecordContext2 {
   onChangeImage: (idx: number) => void;
   clearAllState: () => void;
   onChangeTitle: (text: string) => void;
+  getNorthEastCoordinates: () => [number, number];
+  getSouthWestCoordinates: () => [number, number];
 }
 
 interface Props {
@@ -201,6 +203,24 @@ export const RecordContextProvider2 = ({children}: Props) => {
         return {img: path, lat, lon, distance};
       }),
     );
+  };
+
+  const getNorthEastCoordinates = () => {
+    return state.records.coordinates.reduce(([preLat, preLon], [curLat, curLon]) => {
+      const maxLat = preLat > curLat ? preLat : curLat;
+      const maxLon = preLon > curLon ? preLon : curLon;
+
+      return [maxLat, maxLon];
+    });
+  };
+
+  const getSouthWestCoordinates = () => {
+    return state.records.coordinates.reduce(([preLat, preLon], [curLat, curLon]) => {
+      const minLat = preLat < curLat ? preLat : curLat;
+      const minLon = preLon < curLon ? preLon : curLon;
+
+      return [minLat, minLon];
+    });
   };
 
   // const getAddress = async (coordinate: Array<number>) => {
@@ -565,6 +585,8 @@ export const RecordContextProvider2 = ({children}: Props) => {
         onCreateRecord,
         onChangeImage,
         clearAllState,
+        getNorthEastCoordinates,
+        getSouthWestCoordinates,
       }}>
       {children}
     </RecordContext2.Provider>
