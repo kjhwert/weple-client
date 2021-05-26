@@ -3,26 +3,21 @@ import styled from 'styled-components/native';
 import ContainerCard from '../../../components/ContainerCard';
 import CheckBox from '@react-native-community/checkbox';
 import {IMapGroup} from '../../../module/type/map';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import RecordContext from '../../../module/context/RecordContext';
-import {IRecordContext} from '../../../module/type/recordContext';
-import {ACTIVE_BUTTON, INACTIVE_BUTTON, MAPBOX_TOKEN} from '../../../module/common';
+import {ACTIVE_BUTTON, INACTIVE_BUTTON} from '../../../module/common';
 import {Text} from 'react-native';
 import RecordContext2, {IRecordContext2} from '../../../module/context/RecordContext2';
 
 interface IProps {
-  navigation: any;
   mapGroup: Array<IMapGroup>;
 }
 
 interface IStyledMapWrapper {
   isLastChild?: boolean;
   isActive?: boolean;
+  isFree?: boolean;
 }
 
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
-
-export default ({navigation, mapGroup}: IProps) => {
+export default ({mapGroup}: IProps) => {
   const {
     state: {
       records: {map},
@@ -35,27 +30,29 @@ export default ({navigation, mapGroup}: IProps) => {
       <ScrollContainer>
         <ScrollWrapper>
           <ContainerCard>
-            {mapGroup.map(({id, name, maps}) => (
-              <MapGroupWrapper key={id}>
+            {mapGroup.map(({id: groupId, name, maps}) => (
+              <MapGroupWrapper key={groupId}>
                 <MapStyleTitle>{name}</MapStyleTitle>
                 <MapContainer>
                   {maps.map(({id, style, thumbnail, name}, idx) => (
                     <MapWrapper key={id} isLastChild={(idx + 1) % 3 !== 0}>
-                      <ActivityImage source={{uri: thumbnail}} isActive={map.id === id} />
-                      <CheckBox
-                        style={{
-                          position: 'absolute',
-                          right: 3,
-                          top: 1,
-                        }}
-                        boxType={'circle'}
-                        disabled={false}
-                        value={map.id === id}
-                        onValueChange={() => {
-                          onChangeRecordsMap({id, style, name});
-                        }}
-                        tintColors={{true: ACTIVE_BUTTON}}
-                      />
+                      <ActivityImage source={{uri: thumbnail}} isActive={map.id === id} isFree={groupId === 1} />
+                      {groupId === 1 && (
+                        <CheckBox
+                          style={{
+                            position: 'absolute',
+                            right: 3,
+                            top: 1,
+                          }}
+                          boxType={'circle'}
+                          disabled={false}
+                          value={map.id === id}
+                          onValueChange={() => {
+                            onChangeRecordsMap({id, style, name});
+                          }}
+                          tintColors={{true: ACTIVE_BUTTON}}
+                        />
+                      )}
                       <Text style={{fontSize: 10, marginTop: 5}}>{name}</Text>
                     </MapWrapper>
                   ))}
@@ -118,4 +115,5 @@ const ActivityImage = styled.Image`
   height: 100px;
   border-width: 1px;
   border-color: ${({isActive}: IStyledMapWrapper) => (isActive ? ACTIVE_BUTTON : INACTIVE_BUTTON)};
+  opacity: ${({isFree}: IStyledMapWrapper) => (isFree ? 1 : 0.4)};
 `;

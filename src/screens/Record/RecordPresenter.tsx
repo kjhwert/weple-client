@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import MapboxGL from '@react-native-mapbox-gl/maps';
@@ -64,6 +64,14 @@ export default ({navigation}: IProps) => {
       />
     );
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('asdfa');
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <Container>

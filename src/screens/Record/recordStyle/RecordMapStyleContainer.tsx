@@ -3,11 +3,7 @@ import RecordMapStylePresenter from './RecordMapStylePresenter';
 import {utilitiesApi} from '../../../module/api';
 import Loading from '../../../components/Loading';
 
-interface IProps {
-  navigation: any;
-}
-
-export default ({navigation}: IProps) => {
+export default () => {
   const [mapGroup, setMapGroup] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,5 +21,5 @@ export default ({navigation}: IProps) => {
     getMaps();
   }, []);
 
-  return loading ? <Loading /> : <RecordMapStylePresenter navigation={navigation} mapGroup={mapGroup} />;
+  return loading ? <Loading /> : <RecordMapStylePresenter mapGroup={mapGroup} />;
 };

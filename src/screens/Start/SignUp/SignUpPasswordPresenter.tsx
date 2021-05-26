@@ -28,7 +28,7 @@ export default ({
       <ContainerCard>
         <InputPasswordBox
           title={'비밀번호'}
-          placeholder1="비밀번호를 입력하세요."
+          placeholder1="영문, 숫자, 특수기호 포함 8자리 이상"
           placeholder2="비밀번호를 한번 더 입력하세요."
           onChange1={userPasswordChange1}
           onChange2={userPasswordChange2}

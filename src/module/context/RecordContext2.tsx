@@ -124,7 +124,10 @@ const recordsInit = {
   calorie: 0,
   speed: 0,
   distance: 0,
-  coordinates: [],
+  coordinates: [
+    [123, 71],
+    [124, 70],
+  ],
   title: '',
   map: {
     id: 1,
@@ -235,7 +238,17 @@ export const RecordContextProvider2 = ({children}: Props) => {
   // };
 
   const onChangeTitle = (text: string) => {
-    if (text.length > 10) {
+    let textLength = 0;
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charAt(i);
+
+      if (escape(char).length > 4) {
+        textLength += 2;
+      } else {
+        textLength += 1;
+      }
+    }
+    if (textLength > 20) {
       return setAlertVisible(
         <CheckAlert
           check={{
@@ -463,12 +476,12 @@ export const RecordContextProvider2 = ({children}: Props) => {
       return setState({...state, records: {...state.records, music}});
     }
     setState({...state, records: {...state.records, music}});
-    webViewRef.current.reload();
+    webViewRef?.current?.reload();
   };
 
   const onChangeRecordsMap = (map: Map) => {
     setState({...state, records: {...state.records, map}});
-    webViewRef.current.reload();
+    webViewRef?.current?.reload();
   };
 
   const onChangeSettingAwake = () => {
@@ -481,29 +494,29 @@ export const RecordContextProvider2 = ({children}: Props) => {
   };
 
   const onInitRecord = async () => {
-    setAlertVisible(
-      <GpsCheckAlert
-        check={{
-          type: 'check',
-          title: 'GPS 정보를 수신 중입니다.',
-          description: '잠시 기다려 주세요.',
-        }}
-      />,
-    );
-    try {
-      await isGpsConnected();
-      setAlertInvisible();
-    } catch (e) {
-      return setAlertVisible(
-        <CheckAlert
-          check={{
-            type: 'warning',
-            title: 'GPS 정보를 수신할 수 없습니다.',
-            description: '잠시 후에 다시 시도해 주세요.',
-          }}
-        />,
-      );
-    }
+    // setAlertVisible(
+    //   <GpsCheckAlert
+    //     check={{
+    //       type: 'check',
+    //       title: 'GPS 정보를 수신 중입니다.',
+    //       description: '잠시 기다려 주세요.',
+    //     }}
+    //   />,
+    // );
+    // try {
+    //   await isGpsConnected();
+    //   setAlertInvisible();
+    // } catch (e) {
+    //   return setAlertVisible(
+    //     <CheckAlert
+    //       check={{
+    //         type: 'warning',
+    //         title: 'GPS 정보를 수신할 수 없습니다.',
+    //         description: '잠시 후에 다시 시도해 주세요.',
+    //       }}
+    //     />,
+    //   );
+    // }
     interval.current = BackgroundTimer.setInterval(() => {
       backgroundTimer.current();
     }, 1000);
@@ -537,11 +550,11 @@ export const RecordContextProvider2 = ({children}: Props) => {
 
   const clearAllState = () => {
     setState({...state, settings: settingsInit, records: recordsInit, duration: 0, loading: false});
-    webViewRef.current.reload();
+    webViewRef?.current?.reload();
   };
 
   const onFinishRecord = (navigation: any) => {
-    if (state.records.coordinates.length === 0) {
+    if (state.records.coordinates.length <= 1) {
       return setAlertVisible(
         <ConfirmAlert
           confirm={{
