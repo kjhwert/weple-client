@@ -12,6 +12,17 @@ interface IProps {
   children: ReactNode;
 }
 
+interface LoginUser {
+  access_token: string;
+  id: number;
+  image: string;
+  name: string;
+  nickName: string;
+  email: string;
+  password: string;
+  description: string;
+}
+
 export const UserContextProvider = ({children}: IProps) => {
   const {setWarningAlertVisible}: any = useContext(AlertContext);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,7 +32,7 @@ export const UserContextProvider = ({children}: IProps) => {
   });
   const [isLoginBtnActive, setIsLoginBtnActive] = useState(false);
 
-  const [loginUser, setLoginUser] = useState({
+  const [loginUser, setLoginUser] = useState<LoginUser>({
     access_token: '',
     id: 0,
     image: '',

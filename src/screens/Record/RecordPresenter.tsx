@@ -5,20 +5,25 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import KeepAwake from 'react-native-keep-awake';
 import RecordUnits from '../../components/RecordUnits';
 import {MAPBOX_STYLE} from '../../module/common';
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import RecordContext2, {IRecordContext2} from '../../module/context/RecordContext2';
+import ConfirmAlert from '../../components/ConfirmAlert';
+import AlertContext from '../../module/context/AlertContext';
 
 interface IProps {
   navigation: any;
 }
 
 export default ({navigation}: IProps) => {
+  const {setAlertVisible, setAlertInvisible}: any = useContext(AlertContext);
+
   const {
     state: {settings, records, duration},
     onInitRecord,
     onChangeRecord,
     onFinishRecord,
     onTakePicture,
+    clearAllState,
   } = useContext(RecordContext2) as IRecordContext2;
 
   const getLastCoordinates = () => {
@@ -65,13 +70,35 @@ export default ({navigation}: IProps) => {
     );
   };
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      console.log('asdfa');
-    });
+  const backAction = (): boolean => {
+    if (settings.isStart) {
+      onChangeRecord();
+      setAlertVisible(
+        <ConfirmAlert
+          confirm={{
+            type: 'warning',
+            title: '종료하시겠습니까?',
+            description: '기록된 데이터는 초기화됩니다.',
+            confirmedText: '종료',
+            canceledText: '취소',
+          }}
+          confirmed={() => {
+            clearAllState();
+            navigation.goBack();
+          }}
+          canceled={() => setAlertInvisible()}
+        />,
+      );
+      return true;
+    }
+    return false;
+  };
 
-    return unsubscribe;
-  }, []);
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [settings, duration]);
 
   return (
     <Container>
